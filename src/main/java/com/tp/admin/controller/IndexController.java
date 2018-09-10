@@ -87,7 +87,7 @@ public class IndexController {
     }
 
     /**
-     * 角色管理
+     * 权限
      * @param request
      * @return
      */
