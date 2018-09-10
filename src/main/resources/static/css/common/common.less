@@ -1,0 +1,397 @@
+@blue: #3388ff;
+body {
+	// background: url("http://tp-app.oss-cn-hangzhou.aliyuncs.com/ios/bg_par.jpg");
+	// background-size: cover;
+	// background: #fff;
+}
+
+::-webkit-scrollbar {
+	color: transparent;	
+}
+
+[v-cloak] {
+  display: none;
+}
+
+#app {
+	width: 100%;
+	// width: 1280px;
+	height: 100vh;
+	margin: 0 auto;
+}
+.leftNav {
+	background: #414E62;
+	width: 1.25rem;
+	// width: 160px;
+	height: 100vh;
+	overflow-y: hidden;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	.logoBox {
+		position: relative;
+		top: 0;
+		z-index: 99;
+		width: 1.148438rem;
+		height: 0.359375rem;
+		margin: 0 auto;
+		padding-top : 0.132812rem;
+		text-align: center;
+		border-bottom: 1px solid #E3EBF2;
+		box-sizing: border-box;
+		font-size: 12px;
+		color: #fff;
+		img {
+			width: 0.234375rem;
+			height: 0.101562rem;
+			margin-right: 0.078125rem;
+			vertical-align: bottom;
+		}
+	}
+	.nav-box {
+		height: 100vh;
+		padding: 0.15625rem 0 0.46875rem;
+		box-sizing: border-box;
+		// overflow-y: hidden;
+		overflow-y: scroll;
+		.nav-each {
+			width: 100%;
+			height: 30px;
+			padding: 0 0.15625rem;
+			box-sizing: border-box;
+			font-size: 12px;
+			line-height: 30px;
+			margin: 0 auto 10px;
+			color: #fff;
+			&.active {
+				background: #2981FF;
+			}
+			.iconfont {
+				font-size: 12px;
+				margin-right: 8px;
+			}
+		}
+	}
+	.logout {
+		position: absolute;
+		bottom: 55px;
+		width: 100%;
+		text-align: center;
+		color: #3E3F41;
+		font-size: 12px;
+	}
+}
+
+
+.rightSide {
+	width: 8.75rem;
+	height: 100vh;
+	margin-left: 1.25rem;
+	// background: #fff;
+	// padding: 50px 0 50px 50px;
+	box-sizing: border-box;
+	// overflow-y: hidden;
+
+	// .topTitle {
+	// 	margin-bottom: 30px;
+	// 	font-size: 24px;
+	// 	color: #00233c;
+	// 	box-sizing: border-box;
+	// }
+
+	.topBox {
+		width: 8.75rem;
+		height: 0.367188rem;
+		position: fixed;
+		top: 0;
+		right: 0;
+		z-index: 100;
+		background: #fff;
+		display: flex;
+		justify-content: space-between;
+		padding-right: 0.117188rem;
+		box-sizing: border-box;
+		.name {
+			font-size: 16px;
+			color: #00203C;
+			padding-left: 0.101562rem;
+			line-height: 0.367188rem;
+		}
+		.avatar {
+			width: 0.210938rem;
+			height: 0.210938rem;
+			border-radius: 4px;
+			vertical-align: middle;
+			margin-right: 0.054688rem;
+		}
+		.adminName {
+			font-size: 10px;
+			color: #000;
+			line-height: 0.367188rem;
+			margin-right: 25px;
+		}
+		.iconfont {
+			font-size: 12px;
+			color: #2981FF;
+		}
+
+	}
+
+	.content {
+		width: 100%;
+		height: 100vh;
+		overflow-y: scroll;
+		// overflow-x: hidden;
+		box-sizing: border-box;
+		padding: 0.46875rem 0.101562rem 0.3125rem;
+		// background: #fff;
+		.searchBox {
+			margin-bottom: 13px;
+		}
+
+		// 手写表格样式
+		table {
+			width: 100%;
+			thead {
+				td {
+					font-size: 14px;
+					color: #00203C;
+				}
+			}
+			tbody {
+				td {
+					font-size: 12px;
+					&.btn {
+						color: #2981FF;
+					}
+					span.btn {
+						font-size: 14px;
+						color: #409eff;
+					}
+					i.icon {
+						padding-left: 5px;
+						color: #2981FF;
+					}
+					a {
+						color: #2981FF;
+					}
+				}
+			}
+			tr {
+				height: 40px;
+				border-bottom: 1px solid #e3ebf2;
+
+				td:nth-child(1) {
+					padding-left: 5px;
+				}
+
+				td {
+					height: 40px;
+					text-align: left;
+					img {
+						width: 100px;
+						height: 100px;
+						margin: 10px;
+					}
+				}
+			}
+		}
+
+		// 表格UI调整
+		.el-table {
+			.el-table__header-wrapper {
+
+			}
+			.cell {
+				text-align: leftleft;
+			}
+			th>.cell {
+				font-family: PingFangSC-Regular;
+				color: #00254e;
+				letter-spacing: 0.09px;
+			}
+		}
+	}
+
+	// 分页器
+	.pages {
+		// width: 8.75rem;
+		// position: absolute;
+		// bottom: 0;
+		// right: 0;
+		// z-index: 99;
+		text-align: center;
+		margin-top: 40px;
+		// margin-left: -50px;
+		// margin-top: 40px;
+	}
+}
+
+// 弹出框样式
+.el-dialog {
+	.el-dialog__header {
+		background: #0E79D1;
+		text-align: center;
+		padding: 0;
+		.el-dialog__title {
+			color: #fff;
+			font-size: 18px;
+			line-height: 40px;
+		}
+		.el-dialog__headerbtn {
+		    top: 12px;
+		    .el-dialog__close {
+				color: #fff;
+				font-size: 18px;
+			}
+		}
+	}	
+
+	// 表单UI调整
+	.el-form {
+		.el-form-item__label {
+			text-align: center;
+			line-height: 30px;
+		}
+		.el-cascader {
+			width: 100%;
+		}
+		.el-upload {
+			border: 1px dashed #d9d9d9;
+		    border-radius: 6px;
+		    cursor: pointer;
+		    position: relative;
+		    overflow: hidden;
+			&:hover {
+				border-color: #409EFF;
+			}
+		    .avatar-uploader-icon {
+			    font-size: 28px;
+			    color: #8c939d;
+			    width: 178px;
+			    height: 178px;
+			    line-height: 178px;
+			    text-align: center;
+			}
+			img {
+			    width: 178px;
+			    height: 178px;
+			    display: block;
+			}
+		}
+	}
+	.el-dialog__footer {
+		text-align: center;
+	}
+
+
+	// 弹出框手写表格
+	table {
+		width: 100%;
+		thead {
+			td {
+				font-size: 14px;
+				color: #00203C;
+			}
+		}
+		tbody {
+			td {
+				font-size: 12px;
+				&.btn {
+					color: #2981FF;
+				}
+				span.btn {
+					font-size: 14px;
+					color: #409eff;
+				}
+				i.icon {
+					padding-left: 5px;
+					color: #2981FF;
+				}
+				a {
+					color: #2981FF;
+				}
+			}
+		}
+		tr {
+			height: 40px;
+			border-bottom: 1px solid #e3ebf2;
+
+			td:nth-child(1) {
+				padding-left: 5px;
+			}
+
+			td {
+				height: 40px;
+				text-align: left;
+				img {
+					width: 100px;
+					height: 100px;
+					margin: 10px;
+				}
+			}
+		}
+	}
+
+}
+
+// 提示消息
+.el-message-box {
+	.el-button--small {
+	    padding: 5px 12px;
+	}
+}
+
+// 修改密码
+#changePwDialog {
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 101;
+	background: rgba(0, 0, 0, 0.3);
+
+	.mainBox {
+		// width: 333px;
+		width: 500px;
+		height: 300px;
+		// height: 197px;
+		margin: auto;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background: #fff;
+		border-radius: 4px;
+		.title {
+			background: #0E79D1;
+			width: 100%;
+			height: 40px;
+			// height: 30px;
+			font-size: 18px;
+			color: #fff;
+			line-height: 40px;
+			text-align: center;
+			margin-bottom: 40px;
+		}
+		.formBox {
+			text-align: center;
+			padding: 0 40px;
+			.eachItem {
+				margin-bottom: 20px;
+				label {
+					line-height: 30px;
+				}
+			}
+		}
+		.btnsBox {
+			text-align: center;
+		}
+	}
+}
+
+
+

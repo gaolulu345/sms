@@ -1,0 +1,127 @@
+.rightSide .content {
+  padding-bottom: 0.117188rem;
+}
+.rightSide .content .imgBox {
+  width: 4.445312rem;
+  height: 3.085938rem;
+  margin: 0.851562rem auto 0;
+  position: relative;
+}
+.rightSide .content .imgBox img {
+  width: 100%;
+  height: 100%;
+}
+.rightSide .content .dataBox .totalBox {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.101562rem;
+}
+.rightSide .content .dataBox .totalBox .item {
+  display: flex;
+  justify-content: flex-start;
+  width: 2.742188rem;
+  height: 130px;
+  color: #fff;
+  border-radius: 4px;
+  box-shadow: 0px -5px 5px rgba(29, 21, 17, 0.1) inset;
+}
+.rightSide .content .dataBox .totalBox .item.oneMonthOrderCnt {
+  background: #FC8675;
+}
+.rightSide .content .dataBox .totalBox .item.todayAmount {
+  background: #5AB6DF;
+}
+.rightSide .content .dataBox .totalBox .item.sevenDaysAmount {
+  background: #64CEA7;
+}
+.rightSide .content .dataBox .totalBox .item .iconBox {
+  width: 45px;
+  height: 45px;
+  margin: 42px 32px 0 60px;
+}
+.rightSide .content .dataBox .totalBox .item .iconBox .iconfont {
+  font-size: 36px;
+}
+.rightSide .content .dataBox .totalBox .item .num {
+  font-size: 18px;
+  margin-top: 45px;
+}
+.rightSide .content .dataBox .totalBox .item .desc {
+  font-size: 10px;
+}
+.rightSide .content .dataBox .chartsBox {
+  display: flex;
+  justify-content: space-between;
+}
+.rightSide .content .dataBox .chartsBox .orderData {
+  width: 4.179688rem;
+  height: 2.242188rem;
+  border-radius: 4px;
+  background: #fff;
+}
+.rightSide .content .dataBox .chartsBox .orderData #line {
+  padding: 0.3125rem 0 0;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.rightSide .content .dataBox .chartsBox .terData {
+  width: 4.179688rem;
+  height: 2.242188rem;
+  border-radius: 4px;
+  background: #fff;
+}
+.rightSide .content .dataBox .chartsBox .terData #bar {
+  padding: 0.3125rem 0 0;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.rightSide .content .dataBox .flex {
+  width: 100%;
+  margin-top: 30px;
+  display: flex;
+  justify-content: left;
+}
+.rightSide .content .dataBox .flex .totalData {
+  width: 260px;
+  height: 349px;
+  border: 1px solid #c7cacc;
+  border-radius: 4px;
+  margin-left: 40px;
+}
+.rightSide .content .dataBox .flex .totalData .totalAmount {
+  height: 116px;
+  border-top: 1px solid #c7cacc;
+}
+.rightSide .content .dataBox .flex .totalData .totalBox {
+  height: 116px;
+  width: 100%;
+  padding-top: 33px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+}
+.rightSide .content .dataBox .flex .totalData .totalBox .iconBox {
+  width: 50px;
+  height: 50px;
+  background: #2981ff;
+  border-radius: 50%;
+  margin-left: 40px;
+  text-align: center;
+}
+.rightSide .content .dataBox .flex .totalData .totalBox .iconBox .iconfont {
+  font-size: 24px;
+  color: #fff;
+  line-height: 50px;
+}
+.rightSide .content .dataBox .flex .totalData .totalBox .num {
+  width: 168px;
+  color: #2981FF;
+  font-size: 20px;
+  text-align: center;
+}
+.rightSide .content .dataBox .flex .totalData .totalBox .desc {
+  width: 168px;
+  color: #646F7C;
+  font-size: 12px;
+  text-align: center;
+}

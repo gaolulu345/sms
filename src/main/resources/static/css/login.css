@@ -1,0 +1,67 @@
+body {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 0.6875rem;
+  background: url('http://tp-app.oss-cn-hangzhou.aliyuncs.com/ios/background.png') no-repeat;
+  background-size: cover;
+}
+body .login-box {
+  width: 944px;
+  height: 546px;
+  background: #fff;
+  border-radius: 47px;
+  margin: 0 auto;
+  position: relative;
+  padding: 64px 0 0 113px;
+  box-sizing: border-box;
+}
+body .login-box .logo {
+  width: 80px;
+  height: 36px;
+  position: absolute;
+  top: 27px;
+  left: 58px;
+}
+body .login-box .pic-box {
+  width: 325px;
+  height: 325px;
+}
+body .login-box .pic-box img {
+  width: 100%;
+  height: 100%;
+}
+body .login-box .info-box {
+  width: 305px;
+  margin-left: 92px;
+}
+body .login-box .info-box .title {
+  margin-top: 117px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 22px;
+  color: #3388ff;
+}
+body .login-box .info-box .content {
+  width: 305px;
+  text-align: center;
+  box-sizing: border-box;
+}
+body .login-box .info-box .content .el-input {
+  width: 300px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid #babcbf;
+}
+body .login-box .info-box .content .el-input input {
+  border: 1px solid transparent;
+}
+body .login-box .info-box .content .el-button {
+  width: 238px;
+  height: 40px;
+  background: #3388ff;
+  border-radius: 22px;
+  font-size: 18px;
+  line-height: 16px;
+  color: #fff;
+  text-align: center;
+}
