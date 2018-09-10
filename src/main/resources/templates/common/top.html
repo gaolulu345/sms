@@ -1,0 +1,35 @@
+
+<!-- 顶部页面名称、退出、修改密码等 -->
+
+<div class="topBox">
+	<p class="name">{{pageTitle}}</p>
+	<div class="infoBox">
+		<img class="avatar" src="http://tp-app.oss-cn-hangzhou.aliyuncs.com/ios/appLogo.png" onclick="openChangePwDialog()">
+		<span class="adminName">管理员名称</span>
+		<i class="iconfont icon-logout" onclick="logout()"></i>
+	</div>
+</div>
+
+<div id="changePwDialog" class="none">
+	<div class="mainBox">
+		<p class="title">修改密码</p>
+		<el-form label-width="100px" class="formBox">
+			<el-form-item label="原始密码" class="eachItem">
+			    <el-input type="password" size="mini" id="opw" placeholder="请输入旧密码"></el-input>
+			</el-form-item>
+			<el-form-item label="新密码" class="eachItem">
+				<el-input type="password" size="mini" id="npw" placeholder="请输入新密码"></el-input>
+			</el-form-item>
+		 	<el-form-item label="确认新密码" class="eachItem">
+		 		<el-input type="password" size="mini" id="snpw" placeholder="请再次输入新密码"></el-input>
+			</el-form-item>
+			
+		</el-form>
+		<div class="btnsBox">
+			<el-button type="primary" size="mini" onclick="closeChangePwDialog()">取消</el-button>
+			<el-button type="primary" size="mini" onclick="changePw()">确认修改</el-button>
+		</div>
+	</div>
+</div>
+
+
