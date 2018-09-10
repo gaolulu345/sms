@@ -6,14 +6,12 @@
 #### 软件架构
 软件架构说明
 
-#### 项目页面路由说明
+#### 路由
 
 - 首页  url: /index
 - 登录  url:/login
 - 用户  url:/pages/user
-
 - 订单  url:/pages/order
-
 - 退款  url:/pages/refund
 - 上传 url:/pages/upload
 - 系统 url:/pages/system

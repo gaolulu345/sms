@@ -13,7 +13,6 @@ public class IndexController {
 
     /**
      * 首页
-     * @param request
      * @return
      */
     @GetMapping(value = {"","/index"})
@@ -30,6 +29,13 @@ public class IndexController {
         return "login";
     }
 
+
+    /**
+     * 系统错误
+     * @return
+     */
+    @GetMapping(value = "/error")
+    public String error() { return "error"; }
 
     /**
      * 用户
