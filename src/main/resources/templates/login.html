@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<!-- 2018.2.27 -->
+
 <head>
-    <meta charset="UTF-8">
-    <title>login</title>
+   <#include "common/meta.html">
+   <link rel="stylesheet" href="/css/login.css">
+   <script src="/js/common/md5.js"></script>
 </head>
+
 <body>
-<h1>登录</h1>
+<div v-cloak id="app" class="clearfix">
+	<div class="login-box">
+		<img src="http://tp-app.oss-cn-hangzhou.aliyuncs.com/ios/logo.png" alt="" class="logo">
+		<div class="pic-box fl">
+			<img src="http://tp-app.oss-cn-hangzhou.aliyuncs.com/ios/login.png" alt="">
+		</div>
+		<div class="info-box fl">
+			<p class="title">太仆汽车后台管理系统登录</p>
+
+			<div class="content" onkeydown="keyLogin(event)">
+    			<el-input v-model="name" placeholder="请输入账号" prefix-icon="el-icon-search"></el-input>
+    			<el-input type="password" v-model="pw" placeholder="请输入密码" prefix-icon="el-icon-search"></el-input>
+    			<el-button type="primary" @click="login">登录</el-button>
+    		</div>
+
+		</div>
+	</div>
+    
+</div>
+
+
+<script src="/js/login.js"></script>
 </body>
 </html>
+

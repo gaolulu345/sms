@@ -1,0 +1,79 @@
+.content {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 50px;
+  box-sizing: border-box;
+}
+.content .menuListBox {
+  width: 1.71875rem;
+  height: 720px;
+  border: 1px solid #c7cacc;
+  background: #fff;
+}
+.content .menuListBox .title {
+  height: 40px;
+  font-size: 18px;
+  color: #00203C;
+  line-height: 40px;
+  padding-left: 5px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e3ebf2;
+}
+.content .menuListBox table tbody {
+  height: 500px;
+  overflow-y: scroll;
+}
+.content .menuDetailsBox {
+  width: 6.640625rem;
+  height: 720px;
+}
+.content .menuDetailsBox .infosBox {
+  width: 6.25rem;
+  height: 200px;
+  border: 1px solid #c7cacc;
+  background: #fff;
+}
+.content .menuDetailsBox .infosBox .title {
+  height: 40px;
+  font-size: 18px;
+  color: #00203C;
+  line-height: 40px;
+  padding-left: 30px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e3ebf2;
+}
+.content .menuDetailsBox .infosBox .data {
+  padding-left: 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+}
+.content .menuDetailsBox .infosBox .data .eachData {
+  width: 1.890625rem;
+  font-size: 16px;
+  color: #3E3F41;
+  line-height: 42px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.content .menuDetailsBox .infosBox .data .eachData .dataNum {
+  font-size: 14px;
+}
+.content .menuDetailsBox .operateBox {
+  width: 6.25rem;
+  height: 500px;
+  margin-top: 18px;
+  border: 1px solid #c7cacc;
+  background: #fff;
+}
+.content .menuDetailsBox .operateBox .title {
+  height: 40px;
+  font-size: 18px;
+  color: #00203C;
+  line-height: 40px;
+  padding-left: 5px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e3ebf2;
+}

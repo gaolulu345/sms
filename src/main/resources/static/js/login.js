@@ -8,7 +8,7 @@ var vm = new Vue({
     },
     methods: {
     	login: function(){
-    		var data = {name: vm.name, pw: hex_md5(vm.pw)};
+    		var data = {username: vm.name, password: hex_md5(vm.pw)};
 			$.ajax({
 				url: 'api/user/login',
 				dataType: 'json',

@@ -1,10 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>system</title>
+   <#include "common/meta.html">
+   <link rel="stylesheet" href="/css/system.css">
 </head>
+
 <body>
-<h1>系统管理</h1>
+<div id="app" class="clearfix">
+    <#include "common/left.html">
+    <div class="rightSide fl">
+        <#include "common/top.html">
+        <div class="content">
+
+            <!-- 页面菜单列表 -->
+            <div class="menuListBox">
+                <p class="title">
+                    
+                    <el-button v-if="isAll == false" type="primary" size="mini"  @click="getMenuList(true)">查看全部</el-button>
+                    <el-button v-if="isAll == true" type="success" size="mini"  @click="getMenuList(false)">仅看有效</el-button>
+
+                    <el-button icon="el-icon-plus" type="primary" size="mini"  @click="clickShowAddMenu"></el-button>
+                    <el-button icon="el-icon-delete" type="danger" size="mini"  @click="deleteMenu"></el-button>
+                </p>
+
+                <el-table
+                    ref="multipleTable"
+                    @selection-change="handleMenuSelectionChange"
+                    :data="menuList"
+                    size="mini"
+                    height="680"
+                    highlight-current-row
+                    @row-click="getMenuInfo"
+                    style="width: 100%">
+
+                    <el-table-column type="selection" width="55"></el-table-column>
+
+                    <el-table-column label="菜单名称">
+                        <template slot-scope="scope">
+                            <span style="color: gray;" v-if="scope.row.enable == false && scope.row.deleted == false">{{scope.row.menuName}}  (未启用）</span>
+                            <span style="color: red;" v-if="scope.row.deleted == true">{{scope.row.menuName}}  (已删除）</span>
+                            <span v-if="scope.row.enable == true && scope.row.deleted == false">{{scope.row.menuName}}</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+
+            <!-- 详情+功能 -->
+            <div class="menuDetailsBox">
+                <div class="infosBox">
+                    <p class="title">
+                        菜单信息
+                        <el-button icon="el-icon-edit" type="primary" size="mini" @click="openEditMenuDialog"></el-button>
+                    </p>
+                    <div class="data">
+                        <div class="eachData">菜单ID：<span class="dataNum">{{currentMenu.id}}</span></div>
+                        <div class="eachData">菜单名称：<span class="dataNum">{{currentMenu.menuName}}</span></div>
+                        <div class="eachData">资源：<span class="dataNum">{{currentMenu.resource}}</span></div>
+
+                        <div class="eachData">是否启用：
+                            <span class="dataNum">  
+                                <el-switch
+                                    v-model="currentMenu.enable"
+                                    active-color="#13ce66"
+                                    @change="handleMenuChangeEnable">
+                                </el-switch>
+                            </span>
+                        </div>
+
+                        <div class="eachData">创建时间：<span class="dataNum">{{currentMenu.createTime}}</span></div>
+                        <div class="eachData">修改时间：<span class="dataNum">{{currentMenu.modifyTime}}</span></div>
+
+                        <div class="eachData">是否删除：
+                            <span class="dataNum">  
+                                <el-switch
+                                    v-model="currentMenu.deleted"
+                                    active-color="#13ce66"
+                                    @change="handleMenuChangeDelete">
+                                </el-switch>
+                            </span>
+                        </div>
+                        <div class="eachData">排序：<span class="dataNum">{{currentMenu.orderBy}}</span></div>
+                    </div>
+                </div>
+
+                <!-- 操作列表 -->
+                <div class="operateBox">
+                    <p class="title">
+                        操作信息
+                        <el-button v-if="isAllOp == false" type="primary" size="mini"  @click="getOperationList(currentMenu.id,true)">查看全部</el-button>
+                        <el-button v-if="isAllOp == true" type="success" size="mini"  @click="getOperationList(currentMenu.id,false)">仅看有效</el-button>
+
+                        <el-button icon="el-icon-plus" type="primary" size="mini" @click="openAddOperationDialog"></el-button>
+                        <el-button icon="el-icon-delete" type="danger" size="mini"  @click="deleteOp"></el-button>
+                    </p>
+                    <el-table ref="multipleTable"
+                    @selection-change="handleOpSelectionChange" :data="operationList" size="mini" height="460" style="width: 100%">
+                        <el-table-column type="selection" width="55"></el-table-column>
+                        <!-- <el-table-column prop="id" label="操作ID"></el-table-column> -->
+
+                        <el-table-column label="操作名称">
+                            <template slot-scope="scope">
+                                <span style="color: gray;" v-if="scope.row.enable == false && scope.row.deleted == false">{{scope.row.operationsName}}  (未启用）</span>
+                                <span style="color: red;" v-if="scope.row.deleted == true">{{scope.row.operationsName}}  (已删除）</span>
+                                <span v-if="scope.row.enable == true && scope.row.deleted == false">{{scope.row.operationsName}}</span>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column prop="details" label="详情"> </el-table-column>
+                        <el-table-column prop="resource" label="资源"></el-table-column>
+                        <!-- <el-table-column prop="menuId" label="所属菜单"></el-table-column> -->
+
+                        <el-table-column prop="enable" label="是否启用">
+                            <template slot-scope="scope">
+                                <el-switch
+                                    v-model="scope.row.enable"
+                                    active-color="#13ce66"
+                                    @change="handleOpChangeEnable($event,scope.row.id)">
+                                </el-switch>                                
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column prop="deleted" label="是否删除">
+                            <template slot-scope="scope">
+                                <el-switch
+                                    v-model="scope.row.deleted"
+                                    active-color="#13ce66"
+                                    @change="handleOpChangeDelete($event,scope.row.id)">
+                                </el-switch>                                
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column label="编辑">
+                            <template slot-scope="scope">
+                                <el-button @click="clickEditOp(scope.row)" type="text" size="small" icon="el-icon-edit"></el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增菜单弹出框 -->
+    <el-dialog title="新增菜单" :visible.sync="showAddMenu">
+        <el-form :model="addMenuInfo">
+            <el-form-item label="菜单名称" :label-width="dialogLabelWidth">
+                <el-input v-model="addMenuInfo.menuName" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="详情" :label-width="dialogLabelWidth">
+                <el-input v-model="addMenuInfo.details" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="资源" :label-width="dialogLabelWidth">
+                <el-select v-model="addMenuInfo.resource" placeholder="请选择" size="mini" style="min-width: 200px;">
+                    <el-option v-for="item in pageResource" :value="item"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="排序" :label-width="dialogLabelWidth">
+                <el-input type="number" v-model="addMenuInfo.orderBy" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="mini" @click="addMenu">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 修改菜单弹出框 -->
+    <el-dialog title="编辑菜单" :visible.sync="showEditMenu">
+        <el-form :model="editMenuInfo">
+            <el-form-item label="菜单ID" :label-width="dialogLabelWidth">
+                <el-input v-model="editMenuInfo.id" disabled size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="菜单名称" :label-width="dialogLabelWidth">
+                <el-input v-model="editMenuInfo.menuName" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="详情" :label-width="dialogLabelWidth">
+                <el-input v-model="editMenuInfo.details" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="资源" :label-width="dialogLabelWidth">
+                <el-select v-model="editMenuInfo.resource" placeholder="请选择" size="mini" style="min-width: 200px;">
+                    <el-option v-for="item in pageResource" :value="item"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="排序" :label-width="dialogLabelWidth">
+                <el-input type="number" v-model="editMenuInfo.orderBy" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="mini" @click="editMenu">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 新增操作弹出框 -->
+    <el-dialog title="新增操作" :visible.sync="showAddOperation">
+        <el-form :model="addOperationInfo">
+            <el-form-item label="操作名称" :label-width="dialogLabelWidth">
+                <el-input v-model="addOperationInfo.operationsName" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="详情" :label-width="dialogLabelWidth">
+                <el-input v-model="addOperationInfo.details" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="资源" :label-width="dialogLabelWidth">
+                <el-select v-model="addOperationInfo.resource" placeholder="请选择" size="mini" style="min-width: 200px;">
+                    <el-option v-for="item in opResource" :value="item"></el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="所属菜单名称" :label-width="dialogLabelWidth">
+                <el-input  disabled v-model="currentMenu.menuName" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="mini" @click="addOperation">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 修改操作弹出框 -->
+    <el-dialog title="修改操作" :visible.sync="showEditOp">
+        <el-form :model="editOpInfo">
+            <el-form-item label="操作ID" :label-width="dialogLabelWidth">
+                <el-input v-model="editOpInfo.id" disabled size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item label="所属菜单" :label-width="dialogLabelWidth">
+                <el-select v-model="editOpInfo.menuId" placeholder="请选择" size="mini" style="min-width: 200px;">
+                    <el-option v-for="item in menuOptions" :value="item.value" :label="item.label"></el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="操作名称" :label-width="dialogLabelWidth">
+                <el-input v-model="editOpInfo.operationsName" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="详情" :label-width="dialogLabelWidth">
+                <el-input v-model="editOpInfo.details" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="资源" :label-width="dialogLabelWidth">
+                <el-select v-model="editOpInfo.resource" placeholder="请选择" size="mini" style="min-width: 200px;">
+                    <el-option v-for="item in opResource" :value="item"></el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="mini" @click="editOp">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+
+<script>
+    var admin = '超级管理员';
+    var adminId = 1;
+</script>
+<script src="/js/common/per.js"></script>
+<script src="/js/system.js"></script>
 </body>
 </html>
