@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.AdminMenuDao">
+
+    <insert id="insert" parameterType="com.tp.admin.data.entity.AdminMenu" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+      INSERT INTO `admin_menu` (
+			`menu_name`,
+			`details`,
+			`resource`,
+			`order_by`
+		) VALUES (
+			#{menuName},
+			#{details},
+			#{resource},
+			#{orderBy}
+		)
+    </insert>
+
+	<update id="update" parameterType="com.tp.admin.data.entity.AdminMenu" >
+		UPDATE
+		`admin_menu`
+		<trim prefix="set" suffixOverrides=",">
+			<if test="menuName != null">
+				menu_name = #{menuName},
+			</if>
+			<if test="details != null">
+				details = #{details},
+			</if>
+			<if test="resource != null">
+				resource = #{resource},
+			</if>
+			<if test="orderBy != null">
+				order_by = #{orderBy},
+			</if>
+		</trim>
+		WHERE
+		id = #{id}
+	</update>
+
+	<select id="listBySearch" parameterType="com.tp.admin.data.search.SystemSearch" resultMap="AdminMenuMap">
+		SELECT
+		*
+		FROM
+		`admin_menu`
+		<where>
+			<if test="all == false">
+				AND
+				deleted = 0
+				AND
+				enable = #{enable}
+			</if>
+		</where>
+		ORDER BY id DESC , order_by DESC
+		<if test="pageSize != null and pageSize !=0 and offset != null">
+			LIMIT #{offset},#{pageSize}
+		</if>
+    </select>
+
+	<select id="cntBySearch" resultType="java.lang.Integer">
+		SELECT
+			COUNT(id)
+		FROM
+			`admin_menu`
+		<where>
+			<if test="all == false">
+				AND
+				deleted = 0
+				AND
+				enable = #{enable}
+			</if>
+		</where>
+	</select>
+
+    <select id="list" resultMap="AdminMenuMap">
+		SELECT
+		*
+		FROM
+		`admin_menu`
+		WHERE
+		deleted = 0
+		AND
+		enable = 1
+	</select>
+
+	<select id="listByRolesIds" parameterType="java.util.List" resultMap="AdminMenuMap">
+		SELECT
+		m.*
+		FROM
+		`admin_menu` AS m INNER JOIN `admin_pk_roles_menu` AS aprm ON m.id = aprm.menu_id
+		WHERE
+		m.deleted = 0
+		AND
+		m.enable = 1
+		AND
+		aprm.enable = 1
+		AND
+		aprm.roles_id IN
+		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="listByAdminId" resultMap="AdminMenuMap">
+		SELECT
+		m.*
+		FROM
+		`admin_menu` AS m INNER JOIN `admin_pk_roles_menu` AS aprm ON m.id = aprm.menu_id
+		INNER JOIN `admin_roles` AS r ON aprm.roles_id = r.id
+		INNER JOIN `admin_pk_sys_roles` AS apsr ON apsr.roles_id = r.id
+		INNER JOIN `admin_account` AS aa ON aa.id = apsr.admin_id
+		WHERE
+		aa.id = #{adminId}
+		AND
+		aa.deleted = 0
+		AND
+		m.deleted = 0
+		AND
+		m.enable = 1
+		AND
+		aprm.enable = 1
+		AND
+		r.enable = 1
+		AND
+		r.deleted = 0
+		AND
+		apsr.enable = 1
+	</select>
+
+	<select id="all" resultMap="AdminMenuMap">
+		SELECT
+		*
+		FROM
+		`admin_menu`
+	</select>
+
+    <select id="findById" resultMap="AdminMenuMap">
+		SELECT
+		*
+		FROM
+		`admin_menu`
+		WHERE
+		id = #{id}
+	</select>
+
+    <update id="bachUpdateEnable" parameterType="com.tp.admin.data.search.SystemSearch" >
+		UPDATE
+		`admin_menu` AS menu
+		SET
+		menu.enable = #{enable}
+		WHERE
+		menu.id IN
+		<foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="bachUpdateEnableAndOperationsEnable">
+		UPDATE
+		`admin_menu` AS menu LEFT JOIN `admin_operations` AS operations ON menu.id = operations.menu_id
+		SET
+		menu.enable = #{enable} , operations.enable = #{enable}
+		WHERE
+		menu.id IN
+		<foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="bachUpdateDeleted">
+		UPDATE
+		`admin_menu` AS menu
+		SET
+		menu.deleted = #{deleted}
+		WHERE
+		menu.id IN
+		<foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="bachUpdateDeletedAndOperationsDeleted" parameterType="com.tp.admin.data.search.SystemSearch">
+		UPDATE
+		`admin_menu` AS menu LEFT JOIN `admin_operations` AS operations ON menu.id = operations.menu_id
+		SET
+		menu.deleted = #{deleted} , operations.deleted = #{deleted}
+		WHERE
+		menu.id IN
+		<foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<resultMap id="AdminMenuMap" type="com.tp.admin.data.entity.AdminMenu">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="enable" property="enable" jdbcType="BIT" />
+		<result column="deleted" property="deleted" jdbcType="BIT" />
+		<result column="menu_name" property="menuName" jdbcType="VARCHAR"/>
+		<result column="details" property="details" jdbcType="VARCHAR"/>
+		<result column="resource" property="resource" jdbcType="VARCHAR"/>
+		<result column="order_by" property="orderBy" jdbcType="INTEGER"/>
+	</resultMap>
+
+</mapper>

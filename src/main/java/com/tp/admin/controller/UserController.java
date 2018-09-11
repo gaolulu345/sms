@@ -21,16 +21,14 @@ public class UserController {
     @Autowired
     AccountServiceI accountServiceI;
 
-    @PostMapping(value = "/api/user/login")
+    @PostMapping(value = "/login")
     public ApiResult login(HttpServletRequest request, @RequestBody AdminAccount adminAccount) {
         return accountServiceI.login(request,adminAccount);
     }
 
-    @PostMapping(value = "/api/user/logout")
+    @PostMapping(value = "/logout")
     public ApiResult logout(HttpServletRequest request) {
         return accountServiceI.logout(request);
     }
-
-
 
 }

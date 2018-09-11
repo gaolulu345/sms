@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.AdminPkRolesOperationsDao">
+
+    <insert id="insert">
+        INSERT INTO `admin_pk_roles_operations` (
+			`roles_id`,
+			`operations_id`,
+			`enable`
+		) VALUES (
+			#{rolesId},
+			#{operationsId},
+			#{enable}
+		)
+    </insert>
+
+    <update id="update">
+        UPDATE
+        `admin_pk_roles_operations`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="rolesId != null">
+                roles_id = #{rolesId},
+            </if>
+            <if test="operationsId != null">
+                operations_id = #{operationsId},
+            </if>
+            <if test="enable != null">
+                enable = #{enable},
+            </if>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="listByRolesId" resultMap="AdminPkRolesOperationsMap">
+        SELECT *
+        FROM `admin_pk_roles_operations`
+        WHERE
+        roles_id = #{rolesId}
+    </select>
+
+    <select id="listByRolesIdAndIds" resultMap="AdminPkRolesOperationsMap" >
+        SELECT *
+        FROM `admin_pk_roles_operations`
+        WHERE
+        roles_id = #{rolesId}
+        AND
+        operations_id IN
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="listByPartnerId" resultMap="AdminPkRolesOperationsMap">
+        SELECT apro.*
+        FROM `admin_pk_roles_operations` AS apro
+        INNER JOIN `admin_roles` AS r ON apro.roles_id = r.id
+        INNER JOIN `admin_pk_sys_roles` AS apsr ON apsr.roles_id = r.id
+        INNER JOIN `admin_account` AS aa ON apsr.admin_id = aa.id
+        WHERE
+        aa.id = #{adminId}
+        AND
+        aa.deleted = 0
+        AND
+        apro.enable = 1
+        AND
+        r.enable = 1
+        AND
+        r.deleted = 0
+    </select>
+
+    <resultMap id="AdminPkRolesOperationsMap" type="com.tp.admin.data.entity.AdminPkRolesOperations">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="operations_id" property="operationsId" jdbcType="INTEGER"/>
+        <result column="roles_id" property="rolesId" jdbcType="INTEGER"/>
+        <result column="enable" property="enable" jdbcType="BIT" />
+    </resultMap>
+</mapper>

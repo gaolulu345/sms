@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.AdminPkRolesMenuDao">
+
+    <insert id="insert" parameterType="com.tp.admin.data.entity.AdminPkRolesMenu" >
+    INSERT INTO `admin_pk_roles_menu` (
+			`roles_id`,
+			`menu_id`,
+			`enable`
+		) VALUES (
+			#{rolesId},
+			#{menuId},
+			#{enable}
+		)
+    </insert>
+
+    <update id="update" parameterType="com.tp.admin.data.entity.AdminPkRolesMenu" >
+        UPDATE
+        `admin_pk_roles_menu`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="rolesId != null">
+                roles_id = #{rolesId},
+            </if>
+            <if test="menuId != null">
+                menu_id = #{menuId},
+            </if>
+            <if test="enable != null">
+                enable = #{enable},
+            </if>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="listByRolesId" resultMap="AdminPkRolesMenuMap">
+        SELECT *
+        FROM `admin_pk_roles_menu`
+        WHERE
+        roles_id = #{rolesId}
+    </select>
+
+    <select id="listByRolesIdAndIds" resultMap="AdminPkRolesMenuMap" >
+        SELECT *
+        FROM `admin_pk_roles_menu`
+        WHERE
+        roles_id = #{rolesId}
+        AND
+        menu_id IN
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="listByAdminId" resultMap="AdminPkRolesMenuMap">
+        SELECT sprm.*
+        FROM `admin_pk_roles_menu` AS aprm
+        INNER JOIN `admin_roles` AS r ON aprm.roles_id = r.id
+        INNER JOIN `admin_pk_sys_roles` AS apsr ON apsr.roles_id = r.id
+        INNER JOIN `admin_account` AS aa ON apsr.admin_id = aa.id
+        WHERE
+        aa.id = #{adminId}
+        AND
+        aa.deleted = 0
+        AND
+        aprm.enable = 1
+        AND
+        r.enable = 1
+        AND
+        r.deleted = 0
+    </select>
+
+
+    <resultMap id="AdminPkRolesMenuMap" type="com.tp.admin.data.entity.AdminPkRolesMenu">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="menu_id" property="menuId" jdbcType="INTEGER"/>
+        <result column="roles_id" property="rolesId" jdbcType="INTEGER"/>
+        <result column="enable" property="enable" jdbcType="BIT" />
+    </resultMap>
+
+
+</mapper>

@@ -6,8 +6,8 @@ import com.tp.admin.dao.AdminAccountDao;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
+import com.tp.admin.security.AutoResource;
 import com.tp.admin.service.AccountServiceI;
-import com.tp.admin.utils.SecurityUtil;
 import com.tp.admin.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class AccountServiceImplement implements AccountServiceI {
@@ -29,12 +32,19 @@ public class AccountServiceImplement implements AccountServiceI {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    private AdminAccount findByUsername(String username) {
+    @Override
+    public AdminAccount findByUsername(String username) {
         return adminAccountDao.findByUsername(username);
     }
 
-    private int updateLastLoginTime(int id) {
-        return adminAccountDao.updateLastLoginTime(id);
+    @Override
+    public int updateLastLoginTime(int id) {
+        return adminAccountDao.updateLastLoginTime(id,new Timestamp(System.currentTimeMillis()));
+    }
+
+    @Override
+    public Set<AutoResource> findAdminAutoResource(int id) {
+        return new HashSet<>();
     }
 
     @Override

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.AdminPkAccountRolesDao">
+
+    <insert id="insert" parameterType="com.tp.admin.data.entity.AdminPkAccountRoles" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        INSERT INTO `admin_pk_account_roles` (
+			`admin_id`,
+			`roles_id`,
+			`enable`
+		) VALUES (
+			#{adminId},
+			#{rolesId},
+			#{enable}
+		)
+    </insert>
+
+    <update id="update" parameterType="com.tp.admin.data.entity.AdminPkAccountRoles">
+      UPDATE `admin_pk_account_roles`
+      <trim prefix="set" suffixOverrides=",">
+        <if test="null != parnterId and 0 != parnterId">
+            admin_id = #{adminId},
+        </if>
+        <if test="null != rolesId  and 0 != rolesId">
+            roles_id = #{rolesId},
+        </if>
+        <if test="enable != null">
+            enable = #{enable},
+        </if>
+      </trim>
+      WHERE
+      id = #{id}
+    </update>
+
+    <select id="listByAdminId" resultMap="AdminPkRolesMap">
+        SELECT *
+        FROM `admin_pk_account_roles`
+        WHERE
+        admin_id = #{adminId}
+        AND
+        enable = true
+    </select>
+
+    <select id="findByAdminId" resultMap="AdminPkRolesMap">
+      SELECT *
+        FROM `admin_pk_account_roles`
+        WHERE
+        admin_id = #{adminId}
+        AND
+        enable = true
+        LIMIT 0 , 1
+    </select>
+
+    <resultMap id="AdminPkRolesMap" type="com.tp.admin.data.entity.AdminPkAccountRoles">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="admin_id" property="adminId" jdbcType="INTEGER" />
+        <result column="roles_id" property="rolesId" jdbcType="INTEGER" />
+        <result column="enable" property="enable" jdbcType="BIT" />
+    </resultMap>
+
+</mapper>

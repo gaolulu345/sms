@@ -15,7 +15,7 @@ public class IndexController {
      * 首页
      * @return
      */
-    @GetMapping(value = {"","/index"})
+    @GetMapping(value = {"","/pages/index"})
     public String index(HttpServletRequest request , Model model) {
         return "index";
     }
@@ -28,7 +28,6 @@ public class IndexController {
     public String login(HttpServletRequest request, Model model ) {
         return "login";
     }
-
 
     /**
      * 系统错误

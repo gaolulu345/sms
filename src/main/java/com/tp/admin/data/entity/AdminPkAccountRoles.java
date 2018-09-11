@@ -6,19 +6,16 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
-/**
- * 角色
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminRoles {
+public class AdminPkAccountRoles {
 
     private int id;
     private Timestamp createTime;
     private Timestamp modifyTime;
+    private int adminId;
+    private int rolesId;
     private boolean enable;
-    private boolean deleted;
-    private String rolesName;
-    private String details;
+
 }

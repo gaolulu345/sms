@@ -2,9 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tp.admin.dao.AdminAccountDao">
 
+    <select id="findByUsername" resultMap="AdminAccountMap">
+      SELECT DISTINCT * FROM
+		`admin_account`
+		WHERE
+		username = #{username}
+		AND
+		deleted = 0
+		AND
+		enable = 1
+		LIMIT 0 , 1
+    </select>
 
-    <select id="findByUsername" resultType="com.tp.admin.data.entity.AdminAccount"></select>
+    <update id="updateLastLoginTime">
+        UPDATE
+		`admin_account`
+		SET
+		last_login_time = #{time}
+		WHERE
+		id = #{id}
+    </update>
 
-    <update id="updateLastLoginTime"></update>
+    <resultMap id="AdminAccountMap" type="com.tp.admin.data.entity.AdminAccount">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="intros" property="intros" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="deleted" property="deleted" jdbcType="BIT" />
+        <result column="enable" property="enable" jdbcType="BIT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    </resultMap>
 
 </mapper>

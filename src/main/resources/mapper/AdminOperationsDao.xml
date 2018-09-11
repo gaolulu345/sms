@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.AdminOperationsDao">
+
+
+    <insert id="insert" parameterType="com.tp.admin.data.entity.AdminOperations" useGeneratedKeys="true"
+            keyProperty="id"
+            keyColumn="id">
+        INSERT INTO `admin_operations` (
+			`operations_name`,
+			`details`,
+			`resource`,
+			`menu_id`
+		) VALUES (
+			#{operationsName},
+			#{details},
+			#{resource},
+			#{menuId}
+		)
+    </insert>
+
+    <update id="update" parameterType="com.tp.admin.data.entity.AdminOperations">
+        UPDATE
+        `admin_operations`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="operationsName != null">
+                operations_name = #{operationsName},
+            </if>
+            <if test="details != null">
+                details = #{details},
+            </if>
+            <if test="resource != null">
+                resource = #{resource},
+            </if>
+            <if test="menuId != null">
+                menu_id = #{menuId},
+            </if>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="listBySearch" parameterType="com.tp.admin.data.search.SystemSearch"
+            resultMap="AdminOperationsMap">
+        SELECT
+        *
+        FROM
+        `admin_operations`
+        WHERE
+        menu_id = #{menuId}
+        <if test="all == false">
+            AND
+            deleted = 0
+            AND
+            enable = #{enable}
+        </if>
+        ORDER BY id DESC
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <select id="cntBySearch" resultType="java.lang.Integer">
+        SELECT
+        COUNT(id)
+        FROM
+        `admin_operations`
+        WHERE
+        menu_id = #{menuId}
+        <if test="all == false">
+            AND
+            deleted = 0
+            AND
+            enable = #{enable}
+        </if>
+    </select>
+
+    <select id="list" resultMap="AdminOperationsMap">
+        SELECT
+        *
+        FROM
+        `admin_operations`
+        WHERE
+        deleted = 0
+        AND
+		enable = 1
+    </select>
+
+    <select id="listByRolesIds" resultMap="AdminOperationsMap">
+        SELECT
+        o.*
+        FROM
+        `admin_operations` AS o INNER JOIN `admin_pk_roles_operations` AS spro ON o.id = spro.operations_id
+        WHERE
+        o.deleted = 0
+        AND
+        o.enable = 1
+        AND
+        spro.enable = 1
+        AND
+        spro.roles_id IN
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="listByAdminId" resultMap="AdminOperationsMap">
+        SELECT
+		o.*
+		FROM
+		`admin_operations` AS o INNER JOIN `admin_pk_roles_operations` AS apro ON o.id = apro.operations_id
+		INNER JOIN admin_roles AS r ON apro.roles_id = r.id
+		INNER JOIN admin_pk_sys_roles AS apsr ON apsr.roles_id = r.id
+		INNER JOIN admin_account AS aa ON aa.id = apsr.admin_id
+		WHERE
+		aa.id = #{adminId}
+        AND
+		aa.deleted = 0
+		AND
+		o.deleted = 0
+		AND
+		o.enable = 1
+		AND
+		apro.enable = 1
+		AND
+		r.enable = 1
+		AND
+		r.deleted = 0
+		AND
+		apsr.enable = 1
+    </select>
+
+
+    <select id="all" resultMap="AdminOperationsMap">
+        SELECT
+        *
+        FROM
+        `admin_operations`
+    </select>
+
+    <select id="findById" resultMap="AdminOperationsMap">
+      SELECT
+      *
+      FROM
+      admin_operations
+      WHERE
+      id = #{id}
+    </select>
+
+    <update id="bachUpdateEnable" parameterType="com.tp.admin.data.search.SystemSearch">
+        UPDATE
+        `admin_operations`
+        SET
+        enable = #{enable}
+        WHERE
+        id IN
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="bachUpdateDeleted" parameterType="com.tp.admin.data.search.SystemSearch">
+        UPDATE
+        `admin_operations`
+        SET
+        deleted = #{deleted}
+        WHERE
+        id IN
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <resultMap id="AdminOperationsMap" type="com.tp.admin.data.entity.AdminOperations">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="enable" property="enable" jdbcType="BIT"/>
+        <result column="deleted" property="deleted" jdbcType="BIT"/>
+        <result column="operations_name" property="operationsName" jdbcType="VARCHAR"/>
+        <result column="details" property="details" jdbcType="VARCHAR"/>
+        <result column="resource" property="resource" jdbcType="VARCHAR"/>
+        <result column="menu_id" property="menuId" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+</mapper>

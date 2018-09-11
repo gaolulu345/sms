@@ -27,10 +27,10 @@ public class AdminAccount implements UserDetails {
 
     private Collection<GrantedAuthority> authorities;
 
-    AdminAccount(int id ,String name , String intros, Collection<GrantedAuthority> auths) {
+    public AdminAccount(int id ,String name , String password, Collection<GrantedAuthority> auths) {
         this.id = id;
         this.name = name;
-        this.intros = intros;
+        this.password = password;
         this.authorities = auths;
     }
 
