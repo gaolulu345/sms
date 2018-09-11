@@ -19,16 +19,16 @@ public class UserController {
     public static final String ROUTER_INDEX = "/api/user";
 
     @Autowired
-    AccountServiceI accountServiceI;
+    AccountServiceI accountService;
 
     @PostMapping(value = "/login")
     public ApiResult login(HttpServletRequest request, @RequestBody AdminAccount adminAccount) {
-        return accountServiceI.login(request,adminAccount);
+        return accountService.login(request,adminAccount);
     }
 
     @PostMapping(value = "/logout")
     public ApiResult logout(HttpServletRequest request) {
-        return accountServiceI.logout(request);
+        return accountService.logout(request);
     }
 
 }

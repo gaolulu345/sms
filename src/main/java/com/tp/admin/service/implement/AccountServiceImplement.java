@@ -3,6 +3,7 @@ package com.tp.admin.service.implement;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
 import com.tp.admin.dao.AdminAccountDao;
+import com.tp.admin.data.dto.AdminAccountDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -79,7 +80,10 @@ public class AccountServiceImplement implements AccountServiceI {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             HttpSession session = request.getSession();
             session.setAttribute(Constant.SECURITY_CONTEXT, SecurityContextHolder.getContext()); // 这个非常重要，否则验证后将无法登陆
-            return ApiResult.ok();
+            AdminAccountDTO adminAccountDTO = new AdminAccountDTO();
+            adminAccountDTO.setId(user.getId());
+            adminAccountDTO.setName(user.getName());
+            return ApiResult.ok(adminAccountDTO);
         }
         return ApiResult.error(ExceptionCode.INVALID_ACCESS_EXCEPTION);
     }

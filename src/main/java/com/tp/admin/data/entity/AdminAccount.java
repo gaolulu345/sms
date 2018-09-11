@@ -1,5 +1,6 @@
 package com.tp.admin.data.entity;
 
+import com.tp.admin.data.dto.AdminAccountDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,12 @@ public class AdminAccount implements UserDetails {
     private Timestamp lastLoginTime;
 
     private Collection<GrantedAuthority> authorities;
+
+    public AdminAccount(AdminAccountDTO adminAccountDTO){
+        this.username = adminAccountDTO.getUsername();
+        this.name = adminAccountDTO.getName();
+        this.intros = adminAccountDTO.getIntros();
+    }
 
     public AdminAccount(int id ,String name , String password, Collection<GrantedAuthority> auths) {
         this.id = id;

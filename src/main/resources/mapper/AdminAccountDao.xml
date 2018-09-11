@@ -2,11 +2,78 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tp.admin.dao.AdminAccountDao">
 
+    <insert id="insert" parameterType="com.tp.admin.data.entity.AdminAccount" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        INSERT INTO `admin_account` (
+			`username`,
+			`password`,
+			`intros`,
+			`name`
+		) VALUES (
+			#{username},
+			#{password},
+			#{intros},
+			#{name}
+		)
+    </insert>
+
+    <update id="update" parameterType="com.tp.admin.data.entity.AdminAccount">
+        UPDATE
+        `admin_account`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="intros != null">
+                intros = #{intros},
+            </if>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+
     <select id="findByUsername" resultMap="AdminAccountMap">
       SELECT DISTINCT * FROM
 		`admin_account`
 		WHERE
 		username = #{username}
+		AND
+		deleted = 0
+		AND
+		enable = 1
+		LIMIT 0 , 1
+    </select>
+
+    <select id="cntBySearch" resultType="java.lang.Integer">
+        SELECT
+        COUNT(id)
+        FROM
+        `admin_account`
+        ORDER BY id DESC
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <select id="listBySearch" resultMap="AdminAccountDTOMap">
+        SELECT
+        *
+        FROM
+        `admin_account`
+        ORDER BY id DESC
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <select id="findById" resultMap="AdminAccountMap">
+      SELECT DISTINCT * FROM
+		`admin_account`
+		WHERE
+		id = #{id}
 		AND
 		deleted = 0
 		AND
@@ -23,10 +90,35 @@
 		id = #{id}
     </update>
 
+    <update id="bachUpdateDeleted" parameterType="com.tp.admin.data.search.AdminSearch">
+        UPDATE
+        `admin_account`
+        SET
+        deleted = #{deleted}
+        WHERE
+        id IN
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+
     <resultMap id="AdminAccountMap" type="com.tp.admin.data.entity.AdminAccount">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="intros" property="intros" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="deleted" property="deleted" jdbcType="BIT" />
+        <result column="enable" property="enable" jdbcType="BIT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <resultMap id="AdminAccountDTOMap" type="com.tp.admin.data.dto.AdminAccountDTO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="intros" property="intros" jdbcType="VARCHAR" />
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="deleted" property="deleted" jdbcType="BIT" />
