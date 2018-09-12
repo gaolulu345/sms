@@ -52,6 +52,7 @@ public class AliyunOssManagerImpl implements AliyunOssManagerI {
             ossClient.shutdown();
         }
         dto.setNmae(fileName);
+        dto.setKey(key);
         dto.setUrl(this.aliyunOssProperties.getServerUrl()+key);
         return dto;
     }

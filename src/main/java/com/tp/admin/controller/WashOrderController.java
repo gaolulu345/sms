@@ -3,7 +3,7 @@ package com.tp.admin.controller;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.search.OrderSearch;
-import com.tp.admin.service.OrderServiceI;
+import com.tp.admin.service.WashOrderServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(OrderController.ROUTER_INDEX)
-public class OrderController {
+@RequestMapping(WashOrderController.ROUTER_INDEX)
+public class WashOrderController {
 
     public static final String ROUTER_INDEX = "/api/private/order";
 
     @Autowired
-    OrderServiceI orderService;
+    WashOrderServiceI orderService;
 
     @PostMapping(value = "/ter/selection")
     public ApiResult orderTerSelection(HttpServletRequest request){

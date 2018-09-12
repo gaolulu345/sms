@@ -5,7 +5,7 @@ import com.tp.admin.data.search.UserSearch;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface UserServiceI {
+public interface WashUserServiceI {
 
     ApiResult list(HttpServletRequest request , UserSearch userSearch);
 }

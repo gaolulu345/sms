@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
-public class AdminServiceImplement implements AdminServiceI {
+public class AdminServiceImpl implements AdminServiceI {
 
     @Autowired
     AdminAccountDao adminAccountDao;

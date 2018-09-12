@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
-public class SystemServiceImplement implements SystemServiceI {
+public class SystemServiceImpl implements SystemServiceI {
 
     @Autowired
     AdminMenuDao adminMenuDao;

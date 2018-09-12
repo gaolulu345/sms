@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tp.admin.dao.RefundDao">
 
+
+
+
     <select id="cntBySearch" parameterType="com.tp.admin.data.search.RefundSearch"
             resultType="java.lang.Integer">
         SELECT COUNT(id) FROM
@@ -19,7 +22,7 @@
         </if>
     </select>
 
-    <select id="listBySearch" parameterType="com.tp.admin.data.search.RefundSearch" resultMap="RefundDTOMap">
+    <select id="listBySearch" parameterType="com.tp.admin.data.search.RefundSearch" resultMap="RefundMap">
         SELECT * FROM
         `refund`
         WHERE deleted = 0
@@ -35,8 +38,28 @@
         </if>
     </select>
 
+    <select id="findById" resultType="com.tp.admin.data.entity.Refund">
+        SELECT * FROM
+        `refund`
+        WHERE
+        deleted = 0
+        AND
+        id = #{id}
+        LIMIE 0 , 1
+    </select>
 
-    <resultMap id="RefundDTOMap" type="com.tp.admin.data.dto.RefundDTO">
+    <update id="updateRefundStatus">
+        UPDATE FROM
+          `refund`
+        SET
+          status = #{status}
+        WHERE
+          deleted = 0
+        AND
+          id = #{id}
+    </update>
+
+    <resultMap id="RefundMap" type="com.tp.admin.data.entity.Refund">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="reason" property="reason" jdbcType="VARCHAR" />
         <result column="amount" property="amount" jdbcType="VARCHAR" />
@@ -44,6 +67,7 @@
         <result column="order_id" property="orderId" jdbcType="INTEGER" />
         <result column="status" property="status" jdbcType="TINYINT" />
         <result column="deleted" property="deleted" jdbcType="BIT" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
         <result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />

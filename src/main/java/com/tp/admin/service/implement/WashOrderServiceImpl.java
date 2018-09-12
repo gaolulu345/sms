@@ -5,7 +5,7 @@ import com.tp.admin.dao.OrderDao;
 import com.tp.admin.dao.TerDao;
 import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.search.OrderSearch;
-import com.tp.admin.service.OrderServiceI;
+import com.tp.admin.service.WashOrderServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
-public class OrderServiceImplement implements OrderServiceI {
+public class WashOrderServiceImpl implements WashOrderServiceI {
 
     @Autowired
     OrderDao orderDao;

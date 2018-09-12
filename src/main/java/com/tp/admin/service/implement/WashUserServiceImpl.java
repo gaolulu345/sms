@@ -4,7 +4,7 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.UserDao;
 import com.tp.admin.data.entity.User;
 import com.tp.admin.data.search.UserSearch;
-import com.tp.admin.service.UserServiceI;
+import com.tp.admin.service.WashUserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
-public class UserServiceImplement implements UserServiceI {
+public class WashUserServiceImpl implements WashUserServiceI {
 
     @Autowired
     UserDao userDao;

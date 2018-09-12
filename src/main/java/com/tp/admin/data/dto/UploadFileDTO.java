@@ -1,8 +1,13 @@
 package com.tp.admin.data.dto;
 
+import lombok.Data;
+
+@Data
 public class UploadFileDTO {
 
     String nmae;
+
+    String key;
 
     String url;
 
@@ -24,36 +29,4 @@ public class UploadFileDTO {
         this.errorMsg = errorMsg;
     }
 
-
-    public String getNmae() {
-        return nmae;
-    }
-
-    public void setNmae(String nmae) {
-        this.nmae = nmae;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getErrorMsg() {
-        return errorMsg;
-    }
-
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
-    }
 }

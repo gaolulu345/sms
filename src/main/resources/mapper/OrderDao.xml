@@ -62,6 +62,27 @@
         </if>
     </select>
 
+
+    <select id="findOrderDTOById" resultMap="OrderDTOMap">
+        SELECT
+        o.id ,
+        o.ter_id ,
+        ti.title ,
+        o.user_id ,
+        o.operation_id ,
+        o.amount ,
+        o.status ,
+        o.type ,
+        o.channel ,
+        o.pay_time
+        FROM
+        `order` AS o INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id
+        WHERE
+        o.id = #{id}
+        AND
+        o.deleted = 0
+    </select>
+
     <resultMap id="OrderDTOMap" type="com.tp.admin.data.dto.OrderDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="ter_id" property="terId" jdbcType="INTEGER" />
