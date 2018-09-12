@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class AdminSearch extends  Search {
 
-    boolean deleted = false;
+    Boolean deleted;
 
     int id;
 

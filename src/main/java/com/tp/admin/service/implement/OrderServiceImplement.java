@@ -2,6 +2,7 @@ package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.OrderDao;
+import com.tp.admin.dao.TerDao;
 import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.search.OrderSearch;
 import com.tp.admin.service.OrderServiceI;
@@ -17,6 +18,9 @@ public class OrderServiceImplement implements OrderServiceI {
     @Autowired
     OrderDao orderDao;
 
+    @Autowired
+    TerDao terDao;
+
     @Override
     public ApiResult list(HttpServletRequest request, OrderSearch orderSearch) {
         orderSearch.build();
@@ -30,5 +34,10 @@ public class OrderServiceImplement implements OrderServiceI {
         orderSearch.setResult(list);
         orderSearch.setTotalCnt(cnt);
         return ApiResult.ok(orderSearch);
+    }
+
+    @Override
+    public ApiResult orderTerSelection(HttpServletRequest request) {
+        return ApiResult.ok(terDao.findAllTerIdAndTitle());
     }
 }

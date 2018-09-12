@@ -21,6 +21,11 @@ public class OrderController {
     @Autowired
     OrderServiceI orderService;
 
+    @PostMapping(value = "/ter/selection")
+    public ApiResult orderTerSelection(HttpServletRequest request){
+        return orderService.orderTerSelection(request);
+    }
+
     @PostMapping(value = "/list")
     public ApiResult list(HttpServletRequest request , @RequestBody OrderSearch orderSearch){
         return orderService.list(request,orderSearch);
