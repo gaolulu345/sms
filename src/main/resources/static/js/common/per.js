@@ -75,7 +75,7 @@ function changePw() {
 
 	if( npw === snpw) {
 		$.ajax({
-			url: '/api/private/partner/update/pw',
+			url: '/api/private/admin/update/pw',
 			dataType: 'json',
 			data: JSON.stringify(data),
 			type: 'post',

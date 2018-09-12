@@ -13,21 +13,39 @@
         <#include "common/top.html">
         <div class="content">
             <div class="searchBox">
-                <el-button  @click="showAddUser = true" type="primary" icon="el-icon-plus" size="mini">注册</el-button>
-                <el-button  @click="deleteUser" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
+                <!-- 状态筛选 -->
+                <el-select v-model="currentStatus" size="mini" clearable placeholder="请选择状态">
+                    <el-option
+                      v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+
+              
+                
+                <!-- 日期筛选 -->
+                <el-date-picker clearable v-model="dateRange" size="mini" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+                </el-date-picker>
+
+                <!-- 搜索按钮 -->
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
             </div>
 
 
             <!-- 用户列表 -->
             <el-table
-                ref="multipleTable"
-                @selection-change="handleUserSelectionChange"
                 :data="userList"
                 size="mini"
                 style="width: 100%">
 
-                <el-table-column  type="selection" width="55"></el-table-column>
                 <el-table-column prop="id" label="用户ID"></el-table-column>
+                <el-table-column prop="phone" label="手机号码"></el-table-column>
+                <el-table-column prop="createTime" label="注册时间"></el-table-column>
+                <el-table-column prop="lastLoginTime" label="最近登录时间"></el-table-column>
+                <el-table-column prop="access" label="access"></el-table-column>
+                <el-table-column prop="wxid" label="手机号码"></el-table-column>
+                <el-table-column prop="miniWxid" label="手机号码"></el-table-column>
+                <el-table-column prop="wxUnionid" label="手机号码"></el-table-column>
+                <el-table-column prop="aliId" label="手机号码"></el-table-column>
               
 
                 <el-table-column label="登录账号">
@@ -37,66 +55,12 @@
                         <span v-if="scope.row.enable == true && scope.row.deleted == false">{{scope.row.username}}</span>
                     </template>
                 </el-table-column>
-
-
-                <el-table-column prop="name" label="昵称"></el-table-column>
-                <el-table-column prop="intros" label="简介"></el-table-column>
-                <el-table-column prop="createTime" label="创建时间"></el-table-column>
-                <el-table-column prop="modifyTime" label="修改时间"></el-table-column>
-                <el-table-column prop="lastLoginTime" label="上次登录时间"></el-table-column>
-                <el-table-column label="操作" >
-                    <template slot-scope="scope">
-                        <el-button @click="clickEditUser(scope.row)" plain type="primary" size="mini">编辑</el-button>
-                        <el-button @click="resetPw(scope.row.id)" plain type="danger" size="mini">重置密码</el-button>
-                    </template>
-                </el-table-column>
             </el-table>
 
             <!-- 分页 -->
             <#include "common/pages2.html">
         </div>
     </div>
-
-    <!-- 新增用户弹出框 -->
-    <el-dialog title="注册用户" :visible.sync="showAddUser">
-        <el-form :model="addUserInfo">
-            <el-form-item label="管理员" :label-width="dialogLabelWidth">
-                <el-input v-model="admin" size="mini" disabled auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="登录账号" :label-width="dialogLabelWidth">
-                <el-input v-model="addUserInfo.username" size="mini" auto-complete="off"></el-input>
-            </el-form-item> 
-            <el-form-item label="用户昵称" :label-width="dialogLabelWidth">
-                <el-input v-model="addUserInfo.name" size="mini" auto-complete="off"></el-input>
-            </el-form-item> 
-            <el-form-item label="简介" :label-width="dialogLabelWidth">
-                <el-input v-model="addUserInfo.intros" size="mini" auto-complete="off"></el-input>
-            </el-form-item>           
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button type="primary" size="mini" @click="addUser">确 定</el-button>
-        </div>
-    </el-dialog>
-
-    <!-- 修改用户信息弹出框 -->
-    <el-dialog title="更新用户信息" :visible.sync="showEditUser">
-        <el-form :model="editUserInfo">
-
-
-            <el-form-item label="用户登录账号" :label-width="dialogLabelWidth">
-                <el-input v-model="editUserInfo.username" size="mini" disabled auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="昵称" :label-width="dialogLabelWidth">
-                <el-input v-model="editUserInfo.name" size="mini" auto-complete="off"></el-input>
-            </el-form-item> 
-            <el-form-item label="简介" :label-width="dialogLabelWidth">
-                <el-input v-model="editUserInfo.intros" size="mini" auto-complete="off"></el-input>
-            </el-form-item>            
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button type="primary" size="mini" @click="editUser">确 定</el-button>
-        </div>
-    </el-dialog>
 </div>
 
 <script>

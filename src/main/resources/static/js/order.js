@@ -4,7 +4,7 @@ var vm = new Vue({
     el: "#app",
     data: {
     	pageName: 'order',
-        pageTitle: '订单列表',
+        pageTitle: '洗车订单',
     	admin: admin,
     	adminID: adminId,
         menuPer: menuPer,

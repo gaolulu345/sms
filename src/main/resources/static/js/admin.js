@@ -97,27 +97,27 @@ var vm = new Vue({
             })
         },
         // 重置密码
-        // resetPw: function(id) {
-        //     vm.$confirm('确认重置' + id + '号用户登录密码?', '提示', {
-        //         confirmButtonText: '确定',
-        //         cancelButtonText: '取消',
-        //         type: 'warning'
-        //     }).then(() => {
-        //         this.$http.post("/api/private/admin/reset/pw", {
-        //             id: id
-        //         }).then(function(res){
-        //             let result = res.json();
-        //             if(result.code == 200){
-        //                 vm.$message.success('已重置');
-        //                 vm.getUserList(vm.currentPageSize, vm.currentPageIndex);
-        //             }else {
-        //                 vm.$message.error(result.message)
-        //             }
-        //         })
-        //     }).catch(() => {
-        //         vm.$message.info('已取消操作')
-        //     });
-        // },
+        resetPw: function(id) {
+            vm.$confirm('确认重置' + id + '号用户登录密码?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$http.post("/api/private/admin/reset/pw", {
+                    id: id
+                }).then(function(res){
+                    let result = res.json();
+                    if(result.code == 200){
+                        vm.$message.success('已重置');
+                        vm.getAdminList(vm.currentPageSize, vm.currentPageIndex);
+                    }else {
+                        vm.$message.error(result.message)
+                    }
+                })
+            }).catch(() => {
+                vm.$message.info('已取消操作')
+            });
+        },
         // 批量删除
         handleAdminSelectionChange(val) {
             this.adminSelection = val;

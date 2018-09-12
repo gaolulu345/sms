@@ -4,7 +4,7 @@ var vm = new Vue({
     el: "#app",
     data: {
     	pageName: 'refund',
-        pageTitle: '退款列表',
+        pageTitle: '洗车退款',
     	admin: admin,
     	adminID: adminId,
         menuPer: menuPer,

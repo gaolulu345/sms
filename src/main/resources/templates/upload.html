@@ -1,10 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>upload</title>
+   <#include "common/meta.html">
 </head>
+
 <body>
-<h1>上传</h1>
+<div v-cloak id="app" class="clearfix">
+    <#include "common/left.html">
+    <div class="rightSide fl">
+        <#include "common/top.html">
+        <div class="content">
+            <div class="searchBox">
+                <el-input style="width:150px;" size="mini" v-model="currentAdminName" placeholder="管理员姓名"></el-input>
+                <el-input style="width:150px;" size="mini" v-model="currentFileKey" placeholder="图片键值"></el-input>
+
+                <!-- 日期筛选 -->
+                <el-date-picker clearable v-model="dateRange" size="mini" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+                </el-date-picker>
+
+                <!-- 上传按钮 -->
+                <el-upload
+                    class="upload-demo fr"
+                    action="/api/private/file/upload/images"
+                    accept="image/jpeg, image/gif, image/png"
+                    :on-success="uploadSuccess"
+                    :before-upload="beforeUpload"
+                    multiple
+                    :show-file-list=false
+                    :limit="5"
+                    :on-exceed="handleExceed" >
+                    <el-button class="fr" size="mini" style="margin:11px 8px 0 0;" type="primary" icon="el-icon-upload">图片上传 (不超过2M)</el-button>
+                </el-upload>
+
+                <!-- 搜索按钮 -->
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
+            </div>
+
+
+            <!-- 页面列表 -->
+            <el-table
+                :data="uploadList"
+                size="mini"
+                style="width: 100%">
+
+                <el-table-column prop="id" label="图片ID"></el-table-column>
+                <el-table-column prop="adminName" label="图片ID"></el-table-column>
+                <el-table-column prop="bucketName" label="空间名称"></el-table-column>
+                <el-table-column prop="fileKey" label="键值"></el-table-column>
+                <el-table-column prop="createTime" label="上传时间"></el-table-column>
+                
+                <el-table-column prop="url" label="url"></el-table-column>
+                <el-table-column label="缩略图">
+                    <template slot-scope="scope">
+                        <img :src="scope.row.url + '@100w'"></image>
+                    </template>
+                </el-table-column>
+                <el-table-column label="原图地址">
+                    <template slot-scope="scope">
+                        <a target="_blank" :href="scope.row.url">{{scope.row.url}}</a>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="缩略图-拼接">
+                    <template slot-scope="scope">
+                        <img :src="'http://' + scope.row.bucketName + '.img-cn-hangzhou.aliyuncs.com/' + scope.row.fileKey + '@100w'"></image>
+                    </template>
+                </el-table-column>
+                <el-table-column label="原图地址-拼接">
+                    <template slot-scope="scope">
+                        <a target="_blank" :href="'http://' + scope.row.bucketName + '.img-cn-hangzhou.aliyuncs.com/' + scope.row.fileKey">{{'http://' + scope.row.bucketName + '.img-cn-hangzhou.aliyuncs.com/' + scope.row.fileKey}}</a>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <!-- 分页 -->
+            <#include "common/pages2.html">
+        </div>
+    </div>
+
+    
+</div>
+
+<script>
+    var admin = '超级管理员';
+    var adminId = 1;
+</script>
+<script src="/js/common/per.js"></script>
+<script src="/js/upload.js"></script>
 </body>
 </html>
