@@ -24,6 +24,9 @@
             <if test="username != null">
                 username = #{username},
             </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
             <if test="name != null">
                 name = #{name},
             </if>
@@ -47,7 +50,7 @@
 		LIMIT 0 , 1
     </select>
 
-    <select id="cntBySearch" resultType="java.lang.Integer">
+    <select id="cntBySearch" parameterType="com.tp.admin.data.search.AdminSearch" resultType="java.lang.Integer">
         SELECT
         COUNT(id)
         FROM
@@ -58,7 +61,7 @@
         </if>
     </select>
 
-    <select id="listBySearch" resultMap="AdminAccountDTOMap">
+    <select id="listBySearch" parameterType="com.tp.admin.data.search.AdminSearch" resultMap="AdminAccountDTOMap">
         SELECT
         *
         FROM
