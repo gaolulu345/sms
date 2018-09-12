@@ -6,7 +6,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface RefundServiceI {
+public interface WashRefundServiceI {
 
     ApiResult list(HttpServletRequest request , RefundSearch refundSearch);
+
+    ApiResult approved(HttpServletRequest request , RefundSearch refundSearch);
+
+    ApiResult payBack(HttpServletRequest request , RefundSearch refundSearch);
+
 }

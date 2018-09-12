@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
-public class FileServiceImplmplement implements FileServiceI {
+public class FileServiceImplmpl implements FileServiceI {
 
     @Autowired
     FileUploadLogDao fileUploadLogDao;
@@ -41,9 +41,9 @@ public class FileServiceImplmplement implements FileServiceI {
         if (!uploadFileDTO.isSuccess()) {
             throw new BaseException(ExceptionCode.ALI_OSS_UPDATE_ERROR);
         }
-        String oldName  = file.getOriginalFilename();
+        String fileName = uploadFileDTO.getKey();
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
-        int res = fileUploadLogDao.insert(new FileUploadLog(adminAccount.getName(),oldName));
+        int res = fileUploadLogDao.insert(new FileUploadLog(adminAccount.getName(),fileName));
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }

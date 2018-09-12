@@ -5,7 +5,7 @@ import com.tp.admin.data.search.OrderSearch;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface OrderServiceI {
+public interface WashOrderServiceI {
 
     ApiResult list(HttpServletRequest request , OrderSearch orderSearch);
 

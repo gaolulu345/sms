@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class AccountServiceImplement implements AccountServiceI {
+public class AccountServiceImpl implements AccountServiceI {
 
     @Autowired
     AdminAccountDao adminAccountDao;

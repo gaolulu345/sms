@@ -1,4 +1,4 @@
-package com.tp.admin.data.dto;
+package com.tp.admin.data.entity;
 
 import com.tp.admin.enums.RefundStatusEnum;
 import com.tp.admin.enums.RefundTypeEnum;
@@ -7,7 +7,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class RefundDTO {
+public class Refund {
 
     int id;
     int reason;  // 原因
@@ -15,6 +15,7 @@ public class RefundDTO {
     int orderId;
     int status;  // 进度
     String msg;  // 退款说明
+    String phone;// 手机号
     boolean deleted;
     Timestamp modifyTime;
     Timestamp createTime;
