@@ -11,5 +11,4 @@ public interface OrderDao {
 
     List<OrderDTO> listBySearch(OrderSearch orderSearch);
 
-
 }

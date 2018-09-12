@@ -1,9 +1,9 @@
 package com.tp.admin.controller;
 
-
 import com.tp.admin.ajax.ApiResult;
-import com.tp.admin.data.entity.AdminAccount;
-import com.tp.admin.service.AccountServiceI;
+import com.tp.admin.data.search.OrderSearch;
+import com.tp.admin.data.search.UserSearch;
+import com.tp.admin.service.UserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,19 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(UserController.ROUTER_INDEX)
 public class UserController {
 
-    public static final String ROUTER_INDEX = "/api/user";
+    public static final String ROUTER_INDEX = "/api/private/user";
 
     @Autowired
-    AccountServiceI accountService;
+    UserServiceI userService;
 
-    @PostMapping(value = "/login")
-    public ApiResult login(HttpServletRequest request, @RequestBody AdminAccount adminAccount) {
-        return accountService.login(request,adminAccount);
-    }
-
-    @PostMapping(value = "/logout")
-    public ApiResult logout(HttpServletRequest request) {
-        return accountService.logout(request);
+    @PostMapping(value = "/list")
+    public ApiResult list(HttpServletRequest request , @RequestBody UserSearch userSearch){
+        return userService.list(request,userSearch);
     }
 
 }

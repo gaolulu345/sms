@@ -17,15 +17,6 @@ public enum ExceptionCode {
     NO_PERMIT("2002", "未登陆"),
     LOGIN_TIMEOUT("2003", "登录超时"),
 
-    REMOTE_TER_RESPONCE_ERROR("3000","远程网点返回信息失败"),
-    REMOTE_TER_RESET_FAILURE("3001","远程网点复位失败"),
-
-    REMOTE_TER_PUSH_IMAGE_ERROR("4000","远程推送轮播图片返回消息失败"),
-    REMOTE_TER_PUSH_IMAGE_FAILURE("4001","远程推送轮播图片失败"),
-    REMOTE_TER_NO_IMAGE_ERROR("4002","该网点未找到有效的轮播图片"),
-
-    REMOTE_TER_STATUS_ERROR("4003","获取网点轮播图状态信息失败"),
-
     ALI_OSS_OPEN_STORAGE_SERVICE_ERROR("9000","当访问对象存储服务 Open Storage Service 失败时抛出该异常类实例，请重新尝试"),
     ALI_OSS_REMOTE_ERROR("9001","尝试访问阿里云服务时的异常,请重新尝试"),
     ALI_OSS_UPDATE_ERROR("9002","上传文件失败,请重新尝试"),

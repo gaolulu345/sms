@@ -3,6 +3,7 @@ package com.tp.admin.controller;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.dto.AdminAccountDTO;
+import com.tp.admin.data.dto.ChangePasswordDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.service.AdminServiceI;
@@ -33,6 +34,11 @@ public class AdminController {
         return adminService.update(request,adminAccount);
     }
 
+    @PostMapping(value = "/update/pw")
+    public ApiResult updatePassword(HttpServletRequest request, @RequestBody ChangePasswordDTO changePasswordDTO){
+        return adminService.updatePassword(request,changePasswordDTO);
+    }
+
     @PostMapping(value = "/list")
     public ApiResult list(HttpServletRequest request ,@RequestBody AdminSearch adminSearch){
         return adminService.list(request,adminSearch);
@@ -42,5 +48,12 @@ public class AdminController {
     public ApiResult bachUpdateDeleted(HttpServletRequest request ,@RequestBody AdminSearch adminSearch){
         return adminService.bachUpdateDeleted(request,adminSearch);
     }
+
+    @PostMapping(value = "/reset/pw")
+    public ApiResult resetPassword(HttpServletRequest request ,@RequestBody AdminSearch adminSearch){
+        return adminService.resetPassword(request,adminSearch);
+    }
+
+
 
 }

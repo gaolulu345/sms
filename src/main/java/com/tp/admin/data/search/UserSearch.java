@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class AdminSearch extends  Search {
+public class UserSearch extends Search {
 
-    boolean deleted = false;
+    Integer id;
+    String phone;
+    private String startTime;
+    private String endTime;
 
-    int id;
-
-    int[] ids;
 }

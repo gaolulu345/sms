@@ -3,17 +3,19 @@ package com.tp.admin.service.implement;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.AdminAccountDao;
 import com.tp.admin.data.dto.AdminAccountDTO;
+import com.tp.admin.data.dto.ChangePasswordDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.service.AdminServiceI;
+import com.tp.admin.utils.PasswordUtils;
+import com.tp.admin.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Service
@@ -25,31 +27,7 @@ public class AdminServiceImplement implements AdminServiceI {
     @Override
     public ApiResult register(HttpServletRequest request, AdminAccountDTO adminAccountDTO) {
         AdminAccount adminAccount = new AdminAccount(adminAccountDTO);
-        // 暂时采用MD5 32位编码
-        String newPwd = "123456";
-        String result = "";
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(newPwd.getBytes());
-            byte b[] = md.digest();
-            int i;
-            StringBuffer buf = new StringBuffer("");
-            for (int offset = 0; offset < b.length; offset++) {
-                i = b[offset];
-                if (i < 0) {
-                    i += 256;
-                }
-                if (i < 16) {
-                    buf.append("0");
-                }
-                buf.append(Integer.toHexString(i));
-            }
-            result = buf.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
-        }
-        adminAccount.setPassword(result);
+        adminAccount.setPassword(PasswordUtils.defaultPassword());
         int res = adminAccountDao.insert(adminAccount);
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
@@ -83,6 +61,44 @@ public class AdminServiceImplement implements AdminServiceI {
     @Override
     public ApiResult bachUpdateDeleted(HttpServletRequest request, AdminSearch adminSearch) {
         int res = adminAccountDao.bachUpdateDeleted(adminSearch);
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+        }
+        return ApiResult.ok();
+    }
+
+    @Override
+    public ApiResult resetPassword(HttpServletRequest request, AdminSearch adminSearch) {
+        int id = adminSearch.getId();
+        AdminAccount adminAccount = adminAccountDao.findById(id);
+        if (null == adminAccount) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        adminAccount.setPassword(PasswordUtils.defaultPassword());
+        int res = adminAccountDao.update(adminAccount);
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+        }
+        return ApiResult.ok();
+    }
+
+    @Override
+    public ApiResult updatePassword(HttpServletRequest request, ChangePasswordDTO changePasswordDTO) {
+        if (StringUtils.isEmpty(changePasswordDTO.getOpw()) ||
+                StringUtils.isEmpty(changePasswordDTO.getNpw()) ||
+                StringUtils.isEmpty(changePasswordDTO.getSnpw())) {
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "illegal pw npw snpw ");
+        }
+        if (!changePasswordDTO.getNpw().equals(changePasswordDTO.getSnpw())) {
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "new password does not match");
+        }
+        AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
+        adminAccount = adminAccountDao.findById(adminAccount.getId());
+        if (!changePasswordDTO.getOpw().equals(adminAccount.getPassword())) {
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "old password does not match");
+        }
+        adminAccount.setPassword(changePasswordDTO.getNpw());
+        int res = adminAccountDao.update(adminAccount);
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }

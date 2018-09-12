@@ -2,10 +2,10 @@ package com.tp.admin.controller;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.search.FileSearch;
-import com.tp.admin.data.search.RefundSearch;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.tp.admin.service.FileServiceI;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,7 +16,19 @@ public class FileController {
 
     public static final String ROUTER_INDEX = "/api/private/file";
 
-    public ApiResult uploadImages(HttpServletRequest request, @RequestBody FileSearch fileSearch) {
-        return null;
+    @Autowired
+    FileServiceI fileService;
+
+    @PostMapping(value = "/upload/images")
+    public ApiResult updateTerCover(HttpServletRequest request , @RequestPart("file")MultipartFile file) {
+        return fileService.uoloadImges(request ,file);
     }
+
+    @PostMapping(value = "/upload/list")
+    public ApiResult list(HttpServletRequest request, @RequestBody FileSearch fileSearch) {
+        return fileService.list(request,fileSearch);
+    }
+
+
+
 }
