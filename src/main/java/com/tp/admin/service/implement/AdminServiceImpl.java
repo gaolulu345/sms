@@ -59,6 +59,11 @@ public class AdminServiceImpl implements AdminServiceI {
     }
 
     @Override
+    public ApiResult listExport(HttpServletRequest request, AdminSearch refundSearch) {
+        return null;
+    }
+
+    @Override
     public ApiResult bachUpdateDeleted(HttpServletRequest request, AdminSearch adminSearch) {
         int res = adminAccountDao.bachUpdateDeleted(adminSearch);
         if (res == 0) {

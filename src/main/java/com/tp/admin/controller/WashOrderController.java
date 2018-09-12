@@ -3,6 +3,7 @@ package com.tp.admin.controller;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.search.OrderSearch;
+import com.tp.admin.data.search.RefundSearch;
 import com.tp.admin.service.WashOrderServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,5 +31,7 @@ public class WashOrderController {
     public ApiResult list(HttpServletRequest request , @RequestBody OrderSearch orderSearch){
         return orderService.list(request,orderSearch);
     }
+
+
 
 }

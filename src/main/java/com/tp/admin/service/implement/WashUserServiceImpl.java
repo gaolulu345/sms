@@ -26,4 +26,9 @@ public class WashUserServiceImpl implements WashUserServiceI {
         userSearch.setTotalCnt(cnt);
         return ApiResult.ok(userSearch);
     }
+
+    @Override
+    public ApiResult listExport(HttpServletRequest request, UserSearch userSearch) {
+        return null;
+    }
 }

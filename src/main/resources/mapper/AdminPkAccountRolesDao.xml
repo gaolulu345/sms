@@ -18,7 +18,7 @@
     <update id="update" parameterType="com.tp.admin.data.entity.AdminPkAccountRoles">
       UPDATE `admin_pk_account_roles`
       <trim prefix="set" suffixOverrides=",">
-        <if test="null != parnterId and 0 != parnterId">
+        <if test="null != adminId and 0 != parnterId">
             admin_id = #{adminId},
         </if>
         <if test="null != rolesId  and 0 != rolesId">

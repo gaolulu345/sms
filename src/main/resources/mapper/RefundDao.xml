@@ -38,21 +38,36 @@
         </if>
     </select>
 
-    <select id="findById" resultType="com.tp.admin.data.entity.Refund">
+    <select id="findById" resultMap="RefundMap">
         SELECT * FROM
         `refund`
         WHERE
         deleted = 0
         AND
         id = #{id}
-        LIMIE 0 , 1
+        LIMIT 0 , 1
     </select>
 
-    <update id="updateRefundStatus">
-        UPDATE FROM
+    <update id="update" parameterType="com.tp.admin.data.entity.Refund">
+        UPDATE
           `refund`
-        SET
-          status = #{status}
+        <trim prefix="set" suffixOverrides=",">
+            <if test="status != 0">
+                `status` = #{status},
+            </if>
+            <if test="null != checkTime ">
+                `check_time` = #{checkTime},
+            </if>
+            <if test="null != refundTime ">
+                `refund_time` = #{refundTime},
+            </if>
+            <if test="sysAdminNameCheck != null">
+                `sys_admin_name_check` = #{sysAdminNameCheck},
+            </if>
+            <if test="sysAdminNamePay != null">
+                `sys_admin_name_pay` = #{sysAdminNamePay},
+            </if>
+        </trim>
         WHERE
           deleted = 0
         AND

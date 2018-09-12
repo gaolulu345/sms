@@ -10,6 +10,8 @@ public interface WashRefundServiceI {
 
     ApiResult list(HttpServletRequest request , RefundSearch refundSearch);
 
+    ApiResult listExport(HttpServletRequest request , RefundSearch refundSearch);
+
     ApiResult approved(HttpServletRequest request , RefundSearch refundSearch);
 
     ApiResult payBack(HttpServletRequest request , RefundSearch refundSearch);

@@ -9,5 +9,9 @@ public interface WashOrderServiceI {
 
     ApiResult list(HttpServletRequest request , OrderSearch orderSearch);
 
+    ApiResult listExport(HttpServletRequest request , OrderSearch orderSearch);
+
     ApiResult orderTerSelection(HttpServletRequest request);
+
+
 }

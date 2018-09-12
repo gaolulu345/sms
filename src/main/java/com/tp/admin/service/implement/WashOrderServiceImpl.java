@@ -37,6 +37,11 @@ public class WashOrderServiceImpl implements WashOrderServiceI {
     }
 
     @Override
+    public ApiResult listExport(HttpServletRequest request, OrderSearch orderSearch) {
+        return null;
+    }
+
+    @Override
     public ApiResult orderTerSelection(HttpServletRequest request) {
         return ApiResult.ok(terDao.findAllTerIdAndTitle());
     }

@@ -1,6 +1,7 @@
 package com.tp.admin.dao;
 
 import com.tp.admin.data.dto.OrderDTO;
+import com.tp.admin.data.entity.Order;
 import com.tp.admin.data.search.OrderSearch;
 
 import java.util.List;
@@ -12,5 +13,7 @@ public interface OrderDao {
     List<OrderDTO> listBySearch(OrderSearch orderSearch);
 
     OrderDTO findOrderDTOById(int id);
+
+    Order findById(int id);
 
 }

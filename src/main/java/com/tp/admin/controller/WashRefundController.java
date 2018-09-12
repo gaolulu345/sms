@@ -30,5 +30,10 @@ public class WashRefundController {
         return refundService.approved(request,refundSearch);
     }
 
+    @PostMapping(value = "/back")
+    ApiResult payBack(HttpServletRequest request ,@RequestBody  RefundSearch refundSearch){
+        return refundService.payBack(request,refundSearch);
+    }
+
 
 }

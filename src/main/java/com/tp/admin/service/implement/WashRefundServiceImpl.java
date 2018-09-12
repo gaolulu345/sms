@@ -12,8 +12,12 @@ import com.tp.admin.enums.OrderTypeEnum;
 import com.tp.admin.enums.RefundStatusEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
+import com.tp.admin.manage.OrderPayManagerI;
+import com.tp.admin.manage.impl.OrderPayManagerImpl;
 import com.tp.admin.service.WashRefundServiceI;
 import com.tp.admin.utils.SessionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,11 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
 
     @Autowired
     OrderDao orderDao;
+
+    @Autowired
+    OrderPayManagerI orderPayManager;
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderPayManagerImpl.class);
 
     @Override
     public ApiResult list(HttpServletRequest request, RefundSearch refundSearch) {
@@ -46,6 +55,11 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
     }
 
     @Override
+    public ApiResult listExport(HttpServletRequest request, RefundSearch refundSearch) {
+        return null;
+    }
+
+    @Override
     public ApiResult approved(HttpServletRequest request, RefundSearch refundSearch) {
         int id = refundSearch.getId();
         int status = refundSearch.getStatus();
@@ -56,7 +70,7 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
         if (refund.getStatus() != RefundStatusEnum.REQUEST_REFUND.getValue()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
-        if (status != RefundStatusEnum.APPROVED.getValue() ||
+        if (status != RefundStatusEnum.APPROVED.getValue() &&
             status != RefundStatusEnum.REQUEST_REJECTION.getValue()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
@@ -81,45 +95,32 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
         if (refund.getStatus() != RefundStatusEnum.APPROVED.getValue()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
-        OrderDTO orderDTO = orderDao.findOrderDTOById(refund.getOrderId());
-        if (null == orderDTO) {
+        Order order = orderDao.findById(refund.getOrderId());
+        if (null == order) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
-        int orderType = orderDTO.getType();
+        int orderType = order.getType();
         // 如果是免费的，不退款。
         if (orderType == OrderTypeEnum.FREE.ordinal()) {
-            refund.setSysAdminNamePay(adminAccount.getName());
-            refund.setStatus(RefundStatusEnum.REFUNDED.getValue());
-            refund.setRefundTime(new Timestamp(System.currentTimeMillis()));
+            // 免费的什么都不做.直接更新数据库。
         }else if (orderType == OrderTypeEnum.ALIPAY.ordinal()) {
-//            payBackAliPayOrder(channel == AppOrderChannel.AliminiApp.ordinal(), dbOrder);
+            orderPayManager.aliPayBack(order);
         }else if (orderType == OrderTypeEnum.WXPAY.ordinal() || orderType == OrderTypeEnum.TEST.ordinal()) {
-//            payBackWxPayOrder(
-//                    channel == AppOrderChannel.WXminiApp.ordinal() || type == OrderType.TestOr0PayOrder.ordinal(),
-//                    dbOrder);
+            orderPayManager.wxinPayBack(order);
         }else {
             // 如果订单状态不正确则拒绝退款。
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
+        refund.setSysAdminNamePay(adminAccount.getName());
+        refund.setStatus(RefundStatusEnum.REFUNDED.getValue());
+        refund.setRefundTime(new Timestamp(System.currentTimeMillis()));
         int sqlRes = refundDao.update(refund);
         if (sqlRes == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
         return ApiResult.ok();
     }
-
-//    public ApiResult export(HttpServletResponse response,
-//                             @RequestParam(value = "orderID", required = false, defaultValue = "0") int orderID,
-//                             @RequestParam(value = "status", required = false) Integer status,
-//                             @RequestParam(value = "reason", required = false) Integer reason) {
-//
-//        RefundSearch search = new RefundSearch(orderID, 0, 0, status, reason);
-//        AjaxResult result = ExcelUtil.export(response, search, refundService, "refund", "退款列表",
-//                ExcelUtil.refundHeaderName(), false);
-//        return result;
-//    }
-
 
 
 }
