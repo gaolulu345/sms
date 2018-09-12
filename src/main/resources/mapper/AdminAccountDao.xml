@@ -55,6 +55,11 @@
         COUNT(id)
         FROM
         `admin_account`
+        <where>
+            <if test="null != deleted">
+                deleted = #{deleted}
+            </if>
+        </where>
         ORDER BY id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">
             LIMIT #{offset},#{pageSize}
@@ -66,6 +71,11 @@
         *
         FROM
         `admin_account`
+        <where>
+            <if test="null != deleted">
+                deleted = #{deleted}
+            </if>
+        </where>
         ORDER BY id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">
             LIMIT #{offset},#{pageSize}

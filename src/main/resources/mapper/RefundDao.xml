@@ -41,7 +41,7 @@
         <result column="reason" property="reason" jdbcType="VARCHAR" />
         <result column="amount" property="amount" jdbcType="VARCHAR" />
         <result column="msg" property="msg" jdbcType="VARCHAR" />
-        <result column="app_order_id" property="orderId" jdbcType="INTEGER" />
+        <result column="order_id" property="orderId" jdbcType="INTEGER" />
         <result column="status" property="status" jdbcType="TINYINT" />
         <result column="deleted" property="deleted" jdbcType="BIT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
