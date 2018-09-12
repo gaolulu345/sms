@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.OrderDao">
+
+    <select id="cntBySearch" parameterType="com.tp.admin.data.search.OrderSearch"  resultType="java.lang.Integer">
+        SELECT
+        COUNT(o.id)
+        FROM
+        `order` AS o INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id
+        WHERE
+        o.deleted = 0
+        <if test="terIds != null">
+            AND
+            o.ter_id IN
+            <foreach collection="terIds" item="terId" index="index"
+                     open="(" close=")" separator=",">
+                #{terId}
+            </foreach>
+        </if>
+        <if test="status != null">
+            AND o.status = #{status}
+        </if>
+        <if test="startTime != null and endTime != null">
+            AND o.pay_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+    </select>
+
+    <select id="listBySearch" parameterType="com.tp.admin.data.search.OrderSearch" resultMap="OrderDTOMap">
+        SELECT
+        o.id ,
+        o.ter_id ,
+        ti.title ,
+        o.user_id ,
+        o.operation_id ,
+        o.amount ,
+        o.status ,
+        o.type ,
+        o.channel ,
+        o.pay_time
+        FROM
+        `order` AS o INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id
+        WHERE
+        o.deleted = 0
+        <if test="terIds != null">
+            AND
+            o.ter_id IN
+            <foreach collection="terIds" item="terId" index="index"
+                     open="(" close=")" separator=",">
+                #{terId}
+            </foreach>
+        </if>
+        <if test="status != null">
+            AND
+            o.status = #{status}
+        </if>
+        <if test="startTime != null and endTime != null">
+            AND o.pay_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        ORDER BY o.pay_time DESC
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <resultMap id="OrderDTOMap" type="com.tp.admin.data.dto.OrderDTO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="ter_id" property="terId" jdbcType="INTEGER" />
+        <result column="title" property="terTitle" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="operation_id" property="operationId" jdbcType="INTEGER" />
+        <result column="amount" property="amount" jdbcType="INTEGER" />
+        <result column="ticket_id" property="ticketId" jdbcType="INTEGER" />
+        <result column="card_id" property="cardId" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="channel" property="channel" jdbcType="TINYINT" />
+        <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+</mapper>

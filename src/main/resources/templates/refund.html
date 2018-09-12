@@ -1,10 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>refund</title>
+   <#include "common/meta.html">
 </head>
+
 <body>
-<h1>退款</h1>
+<div v-cloak id="app" class="clearfix">
+    <#include "common/left.html">
+    <div class="rightSide fl">
+        <#include "common/top.html">
+        <div class="content">
+            <div class="searchBox">
+                <!-- 状态筛选 -->
+                <el-select v-model="currentStatus" size="mini" clearable placeholder="请选择状态">
+                    <el-option
+                      v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+                
+                <!-- 搜索按钮 -->
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
+            </div>
+
+
+            <!-- 页面列表 -->
+            <el-table
+                :data="refundList"
+                size="mini"
+                style="width: 100%">
+
+                <el-table-column prop="id" label="退款编号"></el-table-column>
+                <el-table-column prop="orderId" label="订单ID"></el-table-column>
+                <el-table-column prop="reason" label="退款原因"></el-table-column>
+                <el-table-column prop="reasonDesc" label="退款原因描述"></el-table-column>
+                <el-table-column prop="amount" label="退款金额"></el-table-column>
+                <el-table-column prop="status" label="状态"></el-table-column>
+                <el-table-column prop="statusDesc" label="状态描述"></el-table-column>
+                <el-table-column prop="msg" label="留言"></el-table-column>
+                <el-table-column prop="createTime" label="创建时间"></el-table-column>
+                <el-table-column prop="checkTime" label="审核时间"></el-table-column>
+                <el-table-column prop="sysAdminNameCheck" label="审核人"></el-table-column>
+                <el-table-column prop="refuntTime" label="退款时间"></el-table-column>
+                <el-table-column prop="sysAdminNamePay" label="退款人"></el-table-column>
+
+                <el-table-column label="操作" >
+                    <template slot-scope="scope">
+                        <el-button @click="clickPass(scope.row.id)" plain type="primary" size="mini">通过</el-button>
+                        <el-button @click="clickReject(scope.row.id)" plain type="primary" size="mini">拒绝</el-button>
+                        <el-button @click="clickRefund(scope.row.id)" plain type="danger" size="mini">退款</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <!-- 分页 -->
+            <#include "common/pages2.html">
+        </div>
+    </div>
+
+    
+</div>
+
+<script>
+    var admin = '超级管理员';
+    var adminId = 1;
+</script>
+<script src="/js/common/per.js"></script>
+<script src="/js/refund.js"></script>
 </body>
 </html>

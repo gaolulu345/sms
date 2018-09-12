@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.RefundDao">
+
+    <select id="cntBySearch" parameterType="com.tp.admin.data.search.RefundSearch"
+            resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM
+        `refund`
+        WHERE deleted = 0
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="reason != null">
+            AND reason = #{reason}
+        </if>
+        ORDER BY id DESC
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <select id="listBySearch" parameterType="com.tp.admin.data.search.RefundSearch" resultMap="RefundDTOMap">
+        SELECT * FROM
+        `refund`
+        WHERE deleted = 0
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="reason != null">
+            AND reason = #{reason}
+        </if>
+        ORDER BY id DESC
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
+
+
+    <resultMap id="RefundDTOMap" type="com.tp.admin.data.dto.RefundDTO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="reason" property="reason" jdbcType="VARCHAR" />
+        <result column="amount" property="amount" jdbcType="VARCHAR" />
+        <result column="msg" property="msg" jdbcType="VARCHAR" />
+        <result column="app_order_id" property="orderId" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="deleted" property="deleted" jdbcType="BIT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
+        <result column="refund_time" property="refundTime" jdbcType="TIMESTAMP" />
+        <result column="sys_admin_name_check" property="sysAdminNameCheck" jdbcType="VARCHAR" />
+        <result column="sys_admin_name_pay" property="sysAdminNamePay" jdbcType="VARCHAR" />
+    </resultMap>
+
+</mapper>

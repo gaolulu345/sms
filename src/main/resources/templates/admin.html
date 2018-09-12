@@ -13,16 +13,16 @@
         <#include "common/top.html">
         <div class="content">
             <div class="searchBox">
-                <el-button  @click="showAddUser = true" type="primary" icon="el-icon-plus" size="mini">注册</el-button>
-                <el-button  @click="deleteUser" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
+                <el-button  @click="showAddAdmin = true" type="primary" icon="el-icon-plus" size="mini">注册</el-button>
+                <el-button  @click="deleteAdmin" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
             </div>
 
 
             <!-- 用户列表 -->
             <el-table
                 ref="multipleTable"
-                @selection-change="handleUserSelectionChange"
-                :data="userList"
+                @selection-change="handleAdminSelectionChange"
+                :data="adminList"
                 size="mini"
                 style="width: 100%">
 
@@ -46,7 +46,7 @@
                 <el-table-column prop="lastLoginTime" label="上次登录时间"></el-table-column>
                 <el-table-column label="操作" >
                     <template slot-scope="scope">
-                        <el-button @click="clickEditUser(scope.row)" plain type="primary" size="mini">编辑</el-button>
+                        <el-button @click="clickEditAdmin(scope.row)" plain type="primary" size="mini">编辑</el-button>
                         <el-button @click="resetPw(scope.row.id)" plain type="danger" size="mini">重置密码</el-button>
                     </template>
                 </el-table-column>
@@ -58,43 +58,43 @@
     </div>
 
     <!-- 新增用户弹出框 -->
-    <el-dialog title="注册用户" :visible.sync="showAddUser">
-        <el-form :model="addUserInfo">
+    <el-dialog title="注册用户" :visible.sync="showAddAdmin">
+        <el-form :model="addAdminInfo">
             <el-form-item label="管理员" :label-width="dialogLabelWidth">
                 <el-input v-model="admin" size="mini" disabled auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="登录账号" :label-width="dialogLabelWidth">
-                <el-input v-model="addUserInfo.username" size="mini" auto-complete="off"></el-input>
+                <el-input v-model="addAdminInfo.username" size="mini" auto-complete="off"></el-input>
             </el-form-item> 
             <el-form-item label="用户昵称" :label-width="dialogLabelWidth">
-                <el-input v-model="addUserInfo.name" size="mini" auto-complete="off"></el-input>
+                <el-input v-model="addAdminInfo.name" size="mini" auto-complete="off"></el-input>
             </el-form-item> 
             <el-form-item label="简介" :label-width="dialogLabelWidth">
-                <el-input v-model="addUserInfo.intros" size="mini" auto-complete="off"></el-input>
+                <el-input v-model="addAdminInfo.intros" size="mini" auto-complete="off"></el-input>
             </el-form-item>           
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button type="primary" size="mini" @click="addUser">确 定</el-button>
+            <el-button type="primary" size="mini" @click="addAdmin">确 定</el-button>
         </div>
     </el-dialog>
 
     <!-- 修改用户信息弹出框 -->
-    <el-dialog title="更新用户信息" :visible.sync="showEditUser">
-        <el-form :model="editUserInfo">
+    <el-dialog title="更新用户信息" :visible.sync="showEditAdmin">
+        <el-form :model="editAdminInfo">
 
 
             <el-form-item label="用户登录账号" :label-width="dialogLabelWidth">
-                <el-input v-model="editUserInfo.username" size="mini" disabled auto-complete="off"></el-input>
+                <el-input v-model="editAdminInfo.username" size="mini" disabled auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="昵称" :label-width="dialogLabelWidth">
-                <el-input v-model="editUserInfo.name" size="mini" auto-complete="off"></el-input>
+                <el-input v-model="editAdminInfo.name" size="mini" auto-complete="off"></el-input>
             </el-form-item> 
             <el-form-item label="简介" :label-width="dialogLabelWidth">
-                <el-input v-model="editUserInfo.intros" size="mini" auto-complete="off"></el-input>
+                <el-input v-model="editAdminInfo.intros" size="mini" auto-complete="off"></el-input>
             </el-form-item>            
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button type="primary" size="mini" @click="editUser">确 定</el-button>
+            <el-button type="primary" size="mini" @click="editAdmin">确 定</el-button>
         </div>
     </el-dialog>
 </div>
@@ -104,6 +104,6 @@
     var adminId = 1;
 </script>
 <script src="/js/common/per.js"></script>
-<script src="/js/user.js"></script>
+<script src="/js/admin.js"></script>
 </body>
 </html>

@@ -1,10 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>order</title>
+   <#include "common/meta.html">
 </head>
+
 <body>
-<h1>订单</h1>
+<div v-cloak id="app" class="clearfix">
+    <#include "common/left.html">
+    <div class="rightSide fl">
+        <#include "common/top.html">
+        <div class="content">
+            <div class="searchBox">
+                <!-- 状态筛选 -->
+                <el-select v-model="currentStatus" size="mini" clearable placeholder="请选择状态">
+                    <el-option
+                      v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+
+                <!-- 网点筛选 -->
+                <el-select v-model="currentTerIds[0]" size="mini" clearable placeholder="请选择网点">
+                    <el-option
+                      v-for="item in terOptions" :key="item.id" :label="item.title" :value="item.id">
+                    </el-option>
+                </el-select>
+                
+                <!-- 日期筛选 -->
+                <el-date-picker clearable v-model="dateRange" size="mini" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+                </el-date-picker>
+
+                <!-- 搜索按钮 -->
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
+            </div>
+
+
+            <!-- 页面列表 -->
+            <el-table
+                :data="orderList"
+                size="mini"
+                style="width: 100%">
+
+                <el-table-column prop="id" label="订单ID"></el-table-column>
+                <el-table-column prop="terTitle" label="网点名称"></el-table-column>
+                <el-table-column prop="payTime" label="支付时间"></el-table-column>
+                <el-table-column label="订单状态">
+                    <template slot-scope="scope">
+                        <span>{{statusList[scope.row.status]}}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="总价（元）">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.amount/100}}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="cardId" label="洗车卡"></el-table-column>
+                <el-table-column prop="ticketId" label="优惠券"></el-table-column>
+                <el-table-column prop="typeDesc" label="支付方式"></el-table-column>
+                <el-table-column prop="channelDesc" label="订单来源"></el-table-column>
+            </el-table>
+
+            <!-- 分页 -->
+            <#include "common/pages2.html">
+        </div>
+    </div>
+
+    
+</div>
+
+<script>
+    var admin = '超级管理员';
+    var adminId = 1;
+</script>
+<script src="/js/common/per.js"></script>
+<script src="/js/order.js"></script>
 </body>
 </html>

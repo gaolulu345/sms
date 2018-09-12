@@ -101,4 +101,14 @@ public class IndexController {
         return "permission";
     }
 
+    /**
+     * 员工
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/pages/admin")
+    public String admin(HttpServletRequest request, Model model ) {
+        return "admin";
+    }
+
 }

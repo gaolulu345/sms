@@ -20,9 +20,9 @@ public interface AdminAccountDao {
 
     int updateLastLoginTime(@Param("id") int id , @Param("time") Timestamp lastLoginTime);
 
-    int cntBySearch(AdminSearch adminSearch);
-
     int bachUpdateDeleted(AdminSearch adminSearch);
+
+    int cntBySearch(AdminSearch adminSearch);
 
     List<AdminAccountDTO> listBySearch(AdminSearch adminSearch);
 
