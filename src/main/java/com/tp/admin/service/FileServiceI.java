@@ -12,4 +12,6 @@ public interface FileServiceI {
 
     ApiResult list(HttpServletRequest request, FileSearch fileSearch);
 
+    ApiResult bachDeleteImges(HttpServletRequest request, FileSearch fileSearch);
+
 }

@@ -2,6 +2,7 @@ package com.tp.admin.dao;
 
 import com.tp.admin.data.entity.FileUploadLog;
 import com.tp.admin.data.search.FileSearch;
+import com.tp.admin.data.search.SystemSearch;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ public interface FileUploadLogDao {
     int cntBySearch(FileSearch fileSearch);
 
     List<FileUploadLog> listBySearch(FileSearch fileSearch);
+
+    int bachUpdateDeleted(FileSearch systemSearch);
 
 
 }

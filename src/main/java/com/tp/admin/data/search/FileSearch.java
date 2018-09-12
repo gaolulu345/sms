@@ -11,11 +11,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class FileSearch extends Search{
+public class FileSearch extends Search {
 
-    private String adminName;
-    private String fileKey;
-    private String startTime;
-    private String endTime;
+    String adminName;
+    String fileKey;
+    String startTime;
+    String endTime;
+    int[] ids;
 
 }

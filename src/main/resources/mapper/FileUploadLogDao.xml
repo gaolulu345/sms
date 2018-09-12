@@ -13,6 +13,16 @@
 		)
     </insert>
 
+    <delete id="bachUpdateDeleted">
+        DELETE FROM `file_upload_log_admin`
+        WHERE
+        id iN
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
     <select id="cntBySearch" parameterType="com.tp.admin.data.search.FileSearch" resultType="java.lang.Integer">
         SELECT
         COUNT(id)
@@ -38,7 +48,7 @@
         </if>
     </select>
 
-    
+
     <select id="listBySearch" parameterType="com.tp.admin.data.search.FileSearch" resultMap="FileUploadLogMap">
         SELECT *
         FROM
@@ -62,13 +72,13 @@
             LIMIT #{offset},#{pageSize}
         </if>
     </select>
-    
+
     <resultMap id="FileUploadLogMap" type="com.tp.admin.data.entity.FileUploadLog">
-        <id column="id" property="id" jdbcType="INTEGER" />
+        <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="admin_name" property="adminName" jdbcType="VARCHAR"/>
         <result column="bucket_name" property="bucketName" jdbcType="VARCHAR"/>
         <result column="file_key" property="fileKey" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
 </mapper>

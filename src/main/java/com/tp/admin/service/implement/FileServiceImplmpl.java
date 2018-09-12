@@ -65,4 +65,16 @@ public class FileServiceImplmpl implements FileServiceI {
         fileSearch.setTotalCnt(cnt);
         return ApiResult.ok(fileSearch);
     }
+
+    @Override
+    public ApiResult bachDeleteImges(HttpServletRequest request, FileSearch fileSearch) {
+        if (fileSearch.getIds().length == 0) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        int res = fileUploadLogDao.bachUpdateDeleted(fileSearch);
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+        }
+        return ApiResult.ok();
+    }
 }

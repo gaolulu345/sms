@@ -29,6 +29,11 @@ public class FileController {
         return fileService.list(request,fileSearch);
     }
 
+    @PostMapping(value = "/delete")
+    public ApiResult bachDeleteImges(HttpServletRequest request, @RequestBody FileSearch fileSearch){
+        return fileService.bachDeleteImges(request,fileSearch);
+    }
+
 
 
 }

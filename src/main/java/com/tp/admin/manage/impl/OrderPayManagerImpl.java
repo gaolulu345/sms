@@ -12,12 +12,16 @@ import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.OrderPayManagerI;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Service
 public class OrderPayManagerImpl implements OrderPayManagerI {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderPayManagerImpl.class);
 
     @Autowired
     AliPayProperties aliPayProperties;
@@ -27,51 +31,54 @@ public class OrderPayManagerImpl implements OrderPayManagerI {
 
     @Override
     public void aliPayBack(boolean miniApp, Order order) {
-//        String aliURL = "https://openapi.alipay.com/gateway.do";
-//        String appId = miniApp ? TestConstant.ALiMiniAppID : TestConstant.ALiPayID;
-//        String privateKey = miniApp ? TestConstant.ALiMiniAppPrivateKey : TestConstant.ALiPayPrivateKey;
-//        String praviteKey = miniApp ? TestConstant.ALiMiniAppPublicKey : TestConstant.ALiPayPublicKey;
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("out_trade_no", order.getAlipayStr());
-//        jsonObject.put("refund_amount", String.valueOf(Float.valueOf(order.getAmount()) / 100));
-//        AlipayClient alipayClient = new DefaultAlipayClient(aliURL, appId, privateKey, "json", "GBK", praviteKey,"RSA2");
-//        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
-//        request.setBizContent(jsonObject.toString());
-//        String aliRes = "";
-//        try {
-//            AlipayTradeRefundResponse response = alipayClient.execute(request);
-//            aliRes = response.getCode();
-//        } catch (Exception e) {
-//            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
-//        }
-//        if (StringUtils.isEmpty(aliRes)) {
-//            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
-//        }
-//        if (aliRes.equals("10000")) {
-//            return;
-//        }
-//        if (aliRes.equals("20000")) {
-//            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "invalid service");
-//        }
-//        if (aliRes.equals("20001")) {
-//            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "no auth to payback");
-//        }
-//        if (aliRes.equals("40001")) {
-//            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "param miss");
-//        }
-//        if (aliRes.equals("40002")) {
-//            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "illegal param");
-//        }
-//        if (aliRes.equals("40004")) {
-//            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "service fails");
-//        }
-//        if (aliRes.equals("40006")) {
-//            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "another: no auth to payback");
-//        }
+        logger.info("订单号：{}生成支付宝支付码",order.getAlipayStr());
+        String aliURL = "https://openapi.alipay.com/gateway.do";
+        String appId = miniApp ? TestConstant.ALiMiniAppID : TestConstant.ALiPayID;
+        String privateKey = miniApp ? TestConstant.ALiMiniAppPrivateKey : TestConstant.ALiPayPrivateKey;
+        String praviteKey = miniApp ? TestConstant.ALiMiniAppPublicKey : TestConstant.ALiPayPublicKey;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("out_trade_no", order.getAlipayStr());
+        jsonObject.put("refund_amount", String.valueOf(Float.valueOf(order.getAmount()) / 100));
+        AlipayClient alipayClient = new DefaultAlipayClient(aliURL, appId, privateKey, "json", "GBK", praviteKey,"RSA2");
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        request.setBizContent(jsonObject.toString());
+        String aliRes = "";
+        try {
+            AlipayTradeRefundResponse response = alipayClient.execute(request);
+            aliRes = response.getCode();
+        } catch (Exception e) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        if (StringUtils.isEmpty(aliRes)) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        if (aliRes.equals("10000")) {
+            return;
+        }
+        if (aliRes.equals("20000")) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "invalid service");
+        }
+        if (aliRes.equals("20001")) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "no auth to payback");
+        }
+        if (aliRes.equals("40001")) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "param miss");
+        }
+        if (aliRes.equals("40002")) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "illegal param");
+        }
+        if (aliRes.equals("40004")) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "service fails");
+        }
+        if (aliRes.equals("40006")) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION , "another: no auth to payback");
+        }
     }
 
     @Override
     public void wxinPayBack(boolean miniApp, Order order) {
+
+
 
     }
 
