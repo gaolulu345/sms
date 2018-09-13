@@ -51,4 +51,8 @@ public interface SystemServiceI {
     ApiResult bachUpdateSysRolesDeleted(HttpServletRequest request, SystemSearch systemSearch);
 
     ApiResult findAllPermission(HttpServletRequest request, SystemSearch systemSearch);
+
+    ApiResult bachUpdateRolesMenu(HttpServletRequest request, SystemSearch systemSearch);
+
+    ApiResult bachUpdateRolesOperations(HttpServletRequest request, SystemSearch systemSearch);
 }
