@@ -8,6 +8,8 @@ var vm = new Vue({
         adminId: adminId,
         menuPer: menuPer,
         opPer: opPer,
+
+        isAll: false,
         // allResource: [],
         // pageResource: [],
         // opResource: [],
@@ -72,8 +74,6 @@ var vm = new Vue({
                     vm.currentRolePermission = result.data.menu;
                 })
             }
-
-            
         })
 
 
@@ -126,7 +126,12 @@ var vm = new Vue({
             vm.showEditRole = true;
         },
         editRole: function() {
-            this.$http.post("/api/private/sys/update/roles", vm.editRoleInfo).then(function(res){
+            let data = {
+                id: vm.editRoleInfo.id,
+                rolesName: vm.editRoleInfo.rolesName,
+                details: vm.editRoleInfo.details
+            }
+            this.$http.post("/api/private/sys/update/roles", data).then(function(res){
                 let result = res.json();
                 if(result.code == 200){
                     vm.$message.success('已修改');

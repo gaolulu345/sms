@@ -12,7 +12,7 @@ var vm = new Vue({
         pageSizes: [1, 10, 20, 50],
         currentPageSize: null,
         currentPageIndex: null,
-        // isAll: false,
+        isAll: false,
 
         adminList: [],
         adminSelection: [],
@@ -31,14 +31,15 @@ var vm = new Vue({
     
     mounted: function() {
     	console.log('mounted......')
-        this.getAdminList(10, 1)
+        this.getAdminList(10, 1, false)
     },
 
     methods: {
-        getAdminList: function(pageSize, pageIndex) {
+        getAdminList: function(pageSize, pageIndex, isAll) {
             this.$http.post("/api/private/admin/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
+                delete: isAll
             }).then(function(res){
                 let data = res.json().data;
                 let result = data.result;

@@ -73,40 +73,34 @@ var vm = new Vue({
         },
 
         download: function(){
-            // var status = getParams('status');
-            // var payType = getParams('payType');
-            // var st = getParams('st');
-            // var et = getParams('et');
-            // var terId = getParams('terID');
-            // sTime = new Date(st);
-            // var today = new Date();
-            // var time = today - sTime;
+            let st = vm.currentStartTime
+            let et = vm.currentEndTime
+            sTime = new Date(st);
+            let today = new Date();
+            let time = today - sTime;
+            console.log(sTime, today, time);
 
-            // console.log(sTime, today, time);
+            if(st && et) {
+                if (time > 86400000*93) { //超过3个月
+                    vm.$message.error('请选择近3个月的订单')
+                } else {
+                    this.$http.post("/api/private/order/list/exprot", {
+                        terIds: vm.currentTerIds,
+                        startTime: st,
+                        endTime: et
+                    }).then(function(res){
+                        let result = res.json()
+                    })
 
-            this.$http.post("/api/private/order/list/exprot", {
-                terIds: [1],
-                startTime: '2018-09-01',
-                endTime: '2018-09-11'
-            }).then(function(res){
-                let result = res.json()
-                // vm.terOptions = result.data
-            })
-
-
-            // if(st && et) {
-            //     if (time > 86400000*93) { //超过3个月
-            //         vm.$message.error('请选择近3个月的订单')
-            //     } else {
-            //         if (totalCnt > 0) {
-            //             window.location.href = "/order/export?&type=" + payType + '&st=' + st + '&et=' + et + '&terId=' + terId;
-            //         } else {
-            //             vm.$message.error('无结果')
-            //         }
-            //     }
-            // } else {
-            //     vm.$message.error('请选择开始和结束日期！');
-            // }
+                    // if (totalCnt > 0) {
+                    //     window.location.href = "/order/export?&type=" + payType + '&st=' + st + '&et=' + et + '&terId=' + terId;
+                    // } else {
+                    //     vm.$message.error('无结果')
+                    // }
+                }
+            } else {
+                vm.$message.error('请选择开始和结束日期！');
+            }
         },
 
 

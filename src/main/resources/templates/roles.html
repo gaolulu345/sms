@@ -17,6 +17,9 @@
             <div class="menuListBox">
                 <p class="title">
                     角色
+                    <!-- <el-button v-if="isAll == false" type="primary" size="mini"  @click="getMenuList(true)">查看全部</el-button>
+                    <el-button v-if="isAll == true" type="success" size="mini"  @click="getMenuList(false)">仅看有效</el-button> -->
+                    
                     <el-button icon="el-icon-plus" type="primary" size="mini"  @click="showAddRole = true"></el-button>
                     <el-button icon="el-icon-delete" type="danger" size="mini"  @click="deleteRole"></el-button>
                 </p>
