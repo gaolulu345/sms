@@ -14,4 +14,8 @@ public class UserSearch extends Search {
     Integer id;
     String phone;
 
+    @Override
+    public void builData() {
+        super.build();
+    }
 }

@@ -15,7 +15,12 @@ public class AdminSearch extends  Search {
 
     Boolean deleted;
 
-    int id;
+    Integer id;
 
     int[] ids;
+
+    @Override
+    public void builData() {
+        super.build();
+    }
 }

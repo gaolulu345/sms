@@ -17,4 +17,8 @@ public class FileSearch extends Search {
     String fileKey;
     int[] ids;
 
+    @Override
+    public void builData() {
+
+    }
 }

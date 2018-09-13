@@ -42,7 +42,7 @@ public class WashOrderServiceImpl implements WashOrderServiceI {
 
     @Override
     public ApiResult list(HttpServletRequest request, OrderSearch orderSearch) {
-        orderSearch.build();
+        orderSearch.builData();
         List<OrderDTO> list = orderDao.listBySearch(orderSearch);
         if (null != list && !list.isEmpty()) {
             for (OrderDTO o : list) {

@@ -18,4 +18,11 @@ public class OrderSearch extends Search {
     private Integer type;
     private int[] terIds;
 
+    @Override
+    public void builData() {
+        super.build();
+        if (status != null && status < 0 ) {
+            status = null;
+        }
+    }
 }

@@ -128,7 +128,7 @@ public class SystemServiceImpl implements SystemServiceI {
 
     @Override
     public ApiResult listSysMenuBySearch(HttpServletRequest request, SystemSearch systemSearch) {
-        systemSearch.build();
+        systemSearch.builData();
         List<AdminMenu> list = adminMenuDao.listBySearch(systemSearch);
         int cnt = adminMenuDao.cntBySearch(systemSearch);
         systemSearch.setResult(list);
@@ -218,7 +218,7 @@ public class SystemServiceImpl implements SystemServiceI {
 
     @Override
     public ApiResult listSysOperationsBySearch(HttpServletRequest request, SystemSearch systemSearch) {
-        systemSearch.build();
+        systemSearch.builData();
         List<AdminOperations> list = adminOperationsDao.listBySearch(systemSearch);
         int cnt = adminOperationsDao.cntBySearch(systemSearch);
         systemSearch.setResult(list);
@@ -287,7 +287,7 @@ public class SystemServiceImpl implements SystemServiceI {
 
     @Override
     public ApiResult listSysRolesBySearch(HttpServletRequest request, SystemSearch systemSearch) {
-        systemSearch.build();
+        systemSearch.builData();
         List<AdminRoles> list = adminRolesDao.listBySearch(systemSearch);
         int cnt = adminRolesDao.cntBySearch(systemSearch);
         systemSearch.setResult(list);

@@ -52,7 +52,7 @@ public class FileServiceImplmpl implements FileServiceI {
 
     @Override
     public ApiResult list(HttpServletRequest request, FileSearch fileSearch) {
-        fileSearch.build();
+        fileSearch.builData();
         String p = aliyunOssProperties.getServerUrl();
         List<FileUploadLog> list = fileUploadLogDao.listBySearch(fileSearch);
         if (null != list && !list.isEmpty()) {
