@@ -7,7 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = { AdminApplication.class })
 @EnableTransactionManagement
 @MapperScan("com.tp.admin.dao")
 public class AdminApplication {

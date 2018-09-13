@@ -16,7 +16,7 @@ public class Search {
 
     public final void build(){
         if (pageIndex < 1) {
-            pageIndex = 1;
+            pageIndex = Constant.Page.DEFAULT_INDEX;
         }
         if (pageSize < 1) {
             pageSize = Constant.Page.DEFAULT_SIZE;

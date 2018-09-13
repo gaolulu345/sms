@@ -1,5 +1,7 @@
 package com.tp.admin.common;
 
+import org.apache.http.client.HttpClient;
+
 public class ConfigUtil {
 
     /**
@@ -36,4 +38,10 @@ public class ConfigUtil {
     public final static String SHORT_URL = "https://api.mch.weixin.qq.com/tools/shorturl";
     // 接口调用上报接口(POST)
     public final static String REPORT_URL = "https://api.mch.weixin.qq.com/payitil/report";
+
+    public static final String WXPAYSDK_VERSION = "WXPaySDK/3.0.9";
+
+    public static final String USER_AGENT = WXPAYSDK_VERSION +
+            " (" + System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version") +
+            ") Java/" + System.getProperty("java.version") + " HttpClient/" + HttpClient.class.getPackage().getImplementationVersion();
 }

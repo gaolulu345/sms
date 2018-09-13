@@ -3,7 +3,6 @@ package com.tp.admin.service.implement;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.OrderDao;
 import com.tp.admin.dao.RefundDao;
-import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.Order;
 import com.tp.admin.data.entity.Refund;
@@ -12,8 +11,8 @@ import com.tp.admin.enums.OrderTypeEnum;
 import com.tp.admin.enums.RefundStatusEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
-import com.tp.admin.manage.OrderPayManagerI;
-import com.tp.admin.manage.impl.OrderPayManagerImpl;
+import com.tp.admin.manage.MiniOrderPayManagerI;
+import com.tp.admin.manage.impl.MiniOrderPayManagerImpl;
 import com.tp.admin.service.WashRefundServiceI;
 import com.tp.admin.utils.SessionUtils;
 import org.slf4j.Logger;
@@ -35,9 +34,9 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
     OrderDao orderDao;
 
     @Autowired
-    OrderPayManagerI orderPayManager;
+    MiniOrderPayManagerI miniOrderPayManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(OrderPayManagerImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MiniOrderPayManagerImpl.class);
 
     @Override
     public ApiResult list(HttpServletRequest request, RefundSearch refundSearch) {
@@ -105,9 +104,9 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
         if (orderType == OrderTypeEnum.FREE.ordinal()) {
             // 免费的什么都不做.直接更新数据库。
         }else if (orderType == OrderTypeEnum.ALIPAY.ordinal()) {
-            orderPayManager.aliPayBack(order);
+            miniOrderPayManager.aliPayBack(order);
         }else if (orderType == OrderTypeEnum.WXPAY.ordinal() || orderType == OrderTypeEnum.TEST.ordinal()) {
-            orderPayManager.wxinPayBack(order);
+            miniOrderPayManager.wxinPayBack(order);
         }else {
             // 如果订单状态不正确则拒绝退款。
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);

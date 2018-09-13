@@ -1,20 +1,15 @@
 package com.tp.admin.manage.impl;
 
-import ch.qos.logback.core.joran.spi.XMLUtil;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.tp.admin.common.ConfigUtil;
-import com.tp.admin.common.Constant;
-import com.tp.admin.common.TestConstant;
-import com.tp.admin.config.AliPayProperties;
-import com.tp.admin.config.WXinPayProperties;
+import com.tp.admin.common.MiniConstant;
 import com.tp.admin.data.entity.Order;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
-import com.tp.admin.manage.OrderPayManagerI;
-import com.tp.admin.utils.ClientCustomSSL;
+import com.tp.admin.manage.MiniOrderPayManagerI;
 import com.tp.admin.utils.MD5Util;
 import net.sf.json.JSONObject;
 import org.jdom.Document;
@@ -23,7 +18,6 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -34,23 +28,17 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-public class OrderPayManagerImpl implements OrderPayManagerI {
+public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
 
-    private static final Logger logger = LoggerFactory.getLogger(OrderPayManagerImpl.class);
-
-    @Autowired
-    AliPayProperties aliPayProperties;
-
-    @Autowired
-    WXinPayProperties wXinPayProperties;
+    private static final Logger logger = LoggerFactory.getLogger(MiniOrderPayManagerImpl.class);
 
     @Override
     public void aliPayBack(Order order) {
-        logger.info("订单号：{}生成支付宝支付码", order.getAlipayStr());
+        logger.info("支付宝小程序支付凭证：{} ", order.getAlipayStr());
         String aliURL = "https://openapi.alipay.com/gateway.do";
-        String appId = TestConstant.ALiMiniAppID;
-        String privateKey = TestConstant.ALiMiniAppPrivateKey;
-        String praviteKey = TestConstant.ALiMiniAppPublicKey;
+        String appId = MiniConstant.ALiMiniAppID;
+        String privateKey = MiniConstant.ALiMiniAppPrivateKey;
+        String praviteKey = MiniConstant.ALiMiniAppPublicKey;
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("out_trade_no", order.getAlipayStr());
         jsonObject.put("refund_amount", String.valueOf(Float.valueOf(order.getAmount()) / 100));
@@ -68,63 +56,69 @@ public class OrderPayManagerImpl implements OrderPayManagerI {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
         if (aliRes.equals("10000")) {
+            logger.info("订单号：{} 支付凭证 {}  支付宝退款成功并删除二维码", order.getId(), order.getAlipayStr());
             return;
         }
         if (aliRes.equals("20000")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "invalid service");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "invalid service");
         }
         if (aliRes.equals("20001")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "no auth to payback");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "no auth to payback");
         }
         if (aliRes.equals("40001")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "param miss");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "param miss");
         }
         if (aliRes.equals("40002")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "illegal param");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "illegal param");
         }
         if (aliRes.equals("40004")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "service fails");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "service fails");
         }
         if (aliRes.equals("40006")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "another: no auth to payback");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "another: no auth to payback");
         }
     }
 
     @Override
     public void wxinPayBack(Order order) {
-        logger.info("订单号：{} 生成微信支付码", order.getWxpayStr());
+        logger.info("微信小程序订单号：{} ", order.getWxpayStr());
         try {
             // 账号信息
-            String mch_id = TestConstant.WXMiniAppID; // 商业号
-            String key = TestConstant.WXMiniAppApiKey; // key
+            String mch_id = MiniConstant.WxMchID; // 商业号
+            String key = MiniConstant.WXMiniAppApiKey; // key
             SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
             commonParams(packageParams);
             packageParams.put("out_trade_no", String.valueOf(order.getId()));// 商户订单号
             packageParams.put("out_refund_no", order.getWxpayStr());//商户退款单号
-            String totalFee = String.valueOf(Float.valueOf(order.getAmount()) / 100);
+            String totalFee = String.valueOf(order.getAmount());
             packageParams.put("total_fee", totalFee);// 总金额
             packageParams.put("refund_fee", totalFee);//退款金额
             packageParams.put("op_user_id", mch_id);//操作员帐号, 默认为商户号
             String sign = createSign("UTF-8", packageParams, key);
             packageParams.put("sign", sign);// 签名
             String requestXML = getRequestXml(packageParams);
-            logger.info("requestXML {} ", requestXML);
-            String weixinPost = ClientCustomSSL.doRefund(ConfigUtil.REFUND_URL, requestXML).toString();
+            String weixinPost = ClientCustomSSL.requestOnce(ConfigUtil.REFUND_URL, requestXML, 5000 , 3000 , true );
             Map map = doXMLParse(weixinPost);
             String returnCode = (String) map.get("return_code");
             if ("SUCCESS".equals(returnCode)) {
                 String resultCode = (String) map.get("result_code");
                 if ("SUCCESS".equals(resultCode)) {
                     logger.info("订单号：{} 支付凭证 {}  微信退款成功并删除二维码", order.getId(), order.getWxpayStr());
-                    throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+                    return;
                 } else {
                     String errCodeDes = (String) map.get("err_code_des");
-                    logger.info("订单号：{} 支付凭证 {}  微信退款失败:{}", order.getId(), order.getWxpayStr(), errCodeDes);
+                    logger.error("订单号：{} 支付凭证 {}  微信退款失败:{}", order.getId(), order.getWxpayStr(), errCodeDes);
                     throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
                 }
             } else {
                 String returnMsg = (String) map.get("return_msg");
-                logger.info("订单号：{}微信退款失败:{}", order.getWxpayStr(), returnMsg);
+                logger.error("订单号：{} 支付凭证 {}  微信退款失败:{}", order.getId(), order.getWxpayStr(), returnMsg);
                 throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
             }
         } catch (Exception e) {
@@ -135,8 +129,8 @@ public class OrderPayManagerImpl implements OrderPayManagerI {
 
     private void commonParams(SortedMap<Object, Object> packageParams) {
         // 账号信息
-        String appid = TestConstant.WxAppID; // appid
-        String mch_id = TestConstant.WxMchID; // 商业号
+        String appid = MiniConstant.WXMiniAppID; // appid
+        String mch_id = MiniConstant.WxMchID; // 商业号
         // 生成随机字符串
         String currTime = getCurrTime();
         String strTime = currTime.substring(8, currTime.length());
