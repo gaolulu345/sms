@@ -53,6 +53,11 @@
             AND
             o.status = #{status}
         </if>
+        <if test="type != null">
+            AND
+            o.type = #{type}
+        </if>
+
         <if test="startTime != null and endTime != null">
             AND o.pay_time BETWEEN #{startTime} AND #{endTime}
         </if>

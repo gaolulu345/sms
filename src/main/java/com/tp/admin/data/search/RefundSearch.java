@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 public class RefundSearch extends  Search {
 
     int id;
-
     Integer status;
-
     Integer reason;  // 现在用type枚举映射
+    private String startTime;
+    private String endTime;
 
 }
