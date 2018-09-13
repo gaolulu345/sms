@@ -9,7 +9,7 @@
         `order` AS o INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id
         WHERE
         o.deleted = 0
-        <if test="terIds != null">
+        <if test="terIds != null and terIds.length != 0">
             AND
             o.ter_id IN
             <foreach collection="terIds" item="terId" index="index"
@@ -41,7 +41,7 @@
         `order` AS o INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id
         WHERE
         o.deleted = 0
-        <if test="terIds != null">
+        <if test="terIds != null and terIds.length != 0">
             AND
             o.ter_id IN
             <foreach collection="terIds" item="terId" index="index"
