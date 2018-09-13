@@ -2,12 +2,15 @@ package com.tp.admin.controller;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.search.FileSearch;
+import com.tp.admin.data.search.OrderSearch;
 import com.tp.admin.service.FileServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 
 @RestController
@@ -33,6 +36,7 @@ public class FileController {
     public ApiResult bachDeleteImges(HttpServletRequest request, @RequestBody FileSearch fileSearch){
         return fileService.bachDeleteImges(request,fileSearch);
     }
+
 
 
 

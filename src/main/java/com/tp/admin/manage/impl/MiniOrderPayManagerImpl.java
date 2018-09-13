@@ -175,7 +175,7 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
      * @param API_KEY
      * @return
      */
-    public String createSign(String characterEncoding, SortedMap<Object, Object> packageParams, String API_KEY) {
+    private String createSign(String characterEncoding, SortedMap<Object, Object> packageParams, String API_KEY) {
         StringBuffer sb = new StringBuffer();
         Set es = packageParams.entrySet();
         Iterator it = es.iterator();
@@ -197,7 +197,7 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
      * 将请求参数转换为xml格式的string
      */
     @SuppressWarnings({ "rawtypes"})
-    public String getRequestXml(SortedMap<Object, Object> parameters) {
+    private String getRequestXml(SortedMap<Object, Object> parameters) {
         StringBuffer sb = new StringBuffer();
         sb.append("<xml>");
         Set es = parameters.entrySet();
@@ -225,7 +225,7 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
      * @throws IOException
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static Map doXMLParse(String strxml) throws JDOMException, IOException {
+    private static Map doXMLParse(String strxml) throws JDOMException, IOException {
         strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
 
         if (null == strxml || "".equals(strxml)) {
@@ -266,7 +266,7 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
      * @return String
      */
     @SuppressWarnings({ "rawtypes" })
-    public static String getChildrenText(List children) {
+    private static String getChildrenText(List children) {
         StringBuffer sb = new StringBuffer();
         if (!children.isEmpty()) {
             Iterator it = children.iterator();
