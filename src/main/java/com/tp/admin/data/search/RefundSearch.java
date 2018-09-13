@@ -17,4 +17,8 @@ public class RefundSearch extends  Search {
     private String startTime;
     private String endTime;
 
+    @Override
+    public void builData() {
+        super.build();
+    }
 }

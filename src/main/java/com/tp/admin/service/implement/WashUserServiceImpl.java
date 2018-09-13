@@ -19,7 +19,7 @@ public class WashUserServiceImpl implements WashUserServiceI {
 
     @Override
     public ApiResult list(HttpServletRequest request, UserSearch userSearch) {
-        userSearch.build();
+        userSearch.builData();
         List<User> list = userDao.listBySearch(userSearch);
         int cnt = userDao.cntBySearch(userSearch);
         userSearch.setResult(list);

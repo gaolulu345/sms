@@ -50,7 +50,7 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
 
     @Override
     public ApiResult list(HttpServletRequest request, RefundSearch refundSearch) {
-        refundSearch.build();
+        refundSearch.builData();
         List<Refund> list = refundDao.listBySearch(refundSearch);
         if (null != list && !list.isEmpty()) {
             for (Refund o : list){

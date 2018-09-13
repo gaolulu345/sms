@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Search {
+public abstract class Search {
 
     protected int pageIndex;
     protected int pageSize;
@@ -17,7 +17,7 @@ public class Search {
     private String endTime;
     protected List<? extends Object> result;
 
-    public final void build(){
+    protected final void build(){
         if (pageIndex < 1) {
             pageIndex = Constant.Page.DEFAULT_INDEX;
         }
@@ -36,5 +36,8 @@ public class Search {
             this.endTime = null;
         }
     }
+
+    abstract void builData();
+
     
 }

@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class SystemSearch extends Search {
 
-    int id;
+    Integer id;
 
-    int rolesId;
+    Integer rolesId;
 
-    int menuId;
+    Integer menuId;
 
-    int operationsId;
+    Integer operationsId;
 
     int[] ids;
 
@@ -28,4 +28,8 @@ public class SystemSearch extends Search {
 
     boolean all = false;
 
+    @Override
+    public void builData() {
+        super.build();
+    }
 }

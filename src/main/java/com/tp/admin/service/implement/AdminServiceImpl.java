@@ -51,7 +51,7 @@ public class AdminServiceImpl implements AdminServiceI {
 
     @Override
     public ApiResult list(HttpServletRequest request, AdminSearch adminSearch) {
-        adminSearch.build();
+        adminSearch.builData();
         List<AdminAccountDTO> list = adminAccountDao.listBySearch(adminSearch);
         int cnt = adminAccountDao.cntBySearch(adminSearch);
         adminSearch.setResult(list);
@@ -61,7 +61,7 @@ public class AdminServiceImpl implements AdminServiceI {
 
     @Override
     public ApiResult listExport(HttpServletRequest request, AdminSearch adminSearch) {
-        adminSearch.build();
+        adminSearch.builData();
         return null;
     }
 
