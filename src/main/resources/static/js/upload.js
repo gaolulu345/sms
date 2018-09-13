@@ -23,6 +23,7 @@ var vm = new Vue({
         currentEndTime: '',
 
         uploadList: [],
+        uploadSelection: [],
         fileList: [],
         fileCnt: 0,
     
@@ -101,6 +102,55 @@ var vm = new Vue({
                 this.$message.error('上传文件大小不能超过 2M!');
             }
             return isIMG && isLt2M;
+        },
+
+        // 批量删除
+        handleUploadSelectionChange(val) {
+            this.uploadSelection = val;
+        },
+        deleteUpload: function() {
+            if (vm.uploadSelection.length == 0) {
+                vm.$message.warning('请选择要删除的图片！');
+            } else {
+                let selection = vm.uploadSelection
+                let ids = []
+                for(var key in selection) {
+                    ids.push(selection[key].id)
+                }
+                console.log(ids)
+
+                vm.$confirm('确认删除这' + ids.length + '个图片?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    vm.$http.post("/api/private/file/delete", {
+                        ids: ids
+                    }).then(function(res){
+                        let result = res.json();
+                        if(result.code == 200){
+                            vm.$message.success('已删除');
+                            vm.getUploadList(vm.currentPageSize, vm.currentPageIndex, vm.currentAdminName, vm.currentFileKey, vm.currentStartTime, vm.currentEndTime);
+                        }else {
+                            vm.$message.error(result.message)
+                        }
+                    })
+                }).catch(() => {
+                    vm.$message.info('已取消操作')
+                });
+            }
+        },
+
+
+        // 多选
+        toggleSelection(rows) {
+            if (rows) {
+                rows.forEach(row => {
+                    this.$refs.multipleTable.toggleRowSelection(row);
+                });
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
         },
 
         search: function(){

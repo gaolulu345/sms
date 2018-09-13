@@ -18,9 +18,14 @@
                 <el-date-picker clearable v-model="dateRange" size="mini" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" format="yyyy-MM-dd" value-format="yyyy-MM-dd">
                 </el-date-picker>
 
+                <!-- 搜索按钮 -->
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
+            </div>
+
+            <div class="opBox">
                 <!-- 上传按钮 -->
                 <el-upload
-                    class="upload-demo fr"
+                    style="display: inline-block;"
                     action="/api/private/file/upload/images"
                     accept="image/jpeg, image/gif, image/png"
                     :on-success="uploadSuccess"
@@ -29,27 +34,25 @@
                     :show-file-list=false
                     :limit="5"
                     :on-exceed="handleExceed" >
-                    <el-button class="fr" size="mini" style="margin:11px 8px 0 0;" type="primary" icon="el-icon-upload">图片上传 (不超过2M)</el-button>
+                    <el-button size="mini" style="margin:11px 8px 0 0;" type="primary" icon="el-icon-upload">图片上传 (不超过2M)</el-button>
                 </el-upload>
 
-                <!-- 搜索按钮 -->
-                <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
+                <el-button class=""  @click="deleteUpload" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
             </div>
 
 
             <!-- 页面列表 -->
             <el-table
+                ref="multipleTable"
+                @selection-change="handleUploadSelectionChange"
                 :data="uploadList"
                 size="mini"
                 style="width: 100%">
 
+                <el-table-column  type="selection" width="55"></el-table-column>
                 <el-table-column prop="id" label="图片ID"></el-table-column>
-                <el-table-column prop="adminName" label="图片ID"></el-table-column>
-                <el-table-column prop="bucketName" label="空间名称"></el-table-column>
-                <el-table-column prop="fileKey" label="键值"></el-table-column>
-                <el-table-column prop="createTime" label="上传时间"></el-table-column>
-                
-                <el-table-column prop="url" label="url"></el-table-column>
+                <el-table-column prop="adminName" label="上传人"></el-table-column>
+                <!-- <el-table-column prop="url" label="url"></el-table-column>
                 <el-table-column label="缩略图">
                     <template slot-scope="scope">
                         <img :src="scope.row.url + '@100w'"></image>
@@ -59,18 +62,22 @@
                     <template slot-scope="scope">
                         <a target="_blank" :href="scope.row.url">{{scope.row.url}}</a>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
 
-                <el-table-column label="缩略图-拼接">
+                <el-table-column label="缩略图">
                     <template slot-scope="scope">
                         <img :src="'http://' + scope.row.bucketName + '.img-cn-hangzhou.aliyuncs.com/' + scope.row.fileKey + '@100w'"></image>
                     </template>
                 </el-table-column>
-                <el-table-column label="原图地址-拼接">
+                <el-table-column label="原图地址">
                     <template slot-scope="scope">
                         <a target="_blank" :href="'http://' + scope.row.bucketName + '.img-cn-hangzhou.aliyuncs.com/' + scope.row.fileKey">{{'http://' + scope.row.bucketName + '.img-cn-hangzhou.aliyuncs.com/' + scope.row.fileKey}}</a>
                     </template>
                 </el-table-column>
+
+                <el-table-column prop="bucketName" label="空间名称"></el-table-column>
+                <el-table-column prop="fileKey" label="键值"></el-table-column>
+                <el-table-column prop="createTime" label="上传时间"></el-table-column>
             </el-table>
 
             <!-- 分页 -->

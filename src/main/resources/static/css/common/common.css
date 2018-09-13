@@ -122,6 +122,10 @@
 .rightSide .content .searchBox {
   margin-bottom: 13px;
 }
+.rightSide .content .opBox {
+  margin-bottom: 13px;
+  margin-top: -13px;
+}
 .rightSide .content table {
   width: 100%;
 }
