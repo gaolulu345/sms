@@ -6,6 +6,7 @@ import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.data.search.OrderSearch;
 import com.tp.admin.data.search.RefundSearch;
 import com.tp.admin.service.WashOrderServiceI;
+import com.tp.admin.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +35,27 @@ public class WashOrderController {
         return washOrderService.list(request, orderSearch);
     }
 
-    @PostMapping(value = "/list/exprot")
+    @GetMapping(value = "/list/exprot")
     public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request, HttpServletResponse response,
-                                                         @RequestBody OrderSearch orderSearch
-    ) {
-        return washOrderService.listExport(request, response, orderSearch);
+                                                         @RequestParam(value = "st") String st,
+                                                         @RequestParam(value = "et") String et,
+                                                         @RequestParam(value = "status" , required = false) Integer status,
+                                                         @RequestParam(value = "type" , required = false) Integer type,
+                                                         @RequestParam(value = "terId" , required = false) Integer terId
+                                                         ) {
+        OrderSearch search = new OrderSearch();
+        search.setStartTime(st);
+        search.setEndTime(et);
+        if (null != status) {
+            search.setStatus(status);
+        }
+        if (null != type) {
+            search.setType(type);
+        }
+        if (null != terId) {
+            search.setTerIds(new int[]{terId});
+        }
+        return washOrderService.listExport(request, response, search);
     }
 
 }

@@ -17,5 +17,5 @@ public class AdminSearch extends  Search {
 
     int id;
 
-    List<Integer> ids;
+    int[] ids;
 }

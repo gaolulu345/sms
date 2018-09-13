@@ -15,8 +15,9 @@ import java.util.List;
 public class OrderSearch extends Search {
 
     private Integer status;
+    private Integer type;
     private String startTime;
     private String endTime;
-    private List<Integer> terIds;
+    private int[] terIds;
 
 }
