@@ -1,6 +1,7 @@
 package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.common.Constant;
 import com.tp.admin.dao.AdminAccountDao;
 import com.tp.admin.data.dto.AdminAccountDTO;
 import com.tp.admin.data.dto.ChangePasswordDTO;
@@ -59,12 +60,16 @@ public class AdminServiceImpl implements AdminServiceI {
     }
 
     @Override
-    public ApiResult listExport(HttpServletRequest request, AdminSearch refundSearch) {
+    public ApiResult listExport(HttpServletRequest request, AdminSearch adminSearch) {
+        adminSearch.build();
         return null;
     }
 
     @Override
     public ApiResult bachUpdateDeleted(HttpServletRequest request, AdminSearch adminSearch) {
+        if (adminSearch.getIds().isEmpty()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
         int res = adminAccountDao.bachUpdateDeleted(adminSearch);
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);

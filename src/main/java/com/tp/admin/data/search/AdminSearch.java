@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,5 +17,5 @@ public class AdminSearch extends  Search {
 
     int id;
 
-    int[] ids;
+    List<Integer> ids;
 }
