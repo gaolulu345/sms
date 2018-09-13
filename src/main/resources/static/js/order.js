@@ -65,12 +65,12 @@ var vm = new Vue({
             })
         },
 
-        getTerList: function() {
-            this.$http.post("/api/private/partner/ter/order/selection", {}).then(function(res){
-                let result = res.json()
-                vm.terOptions = result.data
-            })
-        },
+        // getTerList: function() {
+        //     this.$http.post("/api/private/partner/ter/order/selection", {}).then(function(res){
+        //         let result = res.json()
+        //         vm.terOptions = result.data
+        //     })
+        // },
 
         search: function(){
             if(!vm.dateRange) {  //如果日期选择器中先有选择，后置空，结果为null，会报错
