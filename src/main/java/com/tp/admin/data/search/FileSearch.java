@@ -15,8 +15,6 @@ public class FileSearch extends Search {
 
     String adminName;
     String fileKey;
-    String startTime;
-    String endTime;
     int[] ids;
 
 }
