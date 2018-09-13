@@ -1,10 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>roles</title>
+   <#include "common/meta.html">
+   <link rel="stylesheet" href="/css/roles.css">
 </head>
+
 <body>
-<h1>角色管理</h1>
+<div v-cloak id="app" class="clearfix">
+    <#include "common/left.html">
+    <div class="rightSide fl">
+        <#include "common/top.html">
+        <div class="content">
+
+            <!-- 页面菜单列表 -->
+            <div class="menuListBox">
+                <p class="title">
+                    角色
+                    <el-button icon="el-icon-plus" type="primary" size="mini"  @click="showAddRole = true"></el-button>
+                    <el-button icon="el-icon-delete" type="danger" size="mini"  @click="deleteRole"></el-button>
+                </p>
+
+                <el-table
+                    ref="multipleTable"
+                    @selection-change="handleRoleSelectionChange"
+                    :data="roleList"
+                    size="mini"
+                    height="680"
+                    highlight-current-row
+                    @row-click="getRoleInfo"
+                    style="width: 100%">
+
+                    <el-table-column type="selection" width="55"></el-table-column>
+                    <el-table-column prop="rolesName" label="角色名称"></el-table-column>
+                </el-table>
+            </div>
+
+            <!-- 详情+功能 -->
+            <div class="menuDetailsBox">
+                <div class="infosBox">
+                    <p class="title">
+                        角色信息
+                        <el-button icon="el-icon-edit" type="primary" size="mini"  @click="clickEditRole"></el-button>
+                    </p>
+                    <div class="data">
+                        <div class="eachData">角色名称：<span class="dataNum">{{currentRole.rolesName}}</span></div>
+                        <div class="eachData">角色ID：<span class="dataNum">{{currentRole.id}}</span></div>
+                        <div class="eachData">角色描述：<span class="dataNum">{{currentRole.details}}</span></div>
+                        <div class="eachData">是否启用：
+                            <span class="dataNum">  
+                                <el-switch
+                                    v-model="currentRole.enable"
+                                    active-color="#13ce66"
+                                    @change="handleChangeEnable">
+                                </el-switch>
+                            </span>
+                        </div>
+                        <div class="eachData">创建时间：<span class="dataNum">{{currentRole.createTime}}</span></div>
+                        <div class="eachData">修改时间：<span class="dataNum">{{currentRole.modifyTime}}</span></div>
+                        <div class="eachData">是否删除：
+                            <span class="dataNum">  
+                                <el-switch
+                                    v-model="currentRole.deleted"
+                                    active-color="#13ce66"
+                                    @change="handleChangeDelete">
+                                </el-switch>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 角色权限 -->
+                <div class="operateBox">
+                    <p class="title">
+                        角色权限
+                        <el-button type="primary" size="mini" @click="clickEditPermission">修改权限</el-button>
+                        
+                    </p>
+                    <div class="perBox">
+                        <div class="eachMenuBox" v-for="menu in currentRolePermission">
+                            <p class="menuName">
+                                <el-checkbox 
+                                    class="menuPer" 
+                                    v-model="menu.enable" 
+                                    border 
+                                    :disabled="menuDisabled" 
+                                    :label="menu.name"  
+                                    @change="handleCheckMenuPer(menu.id,menu.enable)">
+                                    {{menu.name}}
+                                </el-checkbox>
+                            </p>
+
+                            <el-checkbox 
+                                class="opPer" 
+                                :disabled="opDisabled" 
+                                v-if="menu.op && menu.enable" 
+                                v-for="op in menu.op"  
+                                v-model="op.enable"  
+                                @change="handleCheckOpPer(op.id,op.enable)">
+                                {{op.name}}
+                            </el-checkbox>
+                        </div>
+
+                        <div v-show="showSaveBtn == true" style="text-align: center;margin-top: 10px;">
+                            <el-button type="primary" size="mini"  @click="savePermission">保存</el-button>
+                        </div>
+                        
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增角色弹出框 -->
+    <el-dialog title="新增角色" :visible.sync="showAddRole">
+        <el-form :model="addRoleInfo">
+            <el-form-item label="角色名称" :label-width="dialogLabelWidth">
+                <el-input v-model="addRoleInfo.rolesName" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="描述" :label-width="dialogLabelWidth">
+                <el-input v-model="addRoleInfo.details" size="mini" auto-complete="off"></el-input>
+            </el-form-item>            
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="mini" @click="addRole">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 修改角色弹出框 -->
+    <el-dialog title="更新角色" :visible.sync="showEditRole">
+        <el-form :model="editRoleInfo">
+            <el-form-item label="角色名称" :label-width="dialogLabelWidth">
+                <el-input v-model="editRoleInfo.rolesName" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="描述" :label-width="dialogLabelWidth">
+                <el-input v-model="editRoleInfo.details" size="mini" auto-complete="off"></el-input>
+            </el-form-item>            
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="mini" @click="editRole">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 新增操作弹出框 -->
+    <!-- <el-dialog title="新增操作" :visible.sync="showAddOperation">
+        <el-form :model="addOperationInfo">
+            <el-form-item label="操作名称" :label-width="dialogLabelWidth">
+                <el-input v-model="addOperationInfo.operationsName" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="详情" :label-width="dialogLabelWidth">
+                <el-input v-model="addOperationInfo.details" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="资源" :label-width="dialogLabelWidth">
+                <el-select v-model="addOperationInfo.resource" placeholder="请选择" size="mini" style="min-width: 200px;">
+                    <el-option v-for="item in opResource" :value="item"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="所属菜单ID" :label-width="dialogLabelWidth">
+                <el-input type="number" disabled v-model="addOperationInfo.menuId" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="mini" @click="addOperation">确 定</el-button>
+        </div>
+    </el-dialog> -->
+
+    <!-- 修改操作弹出框 -->
+    <!-- <el-dialog title="修改操作" :visible.sync="showEditOp">
+        <el-form :model="editOpInfo">
+            <el-form-item label="操作ID" :label-width="dialogLabelWidth">
+                <el-input v-model="editOpInfo.id" disabled size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="所属菜单ID" :label-width="dialogLabelWidth">
+                <el-input type="number" disabled v-model="editOpInfo.menuId" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="操作名称" :label-width="dialogLabelWidth">
+                <el-input v-model="editOpInfo.operationsName" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="详情" :label-width="dialogLabelWidth">
+                <el-input v-model="editOpInfo.details" size="mini" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="资源" :label-width="dialogLabelWidth">
+                <el-select v-model="editOpInfo.resource" placeholder="请选择" size="mini" style="min-width: 200px;">
+                    <el-option v-for="item in opResource" :value="item"></el-option>
+                </el-select>
+            </el-form-item>
+            
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="mini" @click="editOp">确 定</el-button>
+        </div>
+    </el-dialog> -->
+
+    
+</div>
+
+<script>
+    var admin = '超级管理员';
+    var adminId = 1;
+</script>
+<script src="/js/common/per.js"></script>
+<script src="/js/roles.js"></script>
 </body>
 </html>
