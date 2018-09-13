@@ -7,6 +7,7 @@ import com.tp.admin.data.entity.*;
 import com.tp.admin.data.search.SystemSearch;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
+import com.tp.admin.manage.TransactionalServiceI;
 import com.tp.admin.service.SystemServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,9 @@ public class SystemServiceImpl implements SystemServiceI {
 
     @Autowired
     AdminPkRolesOperationsDao adminPkRolesOperationsDao;
+
+    @Autowired
+    TransactionalServiceI transactionalService;
 
     @Override
     public ApiResult findOperationsMaps(HttpServletRequest request) {
@@ -327,5 +331,110 @@ public class SystemServiceImpl implements SystemServiceI {
         List<AdminPkRolesOperations> popList = adminPkRolesOperationsDao.listByRolesId(rolesId);
         PermissionDTO permission = new PermissionDTO(mList, pmList, opList, popList);
         return ApiResult.ok(permission);
+    }
+
+    @Override
+    public ApiResult bachUpdateRolesMenu(HttpServletRequest request, SystemSearch systemSearch) {
+        int rolesId = systemSearch.getRolesId();
+        int[] menuIds = systemSearch.getIds();
+        boolean enable = systemSearch.isEnable();
+        // 待补充校验方法
+        AdminPkRolesMenu sysPkRolesMenu = null;
+        List<Integer> ids = new ArrayList();
+        for (int i = 0; i < menuIds.length; i++) {
+            ids.add(menuIds[i]);
+        }
+        AdminRoles sysRoles = adminRolesDao.findById(rolesId);
+        if (null == sysRoles) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        // 检查已经用户的角色
+        List<AdminPkRolesMenu> pmList = adminPkRolesMenuDao.listByRolesIdAndIds(sysRoles.getId(), menuIds);
+        if (null == pmList || pmList.isEmpty()) {
+            pmList = new ArrayList<>();
+            for (int i = 0; i < menuIds.length; i++) {
+                sysPkRolesMenu = new AdminPkRolesMenu();
+                sysPkRolesMenu.setRolesId(rolesId);
+                sysPkRolesMenu.setMenuId(menuIds[i]);
+                sysPkRolesMenu.setEnable(enable);
+                pmList.add(sysPkRolesMenu);
+            }
+        } else {
+            // 更新已经用户的角色
+            if (!pmList.isEmpty()) {
+                for (int i = 0; i < pmList.size(); i++) {
+                    pmList.get(i).setEnable(enable);
+                    Iterator<Integer> idsIterator = ids.iterator();
+                    while (idsIterator.hasNext()) {
+                        Integer e = idsIterator.next();
+                        if (e.equals(pmList.get(i).getMenuId())) {
+                            idsIterator.remove();
+                        }
+                    }
+                }
+            }
+            // 没有的角色创建
+            if (!ids.isEmpty()) {
+                for (int i = 0; i < ids.size(); i++) {
+                    sysPkRolesMenu = new AdminPkRolesMenu();
+                    sysPkRolesMenu.setRolesId(rolesId);
+                    sysPkRolesMenu.setMenuId(ids.get(i));
+                    sysPkRolesMenu.setEnable(enable);
+                    pmList.add(sysPkRolesMenu);
+                }
+            }
+        }
+        transactionalService.bachInsertAndUpdateSysPkRolesMenu(pmList);
+        return ApiResult.ok();
+    }
+
+    @Override
+    public ApiResult bachUpdateRolesOperations(HttpServletRequest request, SystemSearch systemSearch) {
+        int rolesId = systemSearch.getRolesId();
+        int[] operationsIds = systemSearch.getIds();
+        boolean enable = systemSearch.isEnable();
+        AdminRoles sysRoles = adminRolesDao.findById(rolesId);
+        if (null == sysRoles) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        AdminPkRolesOperations sysPkRolesOperations = null;
+        List<Integer> ids = new ArrayList();
+        for (int i = 0; i < operationsIds.length; i++) {
+            ids.add(operationsIds[i]);
+        }
+        // 待补充校验方法
+        List<AdminPkRolesOperations> pmList = adminPkRolesOperationsDao.listByRolesIdAndIds(sysRoles.getId(), ids);
+        if (null == pmList || pmList.isEmpty()) {
+            pmList = new ArrayList<>();
+            for (int i = 0; i < operationsIds.length; i++) {
+                sysPkRolesOperations = new AdminPkRolesOperations();
+                sysPkRolesOperations.setRolesId(rolesId);
+                sysPkRolesOperations.setOperationsId(operationsIds[i]);
+                sysPkRolesOperations.setEnable(enable);
+                pmList.add(sysPkRolesOperations);
+            }
+        } else {
+            for (int i = 0; i < pmList.size(); i++) {
+                pmList.get(i).setEnable(enable);
+                Iterator<Integer> idsIterator = ids.iterator();
+                while (idsIterator.hasNext()) {
+                    Integer e = idsIterator.next();
+                    if (e.equals(pmList.get(i).getOperationsId())) {
+                        idsIterator.remove();
+                    }
+                }
+            }
+            if (!ids.isEmpty()) {
+                for (int i = 0; i < ids.size(); i++) {
+                    sysPkRolesOperations = new AdminPkRolesOperations();
+                    sysPkRolesOperations.setRolesId(rolesId);
+                    sysPkRolesOperations.setOperationsId(ids.get(i));
+                    sysPkRolesOperations.setEnable(enable);
+                    pmList.add(sysPkRolesOperations);
+                }
+            }
+        }
+        transactionalService.bachInsertAndUpdateSysPkRolesOperations(pmList);
+        return ApiResult.ok();
     }
 }

@@ -210,4 +210,23 @@ public class SystemController {
         return systemService.findAllPermission(request,systemSearch);
     }
 
+    /**
+     * 更新角色菜单权限
+     * @param systemSearch
+     * @return
+     */
+    @PostMapping(value = "/update/roles/menu")
+    public ApiResult updateRolesMenu(HttpServletRequest request ,@RequestBody SystemSearch systemSearch){
+        return systemService.bachUpdateRolesMenu(request,systemSearch);
+    }
+
+    /**
+     * 更新角色操作权限
+     * @param systemSearch
+     * @return
+     */
+    @PostMapping(value = "/update/roles/operations")
+    public ApiResult updateRolesOperations(HttpServletRequest request ,@RequestBody SystemSearch systemSearch){
+        return systemService.bachUpdateRolesOperations(request,systemSearch);
+    }
 }
