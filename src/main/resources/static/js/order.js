@@ -35,21 +35,21 @@ var vm = new Vue({
 
     mounted: function() {
         console.log('mounted......')
-        this.getOrderList(10, 1)
+        this.getOrderList(10, 1, [])
         // this.getOrderList(10, 1, '', [], '', '')
         this.getTerList()
     },
 
     methods: {
         // getOrderList: function(pageSize, pageIndex, status, terIds, startTime, endTime) {
-        getOrderList: function(pageSize, pageIndex) {
-            // console.log(terIds)
-            // let ids = terIds[0] ? terIds : []
+        getOrderList: function(pageSize, pageIndex, terIds) {
+            console.log(terIds)
+            let ids = terIds[0] ? terIds : []
             this.$http.post("/api/private/order/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
                 // status: status,
-                // terIds: ids,
+                terIds: ids,
                 // startTime: startTime,
                 // endTime: endTime
             }).then(function(res){
@@ -65,12 +65,50 @@ var vm = new Vue({
             })
         },
 
-        // getTerList: function() {
-        //     this.$http.post("/api/private/partner/ter/order/selection", {}).then(function(res){
-        //         let result = res.json()
-        //         vm.terOptions = result.data
-        //     })
-        // },
+        getTerList: function() {
+            this.$http.post("/api/private/order/ter/selection", {}).then(function(res){
+                let result = res.json()
+                vm.terOptions = result.data
+            })
+        },
+
+        download: function(){
+            // var status = getParams('status');
+            // var payType = getParams('payType');
+            // var st = getParams('st');
+            // var et = getParams('et');
+            // var terId = getParams('terID');
+            // sTime = new Date(st);
+            // var today = new Date();
+            // var time = today - sTime;
+
+            // console.log(sTime, today, time);
+
+            this.$http.post("/api/private/order/list/exprot", {
+                terIds: [1],
+                startTime: '2018-09-01',
+                endTime: '2018-09-11'
+            }).then(function(res){
+                let result = res.json()
+                // vm.terOptions = result.data
+            })
+
+
+            // if(st && et) {
+            //     if (time > 86400000*93) { //超过3个月
+            //         vm.$message.error('请选择近3个月的订单')
+            //     } else {
+            //         if (totalCnt > 0) {
+            //             window.location.href = "/order/export?&type=" + payType + '&st=' + st + '&et=' + et + '&terId=' + terId;
+            //         } else {
+            //             vm.$message.error('无结果')
+            //         }
+            //     }
+            // } else {
+            //     vm.$message.error('请选择开始和结束日期！');
+            // }
+        },
+
 
         search: function(){
             if(!vm.dateRange) {  //如果日期选择器中先有选择，后置空，结果为null，会报错
@@ -79,14 +117,17 @@ var vm = new Vue({
             vm.currentStartTime = vm.dateRange[0] || '';
             vm.currentEndTime = vm.dateRange[1] || '';
 
-            vm.getOrderList(vm.currentPageSize, 1, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
+            vm.getOrderList(vm.currentPageSize, 1, vm.currentTerIds);
+            // vm.getOrderList(vm.currentPageSize, 1, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
         },
 
         handleSizeChange(val) {
-            vm.getOrderList(val, 1, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
+            vm.getOrderList(val, 1, vm.currentTerIds);
+            // vm.getOrderList(val, 1, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
         },
         handleCurrentChange(val) {
-            vm.getOrderList(vm.currentPageSize, val, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
+            vm.getOrderList(vm.currentPageSize, val, vm.currentTerIds);
+            // vm.getOrderList(vm.currentPageSize, val, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
         }
     }
 });
