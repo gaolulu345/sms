@@ -1,6 +1,7 @@
 package com.tp.admin.data.search;
 
 import com.tp.admin.common.Constant;
+import com.tp.admin.utils.StringUtil;
 import lombok.Data;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public class Search {
     protected int pageSize;
     protected int offset;
     protected int totalCnt;
+    private String startTime;
+    private String endTime;
     protected List<? extends Object> result;
 
     public final void build(){
@@ -22,6 +25,16 @@ public class Search {
             pageSize = Constant.Page.DEFAULT_SIZE;
         }
         this.offset = (pageIndex - 1) * pageSize;
+        if (!StringUtil.isEmpty(startTime) && StringUtil.toSearchDate(startTime) != null) {
+            this.startTime = startTime + " 00:00:00";
+        }
+        if (!StringUtil.isEmpty(endTime) && StringUtil.toSearchDate(endTime) != null) {
+            this.endTime = endTime + " 23:59:59";
+        }
+        if (StringUtil.isEmpty(this.startTime) || StringUtil.isEmpty(this.endTime)) {
+            this.startTime = null;
+            this.endTime = null;
+        }
     }
     
 }

@@ -13,7 +13,5 @@ public class UserSearch extends Search {
 
     Integer id;
     String phone;
-    private String startTime;
-    private String endTime;
 
 }
