@@ -1,8 +1,12 @@
 package com.tp.admin.service.implement;
 
+import com.github.crab2died.ExcelUtils;
+import com.github.crab2died.exceptions.Excel4JException;
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.common.Constant;
 import com.tp.admin.dao.OrderDao;
 import com.tp.admin.dao.RefundDao;
+import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.Order;
 import com.tp.admin.data.entity.Refund;
@@ -14,13 +18,19 @@ import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.MiniOrderPayManagerI;
 import com.tp.admin.manage.impl.MiniOrderPayManagerImpl;
 import com.tp.admin.service.WashRefundServiceI;
+import com.tp.admin.utils.ExcelUtil;
 import com.tp.admin.utils.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -54,9 +64,24 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
     }
 
     @Override
-    public ApiResult listExport(HttpServletRequest request, RefundSearch refundSearch) {
-        return null;
+    public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request, HttpServletResponse response, RefundSearch refundSearch) {
+        List<Refund> list = refundDao.listBySearch(refundSearch);
+        String fileName = ExcelUtil.createXlxs(Constant.WASH_REFUND, refundSearch.getStartTime(), refundSearch.getEndTime());
+        String path = System.getProperty(Constant.TMP_DIR) + Constant._XLSX_DIR;
+        File pathFile = new File(path);
+        if (!pathFile.exists()) {
+            pathFile.mkdirs();
+        }
+        try {
+            ExcelUtils.getInstance().exportObjects2Excel(list, Refund.class, true, "sheet0", true, path + fileName);
+        } catch (Excel4JException | IOException e) {
+            e.printStackTrace();
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        File file = new File(path + fileName);
+        return ExcelUtil.fileExcel(request,fileName,file);
     }
+
 
     @Override
     public ApiResult approved(HttpServletRequest request, RefundSearch refundSearch) {

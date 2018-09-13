@@ -200,4 +200,14 @@ public class SystemController {
     }
 
 
+    /**
+     * 获取角色所有权限
+     * @param systemSearch
+     * @return
+     */
+    @PostMapping(value = "/all/roles/permission")
+    public ApiResult findAllPermission(HttpServletRequest request ,@RequestBody SystemSearch systemSearch){
+        return systemService.findAllPermission(request,systemSearch);
+    }
+
 }
