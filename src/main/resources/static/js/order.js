@@ -16,13 +16,15 @@ var vm = new Vue({
         pageSizes: [10, 20, 50],
 
         dateRange: '',
-        currentStartTime: '',
-        currentEndTime: '',
-        currentStatus: '',
+        currentStartTime: null,
+        currentEndTime:null,
+        currentStatus: null,
+        currentType: null,
         currentTerIds: [],
 
         orderList: [],
     
+        typeOptions: [{value: '0', label: '支付宝'}, {value: '1', label: '微信钱包'}, {value: '2', label: '测试'}, {value: '3', label: '免费'}],
         statusOptions: [{value: '0', label: '创建'}, {value: '1', label: '退款'}, {value: '2', label: '支付完成'}],
         statusList: ['创建', '退款','支付完成'],
         terOptions: [],
@@ -35,23 +37,24 @@ var vm = new Vue({
 
     mounted: function() {
         console.log('mounted......')
-        this.getOrderList(10, 1, [])
+        this.getOrderList(10, 1, [], null, null, null, null)
         // this.getOrderList(10, 1, '', [], '', '')
         this.getTerList()
     },
 
     methods: {
         // getOrderList: function(pageSize, pageIndex, status, terIds, startTime, endTime) {
-        getOrderList: function(pageSize, pageIndex, terIds) {
+        getOrderList: function(pageSize, pageIndex, terIds, status, type, startTime, endTime) {
             console.log(terIds)
             let ids = terIds[0] ? terIds : []
             this.$http.post("/api/private/order/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
-                // status: status,
+                status: status,
+                type: type,
                 terIds: ids,
-                // startTime: startTime,
-                // endTime: endTime
+                startTime: startTime,
+                endTime: endTime
             }).then(function(res){
                 let data = res.json().data
                 let result = data.result;
@@ -62,6 +65,12 @@ var vm = new Vue({
                 vm.totalCnt = data.totalCnt;
                 vm.currentPageSize = data.pageSize;
                 vm.currentPageIndex = data.pageIndex;
+                vm.currentStatus = data.status;
+                vm.currentType = data.type;
+                vm.currentStartTime = data.startTime;
+                vm.currentEndTime = data.endTime;
+                vm.currentTerIds = data.terIds;
+                
             })
         },
 
@@ -84,13 +93,16 @@ var vm = new Vue({
                 if (time > 86400000*93) { //超过3个月
                     vm.$message.error('请选择近3个月的订单')
                 } else {
-                    this.$http.post("/api/private/order/list/exprot", {
-                        terIds: vm.currentTerIds,
-                        startTime: st,
-                        endTime: et
-                    }).then(function(res){
-                        let result = res.json()
-                    })
+                    // this.$http.post("/api/private/order/list/exprot", {
+                    //     terIds: vm.currentTerIds,
+                    //     startTime: st,
+                    //     endTime: et
+                    // }).then(function(res){
+                    //     let result = res.json()
+                    // })
+
+                    // window.location.href = "/api/private/order/list/exprot?st=2018-09-01&et=2018-09-13&status=2&type=1&terId=1";
+                    window.location.href = "/api/private/order/list/exprot?st=" + st + "&et=" + et + "&terId=" + vm.currentTerIds[0] + "&type=" + vm.currentType;
 
                     // if (totalCnt > 0) {
                     //     window.location.href = "/order/export?&type=" + payType + '&st=' + st + '&et=' + et + '&terId=' + terId;
@@ -110,18 +122,15 @@ var vm = new Vue({
             }
             vm.currentStartTime = vm.dateRange[0] || '';
             vm.currentEndTime = vm.dateRange[1] || '';
-
-            vm.getOrderList(vm.currentPageSize, 1, vm.currentTerIds);
-            // vm.getOrderList(vm.currentPageSize, 1, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
+            vm.getOrderList(vm.currentPageSize, 1, vm.currentTerIds, vm.currentStatus, vm.currentType, vm.currentStartTime, vm.currentEndTime);
         },
 
         handleSizeChange(val) {
-            vm.getOrderList(val, 1, vm.currentTerIds);
-            // vm.getOrderList(val, 1, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
+            vm.getOrderList(val, 1, vm.currentTerIds, vm.currentStatus, vm.currentType, vm.currentStartTime, vm.currentEndTime);
         },
         handleCurrentChange(val) {
-            vm.getOrderList(vm.currentPageSize, val, vm.currentTerIds);
-            // vm.getOrderList(vm.currentPageSize, val, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
+            vm.getOrderList(vm.currentPageSize, val, vm.currentTerIds, vm.currentStatus, vm.currentType, vm.currentStartTime, vm.currentEndTime);
+
         }
     }
 });
