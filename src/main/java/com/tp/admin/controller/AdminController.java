@@ -30,8 +30,8 @@ public class AdminController {
     }
 
     @PostMapping(value = "/update")
-    public ApiResult update(HttpServletRequest request ,@RequestBody AdminAccount adminAccount){
-        return adminService.update(request,adminAccount);
+    public ApiResult update(HttpServletRequest request ,@RequestBody AdminAccountDTO adminAccountDTO){
+        return adminService.update(request,adminAccountDTO);
     }
 
     @PostMapping(value = "/update/pw")

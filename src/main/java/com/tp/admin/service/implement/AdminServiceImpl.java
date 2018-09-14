@@ -2,10 +2,12 @@ package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.AdminAccountDao;
+import com.tp.admin.dao.AdminPkAccountRolesDao;
 import com.tp.admin.dao.AdminRolesDao;
 import com.tp.admin.data.dto.AdminAccountDTO;
 import com.tp.admin.data.dto.ChangePasswordDTO;
 import com.tp.admin.data.entity.AdminAccount;
+import com.tp.admin.data.entity.AdminPkAccountRoles;
 import com.tp.admin.data.entity.AdminRoles;
 import com.tp.admin.data.entity.Refund;
 import com.tp.admin.data.search.AdminSearch;
@@ -33,6 +35,9 @@ public class AdminServiceImpl implements AdminServiceI {
     AdminRolesDao adminRolesDao;
 
     @Autowired
+    AdminPkAccountRolesDao adminPkAccountRolesDao;
+
+    @Autowired
     TransactionalServiceI transactionalService;
 
     @Override
@@ -54,10 +59,25 @@ public class AdminServiceImpl implements AdminServiceI {
     }
 
     @Override
-    public ApiResult update(HttpServletRequest request, AdminAccount adminAccount) {
-        AdminAccount old = adminAccountDao.findById(adminAccount.getId());
+    public ApiResult update(HttpServletRequest request, AdminAccountDTO adminAccountDTO) {
+        if(StringUtil.isEmpty(adminAccountDTO.getName()) ||
+                StringUtil.isEmpty(adminAccountDTO.getUsername()) ||
+                StringUtil.isEmpty(adminAccountDTO.getIntros()) ||
+                adminAccountDTO.getRolesId() < 0 ){
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        AdminAccount old = adminAccountDao.findById(adminAccountDTO.getId());
         if (null == old) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        AdminPkAccountRoles adminPkAccountRoles = adminPkAccountRolesDao.findByAdminId(old.getId());
+        AdminAccount adminAccount = new AdminAccount(adminAccountDTO);
+        if (adminPkAccountRoles.getRolesId() != adminAccountDTO.getRolesId()) {
+            adminPkAccountRoles.setRolesId(adminAccountDTO.getRolesId());
+            int res = adminPkAccountRolesDao.update(adminPkAccountRoles);
+            if (res == 0) {
+                throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+            }
         }
         int res = adminAccountDao.update(adminAccount);
         if (res == 0) {

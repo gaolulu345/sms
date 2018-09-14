@@ -14,7 +14,7 @@ public interface AdminServiceI {
 
     ApiResult register(HttpServletRequest request , AdminAccountDTO adminAccountDTO);
 
-    ApiResult update(HttpServletRequest request , AdminAccount adminAccount);
+    ApiResult update(HttpServletRequest request , AdminAccountDTO adminAccountDTO);
 
     ApiResult list(HttpServletRequest request , AdminSearch adminSearch);
 
