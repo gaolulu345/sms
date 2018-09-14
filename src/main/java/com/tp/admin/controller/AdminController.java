@@ -44,11 +44,6 @@ public class AdminController {
         return adminService.list(request,adminSearch);
     }
 
-    @PostMapping(value = "/list/exprot")
-    ApiResult listExport(HttpServletRequest request , @RequestBody AdminSearch adminSearch){
-        return adminService.listExport(request,adminSearch);
-    }
-
     @PostMapping(value = "/update/delete")
     public ApiResult bachUpdateDeleted(HttpServletRequest request ,@RequestBody AdminSearch adminSearch){
         return adminService.bachUpdateDeleted(request,adminSearch);

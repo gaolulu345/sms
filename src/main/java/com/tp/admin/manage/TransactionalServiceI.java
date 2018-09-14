@@ -1,7 +1,9 @@
 package com.tp.admin.manage;
 
+import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.AdminPkRolesMenu;
 import com.tp.admin.data.entity.AdminPkRolesOperations;
+import com.tp.admin.data.entity.AdminRoles;
 
 import java.util.List;
 
@@ -20,6 +22,13 @@ public interface TransactionalServiceI {
      * @return
      */
     void bachInsertAndUpdateSysPkRolesMenu(List<AdminPkRolesMenu> sysPkRolesMenus);
+
+    /**
+     * 注册员工
+     * @param adminAccount
+     * @param adminRoles
+     */
+    void register(AdminAccount adminAccount , AdminRoles adminRoles);
 
 
 }

@@ -18,8 +18,6 @@ public interface AdminServiceI {
 
     ApiResult list(HttpServletRequest request , AdminSearch adminSearch);
 
-    ApiResult listExport(HttpServletRequest request , AdminSearch adminSearch);
-
     ApiResult bachUpdateDeleted(HttpServletRequest request , AdminSearch adminSearch);
 
     ApiResult resetPassword(HttpServletRequest request , AdminSearch adminSearch);

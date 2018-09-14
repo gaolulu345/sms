@@ -1,7 +1,7 @@
 package com.tp.admin.ajax;
 
 public enum ResultCode {
-    SUCCESS("0","成功"),
+    SUCCESS("200","成功"),
     UnknownException("1000","未知异常"),
     SystemException("1001","系统异常"),
     MyException("1002","业务错误"),

@@ -1,9 +1,8 @@
 package com.tp.admin.manage.impl;
 
-import com.tp.admin.dao.AdminPkRolesMenuDao;
-import com.tp.admin.dao.AdminPkRolesOperationsDao;
-import com.tp.admin.data.entity.AdminPkRolesMenu;
-import com.tp.admin.data.entity.AdminPkRolesOperations;
+import com.tp.admin.dao.*;
+import com.tp.admin.data.dto.AdminAccountDTO;
+import com.tp.admin.data.entity.*;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.TransactionalServiceI;
@@ -22,6 +21,12 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
 
     @Autowired
     AdminPkRolesMenuDao adminPkRolesMenuDao;
+
+    @Autowired
+    AdminAccountDao adminAccountDao;
+
+    @Autowired
+    AdminPkAccountRolesDao adminPkAccountRolesDao;
 
     @Override
     @Transactional
@@ -76,5 +81,31 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
+    }
+
+    @Override
+    public void register(AdminAccount adminAccount, AdminRoles adminRoles) {
+        if (null == adminAccount || null == adminRoles) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        try {
+            int res = adminAccountDao.insert(adminAccount);
+            if (0 == res) {
+                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+            }
+            AdminPkAccountRoles adminPkAccountRoles = new AdminPkAccountRoles();
+            adminPkAccountRoles.setAdminId(adminAccount.getId());
+            adminPkAccountRoles.setRolesId(adminRoles.getId());
+            res = adminPkAccountRolesDao.insert(adminPkAccountRoles);
+            if (0 == res) {
+                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+            }
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+
+
+
     }
 }
