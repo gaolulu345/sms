@@ -45,9 +45,9 @@ function compare(property){
 // 	}
 // })
 
-function logout(id) {
+function logout() {
 	$.ajax({
-		url: '/api/user/logout?userId=' + id,
+		url: '/api/user/logout',
 		dataType: 'json',
 		type: 'post',
 		async: false,
