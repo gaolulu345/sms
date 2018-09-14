@@ -4,11 +4,13 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.PermissionDTO;
 import com.tp.admin.data.entity.*;
+import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.data.search.SystemSearch;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.TransactionalServiceI;
 import com.tp.admin.service.SystemServiceI;
+import com.tp.admin.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
@@ -436,5 +438,17 @@ public class SystemServiceImpl implements SystemServiceI {
         }
         transactionalService.bachInsertAndUpdateSysPkRolesOperations(pmList);
         return ApiResult.ok();
+    }
+
+    @Override
+    public ApiResult adminAllPermission(HttpServletRequest request) {
+        AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
+        int id = adminAccount.getId();
+        List<AdminMenu> mList = adminMenuDao.listByAdminId(id);
+        List<AdminPkRolesMenu> pmList = adminPkRolesMenuDao.listByAdminId(id);
+        List<AdminOperations> opList = adminOperationsDao.listByAdminId(id);
+        List<AdminPkRolesOperations> popList = adminPkRolesOperationsDao.listByAdminId(id);
+        PermissionDTO permission = new PermissionDTO(mList, pmList, opList, popList);
+        return ApiResult.ok(permission);
     }
 }

@@ -53,21 +53,19 @@
 
 
     <select id="listByAdminId" resultMap="AdminPkRolesMenuMap">
-        SELECT sprm.*
-        FROM `admin_pk_roles_menu` AS aprm
-        INNER JOIN `admin_roles` AS r ON aprm.roles_id = r.id
-        INNER JOIN `admin_pk_sys_roles` AS apsr ON apsr.roles_id = r.id
-        INNER JOIN `admin_account` AS aa ON apsr.admin_id = aa.id
+        SELECT
+            aprm.*
+        FROM
+            `admin_pk_roles_menu` AS aprm
+            INNER JOIN `admin_roles` AS r ON aprm.roles_id = r.id
+            INNER JOIN `admin_pk_account_roles` AS apar ON apar.roles_id = r.id
+            INNER JOIN `admin_account` AS aa ON apar.admin_id = aa.id
         WHERE
-        aa.id = #{adminId}
-        AND
-        aa.deleted = 0
-        AND
-        aprm.enable = 1
-        AND
-        r.enable = 1
-        AND
-        r.deleted = 0
+            aa.id = #{adminId}
+            AND aa.deleted = 0
+            AND apar.ENABLE = 1
+            AND r.ENABLE = 1
+            AND r.deleted = 0
     </select>
 
 

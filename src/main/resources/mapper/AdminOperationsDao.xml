@@ -107,28 +107,22 @@
 
     <select id="listByAdminId" resultMap="AdminOperationsMap">
         SELECT
-		o.*
-		FROM
-		`admin_operations` AS o INNER JOIN `admin_pk_roles_operations` AS apro ON o.id = apro.operations_id
-		INNER JOIN admin_roles AS r ON apro.roles_id = r.id
-		INNER JOIN admin_pk_sys_roles AS apsr ON apsr.roles_id = r.id
-		INNER JOIN admin_account AS aa ON aa.id = apsr.admin_id
-		WHERE
-		aa.id = #{adminId}
-        AND
-		aa.deleted = 0
-		AND
-		o.deleted = 0
-		AND
-		o.enable = 1
-		AND
-		apro.enable = 1
-		AND
-		r.enable = 1
-		AND
-		r.deleted = 0
-		AND
-		apsr.enable = 1
+            o.*
+        FROM
+            `admin_operations` AS o
+            INNER JOIN `admin_pk_roles_operations` AS apro ON o.id = apro.operations_id
+            INNER JOIN `admin_roles` AS r ON apro.roles_id = r.id
+            INNER JOIN `admin_pk_account_roles` AS apar ON apar.roles_id = r.id
+            INNER JOIN `admin_account` AS aa ON aa.id = apar.admin_id
+        WHERE
+            aa.id = #{adminId}
+            AND aa.deleted = 0
+            AND o.deleted = 0
+            AND o.ENABLE = 1
+            AND apro.ENABLE = 1
+            AND r.ENABLE = 1
+            AND r.deleted = 0
+            AND apar.ENABLE = 1
     </select>
 
 
