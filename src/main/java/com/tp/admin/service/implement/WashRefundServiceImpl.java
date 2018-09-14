@@ -67,7 +67,13 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
 
     @Override
     public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request, HttpServletResponse response, RefundSearch refundSearch) {
+
         List<Refund> list = refundDao.listBySearch(refundSearch);
+        if (null != list && !list.isEmpty()) {
+            for (Refund o : list){
+                o.build();
+            }
+        }
         String fileName = ExcelUtil.createXlxs(Constant.WASH_REFUND, refundSearch.getStartTime(), refundSearch.getEndTime());
         String path = System.getProperty(Constant.TMP_DIR) + Constant._XLSX_DIR;
         File pathFile = new File(path);
