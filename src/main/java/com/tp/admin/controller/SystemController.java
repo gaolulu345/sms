@@ -4,6 +4,7 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.entity.AdminMenu;
 import com.tp.admin.data.entity.AdminOperations;
 import com.tp.admin.data.entity.AdminRoles;
+import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.data.search.SystemSearch;
 import com.tp.admin.service.SystemServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -228,5 +229,14 @@ public class SystemController {
     @PostMapping(value = "/update/roles/operations")
     public ApiResult updateRolesOperations(HttpServletRequest request ,@RequestBody SystemSearch systemSearch){
         return systemService.bachUpdateRolesOperations(request,systemSearch);
+    }
+
+    /**
+     * 获取账号所有权限
+     * @return
+     */
+    @PostMapping(value = "/all/permission")
+    public ApiResult adminAllPermission(HttpServletRequest request){
+        return systemService.adminAllPermission(request);
     }
 }

@@ -4,6 +4,7 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.entity.AdminMenu;
 import com.tp.admin.data.entity.AdminOperations;
 import com.tp.admin.data.entity.AdminRoles;
+import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.data.search.SystemSearch;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,4 +56,6 @@ public interface SystemServiceI {
     ApiResult bachUpdateRolesMenu(HttpServletRequest request, SystemSearch systemSearch);
 
     ApiResult bachUpdateRolesOperations(HttpServletRequest request, SystemSearch systemSearch);
+
+    ApiResult adminAllPermission(HttpServletRequest request);
 }

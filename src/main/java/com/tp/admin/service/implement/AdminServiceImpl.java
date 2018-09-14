@@ -6,6 +6,7 @@ import com.tp.admin.dao.AdminAccountDao;
 import com.tp.admin.data.dto.AdminAccountDTO;
 import com.tp.admin.data.dto.ChangePasswordDTO;
 import com.tp.admin.data.entity.AdminAccount;
+import com.tp.admin.data.entity.AdminMenu;
 import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -114,4 +115,6 @@ public class AdminServiceImpl implements AdminServiceI {
         }
         return ApiResult.ok();
     }
+
+
 }

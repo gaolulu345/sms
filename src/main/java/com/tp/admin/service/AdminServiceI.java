@@ -26,4 +26,6 @@ public interface AdminServiceI {
 
     ApiResult updatePassword(HttpServletRequest request, ChangePasswordDTO changePasswordDTO);
 
+
+
 }

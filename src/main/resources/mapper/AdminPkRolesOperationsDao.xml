@@ -51,22 +51,20 @@
         </foreach>
     </select>
 
-    <select id="listByPartnerId" resultMap="AdminPkRolesOperationsMap">
-        SELECT apro.*
-        FROM `admin_pk_roles_operations` AS apro
-        INNER JOIN `admin_roles` AS r ON apro.roles_id = r.id
-        INNER JOIN `admin_pk_sys_roles` AS apsr ON apsr.roles_id = r.id
-        INNER JOIN `admin_account` AS aa ON apsr.admin_id = aa.id
+    <select id="listByAdminId" resultMap="AdminPkRolesOperationsMap">
+        SELECT
+            apro.*
+        FROM
+            `admin_pk_roles_operations` AS apro
+            INNER JOIN `admin_roles` AS r ON apro.roles_id = r.id
+            INNER JOIN `admin_pk_account_roles` AS apar ON apar.roles_id = r.id
+            INNER JOIN `admin_account` AS aa ON apar.admin_id = aa.id
         WHERE
-        aa.id = #{adminId}
-        AND
-        aa.deleted = 0
-        AND
-        apro.enable = 1
-        AND
-        r.enable = 1
-        AND
-        r.deleted = 0
+            aa.id = #{adminId}
+            AND aa.deleted = 0
+            AND apro.ENABLE = 1
+            AND r.ENABLE = 1
+            AND r.deleted = 0
     </select>
 
     <resultMap id="AdminPkRolesOperationsMap" type="com.tp.admin.data.entity.AdminPkRolesOperations">

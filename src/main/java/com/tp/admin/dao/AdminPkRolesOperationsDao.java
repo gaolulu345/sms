@@ -13,7 +13,7 @@ public interface AdminPkRolesOperationsDao {
 
     List<AdminPkRolesOperations> listByRolesId(int rolesId);
 
-    List<AdminPkRolesOperations> listByPartnerId(int adminId);
+    List<AdminPkRolesOperations> listByAdminId(int adminId);
 
     List<AdminPkRolesOperations> listByRolesIdAndIds(@Param("rolesId") int rolesId, @Param("ids") List<Integer> ids);
 
