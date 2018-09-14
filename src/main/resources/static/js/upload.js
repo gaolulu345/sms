@@ -37,19 +37,19 @@ var vm = new Vue({
 
     mounted: function() {
         console.log('mounted......')
-        this.getUploadList(5, 1, '', '')
+        this.getUploadList(5, 1, '', '', '', '')
     },
 
     methods: {
         // getOrderList: function(pageSize, pageIndex, status, terIds, startTime, endTime) {
-        getUploadList: function(pageSize, pageIndex, adminName, fileKey) {
+        getUploadList: function(pageSize, pageIndex, adminName, fileKey, startTime, endTime) {
             this.$http.post("/api/private/file/upload/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
                 adminName: adminName,
                 fileKey: fileKey,
-                // startTime: startTime,
-                // endTime: endTime
+                startTime: startTime,
+                endTime: endTime
             }).then(function(res){
                 let data = res.json().data
                 let result = data.result;
@@ -62,6 +62,8 @@ var vm = new Vue({
                 vm.currentPageIndex = data.pageIndex;
                 vm.currentAdminName = data.adminName;
                 vm.currentFileKey = data.fileKey;
+                vm.currentStartTime = data.startTime;
+                vm.currentEndTime = data.endTime;
             })
         },
 
