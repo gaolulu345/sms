@@ -16,6 +16,9 @@
         <if test="reason != null">
             AND reason = #{reason}
         </if>
+        <if test="orderId != null">
+            AND order_id = #{orderId}
+        </if>
         ORDER BY id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">
             LIMIT #{offset},#{pageSize}
@@ -31,6 +34,9 @@
         </if>
         <if test="reason != null">
             AND reason = #{reason}
+        </if>
+        <if test="orderId != null">
+            AND order_id = #{orderId}
         </if>
         ORDER BY id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">

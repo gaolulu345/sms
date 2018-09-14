@@ -28,13 +28,16 @@
         id = #{id}
     </update>
 
-    <select  id="cntBySearch" resultType="java.lang.Integer" >
+    <select  id="cntBySearch" parameterType="com.tp.admin.data.search.SystemSearch"  resultType="java.lang.Integer" >
 		SELECT
 			COUNT(id)
 		FROM
             `admin_roles`
-		WHERE
-			deleted = 0
+        <where>
+            <if test="all == false">
+                deleted = 0
+            </if>
+        </where>
 	</select>
 
     <select id="listBySearch" parameterType="com.tp.admin.data.search.SystemSearch" resultMap="AdminRolesMap">
@@ -42,12 +45,11 @@
         *
         FROM
         `admin_roles`
-        WHERE
-        deleted = 0
-        <if test="all == false">
-            AND
-            enable = #{enable}
-        </if>
+        <where>
+            <if test="all == false">
+                deleted = 0
+            </if>
+        </where>
         ORDER BY id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">
             LIMIT #{offset},#{pageSize}
