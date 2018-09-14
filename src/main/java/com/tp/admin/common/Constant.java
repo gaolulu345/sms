@@ -18,6 +18,8 @@ public interface Constant {
 
     String _XLSX_DIR = "/xlsx/";
 
+    String SUPER_ADMIN = "TP_AUTO";
+
     public interface Page {
         static int DEFAULT_SIZE = 10;
         static int DEFAULT_INDEX = 1;

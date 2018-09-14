@@ -34,8 +34,9 @@ public class AdminAccount implements UserDetails {
         this.intros = adminAccountDTO.getIntros();
     }
 
-    public AdminAccount(int id ,String name , String password, Collection<GrantedAuthority> auths) {
+    public AdminAccount(int id ,String username , String name ,String password, Collection<GrantedAuthority> auths) {
         this.id = id;
+        this.username = username;
         this.name = name;
         this.password = password;
         this.authorities = auths;

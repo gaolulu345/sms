@@ -4,8 +4,10 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 
+import com.tp.admin.exception.NotLoginException;
 import com.tp.admin.exception.PagesException;
 import com.tp.admin.utils.StringUtil;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,6 +33,7 @@ public class GlobalExceptionHandler {
             return mav;
         }
     }
+
 
     @ExceptionHandler(BaseException.class)
     @ResponseBody

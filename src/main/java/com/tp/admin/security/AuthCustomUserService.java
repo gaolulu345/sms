@@ -36,7 +36,7 @@ public class AuthCustomUserService implements UserDetailsService {
     }
 
     private AdminAccount buildUserForAuthentication(AdminAccount user, Collection<GrantedAuthority> authorities) {
-        return new AdminAccount(user.getId(), user.getName(),  user.getPassword(), authorities);
+        return new AdminAccount(user.getId(), user.getUsername() ,user.getName(),  user.getPassword(), authorities);
     }
 
 }

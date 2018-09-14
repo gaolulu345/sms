@@ -62,7 +62,7 @@ public class AccountServiceImpl implements AccountServiceI {
                     .getUsername());
         }
         // TODO 这里需要改进,超级管理员账号可以配置。这样避免吧自己也删除了。
-        if (!"TP_AUTO".equals(adminAccount.getUsername())) {
+        if (!Constant.SUPER_ADMIN.equals(adminAccount.getUsername())) {
             if (user.isDeleted()) {
                 throw new BaseException(ExceptionCode.PARAMETER_MISSING, "user deleted:" + adminAccount.getUsername());
             }
