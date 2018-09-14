@@ -43,9 +43,6 @@
             </if>
         </where>
         ORDER BY create_time DESC
-        <if test="pageSize != null and pageSize !=0 and offset != null">
-            LIMIT #{offset},#{pageSize}
-        </if>
     </select>
 
 

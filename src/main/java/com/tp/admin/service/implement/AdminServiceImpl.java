@@ -89,7 +89,7 @@ public class AdminServiceImpl implements AdminServiceI {
         adminSearch.builData();
         List<AdminAccountDTO> list = adminAccountDao.listBySearch(adminSearch);
         if (null != list && !list.isEmpty()) {
-            int cnt = adminAccountDao.cntBySearch(adminSearch);
+            Integer cnt = adminAccountDao.cntBySearch(adminSearch);
             adminSearch.setResult(list);
             adminSearch.setTotalCnt(cnt);
         }else{

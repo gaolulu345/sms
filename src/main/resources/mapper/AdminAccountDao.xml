@@ -61,9 +61,6 @@
             </if>
         </where>
         ORDER BY id DESC
-        <if test="pageSize != null and pageSize !=0 and offset != null">
-            LIMIT #{offset},#{pageSize}
-        </if>
     </select>
 
     <select id="listBySearch" parameterType="com.tp.admin.data.search.AdminSearch" resultMap="AdminAccountDTOMap">

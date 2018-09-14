@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tp.admin.dao.RefundDao">
 
-
-
-
     <select id="cntBySearch" parameterType="com.tp.admin.data.search.RefundSearch"
             resultType="java.lang.Integer">
         SELECT COUNT(id) FROM
@@ -20,9 +17,6 @@
             AND order_id = #{orderId}
         </if>
         ORDER BY id DESC
-        <if test="pageSize != null and pageSize !=0 and offset != null">
-            LIMIT #{offset},#{pageSize}
-        </if>
     </select>
 
     <select id="listBySearch" parameterType="com.tp.admin.data.search.RefundSearch" resultMap="RefundMap">
