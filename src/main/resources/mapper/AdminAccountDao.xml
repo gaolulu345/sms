@@ -77,7 +77,7 @@
         INNER JOIN `admin_roles` AS ar ON ar.id = apar.roles_id
         <where>
             <if test="null != deleted">
-                deleted = #{deleted}
+                aa.deleted = #{deleted}
             </if>
         </where>
         ORDER BY id DESC
