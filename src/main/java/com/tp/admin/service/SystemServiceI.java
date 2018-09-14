@@ -6,8 +6,10 @@ import com.tp.admin.data.entity.AdminOperations;
 import com.tp.admin.data.entity.AdminRoles;
 import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.data.search.SystemSearch;
+import com.tp.admin.security.AutoResource;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
 
 public interface SystemServiceI {
 
@@ -58,4 +60,6 @@ public interface SystemServiceI {
     ApiResult bachUpdateRolesOperations(HttpServletRequest request, SystemSearch systemSearch);
 
     ApiResult adminAllPermission(HttpServletRequest request);
+
+    Set<AutoResource> findAdminAutoResource(HttpServletRequest request);
 }

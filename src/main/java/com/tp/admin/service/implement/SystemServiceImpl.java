@@ -1,14 +1,19 @@
 package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.common.Constant;
 import com.tp.admin.dao.*;
+import com.tp.admin.data.dto.AutoResourceDTO;
 import com.tp.admin.data.dto.PermissionDTO;
+import com.tp.admin.data.dto.UserAutoResourceDTO;
 import com.tp.admin.data.entity.*;
 import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.data.search.SystemSearch;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.TransactionalServiceI;
+import com.tp.admin.security.AuthResourceTypeEnum;
+import com.tp.admin.security.AutoResource;
 import com.tp.admin.service.SystemServiceI;
 import com.tp.admin.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +44,9 @@ public class SystemServiceImpl implements SystemServiceI {
 
     @Autowired
     AdminPkRolesOperationsDao adminPkRolesOperationsDao;
+
+    @Autowired
+    AdminPkAccountRolesDao adminPkAccountRolesDao;
 
     @Autowired
     TransactionalServiceI transactionalService;
@@ -82,7 +90,7 @@ public class SystemServiceImpl implements SystemServiceI {
             Set<String> url = info.getPatternsCondition().getPatterns();
             for (String u : url) {
                 if (u.indexOf("/pages", 0) == 0) {
-                list.add(u);
+                    list.add(u);
                 }
             }
         }
@@ -136,7 +144,7 @@ public class SystemServiceImpl implements SystemServiceI {
             int cnt = adminMenuDao.cntBySearch(systemSearch);
             systemSearch.setResult(list);
             systemSearch.setTotalCnt(cnt);
-        }else {
+        } else {
             systemSearch.setTotalCnt(0);
         }
         return ApiResult.ok(systemSearch);
@@ -230,7 +238,7 @@ public class SystemServiceImpl implements SystemServiceI {
             int cnt = adminOperationsDao.cntBySearch(systemSearch);
             systemSearch.setResult(list);
             systemSearch.setTotalCnt(cnt);
-        }else {
+        } else {
             systemSearch.setTotalCnt(0);
         }
         return ApiResult.ok(systemSearch);
@@ -303,7 +311,7 @@ public class SystemServiceImpl implements SystemServiceI {
             int cnt = adminRolesDao.cntBySearch(systemSearch);
             systemSearch.setResult(list);
             systemSearch.setTotalCnt(cnt);
-        }else {
+        } else {
             systemSearch.setTotalCnt(0);
         }
         return ApiResult.ok(systemSearch);
@@ -454,13 +462,92 @@ public class SystemServiceImpl implements SystemServiceI {
 
     @Override
     public ApiResult adminAllPermission(HttpServletRequest request) {
+        // 返回菜单权限和页面操作权限
+        Set<AutoResource> autoResources = findAdminAutoResource(request);
+        UserAutoResourceDTO dto = new UserAutoResourceDTO();
+        if (null != autoResources && !autoResources.isEmpty()) {
+            AutoResourceDTO autoResourceDTO = null;
+            for (AutoResource auth : autoResources) {
+                if (auth.getType() == AuthResourceTypeEnum.MENU.getValue()) {
+                    autoResourceDTO = new AutoResourceDTO();
+                    autoResourceDTO.setName(auth.getName());
+                    autoResourceDTO.setUrl(auth.getUrl());
+                    autoResourceDTO.setOrder(auth.getOrder());
+                    dto.getMenu().add(autoResourceDTO);
+                } else if (auth.getType() == AuthResourceTypeEnum.OP.getValue()) {
+                    autoResourceDTO = new AutoResourceDTO();
+                    autoResourceDTO.setName(auth.getName());
+                    autoResourceDTO.setUrl(auth.getUrl());
+                    dto.getOp().add(autoResourceDTO);
+                }
+            }
+        }
+        return ApiResult.ok(dto);
+    }
+
+    @Override
+    public Set<AutoResource> findAdminAutoResource(HttpServletRequest request) {
+        Set<AutoResource> set = new HashSet<>();
+        AutoResource resource = null;
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
-        int id = adminAccount.getId();
-        List<AdminMenu> mList = adminMenuDao.listByAdminId(id);
-        List<AdminPkRolesMenu> pmList = adminPkRolesMenuDao.listByAdminId(id);
-        List<AdminOperations> opList = adminOperationsDao.listByAdminId(id);
-        List<AdminPkRolesOperations> popList = adminPkRolesOperationsDao.listByAdminId(id);
-        PermissionDTO permission = new PermissionDTO(mList, pmList, opList, popList);
-        return ApiResult.ok(permission);
+        // 超级管理员 所有权限
+        if (adminAccount.equals(Constant.SUPER_ADMIN)) {
+            List<AdminMenu> menu = adminMenuDao.list();
+            if (null != menu && !menu.isEmpty()) {
+                for (AdminMenu m : menu) {
+                    resource = new AutoResource();
+                    resource.setName(m.getMenuName());
+                    resource.setUrl(m.getResource());
+                    resource.setOrder(m.getOrderBy());
+                    resource.setType(AuthResourceTypeEnum.MENU.getValue());
+                    set.add(resource);
+                }
+            }
+            List<AdminOperations> op = adminOperationsDao.list();
+            if (null != op && !op.isEmpty()) {
+                for (AdminOperations o : op) {
+                    resource = new AutoResource();
+                    resource.setName(o.getOperationsName());
+                    resource.setUrl(o.getResource());
+                    resource.setType(AuthResourceTypeEnum.OP.getValue());
+                    set.add(resource);
+                }
+            }
+        }  else {
+            // 根据partner 获取角色
+            List<AdminPkAccountRoles> rolesMenus = adminPkAccountRolesDao.listByAdminId(adminAccount.getId());
+            List<Integer> ids = new ArrayList<>();
+            if (null != rolesMenus && !rolesMenus.isEmpty()) {
+                for (AdminPkAccountRoles p : rolesMenus) {
+                    ids.add(p.getRolesId());
+                }
+            }
+            if (null != ids && !ids.isEmpty()) {
+                // 根据角色查询菜单
+                List<AdminMenu> menu = adminMenuDao.listByRolesIds(ids);
+                if (null != menu && !menu.isEmpty()) {
+                    for (AdminMenu m : menu) {
+                        resource = new AutoResource();
+                        resource.setName(m.getMenuName());
+                        resource.setUrl(m.getResource());
+                        resource.setOrder(m.getOrderBy());
+                        resource.setType(AuthResourceTypeEnum.MENU.getValue());
+                        set.add(resource);
+                    }
+                }
+                // 根据角色查询操作资源
+                List<AdminOperations> op = adminOperationsDao.listByRolesIds(ids);
+                if (null != op && !op.isEmpty()) {
+                    for (AdminOperations o : op) {
+                        resource = new AutoResource();
+                        resource.setName(o.getOperationsName());
+                        resource.setUrl(o.getResource());
+                        resource.setType(AuthResourceTypeEnum.OP.getValue());
+                        set.add(resource);
+                    }
+                }
+            }
+        }
+        return set;
     }
 }
