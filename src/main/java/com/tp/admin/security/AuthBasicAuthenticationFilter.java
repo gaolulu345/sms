@@ -74,6 +74,10 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
 
             }
         } else if (url.indexOf("/pages", 0) == 0 && method.equals(HttpMethod.GET.name())) {
+            if (url.equals("/pages/index")) {
+                success(request,response,chain);
+                return;
+            }
             if (invokePages(adminAccount, url)) {
                 success(request,response,chain);
             }

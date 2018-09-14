@@ -48,10 +48,12 @@ public class WashOrderServiceImpl implements WashOrderServiceI {
             for (OrderDTO o : list) {
                 o.build();
             }
+            int cnt = orderDao.cntBySearch(orderSearch);
+            orderSearch.setResult(list);
+            orderSearch.setTotalCnt(cnt);
+        }else {
+            orderSearch.setTotalCnt(0);
         }
-        int cnt = orderDao.cntBySearch(orderSearch);
-        orderSearch.setResult(list);
-        orderSearch.setTotalCnt(cnt);
         return ApiResult.ok(orderSearch);
     }
 

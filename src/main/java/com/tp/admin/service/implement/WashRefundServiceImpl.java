@@ -56,10 +56,12 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
             for (Refund o : list){
                 o.build();
             }
+            Integer cnt = refundDao.cntBySearch(refundSearch);
+            refundSearch.setResult(list);
+            refundSearch.setTotalCnt(cnt);
+        }else{
+            refundSearch.setTotalCnt(0);
         }
-        int cnt = refundDao.cntBySearch(refundSearch);
-        refundSearch.setResult(list);
-        refundSearch.setTotalCnt(cnt);
         return ApiResult.ok(refundSearch);
     }
 

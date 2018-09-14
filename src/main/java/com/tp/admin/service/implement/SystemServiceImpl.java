@@ -132,9 +132,13 @@ public class SystemServiceImpl implements SystemServiceI {
     public ApiResult listSysMenuBySearch(HttpServletRequest request, SystemSearch systemSearch) {
         systemSearch.builData();
         List<AdminMenu> list = adminMenuDao.listBySearch(systemSearch);
-        int cnt = adminMenuDao.cntBySearch(systemSearch);
-        systemSearch.setResult(list);
-        systemSearch.setTotalCnt(cnt);
+        if (null != list && !list.isEmpty()) {
+            int cnt = adminMenuDao.cntBySearch(systemSearch);
+            systemSearch.setResult(list);
+            systemSearch.setTotalCnt(cnt);
+        }else {
+            systemSearch.setTotalCnt(0);
+        }
         return ApiResult.ok(systemSearch);
     }
 
@@ -222,9 +226,13 @@ public class SystemServiceImpl implements SystemServiceI {
     public ApiResult listSysOperationsBySearch(HttpServletRequest request, SystemSearch systemSearch) {
         systemSearch.builData();
         List<AdminOperations> list = adminOperationsDao.listBySearch(systemSearch);
-        int cnt = adminOperationsDao.cntBySearch(systemSearch);
-        systemSearch.setResult(list);
-        systemSearch.setTotalCnt(cnt);
+        if (null != list && !list.isEmpty()) {
+            int cnt = adminOperationsDao.cntBySearch(systemSearch);
+            systemSearch.setResult(list);
+            systemSearch.setTotalCnt(cnt);
+        }else {
+            systemSearch.setTotalCnt(0);
+        }
         return ApiResult.ok(systemSearch);
     }
 
@@ -291,9 +299,13 @@ public class SystemServiceImpl implements SystemServiceI {
     public ApiResult listSysRolesBySearch(HttpServletRequest request, SystemSearch systemSearch) {
         systemSearch.builData();
         List<AdminRoles> list = adminRolesDao.listBySearch(systemSearch);
-        int cnt = adminRolesDao.cntBySearch(systemSearch);
-        systemSearch.setResult(list);
-        systemSearch.setTotalCnt(cnt);
+        if (null != list && !list.isEmpty()) {
+            int cnt = adminRolesDao.cntBySearch(systemSearch);
+            systemSearch.setResult(list);
+            systemSearch.setTotalCnt(cnt);
+        }else {
+            systemSearch.setTotalCnt(0);
+        }
         return ApiResult.ok(systemSearch);
     }
 

@@ -59,10 +59,12 @@ public class FileServiceImplmpl implements FileServiceI {
             for (FileUploadLog f : list){
                 f.buildUrl(p);
             }
+            int cnt = fileUploadLogDao.cntBySearch(fileSearch);
+            fileSearch.setResult(list);
+            fileSearch.setTotalCnt(cnt);
+        }else {
+            fileSearch.setTotalCnt(0);
         }
-        int cnt = fileUploadLogDao.cntBySearch(fileSearch);
-        fileSearch.setResult(list);
-        fileSearch.setTotalCnt(cnt);
         return ApiResult.ok(fileSearch);
     }
 

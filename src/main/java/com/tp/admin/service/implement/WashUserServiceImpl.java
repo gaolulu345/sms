@@ -21,9 +21,13 @@ public class WashUserServiceImpl implements WashUserServiceI {
     public ApiResult list(HttpServletRequest request, UserSearch userSearch) {
         userSearch.builData();
         List<User> list = userDao.listBySearch(userSearch);
-        int cnt = userDao.cntBySearch(userSearch);
-        userSearch.setResult(list);
-        userSearch.setTotalCnt(cnt);
+        if (null != list && !list.isEmpty()) {
+            int cnt = userDao.cntBySearch(userSearch);
+            userSearch.setResult(list);
+            userSearch.setTotalCnt(cnt);
+        }else{
+            userSearch.setTotalCnt(0);
+        }
         return ApiResult.ok(userSearch);
     }
 

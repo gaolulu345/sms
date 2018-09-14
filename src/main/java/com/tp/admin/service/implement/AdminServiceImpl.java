@@ -7,6 +7,7 @@ import com.tp.admin.data.dto.AdminAccountDTO;
 import com.tp.admin.data.dto.ChangePasswordDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.AdminRoles;
+import com.tp.admin.data.entity.Refund;
 import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -69,9 +70,13 @@ public class AdminServiceImpl implements AdminServiceI {
     public ApiResult list(HttpServletRequest request, AdminSearch adminSearch) {
         adminSearch.builData();
         List<AdminAccountDTO> list = adminAccountDao.listBySearch(adminSearch);
-        int cnt = adminAccountDao.cntBySearch(adminSearch);
-        adminSearch.setResult(list);
-        adminSearch.setTotalCnt(cnt);
+        if (null != list && !list.isEmpty()) {
+            int cnt = adminAccountDao.cntBySearch(adminSearch);
+            adminSearch.setResult(list);
+            adminSearch.setTotalCnt(cnt);
+        }else{
+            adminSearch.setTotalCnt(0);
+        }
         return ApiResult.ok(adminSearch);
     }
 
