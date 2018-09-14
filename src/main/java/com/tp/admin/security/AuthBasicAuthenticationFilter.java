@@ -43,10 +43,10 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException, AuthenticationException {
         String url = request.getRequestURI();
         String method = request.getMethod();
-        log.info("url method {} {} ", url , method);
         if (url.equals("/") ||
             url.equals("/login") |
-            url.equals("/api/user/login")) {
+            url.equals("/api/user/login") ||
+            url.equals("/api/user/logout")) {
             // 非受保护资源不拦截。
             success(request,response,chain);
             return;

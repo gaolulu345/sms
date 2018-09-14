@@ -68,9 +68,13 @@
 
     <select id="listBySearch" parameterType="com.tp.admin.data.search.AdminSearch" resultMap="AdminAccountDTOMap">
         SELECT
-        *
+        aa.*,
+        ar.id AS roles_id ,
+        ar.roles_name
         FROM
-        `admin_account`
+        `admin_account` AS aa
+        INNER JOIN `admin_pk_account_roles` AS apar ON aa.id = apar.admin_id
+        INNER JOIN `admin_roles` AS ar ON ar.id = apar.roles_id
         <where>
             <if test="null != deleted">
                 deleted = #{deleted}
@@ -131,6 +135,8 @@
 
     <resultMap id="AdminAccountDTOMap" type="com.tp.admin.data.dto.AdminAccountDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="roles_id" property="rolesId" jdbcType="VARCHAR" />
+        <result column="roles_name" property="rolesName" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="intros" property="intros" jdbcType="VARCHAR" />
         <result column="name" property="name" jdbcType="VARCHAR" />

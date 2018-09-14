@@ -12,6 +12,7 @@ public class AdminAccountDTO {
     @ExcelField(title = "员工Id", order = 1)
     private int id;
     private int rolesId;
+    private String rolesName;
     @ExcelField(title = "登录账号", order = 2)
     private String username;
     @ExcelField(title = "昵称", order = 3)
