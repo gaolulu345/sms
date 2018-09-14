@@ -83,7 +83,7 @@
         UPDATE
         `admin_roles`
         SET
-        deleted = #{enable}
+        deleted = #{deleted}
         WHERE
         id IN
         <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">

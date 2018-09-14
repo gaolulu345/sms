@@ -61,7 +61,6 @@ public class AdminServiceImpl implements AdminServiceI {
     @Override
     public ApiResult update(HttpServletRequest request, AdminAccountDTO adminAccountDTO) {
         if(StringUtil.isEmpty(adminAccountDTO.getName()) ||
-                StringUtil.isEmpty(adminAccountDTO.getUsername()) ||
                 StringUtil.isEmpty(adminAccountDTO.getIntros()) ||
                 adminAccountDTO.getRolesId() < 0 ){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
@@ -72,14 +71,13 @@ public class AdminServiceImpl implements AdminServiceI {
         }
         AdminPkAccountRoles adminPkAccountRoles = adminPkAccountRolesDao.findByAdminId(old.getId());
         AdminAccount adminAccount = new AdminAccount(adminAccountDTO);
-        if (adminPkAccountRoles.getRolesId() != adminAccountDTO.getRolesId()) {
-            adminPkAccountRoles.setRolesId(adminAccountDTO.getRolesId());
-            int res = adminPkAccountRolesDao.update(adminPkAccountRoles);
-            if (res == 0) {
-                throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
-            }
+        adminAccount.setId(adminAccountDTO.getId());
+        adminPkAccountRoles.setRolesId(adminAccountDTO.getRolesId());
+        int res = adminPkAccountRolesDao.update(adminPkAccountRoles);
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
-        int res = adminAccountDao.update(adminAccount);
+        res = adminAccountDao.update(adminAccount);
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
