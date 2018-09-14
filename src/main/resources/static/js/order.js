@@ -87,8 +87,11 @@ var vm = new Vue({
         },
 
         download: function(){
-            let st = vm.currentStartTime
-            let et = vm.currentEndTime
+            let st = vm.currentStartTime.split(' ')[0]
+            let et = vm.currentEndTime.split(' ')[0]
+            let terId = vm.currentTerIds[0] || ''
+            let status = vm.currentStatus || ''
+            let type = vm.currentType || ''
             sTime = new Date(st);
             let today = new Date();
             let time = today - sTime;
@@ -99,7 +102,7 @@ var vm = new Vue({
                     vm.$message.error('请选择近3个月的订单')
                 } else {
                    if (vm.totalCnt > 0) {
-                        window.location.href = "/api/private/order/list/exprot?st=" + st + "&et=" + et + "&terId=" + vm.currentTerIds[0] + "&type=" + vm.currentType;
+                        window.location.href = "/api/private/order/list/exprot?st=" + st + "&et=" + et + "&terId=" + terId + "&type=" + type + '&status=' + status;
                     } else {
                         vm.$message.error('无结果')
                     }

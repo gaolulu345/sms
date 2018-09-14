@@ -41,7 +41,6 @@ var vm = new Vue({
     },
 
     methods: {
-        // getOrderList: function(pageSize, pageIndex, status, terIds, startTime, endTime) {
         getUploadList: function(pageSize, pageIndex, adminName, fileKey, startTime, endTime) {
             this.$http.post("/api/private/file/upload/list", {
                 pageSize: pageSize,
@@ -53,9 +52,12 @@ var vm = new Vue({
             }).then(function(res){
                 let data = res.json().data
                 let result = data.result;
-                result.forEach(function(val) {
-                    val.createTime = val.createTime ? formatTimestampToSecond(val.createTime) : '暂无'
-                })
+                if(result && result[0]) {
+                    result.forEach(function(val) {
+                        val.createTime = val.createTime ? formatTimestampToSecond(val.createTime) : '暂无'
+                    })
+                }
+                
                 vm.uploadList = result;
                 vm.totalCnt = data.totalCnt;
                 vm.currentPageSize = data.pageSize;

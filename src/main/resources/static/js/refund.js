@@ -19,9 +19,9 @@ var vm = new Vue({
         currentStatus: null,
         currentReason: null,
         currentOrderId: null,
-        dateRange: '',
-        currentStartTime: '',
-        currentEndTime:'',
+        dateRange: null,
+        currentStartTime: null,
+        currentEndTime: null,
 
         refundList: [],
 
@@ -36,7 +36,7 @@ var vm = new Vue({
 
     mounted: function() {
         console.log('mounted......')
-        this.getRefundList(10, 1, null, null, null, '', '')
+        this.getRefundList(10, 1, null, null, null, null, null)
     },
 
     methods: {
@@ -104,11 +104,12 @@ var vm = new Vue({
 
         // 下载
         download: function(){
-            let orderId = vm.currentOrderId;
-            let reason = vm.currentReason;
-            let status = vm.currentStatus;
-            let st = vm.currentStartTime;
-            let et = vm.currentEndTime;
+            // let orderId = vm.currentOrderId == null ? '' : vm.currentOrderId ;
+            let reason = vm.currentReason == null ? '' : vm.currentReason;
+            let status = vm.currentStatus == null ? '' : vm.currentStatus;
+            let st = vm.currentStartTime.split(' ')[0];
+
+            let et = vm.currentEndTime.split(' ')[0];
             sTime = new Date(st);
             let today = new Date();
             let time = today - sTime;
@@ -119,7 +120,8 @@ var vm = new Vue({
                     vm.$message.error('请选择近3个月的退款列表')
                 } else {
                     if (vm.totalCnt > 0) {
-                        window.location.href = "/api/private/refund/list/exprot?orderId=" + orderId + '&reason=' + reason + '&status=' + status + '&st=' + st + '&et=' + et;
+                        // window.location.href = '/api/private/refund/list/exprot?st=' + st + '&et=' + et + '&reason=' + '' + '&status=' + '';
+                        window.location.href = '/api/private/refund/list/exprot?st=' + st + '&et=' + et + '&reason=' + reason + '&status=' + status;
                     } else {
                         vm.$message.error('无结果')
                     }
@@ -133,10 +135,14 @@ var vm = new Vue({
 
         search: function(){
             if(!vm.dateRange) {  //如果日期选择器中先有选择，后置空，结果为null，会报错
-                vm.dateRange = '';
+                vm.dateRange = null;
+                vm.currentStartTime = null;
+                vm.currentEndTime = null;
+            } else {
+                vm.currentStartTime = vm.dateRange[0] || null;
+                vm.currentEndTime = vm.dateRange[1] || null;
             }
-            vm.currentStartTime = vm.dateRange[0] || '';
-            vm.currentEndTime = vm.dateRange[1] || '';
+            
             vm.getRefundList(vm.currentPageSize, 1, vm.currentStatus, vm.currentReason, vm.currentOrderId, vm.currentStartTime, vm.currentEndTime);
         },
 
