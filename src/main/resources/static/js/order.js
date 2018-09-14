@@ -25,8 +25,8 @@ var vm = new Vue({
 
         orderList: [],
     
-        typeOptions: [{value: '0', label: '支付宝'}, {value: '1', label: '微信钱包'}, {value: '2', label: '测试'}, {value: '3', label: '免费'}],
-        statusOptions: [{value: '0', label: '创建'}, {value: '1', label: '退款'}, {value: '2', label: '支付完成'}],
+        typeOptions: [{value: 0, label: '支付宝'}, {value: 1, label: '微信钱包'}, {value: 2, label: '测试'}, {value: 3, label: '免费'}],
+        statusOptions: [{value: 0, label: '创建'}, {value: 1, label: '退款'}, {value: 2, label: '支付完成'}],
         statusList: ['创建', '退款','支付完成'],
         typeList: ['支付宝', '微信钱宝', '测试', '免费'],
         terOptions: [],
@@ -60,9 +60,12 @@ var vm = new Vue({
             }).then(function(res){
                 let data = res.json().data
                 let result = data.result;
-                result.forEach(function(val) {
-                    val.payTime = val.payTime ? formatTimestampToSecond(val.payTime) : '暂无'
-                })
+                if(result && result[0]) {
+                    result.forEach(function(val) {
+                        val.payTime = val.payTime ? formatTimestampToSecond(val.payTime) : '暂无'
+                    })
+                }
+                
                 vm.orderList = result;
                 vm.totalCnt = data.totalCnt;
                 vm.currentPageSize = data.pageSize;
@@ -95,22 +98,11 @@ var vm = new Vue({
                 if (time > 86400000*93) { //超过3个月
                     vm.$message.error('请选择近3个月的订单')
                 } else {
-                    // this.$http.post("/api/private/order/list/exprot", {
-                    //     terIds: vm.currentTerIds,
-                    //     startTime: st,
-                    //     endTime: et
-                    // }).then(function(res){
-                    //     let result = res.json()
-                    // })
-
-                    // window.location.href = "/api/private/order/list/exprot?st=2018-09-01&et=2018-09-13&status=2&type=1&terId=1";
-                    window.location.href = "/api/private/order/list/exprot?st=" + st + "&et=" + et + "&terId=" + vm.currentTerIds[0] + "&type=" + vm.currentType;
-
-                    // if (totalCnt > 0) {
-                    //     window.location.href = "/order/export?&type=" + payType + '&st=' + st + '&et=' + et + '&terId=' + terId;
-                    // } else {
-                    //     vm.$message.error('无结果')
-                    // }
+                   if (vm.totalCnt > 0) {
+                        window.location.href = "/api/private/order/list/exprot?st=" + st + "&et=" + et + "&terId=" + vm.currentTerIds[0] + "&type=" + vm.currentType;
+                    } else {
+                        vm.$message.error('无结果')
+                    }
                 }
             } else {
                 vm.$message.error('请选择开始和结束日期！');

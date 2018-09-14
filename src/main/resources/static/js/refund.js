@@ -16,51 +16,117 @@ var vm = new Vue({
         currentPageIndex: null,
         pageSizes: [10, 20, 50],
 
-        currentStatus: '',
-        currentTerIds: [],
-        currentReason: '',
+        currentStatus: null,
+        currentReason: null,
+        currentOrderId: null,
+        dateRange: '',
+        currentStartTime: '',
+        currentEndTime:'',
 
         refundList: [],
 
-        reasonOptions: [{value: '0', label: '误购，请求退款'}, {value: '1', label: '设备无法启动'}, {value: '2', label: '洗车中途故障'}, {value: '3', label: '洗车服务不满意'}, {value: '4', label: '其他原因'}],
-        statusOptions: [{value: '0', label: '默认状态'}, {value: '1', label: '请求退款'}, {value: '2', label: '请求通过审核'}, {value: '3', label: '已退款'}, {value: '4', label: '请求被拒绝'}],
-            
-        statusList: ['创建', '退款','支付完成']
-        
+        reasonOptions: [{value: 0, label: '误购，请求退款'}, {value: 1, label: '设备无法启动'}, {value: 2, label: '洗车中途故障'}, {value: 3, label: '洗车服务不满意'}, {value: 4, label: '其他原因'}],
+        statusOptions: [{value: 0, label: '默认状态'}, {value: 1, label: '请求退款'}, {value: 2, label: '请求通过审核'}, {value: 3, label: '已退款'}, {value: 4, label: '请求被拒绝'}],
+        pickerOptions: {
+            disabledDate(time) {
+                return time.getTime() > Date.now();
+            }
+        },
     },
 
     mounted: function() {
         console.log('mounted......')
-        this.getRefundList(10, 1)
-        // this.getOrderList(10, 1, '', [], '', '')
+        this.getRefundList(10, 1, null, null, null, '', '')
     },
 
     methods: {
-        // getOrderList: function(pageSize, pageIndex, status, terIds, startTime, endTime) {
-        getRefundList: function(pageSize, pageIndex) {
-            // console.log(terIds)
-            // let ids = terIds[0] ? terIds : []
+        getRefundList: function(pageSize, pageIndex, status, reason, orderId, startTime, endTime) {
             this.$http.post("/api/private/refund/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
-                // status: status,
-                // terIds: ids,
-                // startTime: startTime,
-                // endTime: endTime
+                status: status,
+                reason: reason,
+                orderId: orderId,
+                startTime: startTime,
+                endTime: endTime
             }).then(function(res){
                 let data = res.json().data
                 let result = data.result;
-                result.forEach(function(val) {
-                    val.modifyTime = val.modifyTime ? formatTimestampToSecond(val.modifyTime) : '暂无'
-                    val.createTime = val.createTime ? formatTimestampToSecond(val.createTime) : '暂无'
-                    val.checkTime = val.checkTime ? formatTimestampToSecond(val.checkTime) : '暂无'
-                    val.refundTime = val.refundTime ? formatTimestampToSecond(val.refundTime) : '暂无'
-                })
+                if(result && result[0]) {
+                    result.forEach(function(val) {
+                        val.modifyTime = val.modifyTime ? formatTimestampToSecond(val.modifyTime) : '暂无'
+                        val.createTime = val.createTime ? formatTimestampToSecond(val.createTime) : '暂无'
+                        val.checkTime = val.checkTime ? formatTimestampToSecond(val.checkTime) : '暂无'
+                        val.refundTime = val.refundTime ? formatTimestampToSecond(val.refundTime) : '暂无'
+                    })
+                }
+                
                 vm.refundList = result;
                 vm.totalCnt = data.totalCnt;
                 vm.currentPageSize = data.pageSize;
                 vm.currentPageIndex = data.pageIndex;
+                vm.currentStatus = data.status;
+                vm.currentReason = data.reason;
+                vm.currentOrderId = data.orderId;
+                vm.currentStartTime = data.startTime;
+                vm.currentEndTime = data.endTime;
             })
+        },
+
+        check: function(refundId, status) {
+            this.$http.post("/api/private/refund/approved", {
+                id: refundId,
+                status: status
+            }).then(function(res){
+                let result = res.json()
+                if(result.code == 200){
+                    vm.getRefundList(vm.currentPageSize, vm.currentPageIndex, vm.currentStatus, vm.currentReason, vm.currentOrderId, vm.currentStartTime, vm.currentEndTime);
+                } else {
+                    vm.$message.error('操作失败！');
+                }
+            })
+        },
+
+        payback: function(refundId) {
+            this.$http.post("/api/private/refund/back", {
+                id: refundId
+            }).then(function(res){
+                let result = res.json()
+                if(result.code == 200){
+                    vm.getRefundList(vm.currentPageSize, vm.currentPageIndex, vm.currentStatus, vm.currentReason, vm.currentOrderId, vm.currentStartTime, vm.currentEndTime);
+                } else {
+                    vm.$message.error('退款失败！');
+                }
+            })
+        },
+
+
+
+        // 下载
+        download: function(){
+            let orderId = vm.currentOrderId;
+            let reason = vm.currentReason;
+            let status = vm.currentStatus;
+            let st = vm.currentStartTime;
+            let et = vm.currentEndTime;
+            sTime = new Date(st);
+            let today = new Date();
+            let time = today - sTime;
+            console.log(sTime, today, time);
+
+            if(st && et) {
+                if (time > 86400000*93) { //超过3个月
+                    vm.$message.error('请选择近3个月的退款列表')
+                } else {
+                    if (vm.totalCnt > 0) {
+                        window.location.href = "/api/private/refund/list/exprot?orderId=" + orderId + '&reason=' + reason + '&status=' + status + '&st=' + st + '&et=' + et;
+                    } else {
+                        vm.$message.error('无结果')
+                    }
+                }
+            } else {
+                vm.$message.error('请选择开始和结束日期！');
+            }
         },
 
 
@@ -71,15 +137,14 @@ var vm = new Vue({
             }
             vm.currentStartTime = vm.dateRange[0] || '';
             vm.currentEndTime = vm.dateRange[1] || '';
-
-            vm.getRefundList(vm.currentPageSize, 1, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
+            vm.getRefundList(vm.currentPageSize, 1, vm.currentStatus, vm.currentReason, vm.currentOrderId, vm.currentStartTime, vm.currentEndTime);
         },
 
         handleSizeChange(val) {
-            vm.getRefundList(val, 1, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
+            vm.getRefundList(val, 1, vm.currentStatus, vm.currentReason, vm.currentOrderId, vm.currentStartTime, vm.currentEndTime);
         },
         handleCurrentChange(val) {
-            vm.getRefundList(vm.currentPageSize, val, vm.currentStatus, vm.currentTerIds, vm.currentStartTime, vm.currentEndTime);
+            vm.getRefundList(vm.currentPageSize, val, vm.currentStatus, vm.currentReason, vm.currentOrderId, vm.currentStartTime, vm.currentEndTime);
         }
     }
 });
