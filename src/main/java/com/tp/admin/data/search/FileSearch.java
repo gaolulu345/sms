@@ -1,5 +1,6 @@
 package com.tp.admin.data.search;
 
+import com.tp.admin.utils.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +20,13 @@ public class FileSearch extends Search {
 
     @Override
     public void builData() {
-
+        super.build();
+        if (StringUtil.isEmpty(this.adminName) ||
+                this.adminName.trim().length() == 0
+                || StringUtil.isEmpty(this.fileKey) ||
+                this.fileKey.trim().length() == 0) {
+            this.adminName = null;
+            this.fileKey = null;
+        }
     }
 }
