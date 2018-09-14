@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/js/**","/css/**","/images/**","/fonts/**","favicon.ico");
+        web.ignoring().antMatchers("/js/**", "/css/**", "/images/**", "/fonts/**", "favicon.ico");
         //可以仿照上面一句忽略静态资源
     }
 
@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/js/**","/css/**","/images/**","/fonts/**","favicon.ico").permitAll()
+                .antMatchers("/js/**", "/css/**", "/images/**", "/fonts/**", "favicon.ico").permitAll()
                 .antMatchers("/login", "/error").permitAll()
                 .antMatchers("/api/user/login").permitAll()
                 .anyRequest().authenticated()
@@ -45,8 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .and()
-                .addFilterAfter(new AuthBasicAuthenticationFilter(authenticationManagerBean()) ,
-                        AuthBasicAuthenticationFilter.class );
+                .addFilter(new AuthBasicAuthenticationFilter(authenticationManagerBean()));
         http.csrf().disable();
     }
 

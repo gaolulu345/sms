@@ -4,7 +4,6 @@ import com.tp.admin.common.Constant;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
-import com.tp.admin.exception.PagesException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
@@ -14,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -42,7 +42,6 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException, AuthenticationException {
         String url = request.getRequestURI();
-
         String method = request.getMethod();
         log.info("url method {} {} ", url , method);
         if (url.equals("/") ||
@@ -64,6 +63,7 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
         }
         Authentication authentication = sctx.getAuthentication();
         AdminAccount adminAccount = (AdminAccount) authentication.getPrincipal();
+        // 如果是超级管理员放行。
         if (adminAccount.getUsername().equals(Constant.SUPER_ADMIN)) {
             success(request,response,chain);
             return;
@@ -71,8 +71,9 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
         if (url.indexOf("/api/private", 0) == 0) {
             if (invokeApi(adminAccount, url)) {
                 success(request,response,chain);
-
+                return;
             }
+            throw new BaseException(ExceptionCode.API_NOT_PERMISSION_ERROR);
         } else if (url.indexOf("/pages", 0) == 0 && method.equals(HttpMethod.GET.name())) {
             if (url.equals("/pages/index")) {
                 success(request,response,chain);
@@ -81,13 +82,13 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
             if (invokePages(adminAccount, url)) {
                 success(request,response,chain);
             }
+            response.sendRedirect("/pages/index");
         }
     }
 
     private void success(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException{
         chain.doFilter(request, response);
     }
-
 
     private boolean invokeApi(AdminAccount adminAccount, String url) {
         AutoResource autoResource = null;
@@ -99,7 +100,7 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
                 }
             }
         }
-        throw new BaseException(ExceptionCode.API_NOT_PERMISSION_ERROR);
+        return false;
     }
 
     private boolean invokePages(AdminAccount adminAccount, String url) {
@@ -112,7 +113,7 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
                 }
             }
         }
-        throw new PagesException();
+        return false;
     }
 
 }

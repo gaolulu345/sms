@@ -8,6 +8,7 @@ import com.tp.admin.exception.NotLoginException;
 import com.tp.admin.exception.PagesException;
 import com.tp.admin.utils.StringUtil;
 import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,6 +24,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     Object handleException(HttpServletRequest req, Exception e) {
+        if (req.getMethod().equals("POST")) {
+            return ApiResult.error(ExceptionCode.UNKNOWN_EXCEPTION);
+        } else {
+            ModelAndView mav = new ModelAndView("error");
+            mav.addObject("exception", e);
+            mav.addObject("url", req.getRequestURL());
+            mav.addObject("reason", e.getMessage());
+            return mav;
+        }
+    }
+
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseBody
+    Object authenticationException(HttpServletRequest req, AuthenticationException e) {
         if (req.getMethod().equals("POST")) {
             return ApiResult.error(ExceptionCode.UNKNOWN_EXCEPTION);
         } else {
