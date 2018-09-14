@@ -51,10 +51,10 @@
         FROM
         `file_upload_log_admin`
         <where>
-            <if test="adminName != null">
+            <if test="adminName != null and adminName != ''">
                 AND `admin_name` LIKE CONCAT('%',#{adminName},'%')
             </if>
-            <if test="fileKey != null">
+            <if test="fileKey != null and fileKey != ''">
                 AND `file_key` LIKE CONCAT('%',#{fileKey},'%')
             </if>
             <if test="startTime != null">

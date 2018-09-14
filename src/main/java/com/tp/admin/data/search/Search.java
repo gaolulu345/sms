@@ -31,7 +31,10 @@ public abstract class Search {
         if (!StringUtil.isEmpty(endTime) && StringUtil.toSearchDate(endTime) != null) {
             this.endTime = endTime + " 23:59:59";
         }
-        if (StringUtil.isEmpty(this.startTime) || StringUtil.isEmpty(this.endTime)) {
+        if (StringUtil.isEmpty(this.startTime) ||
+                this.startTime.trim().length() == 0
+         || StringUtil.isEmpty(this.endTime) ||
+                this.endTime.trim().length() == 0) {
             this.startTime = null;
             this.endTime = null;
         }

@@ -16,6 +16,9 @@
         <if test="orderId != null">
             AND order_id = #{orderId}
         </if>
+        <if test="startTime != null and endTime != null">
+            AND create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
         ORDER BY id DESC
     </select>
 
@@ -31,6 +34,9 @@
         </if>
         <if test="orderId != null">
             AND order_id = #{orderId}
+        </if>
+        <if test="startTime != null and endTime != null">
+            AND create_time BETWEEN #{startTime} AND #{endTime}
         </if>
         ORDER BY id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">
