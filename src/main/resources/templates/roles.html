@@ -39,7 +39,7 @@
                         <template slot-scope="scope">
                             <span style="color: gray;" v-if="scope.row.enable == false && scope.row.deleted == false">{{scope.row.rolesName}}  (未启用）</span>
                             <span style="color: red;" v-if="scope.row.deleted == true">{{scope.row.rolesName}}  (已删除）</span>
-                            <span v-if="scope.row.enable == true && scope.row.deleted == false">{{scope.row.menuName}}</span>
+                            <span v-if="scope.row.enable == true && scope.row.deleted == false">{{scope.row.rolesName}}</span>
                         </template>
                     </el-table-column>
                     <!-- <el-table-column prop="rolesName" label="角色名称"></el-table-column> -->
