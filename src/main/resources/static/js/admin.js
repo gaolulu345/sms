@@ -104,8 +104,7 @@ var vm = new Vue({
                 if(result.code == 200){
                     vm.$message.success('已修改');
                     vm.showEditAdmin = false;
-                    vm.getAdminList(vm.currentPageSize, vm.currentPageIndex);
-                    // window.location.reload();
+                    vm.getAdminList(vm.currentPageSize, vm.currentPageIndex, vm.deleted);
                 }else {
                     vm.$message.error(result.message)
                 }
@@ -124,7 +123,7 @@ var vm = new Vue({
                     let result = res.json();
                     if(result.code == 200){
                         vm.$message.success('已重置');
-                        vm.getAdminList(vm.currentPageSize, vm.currentPageIndex);
+                        vm.getAdminList(vm.currentPageSize, vm.currentPageIndex, vm.deleted);
                     }else {
                         vm.$message.error(result.message)
                     }
@@ -161,7 +160,7 @@ var vm = new Vue({
                         let result = res.json();
                         if(result.code == 200){
                             vm.$message.success('已' + tip);
-                            vm.getAdminList(vm.currentPageSize, vm.currentPageIndex);
+                            vm.getAdminList(vm.currentPageSize, vm.currentPageIndex, vm.deleted);
                         }else {
                             vm.$message.error(result.message)
                         }
