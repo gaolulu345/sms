@@ -5,8 +5,9 @@ var vm = new Vue({
     data: {
     	pageName: 'upload',
         pageTitle: '文件管理',
-    	admin: admin,
-    	adminID: adminId,
+        adminId: adminId,
+        adminRoleId: adminRoleId,
+        admin: admin,
         menuPer: menuPer,
         opPer: opPer,
 

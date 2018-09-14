@@ -4,8 +4,9 @@ var vm = new Vue({
     data: {
         pageName: 'roles',
         pageTitle: '角色设置',
-        admin: admin,
         adminId: adminId,
+        adminRoleId: adminRoleId,
+        admin: admin,
         menuPer: menuPer,
         opPer: opPer,
 
@@ -53,28 +54,29 @@ var vm = new Vue({
     
     mounted: function() {
     	console.log('mounted......')
-        this.$http.post("/api/private/sys/list/roles", {
-            pageSize: 1000,
-            pageIndex: 1,
-            id: adminId
-        }).then(function(res){
-            let result = res.json().data.result;
+        this.getRoleList(false);
+        // this.$http.post("/api/private/sys/list/roles", {
+        //     pageSize: 1000,
+        //     pageIndex: 1,
+        //     id: adminId
+        // }).then(function(res){
+        //     let result = res.json().data.result;
 
-            result.forEach(function(val) {
-                val.createTime = formatTimestampToDay(val.createTime)
-                val.modifyTime = formatTimestampToDay(val.modifyTime)
-            })
-            vm.roleList = result;
-            if(vm.roleList.length > 0){
-                vm.currentRole = vm.roleList[0]
-                this.$http.post("/api/private/sys/all/roles/permission", {
-                    rolesId: vm.roleList[0].id
-                }).then(function(res){
-                    let result = res.json();
-                    vm.currentRolePermission = result.data.menu;
-                })
-            }
-        })
+        //     result.forEach(function(val) {
+        //         val.createTime = formatTimestampToDay(val.createTime)
+        //         val.modifyTime = formatTimestampToDay(val.modifyTime)
+        //     })
+        //     vm.roleList = result;
+        //     if(vm.roleList.length > 0){
+        //         vm.currentRole = vm.roleList[0]
+        //         this.$http.post("/api/private/sys/all/roles/permission", {
+        //             rolesId: vm.roleList[0].id
+        //         }).then(function(res){
+        //             let result = res.json();
+        //             vm.currentRolePermission = result.data.menu;
+        //         })
+        //     }
+        // })
 
 
         // this.$http.post("/api/private/sys/partner/permission", {
@@ -85,6 +87,32 @@ var vm = new Vue({
     },
 
     methods: {
+        getRoleList: function(isAll) {
+            this.$http.post("/api/private/sys/list/roles", {
+                pageSize: 1000,
+                pageIndex: 1,
+                all: isAll
+            }).then(function(res){
+                let result = res.json().data.result;
+
+                result.forEach(function(val) {
+                    val.createTime = formatTimestampToDay(val.createTime)
+                    val.modifyTime = formatTimestampToDay(val.modifyTime)
+                })
+                vm.roleList = result;
+                if(vm.roleList.length > 0){
+                    vm.currentRole = vm.roleList[0]
+                    vm.getCurrentRolePermission(vm.roleList[0].id)
+                    vm.isAll = isAll
+                    // this.$http.post("/api/private/sys/all/roles/permission", {
+                    //     rolesId: vm.roleList[0].id
+                    // }).then(function(res){
+                    //     let result = res.json();
+                    //     vm.currentRolePermission = result.data.menu;
+                    // })
+                }
+            })
+        },
 
         getRoleInfo: function(row) {
             vm.currentRole = row;

@@ -4,6 +4,9 @@ var vm = new Vue({
     data: {
     	pageName: 'index',
         pageTitle: '首页',
+        adminId: adminId,
+        adminRoleId: adminRoleId,
+        admin: admin,
 
         
        

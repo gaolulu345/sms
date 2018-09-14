@@ -4,8 +4,9 @@ var vm = new Vue({
     data: {
         pageName: 'system',
         pageTitle: '系统设置',
-        admin: admin,
         adminId: adminId,
+        adminRoleId: adminRoleId,
+        admin: admin,
         menuPer: menuPer,
         opPer: opPer,
 

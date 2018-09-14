@@ -5,8 +5,9 @@ var vm = new Vue({
     data: {
     	pageName: 'refund',
         pageTitle: '洗车退款',
-    	admin: admin,
-    	adminID: adminId,
+        adminId: adminId,
+        adminRoleId: adminRoleId,
+        admin: admin,
         menuPer: menuPer,
         opPer: opPer,
 
@@ -17,6 +18,7 @@ var vm = new Vue({
 
         currentStatus: '',
         currentTerIds: [],
+        currentReason: '',
 
         refundList: [],
 

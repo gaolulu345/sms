@@ -5,8 +5,9 @@ var vm = new Vue({
     data: {
     	pageName: 'order',
         pageTitle: '洗车订单',
-    	admin: admin,
-    	adminID: adminId,
+        adminId: adminId,
+        adminRoleId: adminRoleId,
+        admin: admin,
         menuPer: menuPer,
         opPer: opPer,
 
@@ -16,10 +17,10 @@ var vm = new Vue({
         pageSizes: [10, 20, 50],
 
         dateRange: '',
-        currentStartTime: null,
-        currentEndTime:null,
-        currentStatus: null,
-        currentType: null,
+        currentStartTime: '',
+        currentEndTime:'',
+        currentStatus: '',
+        currentType: '',
         currentTerIds: [],
 
         orderList: [],
@@ -27,6 +28,7 @@ var vm = new Vue({
         typeOptions: [{value: '0', label: '支付宝'}, {value: '1', label: '微信钱包'}, {value: '2', label: '测试'}, {value: '3', label: '免费'}],
         statusOptions: [{value: '0', label: '创建'}, {value: '1', label: '退款'}, {value: '2', label: '支付完成'}],
         statusList: ['创建', '退款','支付完成'],
+        typeList: ['支付宝', '微信钱宝', '测试', '免费'],
         terOptions: [],
         pickerOptions: {
             disabledDate(time) {
@@ -37,7 +39,7 @@ var vm = new Vue({
 
     mounted: function() {
         console.log('mounted......')
-        this.getOrderList(10, 1, [], null, null, null, null)
+        this.getOrderList(10, 1, [], '', ' ', ' ', ' ')
         // this.getOrderList(10, 1, '', [], '', '')
         this.getTerList()
     },

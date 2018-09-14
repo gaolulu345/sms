@@ -17,6 +17,15 @@
                       v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
                 </el-select>
+
+                <!-- 原因筛选 -->
+                <el-select v-model="currentReason" size="mini" clearable placeholder="请选择退款原因">
+                    <el-option
+                      v-for="item in reasonOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+
+                <el-input style="width:150px;" size="mini" v-model="params.orderID" placeholder="订单编号"></el-input>
                 
                 <!-- 搜索按钮 -->
                 <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>

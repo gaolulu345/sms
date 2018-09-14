@@ -20,6 +20,9 @@ var vm = new Vue({
 					console.log(data);
 					if(data.code == 200){
 						vm.$message.success('登录成功');
+						sessionStorage.setItem("adminId", data.data.id); 
+						sessionStorage.setItem("adminRoleId", data.data.rolesId); 
+						sessionStorage.setItem("admin", data.data.name); 
 						window.location.href = '/pages/index';
 					} else {
 						vm.$message.error(data.message);

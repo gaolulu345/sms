@@ -4,8 +4,9 @@ var vm = new Vue({
     data: {
         pageName: 'user',
         pageTitle: '洗车用户',
-        admin: admin,
         adminId: adminId,
+        adminRoleId: adminRoleId,
+        admin: admin,
         menuPer: menuPer,
         opPer: opPer,
 

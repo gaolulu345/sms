@@ -1,3 +1,6 @@
+var adminId = sessionStorage.getItem("adminId"); 
+var adminRoleId = sessionStorage.getItem("adminRoleId"); 
+var admin = sessionStorage.getItem("admin"); 
 
 var menuPer, opPer;
 
