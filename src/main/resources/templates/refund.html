@@ -25,10 +25,17 @@
                     </el-option>
                 </el-select>
 
-                <el-input style="width:150px;" size="mini" v-model="params.orderID" placeholder="订单编号"></el-input>
+                <el-input style="width:150px;" size="mini" v-model="currentOrderId" placeholder="订单编号"></el-input>
+
+                <!-- 日期筛选 -->
+                <el-date-picker clearable v-model="dateRange" size="mini" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+                </el-date-picker>
                 
                 <!-- 搜索按钮 -->
                 <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
+
+                <!-- 下载按钮 -->
+                <el-button size="mini" type="primary" icon="el-icon-download" @click="download">下载</el-button>
             </div>
 
 
@@ -54,9 +61,9 @@
 
                 <el-table-column label="操作" >
                     <template slot-scope="scope">
-                        <el-button @click="clickPass(scope.row.id)" plain type="primary" size="mini">通过</el-button>
-                        <el-button @click="clickReject(scope.row.id)" plain type="primary" size="mini">拒绝</el-button>
-                        <el-button @click="clickRefund(scope.row.id)" plain type="danger" size="mini">退款</el-button>
+                        <el-button v-if="scope.row.status == 1" @click="check(scope.row.id, 2)" plain type="primary" size="mini">通过</el-button>
+                        <el-button v-if="scope.row.status == 1"  @click="check(scope.row.id, 4)" plain type="primary" size="mini">拒绝</el-button>
+                        <el-button v-if="scope.row.status == 2"  @click="payback(scope.row.id)" plain type="danger" size="mini">退款</el-button>
                     </template>
                 </el-table-column>
             </el-table>

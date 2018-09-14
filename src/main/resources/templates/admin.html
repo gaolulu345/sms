@@ -13,11 +13,12 @@
         <#include "common/top.html">
         <div class="content">
             <div class="searchBox">
-                <el-button v-if="isAll == false" type="primary" size="mini"  @click="getMenuList(true)">查看全部</el-button>
-                <el-button v-if="isAll == true" type="success" size="mini"  @click="getMenuList(false)">仅看有效</el-button>
+                <el-button v-if="deleted == false" type="primary" size="mini"  @click="getAdminList(currentPageSize, 1, null)">查看全部</el-button>
+                <el-button v-if="deleted == null" type="success" size="mini"  @click="getAdminList(currentPageSize, 1, false)">仅看有效</el-button>
                 
                 <el-button  @click="showAddAdmin = true" type="primary" icon="el-icon-plus" size="mini">注册</el-button>
-                <el-button  @click="deleteAdmin" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
+                <el-button  @click="updateDeleteAdmin(true)" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
+                <el-button  @click="updateDeleteAdmin(false)" type="success" icon="el-icon-refresh" size="mini">批量恢复</el-button>
             </div>
 
 
@@ -42,13 +43,14 @@
                 </el-table-column>
 
 
+                <el-table-column prop="rolesId" label="角色"></el-table-column>
                 <el-table-column prop="name" label="昵称"></el-table-column>
                 <el-table-column prop="intros" label="简介"></el-table-column>
                 <el-table-column prop="createTime" label="创建时间"></el-table-column>
                 <el-table-column prop="modifyTime" label="修改时间"></el-table-column>
                 <el-table-column prop="lastLoginTime" label="上次登录时间"></el-table-column>
                 <el-table-column label="操作" >
-                    <template slot-scope="scope">
+                    <template slot-scope="scope" v-if="scope.row.deleted == false">
                         <el-button @click="clickEditAdmin(scope.row)" plain type="primary" size="mini">编辑</el-button>
                         <el-button @click="resetPw(scope.row.id)" plain type="danger" size="mini">重置密码</el-button>
                     </template>
@@ -69,12 +71,21 @@
             <el-form-item label="登录账号" :label-width="dialogLabelWidth">
                 <el-input v-model="addAdminInfo.username" size="mini" auto-complete="off"></el-input>
             </el-form-item> 
+
+            <el-form-item label="用户角色" :label-width="dialogLabelWidth">
+                <el-select v-model="addAdminInfo.rolesId" placeholder="请选择" size="mini">
+                    <el-option v-for="item in rolesList" :key="item.id" :label="item.rolesName" :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
             <el-form-item label="用户昵称" :label-width="dialogLabelWidth">
                 <el-input v-model="addAdminInfo.name" size="mini" auto-complete="off"></el-input>
             </el-form-item> 
             <el-form-item label="简介" :label-width="dialogLabelWidth">
                 <el-input v-model="addAdminInfo.intros" size="mini" auto-complete="off"></el-input>
-            </el-form-item>           
+            </el-form-item> 
+
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" size="mini" @click="addAdmin">确 定</el-button>
@@ -89,6 +100,14 @@
             <el-form-item label="用户登录账号" :label-width="dialogLabelWidth">
                 <el-input v-model="editAdminInfo.username" size="mini" disabled auto-complete="off"></el-input>
             </el-form-item>
+
+            <el-form-item label="用户角色" :label-width="dialogLabelWidth">
+                <el-select v-model="editAdminInfo.rolesId" placeholder="请选择" size="mini">
+                    <el-option v-for="item in rolesList" :key="item.id" :label="item.rolesName" :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
             <el-form-item label="昵称" :label-width="dialogLabelWidth">
                 <el-input v-model="editAdminInfo.name" size="mini" auto-complete="off"></el-input>
             </el-form-item> 

@@ -13,19 +13,17 @@ var vm = new Vue({
         pageSizes: [1, 10, 20, 50],
         currentPageSize: null,
         currentPageIndex: null,
-        isAll: false,
+        deleted: false,
 
         adminList: [],
+        rolesList: [],
         adminSelection: [],
 
         showEditAdmin: false,
         showAddAdmin: false,
 
         editAdminInfo: {},
-        addAdminInfo: {
-            // title: admin,
-            // id: adminId
-        },
+        addAdminInfo: {},
 
         dialogLabelWidth: '200px',
     },
@@ -33,14 +31,15 @@ var vm = new Vue({
     mounted: function() {
     	console.log('mounted......')
         this.getAdminList(10, 1, false)
+        this.getRolesList()
     },
 
     methods: {
-        getAdminList: function(pageSize, pageIndex, isAll) {
+        getAdminList: function(pageSize, pageIndex, deleted) {
             this.$http.post("/api/private/admin/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
-                delete: isAll
+                deleted: deleted
             }).then(function(res){
                 let data = res.json().data;
                 let result = data.result;
@@ -53,6 +52,18 @@ var vm = new Vue({
                 vm.totalCnt = data.totalCnt;
                 vm.currentPageSize = data.pageSize;
                 vm.currentPageIndex = data.pageIndex;
+                vm.deleted = data.deleted;
+            })
+        },
+
+        getRolesList: function() {
+            this.$http.post("/api/private/sys/list/roles", {
+                pageSize: 10000,
+                pageIndex: 1
+            }).then(function(res){
+                let data = res.json().data;
+                let result = data.result;
+                vm.rolesList = result;
             })
         },
 
@@ -61,9 +72,10 @@ var vm = new Vue({
             let infos = {
                 name: vm.addAdminInfo.name,
                 intros: vm.addAdminInfo.intros,
-                username: vm.addAdminInfo.username
+                username: vm.addAdminInfo.username,
+                rolesId: vm.addAdminInfo.rolesId
             }
-            this.$http.post("/api/private/admin/register", infos).then(function(res){
+            this.$http.post("/api/private/admin/register", vm.addAdminInfo).then(function(res){
                 let result = res.json();
                 if(result.code == 200){
                     vm.$message.success('已添加');
@@ -84,7 +96,8 @@ var vm = new Vue({
             let data = {
                 id: vm.editAdminInfo.id,
                 intros: vm.editAdminInfo.intros,
-                name: vm.editAdminInfo.name
+                name: vm.editAdminInfo.name,
+                rolesId: vm.editAdminInfo.rolesId
             }
             this.$http.post("/api/private/admin/update", data).then(function(res){
                 let result = res.json();
@@ -124,9 +137,10 @@ var vm = new Vue({
         handleAdminSelectionChange(val) {
             this.adminSelection = val;
         },
-        deleteAdmin: function() {
+        updateDeleteAdmin: function(deleted) {
+            let tip = deleted ? '删除' : '恢复'
             if (vm.adminSelection.length == 0) {
-                vm.$message.warning('请选择要删除的员工！');
+                vm.$message.warning('请选择要' + tip + '的员工！');
             } else {
                 let selection = vm.adminSelection
                 let ids = []
@@ -135,18 +149,18 @@ var vm = new Vue({
                 }
                 console.log(ids)
 
-                vm.$confirm('确认删除这' + ids.length + '个员工?', '提示', {
+                vm.$confirm('确认' + tip + '这' + ids.length + '个员工?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
                     vm.$http.post("/api/private/admin/update/delete", {
                         ids: ids,
-                        deleted: true
+                        deleted: deleted
                     }).then(function(res){
                         let result = res.json();
                         if(result.code == 200){
-                            vm.$message.success('已删除');
+                            vm.$message.success('已' + tip);
                             vm.getAdminList(vm.currentPageSize, vm.currentPageIndex);
                         }else {
                             vm.$message.error(result.message)
@@ -172,10 +186,10 @@ var vm = new Vue({
 
 
         handleSizeChange(val) {
-            this.getAdminList(val, 1)
+            this.getAdminList(val, 1, vm.deleted)
         },
         handleCurrentChange(val) {
-            this.getAdminList(vm.currentPageSize, val)
+            this.getAdminList(vm.currentPageSize, val, vm.deleted)
         }
   
     }    
