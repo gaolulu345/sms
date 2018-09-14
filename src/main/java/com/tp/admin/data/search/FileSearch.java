@@ -23,9 +23,12 @@ public class FileSearch extends Search {
         super.build();
         if (StringUtil.isEmpty(this.adminName) ||
                 this.adminName.trim().length() == 0
-                || StringUtil.isEmpty(this.fileKey) ||
-                this.fileKey.trim().length() == 0) {
+                ) {
             this.adminName = null;
+        }
+
+        if (StringUtil.isEmpty(this.fileKey) ||
+                this.fileKey.trim().length() == 0) {
             this.fileKey = null;
         }
     }
