@@ -83,7 +83,7 @@
     <resultMap id="RefundMap" type="com.tp.admin.data.entity.Refund">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="reason" property="reason" jdbcType="VARCHAR" />
-        <result column="amount" property="amount" jdbcType="VARCHAR" />
+        <result column="amount" property="amount" jdbcType="INTEGER" />
         <result column="msg" property="msg" jdbcType="VARCHAR" />
         <result column="order_id" property="orderId" jdbcType="INTEGER" />
         <result column="status" property="status" jdbcType="TINYINT" />

@@ -461,9 +461,10 @@ public class SystemServiceImpl implements SystemServiceI {
     }
 
     @Override
-    public ApiResult adminAllPermission(HttpServletRequest request) {
+    public ApiResult adminAllPermission(HttpServletRequest httpServletRequest) {
         // 返回菜单权限和页面操作权限
-        Set<AutoResource> autoResources = findAdminAutoResource(request);
+        AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(httpServletRequest);
+        Set<AutoResource> autoResources = findAdminAutoResource(adminAccount);
         UserAutoResourceDTO dto = new UserAutoResourceDTO();
         if (null != autoResources && !autoResources.isEmpty()) {
             AutoResourceDTO autoResourceDTO = null;
@@ -486,10 +487,9 @@ public class SystemServiceImpl implements SystemServiceI {
     }
 
     @Override
-    public Set<AutoResource> findAdminAutoResource(HttpServletRequest request) {
+    public Set<AutoResource> findAdminAutoResource(AdminAccount adminAccount) {
         Set<AutoResource> set = new HashSet<>();
         AutoResource resource = null;
-        AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
         // 超级管理员 所有权限
         if (adminAccount.equals(Constant.SUPER_ADMIN)) {
             List<AdminMenu> menu = adminMenuDao.list();
@@ -515,10 +515,10 @@ public class SystemServiceImpl implements SystemServiceI {
             }
         }  else {
             // 根据partner 获取角色
-            List<AdminPkAccountRoles> rolesMenus = adminPkAccountRolesDao.listByAdminId(adminAccount.getId());
+            List<AdminPkAccountRoles> roles = adminPkAccountRolesDao.listByAdminId(adminAccount.getId());
             List<Integer> ids = new ArrayList<>();
-            if (null != rolesMenus && !rolesMenus.isEmpty()) {
-                for (AdminPkAccountRoles p : rolesMenus) {
+            if (null != roles && !roles.isEmpty()) {
+                for (AdminPkAccountRoles p : roles) {
                     ids.add(p.getRolesId());
                 }
             }

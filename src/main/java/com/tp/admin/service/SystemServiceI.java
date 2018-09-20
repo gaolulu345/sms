@@ -1,6 +1,7 @@
 package com.tp.admin.service;
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.AdminMenu;
 import com.tp.admin.data.entity.AdminOperations;
 import com.tp.admin.data.entity.AdminRoles;
@@ -59,7 +60,7 @@ public interface SystemServiceI {
 
     ApiResult bachUpdateRolesOperations(HttpServletRequest request, SystemSearch systemSearch);
 
-    ApiResult adminAllPermission(HttpServletRequest request);
+    ApiResult adminAllPermission(HttpServletRequest httpServletRequest);
 
-    Set<AutoResource> findAdminAutoResource(HttpServletRequest request);
+    Set<AutoResource> findAdminAutoResource(AdminAccount adminAccount);
 }

@@ -15,7 +15,7 @@ public class Refund {
     int id;
     int reason;  // 原因
     @ExcelField(title = "退款金额/元", order = 4)
-    String amount;
+    int amount;
     @ExcelField(title = "洗车订单编号", order = 2)
     int orderId;
     int status;  // 进度
