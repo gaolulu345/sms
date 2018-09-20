@@ -6,7 +6,6 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
 import com.tp.admin.dao.OrderDao;
 import com.tp.admin.dao.RefundDao;
-import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.Order;
 import com.tp.admin.data.entity.Refund;
