@@ -16,9 +16,9 @@
                 <el-button v-if="deleted == false" type="primary" size="mini"  @click="getAdminList(currentPageSize, 1, null)">查看全部</el-button>
                 <el-button v-if="deleted == null" type="success" size="mini"  @click="getAdminList(currentPageSize, 1, false)">仅看有效</el-button>
                 
-                <el-button  @click="showAddAdmin = true" type="primary" icon="el-icon-plus" size="mini">注册</el-button>
-                <el-button  @click="updateDeleteAdmin(true)" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
-                <el-button  @click="updateDeleteAdmin(false)" type="success" icon="el-icon-refresh" size="mini">批量恢复</el-button>
+                <el-button v-if="opPer['/api/private/admin/register']"  @click="showAddAdmin = true" type="primary" icon="el-icon-plus" size="mini">注册</el-button>
+                <el-button v-if="opPer['/api/private/admin/delete']"  @click="updateDeleteAdmin(true)" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
+                <el-button v-if="opPer['/api/private/admin/delete']"  @click="updateDeleteAdmin(false)" type="success" icon="el-icon-refresh" size="mini">批量恢复</el-button>
             </div>
 
 
@@ -49,10 +49,10 @@
                 <el-table-column prop="createTime" label="创建时间"></el-table-column>
                 <el-table-column prop="modifyTime" label="修改时间"></el-table-column>
                 <el-table-column prop="lastLoginTime" label="上次登录时间"></el-table-column>
-                <el-table-column label="操作" >
+                <el-table-column label="操作" v-if="opPer['/api/private/admin/update'] || opPer['/api/private/admin/reset/pw']">
                     <template slot-scope="scope" v-if="scope.row.deleted == false">
-                        <el-button @click="clickEditAdmin(scope.row)" plain type="primary" size="mini">编辑</el-button>
-                        <el-button @click="resetPw(scope.row.id)" plain type="danger" size="mini">重置密码</el-button>
+                        <el-button v-if="opPer['/api/private/admin/update']" @click="clickEditAdmin(scope.row)" plain type="primary" size="mini">编辑</el-button>
+                        <el-button v-if="opPer['/api/private/admin/reset/pw']" @click="resetPw(scope.row.id)" plain type="danger" size="mini">重置密码</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -121,10 +121,6 @@
     </el-dialog>
 </div>
 
-<script>
-    // var admin = '超级管理员';
-    // var adminId = 1;
-</script>
 <script src="/js/common/per.js"></script>
 <script src="/js/admin.js"></script>
 </body>

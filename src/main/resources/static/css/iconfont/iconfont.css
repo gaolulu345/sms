@@ -1,4 +1,3 @@
-
 @font-face {font-family: "iconfont";
   src: url('iconfont.eot'); /* IE9*/
   src: url('iconfont.eot') format('embedded-opentype'), /* IE6-IE8 */
@@ -25,6 +24,8 @@
 
 .icon-orderlist:before { content: "\e649"; }
 
+.icon-upload:before { content: "\e61a"; }
+
 .icon-user:before { content: "\e669"; }
 
 .icon-site:before { content: "\e636"; }
@@ -32,6 +33,8 @@
 .icon-terlist:before { content: "\e60c"; }
 
 .icon-system:before { content: "\e71a"; }
+
+.icon-admin:before { content: "\e654"; }
 
 .icon-index:before { content: "\e62f"; }
 
@@ -48,4 +51,6 @@
 .icon-roles:before { content: "\e602"; }
 
 .icon-order:before { content: "\e601"; }
+
+.icon-refund:before { content: "\e606"; }
 

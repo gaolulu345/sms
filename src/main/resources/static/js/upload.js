@@ -98,6 +98,7 @@ var vm = new Vue({
         },
         beforeUpload: function(file) {
             const isIMG = (file.type == 'image/jpeg' || file.type == 'image/gif' || file.type == 'image/png');
+            // const isLt2M = true;
             const isLt2M = file.size / 1024 / 1024 < 2;
 
             if (!isIMG) {

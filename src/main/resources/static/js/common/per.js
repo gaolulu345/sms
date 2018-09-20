@@ -13,37 +13,37 @@ function compare(property){
 }
 
 // 获取用户权限
-// $.ajax({
-// 	url: '/api/private/partner/permission',
-//     dataType : 'json',
-//     type : "post",
-//     data: {},
-//     async : false,
-//     contentType : "application/json;charset=UTF-8",
-// 	success: function(res) {
-// 		if(res.code == 200) {
-// 			opPer = res.data.op;
+$.ajax({
+	url: '/api/private/sys/all/permission',
+    dataType : 'json',
+    type : "post",
+    data: {},
+    async : false,
+    contentType : "application/json;charset=UTF-8",
+	success: function(res) {
+		if(res.code == 200) {
+			opPer = res.data.op;
 
-// 			let hashOpPer = {}
-// 			opPer.forEach(function(val){
-// 				hashOpPer[val.url] = val
-// 			})
-// 			opPer = hashOpPer
-// 			// console.log(hashOpPer)
-// 			let menu = res.data.menu;
-// 			menu.forEach(function(val) {
-// 	            val.class = val.url.substring(7)
-// 	        })
-// 	        menu = menu.sort(compare("order"))
-// 			menuPer = menu;
-// 		} else {
-// 			window.location.href = '/login';
-// 		}
-// 	},
-// 	fail: function() {
-// 		window.location.href = '/login';
-// 	}
-// })
+			let hashOpPer = {}
+			opPer.forEach(function(val){
+				hashOpPer[val.url] = val
+			})
+			opPer = hashOpPer
+			// console.log(hashOpPer)
+			let menu = res.data.menu;
+			menu.forEach(function(val) {
+	            val.class = val.url.substring(7)
+	        })
+	        menu = menu.sort(compare("order"))
+			menuPer = menu;
+		} else {
+			window.location.href = '/login';
+		}
+	},
+	fail: function() {
+		window.location.href = '/login';
+	}
+})
 
 function logout() {
 	$.ajax({

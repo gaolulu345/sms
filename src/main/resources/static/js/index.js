@@ -7,13 +7,8 @@ var vm = new Vue({
         adminId: adminId,
         adminRoleId: adminRoleId,
         admin: admin,
-
-        
-       
-
-
-        // menuPer: menuPer,
-        // opPer: opPer
+        menuPer: menuPer,
+        opPer: opPer
     },
     mounted: function() {
         

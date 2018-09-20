@@ -11,9 +11,6 @@ var vm = new Vue({
         opPer: opPer,
 
         isAll: false,
-        // allResource: [],
-        // pageResource: [],
-        // opResource: [],
 
         roleList: [],
         operationList: [],
@@ -21,12 +18,9 @@ var vm = new Vue({
         currentRolePermission: [],
 
         roleSelection: [],
-        // opSelection: [],
 
         showAddRole: false,
         showEditRole: false,
-        // showAddOperation: false,
-        // showEditOp: false,
 
         addRoleInfo: {
             rolesName: '',
@@ -34,15 +28,7 @@ var vm = new Vue({
             createId: adminId
         },
         editRoleInfo: {},
-        // addOperationInfo: {
-        //     operationsName: '',
-        //     details: '',
-        //     resource: '',
-        //     menuId: null,
-        // },
-        // editOpInfo: {
-
-        // },
+     
         menuDisabled: true,
         opDisabled: true,
         changedMenus: {}, //保存有更改的menu权限
@@ -55,35 +41,6 @@ var vm = new Vue({
     mounted: function() {
     	console.log('mounted......')
         this.getRoleList(false);
-        // this.$http.post("/api/private/sys/list/roles", {
-        //     pageSize: 1000,
-        //     pageIndex: 1,
-        //     id: adminId
-        // }).then(function(res){
-        //     let result = res.json().data.result;
-
-        //     result.forEach(function(val) {
-        //         val.createTime = formatTimestampToDay(val.createTime)
-        //         val.modifyTime = formatTimestampToDay(val.modifyTime)
-        //     })
-        //     vm.roleList = result;
-        //     if(vm.roleList.length > 0){
-        //         vm.currentRole = vm.roleList[0]
-        //         this.$http.post("/api/private/sys/all/roles/permission", {
-        //             rolesId: vm.roleList[0].id
-        //         }).then(function(res){
-        //             let result = res.json();
-        //             vm.currentRolePermission = result.data.menu;
-        //         })
-        //     }
-        // })
-
-
-        // this.$http.post("/api/private/sys/partner/permission", {
-        //     id: 1
-        // }).then(function(res){
-        //     console.log('vue请求权限。。。',res.data);
-        // })
     },
 
     methods: {
@@ -104,12 +61,6 @@ var vm = new Vue({
                     vm.currentRole = vm.roleList[0]
                     vm.getCurrentRolePermission(vm.roleList[0].id)
                     vm.isAll = isAll
-                    // this.$http.post("/api/private/sys/all/roles/permission", {
-                    //     rolesId: vm.roleList[0].id
-                    // }).then(function(res){
-                    //     let result = res.json();
-                    //     vm.currentRolePermission = result.data.menu;
-                    // })
                 }
             })
         },
@@ -297,47 +248,11 @@ var vm = new Vue({
         handleCheckMenuPer: function(menuId, val) {
             console.log(menuId, 'menu', val)
             vm.changedMenus[menuId] = val
-            // this.$http.post("/api/private/sys/update/roles/menu", {
-            //     rolesId: vm.currentRole.id,
-            //     ids: [menuId],
-            //     enable: val
-            // }).then(function(res){
-            //     let result = res.json();
-            //     if(result.code == 200){
-            //         vm.$message.success('已修改');
-            //     }else {
-                   
-            //     }
-            // })
         },
         handleCheckOpPer: function(opId, val) {
             console.log(opId, 'op', val)
             vm.changedOps[opId] = val
-            // this.$http.post("/api/private/sys/update/roles/operations", {
-            //     rolesId: vm.currentRole.id,
-            //     ids: [opId],
-            //     enable: val
-            // }).then(function(res){
-            //     let result = res.json();
-            //     if(result.code == 200){
-            //         vm.$message.success('已修改');
-            //     }else {
-                   
-            //     }
-            // })
         },
-
-
-
-
-
-
-
-
-
-
-
-
 
         // 多选
         toggleSelection(rows) {
@@ -349,12 +264,6 @@ var vm = new Vue({
                 this.$refs.multipleTable.clearSelection();
             }
         },
-        
-        // handleOpSelectionChange(val) {
-        //     this.opSelection = val;
-        // }
-
-
   
     }    
 });

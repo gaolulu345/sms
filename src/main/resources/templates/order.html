@@ -20,7 +20,6 @@
 
                 <!-- 支付方式筛选 -->
                 <el-select v-model="currentType" size="mini" clearable placeholder="请选择支付方式">
-                <!-- <el-select v-model="typeList[currentType]" size="mini" clearable placeholder="请选择支付放肆"> -->
                     <el-option
                       v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
@@ -41,7 +40,7 @@
                 <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
 
                 <!-- 下载按钮 -->
-                <el-button size="mini" type="primary" icon="el-icon-download" @click="download">下载</el-button>
+                <el-button v-if="opPer['/api/private/order/list/exprot']" size="mini" type="primary" icon="el-icon-download" @click="download">下载</el-button>
             </div>
 
 
@@ -75,15 +74,9 @@
             <!-- 分页 -->
             <#include "common/pages2.html">
         </div>
-    </div>
-
-    
+    </div>    
 </div>
 
-<script>
-    var admin = '超级管理员';
-    var adminId = 1;
-</script>
 <script src="/js/common/per.js"></script>
 <script src="/js/order.js"></script>
 </body>

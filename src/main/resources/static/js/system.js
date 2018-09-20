@@ -78,19 +78,13 @@ var vm = new Vue({
             this.$http.post("/api/private/sys/list/operations", {
                 pageSize: 1000,
                 pageIndex: 1,
-                menuId: ''
-                // menuId: vm.menuList[0].id || ''
+                // menuId: ''
+                menuId: vm.menuList[0].id || ''
             }).then(function(res){
                 let result = res.json();
                 vm.operationList = result.data.result;
             })
-        })
-
-        // this.getAllMenuResource()
-        // this.getAllOperationResource()
-
-
-        
+        })  
     },
 
     methods: {
@@ -178,7 +172,7 @@ var vm = new Vue({
                 let result = res.json();
                 if(result.code == 200){
                     vm.$message.success('已修改');
-                    vm.showAddOperation = false;
+                    vm.showEditMenu = false;
                     vm.currentMenu = vm.editMenuInfo;
                     vm.editMenuInfo = {}
                 }else {
@@ -361,7 +355,6 @@ var vm = new Vue({
                 operationsName: vm.editOpInfo.operationsName,
                 details: vm.editOpInfo.details,
                 resource: vm.editOpInfo.resource,
-                // resource: '/pages/ter/status',
                 menuId: vm.editOpInfo.menuId,
             }
             this.$http.post("/api/private/sys/update/operations", infos).then(function(res){
@@ -375,8 +368,6 @@ var vm = new Vue({
                 }
             })
         },
-
-
 
         // 多选
         toggleSelection(rows) {
@@ -396,9 +387,6 @@ var vm = new Vue({
         }  
     }    
 });
-
-
-
 
 $('.nav-each').removeClass('active');
 $('.'+vm.pageName).addClass('active');

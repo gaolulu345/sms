@@ -35,7 +35,7 @@
                 <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
 
                 <!-- 下载按钮 -->
-                <el-button size="mini" type="primary" icon="el-icon-download" @click="download">下载</el-button>
+                <el-button v-if="opPer['/api/private/refund/list/exprot']" size="mini" type="primary" icon="el-icon-download" @click="download">下载</el-button>
             </div>
 
 
@@ -47,10 +47,8 @@
 
                 <el-table-column prop="id" label="退款编号"></el-table-column>
                 <el-table-column prop="orderId" label="订单ID"></el-table-column>
-                <el-table-column prop="reason" label="退款原因"></el-table-column>
                 <el-table-column prop="reasonDesc" label="退款原因描述"></el-table-column>
                 <el-table-column prop="amount" label="退款金额"></el-table-column>
-                <el-table-column prop="status" label="状态"></el-table-column>
                 <el-table-column prop="statusDesc" label="状态描述"></el-table-column>
                 <el-table-column prop="msg" label="留言"></el-table-column>
                 <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -59,11 +57,11 @@
                 <el-table-column prop="refuntTime" label="退款时间"></el-table-column>
                 <el-table-column prop="sysAdminNamePay" label="退款人"></el-table-column>
 
-                <el-table-column label="操作" >
+                <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button v-if="scope.row.status == 1" @click="check(scope.row.id, 2)" plain type="primary" size="mini">通过</el-button>
-                        <el-button v-if="scope.row.status == 1"  @click="check(scope.row.id, 4)" plain type="primary" size="mini">拒绝</el-button>
-                        <el-button v-if="scope.row.status == 2"  @click="payback(scope.row.id)" plain type="danger" size="mini">退款</el-button>
+                        <el-button v-if="scope.row.status == 1 && opPer['/api/private/refund/approved']" @click="check(scope.row.id, 2)" plain type="primary" size="mini">通过</el-button>
+                        <el-button v-if="scope.row.status == 1 && opPer['/api/private/refund/approved']"  @click="check(scope.row.id, 4)" plain type="primary" size="mini">拒绝</el-button>
+                        <el-button v-if="scope.row.status == 2 && opPer['/api/private/refund/back']"  @click="payback(scope.row.id)" plain type="danger" size="mini">退款</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -71,15 +69,9 @@
             <!-- 分页 -->
             <#include "common/pages2.html">
         </div>
-    </div>
-
-    
+    </div>    
 </div>
 
-<script>
-    var admin = '超级管理员';
-    var adminId = 1;
-</script>
 <script src="/js/common/per.js"></script>
 <script src="/js/refund.js"></script>
 </body>

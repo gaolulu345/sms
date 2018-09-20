@@ -87,8 +87,8 @@ var vm = new Vue({
         },
 
         download: function(){
-            let st = vm.currentStartTime.split(' ')[0]
-            let et = vm.currentEndTime.split(' ')[0]
+            let st = vm.currentStartTime ? vm.currentStartTime.split(' ')[0] : null
+            let et = vm.currentEndTime ? vm.currentEndTime.split(' ')[0] : null
             let terId = vm.currentTerIds[0] || ''
             let status = vm.currentStatus || ''
             let type = vm.currentType || ''

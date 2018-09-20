@@ -25,6 +25,7 @@
             <div class="opBox">
                 <!-- 上传按钮 -->
                 <el-upload
+                    v-if="opPer['/api/private/file/upload/images']"
                     style="display: inline-block;"
                     action="/api/private/file/upload/images"
                     accept="image/jpeg, image/gif, image/png"
@@ -37,7 +38,7 @@
                     <el-button size="mini" style="margin:11px 8px 0 0;" type="primary" icon="el-icon-upload">图片上传 (不超过2M)</el-button>
                 </el-upload>
 
-                <el-button class=""  @click="deleteUpload" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
+                <el-button v-if="opPer['/api/private/file/delete']"  @click="deleteUpload" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
             </div>
 
 
@@ -83,15 +84,9 @@
             <!-- 分页 -->
             <#include "common/pages2.html">
         </div>
-    </div>
-
-    
+    </div>    
 </div>
 
-<script>
-    var admin = '超级管理员';
-    var adminId = 1;
-</script>
 <script src="/js/common/per.js"></script>
 <script src="/js/upload.js"></script>
 </body>

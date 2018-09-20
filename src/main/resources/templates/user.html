@@ -13,14 +13,9 @@
         <#include "common/top.html">
         <div class="content">
             <div class="searchBox">
-                <!-- 状态筛选 -->
-                <el-select v-model="currentStatus" size="mini" clearable placeholder="请选择状态">
-                    <el-option
-                      v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                </el-select>
-
-              
+                <!-- 筛选 -->
+                <el-input style="width:150px;" type="number" clearable size="mini" v-model="currentUserId" placeholder="用户ID"></el-input>
+                <el-input style="width:150px;" type="number" clearable size="mini" v-model="currentPhone" placeholder="用户手机号"></el-input>
                 
                 <!-- 日期筛选 -->
                 <el-date-picker clearable v-model="dateRange" size="mini" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" format="yyyy-MM-dd" value-format="yyyy-MM-dd">
@@ -63,10 +58,6 @@
     </div>
 </div>
 
-<script>
-    var admin = '超级管理员';
-    var adminId = 1;
-</script>
 <script src="/js/common/per.js"></script>
 <script src="/js/user.js"></script>
 </body>

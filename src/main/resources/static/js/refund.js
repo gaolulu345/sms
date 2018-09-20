@@ -107,9 +107,9 @@ var vm = new Vue({
             // let orderId = vm.currentOrderId == null ? '' : vm.currentOrderId ;
             let reason = vm.currentReason == null ? '' : vm.currentReason;
             let status = vm.currentStatus == null ? '' : vm.currentStatus;
-            let st = vm.currentStartTime.split(' ')[0];
 
-            let et = vm.currentEndTime.split(' ')[0];
+            let st = vm.currentStartTime ? vm.currentStartTime.split(' ')[0] : null
+            let et = vm.currentEndTime ? vm.currentEndTime.split(' ')[0] : null
             sTime = new Date(st);
             let today = new Date();
             let time = today - sTime;

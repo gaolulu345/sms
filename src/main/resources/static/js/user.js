@@ -18,8 +18,8 @@ var vm = new Vue({
         dateRange: '',
         currentStartTime: '',
         currentEndTime: '',
-        currentStatus: '',
-        currentTerIds: [],
+        currentUserId: null,
+        currentPhone: null,
 
         userList: [],
 
@@ -39,17 +39,23 @@ var vm = new Vue({
     },
 
     methods: {
-        getUserList: function(pageSize, pageIndex) {
+        getUserList: function(pageSize, pageIndex, id, phone, startTime, endTime) {
             this.$http.post("/api/private/user/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
+                id: id,
+                phone: phone,
+                startTime: startTime,
+                endTime: endTime
             }).then(function(res){
                 let data = res.json().data;
                 let result = data.result;
-                result.forEach(function(val) {
-                    val.createTime = formatTimestampToSecond(val.createTime)
-                    val.lastLoginTime = formatTimestampToSecond(val.lastLoginTime)
-                })
+                if(result && result[0]) {
+                    result.forEach(function(val) {
+                        val.createTime = formatTimestampToSecond(val.createTime)
+                        val.lastLoginTime = formatTimestampToSecond(val.lastLoginTime)
+                    })
+                }
                 vm.userList = result;
                 vm.totalCnt = data.totalCnt;
                 vm.currentPageSize = data.pageSize;
@@ -57,19 +63,24 @@ var vm = new Vue({
             })
         },
 
+        search: function(){
+            if(!vm.dateRange) {  //如果日期选择器中先有选择，后置空，结果为null，会报错
+                vm.dateRange = '';
+            }
+            vm.currentStartTime = vm.dateRange[0] || '';
+            vm.currentEndTime = vm.dateRange[1] || '';
+            vm.getUserList(vm.currentPageSize, 1, vm.currentUserId, vm.currentPhone, vm.currentStartTime, vm.currentEndTime);
+        },
 
         handleSizeChange(val) {
-            this.getUserList(val, 1)
+            this.getUserList(val, 1, vm.currentUserId, vm.currentPhone, vm.currentStartTime, vm.currentEndTime)
         },
         handleCurrentChange(val) {
-            this.getUserList(vm.currentPageSize, val)
+            this.getUserList(vm.currentPageSize, val, vm.currentUserId, vm.currentPhone, vm.currentStartTime, vm.currentEndTime)
         }
   
     }    
 });
-
-
-
 
 $('.nav-each').removeClass('active');
 $('.'+vm.pageName).addClass('active');
