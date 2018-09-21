@@ -91,6 +91,9 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
     }
 
     private boolean invokeApi(AdminAccount adminAccount, String url) {
+        if (adminAccount.getAuthorities().isEmpty()) {
+            return false;
+        }
         AutoResource autoResource = null;
         for (GrantedAuthority ga : adminAccount.getAuthorities()) {
             if (ga instanceof AutoResource) {
@@ -104,6 +107,9 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
     }
 
     private boolean invokePages(AdminAccount adminAccount, String url) {
+        if (adminAccount.getAuthorities().isEmpty()) {
+            return false;
+        }
         AutoResource autoResource = null;
         for (GrantedAuthority ga : adminAccount.getAuthorities()) {
             if (ga instanceof AutoResource) {
