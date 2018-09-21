@@ -17,8 +17,8 @@
                 <el-button v-if="deleted == null" type="success" size="mini"  @click="getAdminList(currentPageSize, 1, false)">仅看有效</el-button>
                 
                 <el-button v-if="opPer['/api/private/admin/register']"  @click="showAddAdmin = true" type="primary" icon="el-icon-plus" size="mini">注册</el-button>
-                <el-button v-if="opPer['/api/private/admin/delete']"  @click="updateDeleteAdmin(true)" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
-                <el-button v-if="opPer['/api/private/admin/delete']"  @click="updateDeleteAdmin(false)" type="success" icon="el-icon-refresh" size="mini">批量恢复</el-button>
+                <el-button v-if="opPer['/api/private/admin/update/delete']"  @click="updateDeleteAdmin(true)" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
+                <el-button v-if="opPer['/api/private/admin/update/delete']"  @click="updateDeleteAdmin(false)" type="success" icon="el-icon-refresh" size="mini">批量恢复</el-button>
             </div>
 
 
