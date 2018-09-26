@@ -142,7 +142,6 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
         packageParams.put("nonce_str", nonce_str);// 随机字符串
     }
 
-
     /**
      * 取出一个指定长度大小的随机正整数.
      */
@@ -193,7 +192,6 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
         return sign;
     }
 
-
     /**
      * 将请求参数转换为xml格式的string
      */
@@ -228,13 +226,10 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static Map doXMLParse(String strxml) throws JDOMException, IOException {
         strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
-
         if (null == strxml || "".equals(strxml)) {
             return null;
         }
-
         Map m = new HashMap();
-
         InputStream in = new ByteArrayInputStream(strxml.getBytes("UTF-8"));
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(in);
@@ -254,7 +249,6 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
 
             m.put(k, v);
         }
-
         // 关闭流
         in.close();
 

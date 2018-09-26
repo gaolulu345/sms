@@ -18,6 +18,7 @@ import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ResourceUtils;
 
 import javax.net.ssl.KeyManagerFactory;
@@ -48,9 +49,11 @@ public class ClientCustomSSL {
 		if (useCert) {
 			// 证书
 			char[] password = MiniConstant.WxMchID.toCharArray();
-			File sertFile = ResourceUtils.getFile("classpath:cert"+ System.getProperty("file.separator") +
-					"apiclient_cert.p12");
-			InputStream certStream = new FileInputStream(sertFile);
+//			File sertFile = ResourceUtils.getFile("classpath:cert"+ System.getProperty("file.separator") +
+//					"apiclient_cert.p12");
+//			InputStream certStream = new FileInputStream(sertFile);
+			ClassPathResource resource = new ClassPathResource("cert/application.yml");
+			InputStream certStream = resource.getInputStream();
 			if (null == certStream) {
 				logger.error(" logger null ");
 			}
@@ -97,7 +100,6 @@ public class ClientCustomSSL {
 		HttpPost httpPost = new HttpPost(url);
 		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(readTimeoutMs).setConnectTimeout(connectTimeoutMs).build();
 		httpPost.setConfig(requestConfig);
-
 		StringEntity postEntity = new StringEntity(data, "UTF-8");
 		httpPost.addHeader("Content-Type", "text/xml");
 		httpPost.addHeader("User-Agent", ConfigUtil.USER_AGENT + " " + MiniConstant.WxMchID);
