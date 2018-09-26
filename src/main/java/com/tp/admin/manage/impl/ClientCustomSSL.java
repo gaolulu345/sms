@@ -16,6 +16,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
 
 import javax.net.ssl.KeyManagerFactory;
@@ -27,6 +29,8 @@ import java.security.KeyStore;
 import java.security.SecureRandom;
 
 public class ClientCustomSSL {
+
+	private static final Logger logger = LoggerFactory.getLogger(ClientCustomSSL.class);
 
 	/**
 	 * 请求，只请求一次，不做重试
@@ -47,13 +51,14 @@ public class ClientCustomSSL {
 			File sertFile = ResourceUtils.getFile("classpath:cert"+ System.getProperty("file.separator") +
 					"apiclient_cert.p12");
 			InputStream certStream = new FileInputStream(sertFile);
+			if (null == certStream) {
+				logger.error(" logger null ");
+			}
 			KeyStore ks = KeyStore.getInstance("PKCS12");
 			ks.load(certStream, password);
-
 			// 实例化密钥库 & 初始化密钥工厂
 			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			kmf.init(ks, password);
-
 			// 创建 SSLContext
 			SSLContext sslContext = SSLContext.getInstance("TLS");
 			sslContext.init(kmf.getKeyManagers(), null, new SecureRandom());

@@ -122,6 +122,7 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
                 throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("订单号：{} 支付凭证 {} 微信支付失败(系统异常)", order.getId(), order.getWxpayStr(), e.getMessage());
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
