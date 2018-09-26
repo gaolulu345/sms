@@ -37,19 +37,11 @@
                 <el-table-column prop="createTime" label="注册时间"></el-table-column>
                 <el-table-column prop="lastLoginTime" label="最近登录时间"></el-table-column>
                 <el-table-column prop="access" label="access"></el-table-column>
-                <el-table-column prop="wxid" label="手机号码"></el-table-column>
-                <el-table-column prop="miniWxid" label="手机号码"></el-table-column>
-                <el-table-column prop="wxUnionid" label="手机号码"></el-table-column>
-                <el-table-column prop="aliId" label="手机号码"></el-table-column>
+                <!-- <el-table-column prop="wxid" label="wxid"></el-table-column> -->
+                <!-- <el-table-column prop="miniWxid" label="miniWxid"></el-table-column> -->
+                <!-- <el-table-column prop="wxUnionid" label="wxUnionid"></el-table-column> -->
+                <!-- <el-table-column prop="aliId" label="aliId"></el-table-column> -->
               
-
-                <el-table-column label="登录账号">
-                    <template slot-scope="scope">
-                        <span style="color: gray;" v-if="scope.row.enable == false && scope.row.deleted == false">{{scope.row.username}}  (未启用）</span>
-                        <span style="color: red;" v-if="scope.row.deleted == true">{{scope.row.username}}  (已删除）</span>
-                        <span v-if="scope.row.enable == true && scope.row.deleted == false">{{scope.row.username}}</span>
-                    </template>
-                </el-table-column>
             </el-table>
 
             <!-- 分页 -->
