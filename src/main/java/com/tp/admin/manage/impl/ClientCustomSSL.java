@@ -19,6 +19,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.util.ResourceUtils;
 
 import javax.net.ssl.KeyManagerFactory;
@@ -49,10 +50,7 @@ public class ClientCustomSSL {
 		if (useCert) {
 			// 证书
 			char[] password = MiniConstant.WxMchID.toCharArray();
-//			File sertFile = ResourceUtils.getFile("classpath:cert"+ System.getProperty("file.separator") +
-//					"apiclient_cert.p12");
-//			InputStream certStream = new FileInputStream(sertFile);
-			ClassPathResource resource = new ClassPathResource("cert/application.yml");
+			ClassPathResource resource = new ClassPathResource("classpath:cert/apiclient_cert.p12");
 			InputStream certStream = resource.getInputStream();
 			if (null == certStream) {
 				logger.error(" logger null ");
