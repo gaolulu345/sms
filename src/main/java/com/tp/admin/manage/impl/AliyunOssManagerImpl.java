@@ -29,7 +29,6 @@ public class AliyunOssManagerImpl implements AliyunOssManagerI {
     // 直接扔到OSS
     @Override
     public UploadFileDTO uploadFileToAliyunOss(MultipartFile picture) {
-        String exceptionMsg = "";
         String fileName = picture.getOriginalFilename();
         String uoloadPath = this.aliyunOssProperties.getPath() + "/" + fileName;
         String key = "/" + this.aliyunOssProperties.getPath() + "/" + fileName;
