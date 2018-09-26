@@ -4,13 +4,13 @@ public interface Constant {
 
     String SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
 
-    String ADMIN = "员工列表_";
+    String ADMIN = "COM_EMP_";
 
-    String WASH_ORDER = "洗车订单列表_";
+    String WASH_ORDER = "WASH_ORDER_LIST_";
 
-    String WASH_REFUND = "洗车退款申请_";
+    String WASH_REFUND = "WASH_REFUNA_LIST_";
 
-    String WASH_USER = "洗车用户_";
+    String WASH_USER = "WASH_USER_LIST_";
 
     String _XLSX = ".xlsx";
 
