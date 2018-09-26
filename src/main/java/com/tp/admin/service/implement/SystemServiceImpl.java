@@ -514,7 +514,7 @@ public class SystemServiceImpl implements SystemServiceI {
                 }
             }
         }  else {
-            // 根据partner 获取角色
+            // 获取角色
             List<AdminPkAccountRoles> roles = adminPkAccountRolesDao.listByAdminId(adminAccount.getId());
             List<Integer> ids = new ArrayList<>();
             if (null != roles && !roles.isEmpty()) {
