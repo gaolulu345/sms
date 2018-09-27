@@ -33,10 +33,17 @@ public class Refund {
     String sysAdminNameCheck; // 审批管理员名称
     @ExcelField(title = "退款人", order = 8)
     String sysAdminNamePay;   // 退款管理员名称
+
+
+
+
     @ExcelField(title = "退款原因描述", order = 3)
     String reasonDesc; // 原因描述
     @ExcelField(title = "退款进度", order = 5)
     String statusDesc; // 进度描述
+
+    // 退款人Id
+    int userId;
 
     public void build() {
         this.reasonDesc = RefundTypeEnum.getByValue(this.reason).getDesc();
