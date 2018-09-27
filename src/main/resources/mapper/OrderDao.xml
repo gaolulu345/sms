@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tp.admin.dao.OrderDao">
 
+
     <select id="cntBySearch" parameterType="com.tp.admin.data.search.OrderSearch" resultType="java.lang.Integer">
         SELECT
         COUNT(o.id)
@@ -36,9 +37,12 @@
         o.status ,
         o.type ,
         o.channel ,
-        o.pay_time
+        o.pay_time ,
+        o.card_id ,
+        o.ticket_id
         FROM
-        `order` AS o INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id
+        `order` AS o
+        INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id
         WHERE
         o.deleted = 0
         <if test="terIds != null and terIds.length != 0">
@@ -99,6 +103,13 @@
       AND
       deleted = 0
     </select>
+
+    <update id="updateOrderStatus">
+        UPDATE
+        `order`
+        SET `status` = #{status}
+        WHERE id = #{orderId}
+    </update>
 
     <resultMap id="OrderDTOMap" type="com.tp.admin.data.dto.OrderDTO">
         <id column="id" property="id" jdbcType="INTEGER"/>

@@ -15,6 +15,7 @@ import com.tp.admin.enums.RefundStatusEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.MiniOrderPayManagerI;
+import com.tp.admin.manage.TransactionalServiceI;
 import com.tp.admin.manage.impl.MiniOrderPayManagerImpl;
 import com.tp.admin.service.WashRefundServiceI;
 import com.tp.admin.utils.ExcelUtil;
@@ -44,6 +45,9 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
 
     @Autowired
     MiniOrderPayManagerI miniOrderPayManager;
+
+    @Autowired
+    TransactionalServiceI transactionalService;
 
     private static final Logger logger = LoggerFactory.getLogger(MiniOrderPayManagerImpl.class);
 
@@ -146,10 +150,7 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
         refund.setSysAdminNamePay(adminAccount.getName());
         refund.setStatus(RefundStatusEnum.REFUNDED.getValue());
         refund.setRefundTime(new Timestamp(System.currentTimeMillis()));
-        int sqlRes = refundDao.update(refund);
-        if (sqlRes == 0) {
-            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
-        }
+        transactionalService.payBack(refund,order);
         return ApiResult.ok();
     }
 

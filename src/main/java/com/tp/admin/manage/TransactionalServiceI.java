@@ -1,9 +1,6 @@
 package com.tp.admin.manage;
 
-import com.tp.admin.data.entity.AdminAccount;
-import com.tp.admin.data.entity.AdminPkRolesMenu;
-import com.tp.admin.data.entity.AdminPkRolesOperations;
-import com.tp.admin.data.entity.AdminRoles;
+import com.tp.admin.data.entity.*;
 
 import java.util.List;
 
@@ -30,5 +27,12 @@ public interface TransactionalServiceI {
      */
     void register(AdminAccount adminAccount , AdminRoles adminRoles);
 
+
+    /**
+     * 退款
+     * @param refund 退款申请
+     * @param order  订单信息
+     */
+    void payBack(Refund refund , Order order);
 
 }

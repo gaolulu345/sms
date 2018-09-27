@@ -2,7 +2,7 @@ package com.tp.admin.enums;
 
 public enum OrderStatusEnum {
     DEFAULT(0, "创建"),
-    CANCEL(1, "取消付款"),
+    CANCEL(1, "已退款"),
     ASK_CHECK(2, "已支付");
  
     private int value;
