@@ -24,9 +24,9 @@
   top: 0;
   z-index: 99;
   width: 1.148438rem;
-  height: 0.359375rem;
+  height: 50px;
+  line-height: 50px;
   margin: 0 auto;
-  padding-top: 0.132812rem;
   text-align: center;
   border-bottom: 1px solid #E3EBF2;
   box-sizing: border-box;
@@ -34,10 +34,8 @@
   color: #fff;
 }
 .leftNav .logoBox img {
-  width: 0.234375rem;
-  height: 0.101562rem;
-  margin-right: 0.078125rem;
-  vertical-align: bottom;
+  max-width: 70%;
+  vertical-align: middle;
 }
 .leftNav .nav-box {
   height: 100vh;
@@ -78,7 +76,7 @@
 }
 .rightSide .topBox {
   width: 8.75rem;
-  height: 0.367188rem;
+  height: 50px;
   position: fixed;
   top: 0;
   right: 0;
@@ -93,22 +91,25 @@
   font-size: 16px;
   color: #00203C;
   padding-left: 0.101562rem;
-  line-height: 0.367188rem;
+  line-height: 50px;
 }
-.rightSide .topBox .avatar {
-  width: 0.210938rem;
-  height: 0.210938rem;
+.rightSide .topBox .infoBox {
+  line-height: 50px;
+}
+.rightSide .topBox .infoBox .avatar {
+  width: 25px;
+  height: 25px;
   border-radius: 4px;
   vertical-align: middle;
-  margin-right: 0.054688rem;
+  margin-right: 10px;
 }
-.rightSide .topBox .adminName {
+.rightSide .topBox .infoBox .adminName {
   font-size: 10px;
   color: #000;
-  line-height: 0.367188rem;
+  line-height: 50px;
   margin-right: 25px;
 }
-.rightSide .topBox .iconfont {
+.rightSide .topBox .infoBox .iconfont {
   font-size: 12px;
   color: #2981FF;
 }

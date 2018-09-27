@@ -33,14 +33,17 @@
                 style="width: 100%">
 
                 <el-table-column prop="id" label="用户ID"></el-table-column>
+                <el-table-column prop="typeDesc" label="用户来源"></el-table-column>
+                <el-table-column v-if="adminRoleId == 0"  prop="miniWxid" label="miniWxid"></el-table-column>
+                <el-table-column v-if="adminRoleId == 0" prop="aliId" label="aliId"></el-table-column>
                 <el-table-column prop="phone" label="手机号码"></el-table-column>
                 <el-table-column prop="createTime" label="注册时间"></el-table-column>
                 <el-table-column prop="lastLoginTime" label="最近登录时间"></el-table-column>
-                <el-table-column prop="access" label="access"></el-table-column>
+                <!-- <el-table-column prop="access" label="access"></el-table-column> -->
                 <!-- <el-table-column prop="wxid" label="wxid"></el-table-column> -->
-                <!-- <el-table-column prop="miniWxid" label="miniWxid"></el-table-column> -->
+                
                 <!-- <el-table-column prop="wxUnionid" label="wxUnionid"></el-table-column> -->
-                <!-- <el-table-column prop="aliId" label="aliId"></el-table-column> -->
+                
               
             </el-table>
 
