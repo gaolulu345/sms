@@ -22,6 +22,9 @@ public class WashUserServiceImpl implements WashUserServiceI {
         userSearch.builData();
         List<User> list = userDao.listBySearch(userSearch);
         if (null != list && !list.isEmpty()) {
+            for (User u : list) {
+                u.build();
+            }
             int cnt = userDao.cntBySearch(userSearch);
             userSearch.setResult(list);
             userSearch.setTotalCnt(cnt);

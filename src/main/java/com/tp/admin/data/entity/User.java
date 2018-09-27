@@ -1,5 +1,6 @@
 package com.tp.admin.data.entity;
 
+import com.tp.admin.enums.UserChanneEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,11 @@ public class User {
     private String miniWxid;
     private String wxUnionid;
     private String aliId;
+
+    private String typeDesc;
+
+    public void build(){
+        this.typeDesc = UserChanneEnum.getByCode(this.type).getDesc();
+    }
     
 }

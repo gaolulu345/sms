@@ -6,6 +6,8 @@
         `user`
         WHERE
         deleted = 0
+        AND
+        (type = 3 OR type = 4)
         <if test="phone != null">
             AND phone LIKE CONCAT('%',#{phone},'%')
         </if>
@@ -25,6 +27,8 @@
         `user`
         WHERE
         deleted = 0
+        AND
+        (type = 3 OR type = 4)
         <if test="phone != null">
             AND phone LIKE CONCAT('%',#{phone},'%')
         </if>
