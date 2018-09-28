@@ -54,11 +54,6 @@ public class AccountServiceImpl implements AccountServiceI {
     }
 
     @Override
-    public Set<AutoResource> findAdminAutoResource(int id) {
-        return new HashSet<>();
-    }
-
-    @Override
     public ApiResult login(HttpServletRequest request, AdminAccount adminAccount) {
         if (StringUtil.isEmpty(adminAccount.getUsername()) || StringUtil.isEmpty(adminAccount.getPassword())) {
             throw new BaseException(ExceptionCode.PARAMETER_MISSING, "neither name nor password should be empty when partner login");
@@ -97,7 +92,6 @@ public class AccountServiceImpl implements AccountServiceI {
             AdminAccountDTO adminAccountDTO = new AdminAccountDTO();
             adminAccountDTO.setId(user.getId());
             adminAccountDTO.setName(user.getName());
-
             return ApiResult.ok(adminAccountDTO);
         }
         loginlog(request,adminAccount,false);

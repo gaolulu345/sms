@@ -104,6 +104,7 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
             AdminPkAccountRoles adminPkAccountRoles = new AdminPkAccountRoles();
             adminPkAccountRoles.setAdminId(adminAccount.getId());
             adminPkAccountRoles.setRolesId(adminRoles.getId());
+            adminPkAccountRoles.setEnable(true);
             res = adminPkAccountRolesDao.insert(adminPkAccountRoles);
             if (0 == res) {
                 throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);

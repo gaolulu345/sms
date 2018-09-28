@@ -17,6 +17,4 @@ public interface AccountServiceI {
 
     int updateLastLoginTime(int id);
 
-    Set<AutoResource> findAdminAutoResource(int id);
-
 }
