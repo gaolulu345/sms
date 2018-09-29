@@ -41,14 +41,16 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
         String praviteKey = MiniConstant.ALiMiniAppPublicKey;
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("out_trade_no", order.getAlipayStr());
-        jsonObject.put("refund_amount", String.valueOf(Float.valueOf(order.getAmount()) / 100));
+        String refund_amount = String.valueOf(Float.valueOf(order.getAmount()) / 100);
+        jsonObject.put("refund_amount",refund_amount );
         AlipayClient alipayClient = new DefaultAlipayClient(aliURL, appId, privateKey, "json", "GBK", praviteKey, "RSA2");
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         request.setBizContent(jsonObject.toString());
         String aliRes = "";
+        AlipayTradeRefundResponse refundResponse = null;
         try {
-            AlipayTradeRefundResponse response = alipayClient.execute(request);
-            aliRes = response.getCode();
+            refundResponse = alipayClient.execute(request);
+            aliRes = refundResponse.getCode();
         } catch (Exception e) {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
@@ -59,6 +61,7 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
             logger.info("订单号：{} 支付凭证 {}  支付宝退款成功并删除二维码", order.getId(), order.getAlipayStr());
             return;
         }
+        logger.error("响应信息 {} ", refundResponse.toString());
         if (aliRes.equals("20000")) {
             logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "invalid service");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "invalid service");
