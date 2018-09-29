@@ -5,13 +5,14 @@ import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.security.AutoResource;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 public interface AccountServiceI {
 
     ApiResult login(HttpServletRequest request, AdminAccount adminAccount);
 
-    ApiResult logout(HttpServletRequest request);
+    ApiResult logout(HttpServletRequest request , HttpServletResponse response);
 
     AdminAccount findByUsername(String username);
 

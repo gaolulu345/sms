@@ -40,7 +40,10 @@ public class AuthCustomUserService implements UserDetailsService {
     }
 
     private AdminAccount buildUserForAuthentication(AdminAccount user, Collection<GrantedAuthority> authorities) {
-        return new AdminAccount(user.getId(), user.getUsername() ,user.getName(),  user.getPassword(), authorities);
+        if (null != authorities && !authorities.isEmpty()) {
+            user.setAuthorities(authorities);
+        }
+        return user;
     }
 
 }

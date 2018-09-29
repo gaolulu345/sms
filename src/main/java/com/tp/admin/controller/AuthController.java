@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(AuthController.ROUTER_INDEX)
@@ -27,8 +28,8 @@ public class AuthController {
     }
 
     @PostMapping(value = "/logout")
-    public ApiResult logout(HttpServletRequest request) {
-        return accountService.logout(request);
+    public ApiResult logout(HttpServletRequest request ,  HttpServletResponse response) {
+        return accountService.logout(request , response);
     }
 
 }

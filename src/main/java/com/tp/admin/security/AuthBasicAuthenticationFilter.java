@@ -32,7 +32,6 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
 
     /**
      * 自定义拦截方式
-     *
      * @param request
      * @param response
      * @param chain
@@ -43,14 +42,6 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException, AuthenticationException {
         String url = request.getRequestURI();
         String method = request.getMethod();
-        if (url.equals("/") ||
-            url.equals("/login") |
-            url.equals("/api/user/login") ||
-            url.equals("/api/user/logout")) {
-            // 非受保护资源不拦截。
-            success(request,response,chain);
-            return;
-        }
         HttpSession session = request.getSession();
         if (session == null) {
             response.sendRedirect("/login");
@@ -75,14 +66,14 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
             }
             throw new BaseException(ExceptionCode.API_NOT_PERMISSION_ERROR);
         } else if (url.indexOf("/pages", 0) == 0 && method.equals(HttpMethod.GET.name())) {
-            if (url.equals("/pages/index")) {
+            if (url.equals(Constant.PAGES_INDEX)) {
                 success(request,response,chain);
                 return;
             }
             if (invokePages(adminAccount, url)) {
                 success(request,response,chain);
             }
-            response.sendRedirect("/pages/index");
+            response.sendRedirect(Constant.PAGES_INDEX);
         }
     }
 

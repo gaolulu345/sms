@@ -58,7 +58,6 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
                 }
             }
         } catch (Exception e) {
-            // 如果terinfo表插入失败就回滚。
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }

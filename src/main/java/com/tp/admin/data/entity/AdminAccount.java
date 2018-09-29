@@ -34,15 +34,6 @@ public class AdminAccount implements UserDetails {
         this.intros = adminAccountDTO.getIntros();
     }
 
-    public AdminAccount(int id ,String username , String name ,String password, Collection<GrantedAuthority> auths) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.password = password;
-        this.authorities = auths;
-    }
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -75,6 +66,21 @@ public class AdminAccount implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enable;
+    }
+
+    @Override
+    public String toString() {
+        return this.username;
+    }
+
+    @Override
+    public int hashCode() {
+        return username.hashCode();
+    }
+
+	@Override
+    public boolean equals(Object obj) {
+        return this.toString().equals(obj.toString());
     }
 }

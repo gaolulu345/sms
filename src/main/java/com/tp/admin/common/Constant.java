@@ -20,7 +20,9 @@ public interface Constant {
 
     String SUPER_ADMIN = "TP_AUTO";
 
-    public interface Page {
+    String PAGES_INDEX = "/pages/index";
+
+    interface Page {
         static int DEFAULT_SIZE = 10;
         static int DEFAULT_INDEX = 1;
     }

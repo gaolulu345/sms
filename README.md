@@ -30,3 +30,12 @@
 1. xxxx
 2. xxxx
 3. xxxx
+
+#### 数据库约束
+
+```mysql
+# 账号登陆日志普通索引
+ALTER TABLE admin_account_login_log ADD INDEX index_name ( `username` ) 
+
+```
+
