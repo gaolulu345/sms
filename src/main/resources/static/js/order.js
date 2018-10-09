@@ -39,16 +39,15 @@ var vm = new Vue({
 
     mounted: function() {
         console.log('mounted......')
-        this.getOrderList(10, 1, [], '', ' ', ' ', ' ')
-        // this.getOrderList(10, 1, '', [], '', '')
         this.getTerList()
+        this.getOrderList(10, 1, [], '', ' ', ' ', ' ')
     },
 
     methods: {
-        // getOrderList: function(pageSize, pageIndex, status, terIds, startTime, endTime) {
         getOrderList: function(pageSize, pageIndex, terIds, status, type, startTime, endTime) {
             console.log(terIds)
-            let ids = terIds[0] ? terIds : []
+            let ids = terIds
+            // let ids = terIds[0] ? terIds : []
             this.$http.post("/api/private/order/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
@@ -59,6 +58,7 @@ var vm = new Vue({
                 endTime: endTime
             }).then(function(res){
                 let data = res.json().data
+                console.log(data)
                 let result = data.result;
                 if(result && result[0]) {
                     result.forEach(function(val) {
@@ -70,11 +70,11 @@ var vm = new Vue({
                 vm.totalCnt = data.totalCnt;
                 vm.currentPageSize = data.pageSize;
                 vm.currentPageIndex = data.pageIndex;
-                vm.currentStatus = data.status;
-                vm.currentType = data.type;
+                // vm.currentStatus = data.status;
+                // vm.currentType = data.type;
                 vm.currentStartTime = data.startTime;
                 vm.currentEndTime = data.endTime;
-                vm.currentTerIds = data.terIds;
+                // vm.currentTerIds = data.terIds;
                 
             })
         },

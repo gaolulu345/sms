@@ -65,9 +65,9 @@ var vm = new Vue({
                 vm.totalCnt = data.totalCnt;
                 vm.currentPageSize = data.pageSize;
                 vm.currentPageIndex = data.pageIndex;
-                vm.currentStatus = data.status;
-                vm.currentReason = data.reason;
-                vm.currentOrderId = data.orderId;
+                // vm.currentStatus = data.status;
+                // vm.currentReason = data.reason;
+                // vm.currentOrderId = data.orderId;
                 vm.currentStartTime = data.startTime;
                 vm.currentEndTime = data.endTime;
             })
