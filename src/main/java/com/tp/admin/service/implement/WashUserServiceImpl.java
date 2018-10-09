@@ -4,6 +4,7 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.UserDao;
 import com.tp.admin.data.entity.User;
 import com.tp.admin.data.search.UserSearch;
+import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.service.WashUserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class WashUserServiceImpl implements WashUserServiceI {
         }else{
             userSearch.setTotalCnt(0);
         }
-        return ApiResult.ok(userSearch);
+        return ApiResult.ok(new ResultTable(userSearch));
     }
 
     @Override

@@ -4,7 +4,6 @@ package com.tp.admin.controller;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.dto.AdminAccountDTO;
 import com.tp.admin.data.dto.ChangePasswordDTO;
-import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.service.AdminServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +52,6 @@ public class AdminController {
     public ApiResult resetPassword(HttpServletRequest request ,@RequestBody AdminSearch adminSearch){
         return adminService.resetPassword(request,adminSearch);
     }
-
-
-
-
 
 
 }

@@ -9,8 +9,8 @@ import com.tp.admin.data.dto.ChangePasswordDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.AdminPkAccountRoles;
 import com.tp.admin.data.entity.AdminRoles;
-import com.tp.admin.data.entity.Refund;
 import com.tp.admin.data.search.AdminSearch;
+import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.TransactionalServiceI;
@@ -95,7 +95,7 @@ public class AdminServiceImpl implements AdminServiceI {
         }else{
             adminSearch.setTotalCnt(0);
         }
-        return ApiResult.ok(adminSearch);
+        return ApiResult.ok(new ResultTable(adminSearch));
     }
 
 

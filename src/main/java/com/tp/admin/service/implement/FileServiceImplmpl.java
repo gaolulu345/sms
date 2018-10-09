@@ -9,6 +9,7 @@ import com.tp.admin.data.dto.UploadFileDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.FileUploadLog;
 import com.tp.admin.data.search.FileSearch;
+import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.AliyunOssManagerI;
@@ -65,7 +66,7 @@ public class FileServiceImplmpl implements FileServiceI {
         }else {
             fileSearch.setTotalCnt(0);
         }
-        return ApiResult.ok(fileSearch);
+        return ApiResult.ok(new ResultTable(fileSearch));
     }
 
     @Override

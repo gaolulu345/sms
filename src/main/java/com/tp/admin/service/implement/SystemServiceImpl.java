@@ -9,6 +9,7 @@ import com.tp.admin.data.dto.UserAutoResourceDTO;
 import com.tp.admin.data.entity.*;
 import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.data.search.SystemSearch;
+import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.TransactionalServiceI;
@@ -147,7 +148,7 @@ public class SystemServiceImpl implements SystemServiceI {
         } else {
             systemSearch.setTotalCnt(0);
         }
-        return ApiResult.ok(systemSearch);
+        return ApiResult.ok(new ResultTable(systemSearch));
     }
 
     @Override
@@ -241,7 +242,7 @@ public class SystemServiceImpl implements SystemServiceI {
         } else {
             systemSearch.setTotalCnt(0);
         }
-        return ApiResult.ok(systemSearch);
+        return ApiResult.ok(new ResultTable(systemSearch));
     }
 
     @Override
@@ -314,7 +315,7 @@ public class SystemServiceImpl implements SystemServiceI {
         } else {
             systemSearch.setTotalCnt(0);
         }
-        return ApiResult.ok(systemSearch);
+        return ApiResult.ok(new ResultTable(systemSearch));
     }
 
     @Override

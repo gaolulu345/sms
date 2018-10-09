@@ -8,6 +8,7 @@ import com.tp.admin.dao.OrderDao;
 import com.tp.admin.dao.TerDao;
 import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.search.OrderSearch;
+import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.service.WashOrderServiceI;
@@ -54,7 +55,7 @@ public class WashOrderServiceImpl implements WashOrderServiceI {
         }else {
             orderSearch.setTotalCnt(0);
         }
-        return ApiResult.ok(orderSearch);
+        return ApiResult.ok(new ResultTable(orderSearch));
     }
 
     @Override

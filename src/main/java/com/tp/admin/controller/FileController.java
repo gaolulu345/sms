@@ -37,7 +37,4 @@ public class FileController {
         return fileService.bachDeleteImges(request,fileSearch);
     }
 
-
-
-
 }
