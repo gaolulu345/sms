@@ -53,5 +53,10 @@ public class AdminController {
         return adminService.resetPassword(request,adminSearch);
     }
 
+    @PostMapping(value = "/login/log")
+    public ApiResult loginLog(HttpServletRequest request ,@RequestBody AdminSearch adminSearch){
+        return adminService.loginLog(request,adminSearch);
+    }
+
 
 }

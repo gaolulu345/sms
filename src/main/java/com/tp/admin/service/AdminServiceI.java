@@ -22,6 +22,8 @@ public interface AdminServiceI {
 
     ApiResult resetPassword(HttpServletRequest request , AdminSearch adminSearch);
 
+    ApiResult loginLog(HttpServletRequest request , AdminSearch adminSearch);
+
     ApiResult updatePassword(HttpServletRequest request, ChangePasswordDTO changePasswordDTO);
 
 

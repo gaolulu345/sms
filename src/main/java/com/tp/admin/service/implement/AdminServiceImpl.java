@@ -2,11 +2,13 @@ package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.AdminAccountDao;
+import com.tp.admin.dao.AdminAccountLoginLogDao;
 import com.tp.admin.dao.AdminPkAccountRolesDao;
 import com.tp.admin.dao.AdminRolesDao;
 import com.tp.admin.data.dto.AdminAccountDTO;
 import com.tp.admin.data.dto.ChangePasswordDTO;
 import com.tp.admin.data.entity.AdminAccount;
+import com.tp.admin.data.entity.AdminAccountLoginLog;
 import com.tp.admin.data.entity.AdminPkAccountRoles;
 import com.tp.admin.data.entity.AdminRoles;
 import com.tp.admin.data.search.AdminSearch;
@@ -36,6 +38,9 @@ public class AdminServiceImpl implements AdminServiceI {
 
     @Autowired
     AdminPkAccountRolesDao adminPkAccountRolesDao;
+
+    @Autowired
+    AdminAccountLoginLogDao adminAccountLoginLogDao;
 
     @Autowired
     TransactionalServiceI transactionalService;
@@ -124,6 +129,24 @@ public class AdminServiceImpl implements AdminServiceI {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
         return ApiResult.ok();
+    }
+
+    @Override
+    public ApiResult loginLog(HttpServletRequest request, AdminSearch adminSearch) {
+        Boolean more = adminSearch.getMore();
+        if (null == more || more == false) {
+            adminSearch.setPageIndex(1);
+            adminSearch.setPageSize(5);
+        }else{
+            adminSearch.setPageIndex(1);
+            adminSearch.setPageSize(50);
+        }
+        adminSearch.builData();
+        List<AdminAccountLoginLog> list = adminAccountLoginLogDao.listBySearch(adminSearch);
+        if (null != list && !list.isEmpty()) {
+            adminSearch.setResult(list);
+        }
+        return ApiResult.ok(new ResultTable(adminSearch));
     }
 
     @Override

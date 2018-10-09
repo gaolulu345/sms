@@ -15,6 +15,8 @@ public class AdminSearch extends  Search {
 
     Boolean deleted;
 
+    Boolean more;
+
     Integer id;
 
     int[] ids;
