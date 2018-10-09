@@ -133,6 +133,7 @@ public class AdminServiceImpl implements AdminServiceI {
 
     @Override
     public ApiResult loginLog(HttpServletRequest request, AdminSearch adminSearch) {
+        AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
         Boolean more = adminSearch.getMore();
         if (null == more || more == false) {
             adminSearch.setPageIndex(1);
@@ -142,7 +143,8 @@ public class AdminServiceImpl implements AdminServiceI {
             adminSearch.setPageSize(50);
         }
         adminSearch.builData();
-        List<AdminAccountLoginLog> list = adminAccountLoginLogDao.listBySearch(adminSearch);
+        List<AdminAccountLoginLog> list = adminAccountLoginLogDao.listBySearch(more , adminAccount.getUsername() ,
+                adminSearch.getPageSize() , adminSearch.getOffset());
         if (null != list && !list.isEmpty()) {
             adminSearch.setResult(list);
         }

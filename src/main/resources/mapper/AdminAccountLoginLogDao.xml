@@ -17,9 +17,11 @@
 		)
     </insert>
 
-	<select id="listBySearch" resultMap="AdminAccountLoginLogMap">
+	<select id="listBySearch"  resultMap="AdminAccountLoginLogMap">
 		SELECT DISTINCT * FROM
 		`admin_account_login_log`
+		WHERE
+		username = #{username}
 		ORDER BY id DESC
 		<if test="pageSize != null and pageSize !=0 and offset != null">
 			LIMIT #{offset},#{pageSize}
@@ -27,7 +29,7 @@
 	</select>
 	
 	<resultMap id="AdminAccountLoginLogMap" type="com.tp.admin.data.entity.AdminAccountLoginLog">
-		<id column="id" jdbcType="INTEGER"/>
+		<id column="id" property="id" jdbcType="INTEGER"/>
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
 		<result column="deleted" property="deleted" jdbcType="BIT" />
