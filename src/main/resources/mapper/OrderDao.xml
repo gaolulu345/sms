@@ -32,10 +32,10 @@
         o.ter_id ,
         ti.title ,
         o.user_id ,
-        o.operation_id AS operation_status ,
-        op.status ,
+        o.operation_id  ,
+        op.status AS operation_status,
         o.amount ,
-        o.status ,
+        o.`status` ,
         o.type ,
         o.channel ,
         o.pay_time ,
@@ -53,6 +53,10 @@
                      open="(" close=")" separator=",">
                 #{terId}
             </foreach>
+        </if>
+        <if test="orderId != null">
+            AND
+            o.id = #{orderId}
         </if>
         <if test="status != null">
             AND

@@ -30,6 +30,11 @@ public class WashOrderController {
         return washOrderService.orderTerSelection(request);
     }
 
+    @PostMapping(value = "/info")
+    public ApiResult info(HttpServletRequest request, @RequestBody OrderSearch orderSearch){
+        return washOrderService.info(request,orderSearch);
+    }
+
     @PostMapping(value = "/list")
     public ApiResult list(HttpServletRequest request, @RequestBody OrderSearch orderSearch) {
         return washOrderService.list(request, orderSearch);

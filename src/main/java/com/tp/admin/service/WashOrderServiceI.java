@@ -13,6 +13,8 @@ public interface WashOrderServiceI {
 
     ApiResult list(HttpServletRequest request , OrderSearch orderSearch);
 
+    ApiResult info(HttpServletRequest request, OrderSearch orderSearch);
+
     ResponseEntity<FileSystemResource> listExport(HttpServletRequest request , HttpServletResponse response, OrderSearch orderSearch);
 
     ApiResult orderTerSelection(HttpServletRequest request);

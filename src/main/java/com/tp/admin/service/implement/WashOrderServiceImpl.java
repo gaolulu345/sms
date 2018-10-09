@@ -59,6 +59,20 @@ public class WashOrderServiceImpl implements WashOrderServiceI {
     }
 
     @Override
+    public ApiResult info(HttpServletRequest request, OrderSearch orderSearch) {
+        Integer orderId = orderSearch.getOrderId();
+        if (null == orderId || orderId == 0) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        OrderDTO orderDTO = orderDao.findOrderDTOById(orderId);
+        if (null == orderDTO) {
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        orderDTO.build();
+        return ApiResult.ok(orderDTO);
+    }
+
+    @Override
     public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request , HttpServletResponse response ,OrderSearch orderSearch) {
         List<OrderDTO> list = orderDao.listBySearch(orderSearch);
         if (null != list && !list.isEmpty()) {

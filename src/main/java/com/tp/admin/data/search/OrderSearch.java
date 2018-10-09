@@ -15,6 +15,7 @@ import java.util.List;
 public class OrderSearch extends Search {
 
     private Integer status;
+    private Integer orderId;
     private Integer type;
     private int[] terIds;
 

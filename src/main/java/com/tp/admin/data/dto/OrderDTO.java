@@ -54,7 +54,7 @@ public class OrderDTO {
         if (this.operationId == 0) {
             this.operationDesc = "未启动洗车机";
         }else {
-            this.operationDesc = TerStatusEnum.getByCode(this.operationId).getDesc();
+            this.operationDesc = TerStatusEnum.getByCode(this.operationStatus).getDesc();
         }
     }
 
