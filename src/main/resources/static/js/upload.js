@@ -62,8 +62,8 @@ var vm = new Vue({
                 vm.totalCnt = data.totalCnt;
                 vm.currentPageSize = data.pageSize;
                 vm.currentPageIndex = data.pageIndex;
-                vm.currentAdminName = data.adminName;
-                vm.currentFileKey = data.fileKey;
+                // vm.currentAdminName = data.adminName;
+                // vm.currentFileKey = data.fileKey;
                 vm.currentStartTime = data.startTime;
                 vm.currentEndTime = data.endTime;
             })
