@@ -32,7 +32,8 @@
         o.ter_id ,
         ti.title ,
         o.user_id ,
-        o.operation_id ,
+        o.operation_id AS operation_status ,
+        op.status ,
         o.amount ,
         o.status ,
         o.type ,
@@ -42,7 +43,7 @@
         o.ticket_id
         FROM
         `order` AS o
-        INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id
+        INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id LEFT JOIN operation AS op ON op.id = o.operation_id
         WHERE
         o.deleted = 0
         <if test="terIds != null and terIds.length != 0">
@@ -117,6 +118,7 @@
         <result column="title" property="terTitle" jdbcType="VARCHAR"/>
         <result column="user_id" property="userId" jdbcType="INTEGER"/>
         <result column="operation_id" property="operationId" jdbcType="INTEGER"/>
+        <result column="operation_status" property="operationStatus" jdbcType="INTEGER"/>
         <result column="amount" property="amount" jdbcType="INTEGER"/>
         <result column="ticket_id" property="ticketId" jdbcType="INTEGER"/>
         <result column="card_id" property="cardId" jdbcType="INTEGER"/>

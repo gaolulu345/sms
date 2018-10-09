@@ -4,6 +4,7 @@ import com.github.crab2died.annotation.ExcelField;
 import com.tp.admin.enums.OrderChannelEnum;
 import com.tp.admin.enums.OrderStatusEnum;
 import com.tp.admin.enums.OrderTypeEnum;
+import com.tp.admin.enums.TerStatusEnum;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -20,6 +21,7 @@ public class OrderDTO {
 
     private int status;  // 订单状态
     private int operationId; // 洗车操作id
+    private int operationStatus; // 洗车操作状态
     // 优惠券
     private int ticketId;
     // 洗车卡
@@ -49,6 +51,11 @@ public class OrderDTO {
         this.statusDesc = OrderStatusEnum.getByCode(this.status).getDesc();
         this.typeDesc = OrderTypeEnum.getByCode(this.type).getDesc();
         this.channelDesc = OrderChannelEnum.getByCode(channel).getDesc();
+        if (this.operationId == 0) {
+            this.operationDesc = "未启动洗车机";
+        }else {
+            this.operationDesc = TerStatusEnum.getByCode(this.operationId).getDesc();
+        }
     }
 
 }
