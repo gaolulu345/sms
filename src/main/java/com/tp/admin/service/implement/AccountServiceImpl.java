@@ -5,6 +5,7 @@ import com.tp.admin.common.Constant;
 import com.tp.admin.dao.AdminAccountDao;
 import com.tp.admin.dao.AdminAccountLoginLogDao;
 import com.tp.admin.data.dto.AdminAccountDTO;
+import com.tp.admin.data.dto.LoginDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.AdminAccountLoginLog;
 import com.tp.admin.exception.BaseException;
@@ -12,6 +13,7 @@ import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.security.AutoResource;
 import com.tp.admin.service.AccountServiceI;
 import com.tp.admin.utils.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,37 +58,39 @@ public class AccountServiceImpl implements AccountServiceI {
     }
 
     @Override
-    public ApiResult login(HttpServletRequest request, AdminAccount adminAccount) {
-        if (StringUtil.isEmpty(adminAccount.getUsername()) || StringUtil.isEmpty(adminAccount.getPassword())) {
+    public ApiResult login(HttpServletRequest request, LoginDTO loginDTO) {
+        if (StringUtil.isEmpty(loginDTO.getUsername()) || StringUtil.isEmpty(loginDTO.getPassword())) {
             throw new BaseException(ExceptionCode.PARAMETER_MISSING, "neither name nor password should be empty when partner login");
         }
-        AdminAccount user = findByUsername(adminAccount.getUsername());
+        AdminAccount user = findByUsername(loginDTO.getUsername());
         if (user == null) {
-            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "no user found math username:" + adminAccount.getUsername());
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "no user found math username:" + loginDTO.getUsername());
         }
-        if (!adminAccount.getPassword().equals(user.getPassword())) {
-            loginlog(request,adminAccount,false);
-            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "no user found math username:" + adminAccount
+        // 判断IP地址是否合法
+        String ip = null;
+        if (null == loginDTO.getCip() || StringUtils.isEmpty(loginDTO.getCip())) {
+            ip = getIpAddr(request);
+        }
+        if (!loginDTO.getPassword().equals(user.getPassword())) {
+            loginlog(ip,user,false);
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "no user found math username:" + loginDTO
                     .getUsername());
         }
-
         // TODO 这里需要改进,超级管理员账号可以配置。这样避免吧自己也删除了。
-        if (!Constant.SUPER_ADMIN.equals(adminAccount.getUsername())) {
+        if (!Constant.SUPER_ADMIN.equals(user.getUsername())) {
             if (user.isDeleted()) {
-                throw new BaseException(ExceptionCode.PARAMETER_MISSING, "user deleted:" + adminAccount.getUsername());
+                throw new BaseException(ExceptionCode.PARAMETER_MISSING, "user deleted:" + loginDTO.getUsername());
             }
         }
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(adminAccount
-                .getUsername(), adminAccount.getPassword());
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), user.getPassword());
         Authentication authentication = null;
         try {
             authentication = authenticationManager.authenticate(authRequest); //调用loadUserByUsername
         } catch (Exception e) {
-
             e.printStackTrace();
         }
         if (null != authentication) {
-            loginlog(request,adminAccount,true);
+            loginlog(ip,user,true);
             updateLastLoginTime(user.getId());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             HttpSession session = request.getSession();
@@ -96,7 +100,7 @@ public class AccountServiceImpl implements AccountServiceI {
             adminAccountDTO.setName(user.getName());
             return ApiResult.ok(adminAccountDTO);
         }
-        loginlog(request,adminAccount,false);
+        loginlog(ip,user,false);
         return ApiResult.error(ExceptionCode.INVALID_ACCESS_EXCEPTION);
     }
 
@@ -117,8 +121,8 @@ public class AccountServiceImpl implements AccountServiceI {
         return ApiResult.ok();
     }
 
-    private void loginlog(HttpServletRequest request , AdminAccount adminAccount , boolean ok){
-        String ip = getIpAddr(request);
+    private void loginlog(String ip , AdminAccount adminAccount , boolean ok){
+
         AdminAccountLoginLog adminAccountLoginLog = new AdminAccountLoginLog();
         if (ok) {
             adminAccountLoginLog.sucess(adminAccount.getUsername(),"登陆成功" , ip);

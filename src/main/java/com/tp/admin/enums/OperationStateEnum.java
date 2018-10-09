@@ -1,8 +1,8 @@
 package com.tp.admin.enums;
 
 public enum OperationStateEnum {
-
-    WASHING(1, "洗车"),
+    DEFAULT(0,"未洗车"),
+    WASHING(1, "洗车中"),
     PAUSED(2, "暂停"),
     NONE(3, "洗车结束");
 

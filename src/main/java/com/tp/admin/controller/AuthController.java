@@ -2,6 +2,7 @@ package com.tp.admin.controller;
 
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.data.dto.LoginDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.service.AccountServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class AuthController {
     AccountServiceI accountService;
 
     @PostMapping(value = "/login")
-    public ApiResult login(HttpServletRequest request, @RequestBody AdminAccount adminAccount) {
-        return accountService.login(request,adminAccount);
+    public ApiResult login(HttpServletRequest request, @RequestBody LoginDTO loginDTO) {
+        return accountService.login(request,loginDTO);
     }
 
     @PostMapping(value = "/logout")

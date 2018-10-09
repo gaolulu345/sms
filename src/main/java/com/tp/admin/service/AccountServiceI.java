@@ -1,6 +1,7 @@
 package com.tp.admin.service;
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.data.dto.LoginDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.security.AutoResource;
 
@@ -10,7 +11,7 @@ import java.util.Set;
 
 public interface AccountServiceI {
 
-    ApiResult login(HttpServletRequest request, AdminAccount adminAccount);
+    ApiResult login(HttpServletRequest request, LoginDTO loginDTO);
 
     ApiResult logout(HttpServletRequest request , HttpServletResponse response);
 
