@@ -1,10 +1,7 @@
 package com.tp.admin.data.dto;
 
 import com.github.crab2died.annotation.ExcelField;
-import com.tp.admin.enums.OrderChannelEnum;
-import com.tp.admin.enums.OrderStatusEnum;
-import com.tp.admin.enums.OrderTypeEnum;
-import com.tp.admin.enums.TerStatusEnum;
+import com.tp.admin.enums.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -54,7 +51,7 @@ public class OrderDTO {
         if (this.operationId == 0) {
             this.operationDesc = "未启动洗车机";
         }else {
-            this.operationDesc = TerStatusEnum.getByCode(this.operationStatus).getDesc();
+            this.operationDesc = OperationStateEnum.getByCode(this.operationStatus).getDesc();
         }
     }
 
