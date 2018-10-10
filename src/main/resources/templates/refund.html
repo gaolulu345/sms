@@ -46,7 +46,11 @@
                 style="width: 100%">
 
                 <el-table-column prop="id" label="退款编号"></el-table-column>
-                <el-table-column prop="orderId" label="订单ID"></el-table-column>
+                <el-table-column label="订单ID">
+                    <template slot-scope="scope">
+                        <span style="color: #2981ff;" @click="showOrderInfo(scope.row.orderId)">{{scope.row.orderId}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="userId" label="用户ID"></el-table-column>
                 <el-table-column prop="phone" label="用户手机号"></el-table-column>
                 <el-table-column prop="reasonDesc" label="退款原因描述"></el-table-column>
@@ -75,7 +79,35 @@
             <!-- 分页 -->
             <#include "common/pages2.html">
         </div>
-    </div>    
+    </div>  
+
+    <!-- 修改用户信息弹出框 -->
+    <el-dialog title="订单信息" :visible.sync="showOrderInfoDialog">
+        <el-form :model="orderInfo">
+            <el-form-item label="订单ID" :label-width="dialogLabelWidth">
+                <el-input v-model="orderInfo.id" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="订单金额(元)" :label-width="dialogLabelWidth">
+                <el-input v-model="orderInfo.amount" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="支付方式" :label-width="dialogLabelWidth">
+                <el-input v-model="orderInfo.typeDesc" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="订单来源" :label-width="dialogLabelWidth">
+                <el-input v-model="orderInfo.channelDesc" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="网点名称" :label-width="dialogLabelWidth">
+                <el-input v-model="orderInfo.terTitle" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="操作描述" :label-width="dialogLabelWidth">
+                <el-input v-model="orderInfo.operationDesc" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="订单状态" :label-width="dialogLabelWidth">
+                <el-input v-model="orderInfo.statusDesc" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item> 
+                    
+        </el-form>
+    </el-dialog>  
 </div>
 
 <script src="/js/common/per.js"></script>

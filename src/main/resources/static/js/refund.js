@@ -23,6 +23,9 @@ var vm = new Vue({
         currentStartTime: null,
         currentEndTime: null,
 
+        showOrderInfoDialog: false,
+        orderInfo: {},
+
         refundList: [],
 
         reasonOptions: [{value: 0, label: '误购，请求退款'}, {value: 1, label: '设备无法启动'}, {value: 2, label: '洗车中途故障'}, {value: 3, label: '洗车服务不满意'}, {value: 4, label: '其他原因'}],
@@ -32,6 +35,7 @@ var vm = new Vue({
                 return time.getTime() > Date.now();
             }
         },
+        dialogLabelWidth: '200px',
     },
 
     mounted: function() {
@@ -131,7 +135,22 @@ var vm = new Vue({
             }
         },
 
+        showOrderInfo: function(orderId) {
+            this.$http.post("/api/private/order/info", {
+                orderId: orderId
+            }).then(function(res){
+                let result = res.json();
+                if(result.code == 200){
 
+                    vm.orderInfo = result.data
+                    vm.orderInfo.payTime = formatTimestampToSecond(result.data.payTime)
+                    vm.orderInfo.amount = result.data.amount/100
+                    vm.showOrderInfoDialog = true
+                }else {
+                    vm.$message.error(result.message)
+                }
+            })
+        },
 
         search: function(){
             if(!vm.dateRange) {  //如果日期选择器中先有选择，后置空，结果为null，会报错

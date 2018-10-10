@@ -13,9 +13,25 @@
     <div class="rightSide">
         <#include "common/top.html">
         <div class="content">
-            <div class="imgBox">
+            <!-- <div class="imgBox">
             	<img src="http://tp-app.oss-cn-hangzhou.aliyuncs.com/ios/welcom.png" alt="">
+            </div> -->
+
+            <el-table
+                :data="logList"
+                size="mini"
+                style="width: 100%">
+                <el-table-column prop="id" label="日志ID"></el-table-column>
+                <el-table-column prop="createTime" label="登录时间"></el-table-column>
+                <el-table-column prop="ip" label="登录IP"></el-table-column>
+            </el-table>
+            <div class="btnMore" style="text-align: center; margin-top: 20px;">
+                <el-button v-show="!more" @click="showMore" size="mini" plain type="primary" >查看更多</el-button>
             </div>
+            
+
+
+
         </div>
     </div>
 </div>
