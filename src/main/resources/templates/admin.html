@@ -95,8 +95,6 @@
     <!-- 修改用户信息弹出框 -->
     <el-dialog title="更新用户信息" :visible.sync="showEditAdmin">
         <el-form :model="editAdminInfo">
-
-
             <el-form-item label="用户登录账号" :label-width="dialogLabelWidth">
                 <el-input v-model="editAdminInfo.username" size="mini" disabled auto-complete="off"></el-input>
             </el-form-item>

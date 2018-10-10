@@ -4,11 +4,13 @@ var vm = new Vue({
     el: "#app",
     data: {
     	name: '',
-        pw: ''
+        pw: '',
+        cip: returnCitySN.cip || '',
+
     },
     methods: {
     	login: function(){
-    		var data = {username: vm.name, password: hex_md5(vm.pw)};
+    		var data = {username: vm.name, password: hex_md5(vm.pw), cip: vm.cip};
 			$.ajax({
 				url: 'api/user/login',
 				dataType: 'json',
