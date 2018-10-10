@@ -67,7 +67,7 @@ public class AccountServiceImpl implements AccountServiceI {
             throw new BaseException(ExceptionCode.PARAMETER_MISSING, "no user found math username:" + loginDTO.getUsername());
         }
         // 判断IP地址是否合法
-        String ip = null;
+        String ip = loginDTO.getCip();
         if (null == loginDTO.getCip() || StringUtils.isEmpty(loginDTO.getCip())) {
             ip = getIpAddr(request);
         }
