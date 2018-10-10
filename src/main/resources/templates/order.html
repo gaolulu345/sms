@@ -11,6 +11,8 @@
         <#include "common/top.html">
         <div class="content">
             <div class="searchBox">
+
+                <el-input v-model="currentOrderId" style="width:150px;" type="number" size="mini" clearable placeholder="订单编号"></el-input>
                 <!-- 状态筛选 -->
                 <el-select v-model="currentStatus" size="mini" clearable placeholder="请选择状态">
                     <el-option

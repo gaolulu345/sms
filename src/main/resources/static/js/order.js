@@ -22,6 +22,7 @@ var vm = new Vue({
         currentStatus: '',
         currentType: '',
         currentTerIds: [],
+        currentOrderId: null,
 
         orderList: [],
     
@@ -40,17 +41,18 @@ var vm = new Vue({
     mounted: function() {
         console.log('mounted......')
         this.getTerList()
-        this.getOrderList(10, 1, [], '', ' ', ' ', ' ')
+        this.getOrderList(10, 1, null, [], '', ' ', ' ', ' ')
     },
 
     methods: {
-        getOrderList: function(pageSize, pageIndex, terIds, status, type, startTime, endTime) {
+        getOrderList: function(pageSize, pageIndex, orderId, terIds, status, type, startTime, endTime) {
             console.log(terIds)
             let ids = terIds
             // let ids = terIds[0] ? terIds : []
             this.$http.post("/api/private/order/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
+                orderId: orderId,
                 status: status,
                 type: type,
                 terIds: ids,
@@ -58,7 +60,6 @@ var vm = new Vue({
                 endTime: endTime
             }).then(function(res){
                 let data = res.json().data
-                console.log(data)
                 let result = data.result;
                 if(result && result[0]) {
                     result.forEach(function(val) {
@@ -119,14 +120,14 @@ var vm = new Vue({
             }
             vm.currentStartTime = vm.dateRange[0] || '';
             vm.currentEndTime = vm.dateRange[1] || '';
-            vm.getOrderList(vm.currentPageSize, 1, vm.currentTerIds, vm.currentStatus, vm.currentType, vm.currentStartTime, vm.currentEndTime);
+            vm.getOrderList(vm.currentPageSize, 1, vm.currentOrderId, vm.currentTerIds, vm.currentStatus, vm.currentType, vm.currentStartTime, vm.currentEndTime);
         },
 
         handleSizeChange(val) {
-            vm.getOrderList(val, 1, vm.currentTerIds, vm.currentStatus, vm.currentType, vm.currentStartTime, vm.currentEndTime);
+            vm.getOrderList(val, 1, vm.currentOrderId, vm.currentTerIds, vm.currentStatus, vm.currentType, vm.currentStartTime, vm.currentEndTime);
         },
         handleCurrentChange(val) {
-            vm.getOrderList(vm.currentPageSize, val, vm.currentTerIds, vm.currentStatus, vm.currentType, vm.currentStartTime, vm.currentEndTime);
+            vm.getOrderList(vm.currentPageSize, val, vm.currentOrderId, vm.currentTerIds, vm.currentStatus, vm.currentType, vm.currentStartTime, vm.currentEndTime);
 
         }
     }
