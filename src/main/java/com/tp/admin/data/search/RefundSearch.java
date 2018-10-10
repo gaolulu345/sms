@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class RefundSearch extends  Search {
+public class RefundSearch extends Search {
 
     int id;
     Integer orderId;

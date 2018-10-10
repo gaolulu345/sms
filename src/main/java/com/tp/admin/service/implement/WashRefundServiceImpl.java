@@ -20,6 +20,8 @@ import com.tp.admin.manage.impl.MiniOrderPayManagerImpl;
 import com.tp.admin.service.WashRefundServiceI;
 import com.tp.admin.utils.ExcelUtil;
 import com.tp.admin.utils.SessionUtils;
+import com.tp.admin.utils.StringUtil;
+import com.tp.admin.utils.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +34,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class WashRefundServiceImpl implements WashRefundServiceI {
+
+    private static final Logger logger = LoggerFactory.getLogger(WashRefundServiceImpl.class);
 
     @Autowired
     RefundDao refundDao;
@@ -48,8 +53,6 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
 
     @Autowired
     TransactionalServiceI transactionalService;
-
-    private static final Logger logger = LoggerFactory.getLogger(MiniOrderPayManagerImpl.class);
 
     @Override
     public ApiResult list(HttpServletRequest request, RefundSearch refundSearch) {
@@ -70,7 +73,21 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
 
     @Override
     public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request, HttpServletResponse response, RefundSearch refundSearch) {
-
+        int days = 0;
+        try {
+            String st = refundSearch.getStartTime();
+            String et = refundSearch.getEndTime();
+            Date startTime = StringUtil.toSearchDate(st);
+            Date endTime = StringUtil.toSearchDate(et);
+            days = TimeUtil.getDiffDays(startTime,endTime);
+            logger.info("导出数据天数间隔 {}",days);
+        }catch (Exception e){
+            logger.error("筛选时间请求参数异常{}" , e.getMessage());
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        if (days > 90) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"导出时间间隔天数不能大于9天");
+        }
         List<Refund> list = refundDao.listBySearch(refundSearch);
         if (null != list && !list.isEmpty()) {
             for (Refund o : list){

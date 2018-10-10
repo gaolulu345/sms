@@ -14,8 +14,11 @@ import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.service.WashOrderServiceI;
 import com.tp.admin.utils.ExcelUtil;
 import com.tp.admin.utils.StringUtil;
+import com.tp.admin.utils.TimeUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -30,10 +33,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class WashOrderServiceImpl implements WashOrderServiceI {
+
+    private static final Logger logger = LoggerFactory.getLogger(WashOrderServiceImpl.class);
 
     @Autowired
     OrderDao orderDao;
@@ -74,6 +80,21 @@ public class WashOrderServiceImpl implements WashOrderServiceI {
 
     @Override
     public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request , HttpServletResponse response ,OrderSearch orderSearch) {
+        int days = 0;
+        try {
+            String st = orderSearch.getStartTime();
+            String et = orderSearch.getEndTime();
+            Date startTime = StringUtil.toSearchDate(st);
+            Date endTime = StringUtil.toSearchDate(et);
+            days = TimeUtil.getDiffDays(startTime,endTime);
+            logger.info("导出数据天数间隔 {}",days);
+        }catch (Exception e){
+            logger.error("筛选时间请求参数异常{}" , e.getMessage());
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        if (days > 90) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"导出时间间隔天数不能大于9天");
+        }
         List<OrderDTO> list = orderDao.listBySearch(orderSearch);
         if (null != list && !list.isEmpty()) {
             for (OrderDTO o : list) {
