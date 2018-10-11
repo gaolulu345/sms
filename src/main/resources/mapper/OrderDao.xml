@@ -18,8 +18,17 @@
                 #{terId}
             </foreach>
         </if>
+        <if test="orderId != null">
+            AND
+            o.id = #{orderId}
+        </if>
         <if test="status != null">
-            AND o.status = #{status}
+            AND
+            o.status = #{status}
+        </if>
+        <if test="type != null">
+            AND
+            o.type = #{type}
         </if>
         <if test="startTime != null and endTime != null">
             AND o.pay_time BETWEEN #{startTime} AND #{endTime}
@@ -66,7 +75,6 @@
             AND
             o.type = #{type}
         </if>
-
         <if test="startTime != null and endTime != null">
             AND o.pay_time BETWEEN #{startTime} AND #{endTime}
         </if>

@@ -21,6 +21,7 @@ public class Refund {
     int status;  // 进度
     @ExcelField(title = "留言", order = 10)
     String msg;  // 退款说明
+    @ExcelField(title = "联系人电话", order = 11)
     String phone;// 手机号
     boolean deleted;
     Timestamp modifyTime;
