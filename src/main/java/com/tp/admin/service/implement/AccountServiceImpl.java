@@ -37,7 +37,6 @@ public class AccountServiceImpl implements AccountServiceI {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
-
     @Autowired
     AdminAccountDao adminAccountDao;
 
@@ -66,7 +65,6 @@ public class AccountServiceImpl implements AccountServiceI {
         if (user == null) {
             throw new BaseException(ExceptionCode.PARAMETER_MISSING, "no user found math username:" + loginDTO.getUsername());
         }
-        // 判断IP地址是否合法
         String ip = loginDTO.getCip();
         if (null == loginDTO.getCip() || StringUtils.isEmpty(loginDTO.getCip())) {
             ip = getIpAddr(request);
