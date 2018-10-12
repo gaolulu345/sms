@@ -25,6 +25,11 @@ var vm = new Vue({
         currentOrderId: null,
 
         orderList: [],
+
+        showLog: false,
+        currentLogOrderId: null,
+        logList: {},
+        dialogPageSizes: [5, 10, 20],
     
         typeOptions: [{value: 0, label: '支付宝'}, {value: 1, label: '微信钱包'}, {value: 2, label: '测试'}, {value: 3, label: '免费'}],
         statusOptions: [{value: 0, label: '创建'}, {value: 1, label: '退款'}, {value: 2, label: '支付完成'}],
@@ -111,6 +116,67 @@ var vm = new Vue({
             } else {
                 vm.$message.error('请选择开始和结束日期！');
             }
+        },
+
+        // 查看日志
+        getWashLog: function(orderId, pageIndex, pageSize){
+            vm.currentLogOrderId = orderId
+            vm.$http.post("/api/private/wash/order/log/list", {
+                pageSize: pageSize,
+                pageIndex: pageIndex,
+                orderId: orderId
+            }).then(function(res){
+                if(res.json().code == 200){
+                    let response = res.json().data
+                    if(response.totalCnt > 0) {
+                        response.result.forEach(function(val) {
+                            val.createTime = val.createTime ? formatTimestampToSecond(val.createTime) : '暂无'
+                            val.valid =  val.valid == false ? '不可用' : '空闲'
+                        })
+                        vm.logList = response
+                        vm.showLog = true
+                    } else {
+                        vm.$message.error('暂无结果！')
+                    }
+                } else {
+                    vm.$message.error(res.json().message)
+                }
+            })
+        },
+        // 日志分页操作
+        logCurrentChange: function(val){
+            let orderId = vm.currentLogOrderId;
+            let pageIndex = val;
+            let pageSize = vm.logList.pageSize;
+            vm.$http.post("/api/private/wash/order/log/list", {
+                pageSize: pageSize,
+                pageIndex: pageIndex,
+                orderId: orderId
+            }).then(function(res){
+                let response = res.json().data
+                response.result.forEach(function(val) {
+                    val.createTime = val.createTime ? formatTimestampToSecond(val.createTime) : '暂无'
+                    val.valid =  val.valid == false ? '不可用' : '空闲'
+                })
+                vm.logList = response
+            })
+        },
+        logSizeChange: function(val){
+            let orderId = vm.currentLogOrderId;
+            let pageIndex = 1;
+            let pageSize = val;
+            vm.$http.post("/api/private/wash/order/log/list", {
+                pageSize: pageSize,
+                pageIndex: pageIndex,
+                orderId: orderId
+            }).then(function(res){
+                let response = res.json().data
+                response.result.forEach(function(val) {
+                    val.createTime = val.createTime ? formatTimestampToSecond(val.createTime) : '暂无'
+                    val.valid =  val.valid == false ? '不可用' : '空闲'
+                })
+                vm.logList = response
+            })
         },
 
 
