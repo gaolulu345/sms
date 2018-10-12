@@ -46,9 +46,6 @@ public class WashRefundController {
         RefundSearch search = new RefundSearch();
         search.setStartTime(st);
         search.setEndTime(et);
-
-
-
         if (null != status) {
             search.setStatus(status);
         }
