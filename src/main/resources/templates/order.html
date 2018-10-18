@@ -71,15 +71,43 @@
                 </el-table-column>
 
                 <el-table-column prop="cardId" label="洗车卡"></el-table-column>
-                <el-table-column prop="ticketId" label="优惠券"></el-table-column>
+                <!-- <el-table-column prop="ticketId" label="优惠券"></el-table-column> -->
                 <el-table-column prop="typeDesc" label="支付方式"></el-table-column>
                 <el-table-column prop="channelDesc" label="订单来源"></el-table-column>
+                <el-table-column label="洗车机日志" v-if="opPer['/api/private/wash/order/log/list']">
+                    <template slot-scope="scope">
+                        <el-button plain type="primary" size="mini" @click="getWashLog(scope.row.id,1,5)">查看</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
 
             <!-- 分页 -->
             <#include "common/pages2.html">
         </div>
-    </div>    
+    </div> 
+
+    <!-- 洗车日志列表弹出框 -->
+    <el-dialog title="洗车日志" :visible.sync="showLog">
+        <el-table
+            :data="logList.result"
+            size="mini"
+            style="width: 100%">
+            <el-table-column prop="orderId" label="订单编号"></el-table-column>
+            <!-- <el-table-column prop="code" label="code"></el-table-column> -->
+            <el-table-column prop="state" label="state"></el-table-column>
+            <el-table-column prop="info" label="info"></el-table-column>
+            <el-table-column prop="createTime" label="时间"></el-table-column>
+            <!-- <el-table-column prop="needWait" label="needWait"></el-table-column> -->
+            <!-- <el-table-column prop="valid" label="valid"></el-table-column> -->
+            <el-table-column prop="detail" label="详细信息"></el-table-column>
+        </el-table>
+  
+        
+        <!-- 日志翻页 -->
+        <div class="dialogPages" style="text-align: center; margin-top: 10px;">
+            <el-pagination @size-change="logSizeChange" @current-change="logCurrentChange" :current-page.sycn="logList.pageIndex" :page-sizes="dialogPageSizes" :page-size.sync="logList.pageSize"  layout="total, sizes, prev, pager, next, jumper" :total="logList.totalCnt"></el-pagination>
+        </div>
+    </el-dialog>   
 </div>
 
 <script src="/js/common/per.js"></script>
