@@ -184,6 +184,9 @@ var vm = new Vue({
             if(!vm.dateRange) {  //如果日期选择器中先有选择，后置空，结果为null，会报错
                 vm.dateRange = '';
             }
+            if(!vm.currentTerIds[0] || !vm.currentTerIds) {
+                vm.currentTerIds = []
+            }
             vm.currentStartTime = vm.dateRange[0] || '';
             vm.currentEndTime = vm.dateRange[1] || '';
             vm.getOrderList(vm.currentPageSize, 1, vm.currentOrderId, vm.currentTerIds, vm.currentStatus, vm.currentType, vm.currentStartTime, vm.currentEndTime);
