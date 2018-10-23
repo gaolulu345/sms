@@ -69,22 +69,30 @@ var vm = new Vue({
 
         // 注册
         addAdmin: function() {
+            let regExp = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/; 
             let infos = {
                 name: vm.addAdminInfo.name,
                 intros: vm.addAdminInfo.intros,
                 username: vm.addAdminInfo.username,
                 rolesId: vm.addAdminInfo.rolesId
             }
-            this.$http.post("/api/private/admin/register", vm.addAdminInfo).then(function(res){
-                let result = res.json();
-                if(result.code == 200){
-                    vm.$message.success('已添加');
-                    vm.showAddAdmin = false;
-                    window.location.reload();
-                }else {
-                    vm.$message.error(result.message)
-                }
-            })
+            if(!infos.username) {
+                vm.$message.error("请填写登录账户！")
+            } else if(!regExp.test(infos.username)) {
+                vm.$message.error("请填写正确的邮箱！")
+            } else {
+                this.$http.post("/api/private/admin/register", vm.addAdminInfo).then(function(res){
+                    let result = res.json();
+                    if(result.code == 200){
+                        vm.$message.success('已添加');
+                        vm.showAddAdmin = false;
+                        window.location.reload();
+                    }else {
+                        vm.$message.error(result.message)
+                    }
+                })
+            }
+            
         },
         // 修改信息
         clickEditAdmin(row) {
