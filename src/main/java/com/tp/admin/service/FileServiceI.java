@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface FileServiceI {
 
-    ApiResult uoloadImges(HttpServletRequest request , MultipartFile file);
+    ApiResult uploadImges(HttpServletRequest request , MultipartFile file);
 
     ApiResult list(HttpServletRequest request, FileSearch fileSearch);
 

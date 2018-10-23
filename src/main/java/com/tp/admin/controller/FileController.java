@@ -24,7 +24,7 @@ public class FileController {
 
     @PostMapping(value = "/upload/images")
     public ApiResult updateTerCover(HttpServletRequest request , @RequestPart("file")MultipartFile file) {
-        return fileService.uoloadImges(request ,file);
+        return fileService.uploadImges(request ,file);
     }
 
     @PostMapping(value = "/upload/list")

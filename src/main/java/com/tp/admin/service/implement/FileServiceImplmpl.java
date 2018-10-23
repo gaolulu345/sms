@@ -37,7 +37,7 @@ public class FileServiceImplmpl implements FileServiceI {
     AliyunOssManagerI aliyunOssManager;
 
     @Override
-    public ApiResult uoloadImges(HttpServletRequest request, MultipartFile file) {
+    public ApiResult uploadImges(HttpServletRequest request, MultipartFile file) {
         UploadFileDTO uploadFileDTO = aliyunOssManager.uploadFileToAliyunOss(file);
         if (!uploadFileDTO.isSuccess()) {
             throw new BaseException(ExceptionCode.ALI_OSS_UPDATE_ERROR);
