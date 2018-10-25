@@ -22,24 +22,25 @@
         </if>
         ORDER BY id DESC
     </select>
-    <select id="listBySearch" parameterType="com.tp.admin.data.search.UserSearch" resultMap="UserMap">
-        SELECT * FROM
-        `user`
+
+    <select id="listBySearch" parameterType="com.tp.admin.data.search.UserSearch" resultMap="UserDTOMap">
+        SELECT u.* , uinfo.avatar , uinfo.city , uinfo.nickname , uinfo.gender  FROM
+        `user` AS u LEFT JOIN `user_info` AS uinfo ON u.id = uinfo.user_id
         WHERE
-        deleted = 0
+        u.deleted = 0
         AND
         (type = 3 OR type = 4)
         <if test="phone != null">
-            AND phone LIKE CONCAT('%',#{phone},'%')
+            AND u.phone LIKE CONCAT('%',#{phone},'%')
         </if>
         <if test="id != null and id != 0">
-            AND id = #{id}
+            AND u.id = #{id}
         </if>
         <if test="startTime != null">
-            AND create_time &gt; #{startTime}
+            AND u.create_time &gt; #{startTime}
         </if>
         <if test="endTime != null">
-            AND create_time &lt; #{endTime}
+            AND u.create_time &lt; #{endTime}
         </if>
         ORDER BY id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">
@@ -47,17 +48,17 @@
         </if>
     </select>
 
-    <resultMap id="UserMap" type="com.tp.admin.data.entity.User">
+    <resultMap id="UserDTOMap" type="com.tp.admin.data.dto.UserDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="phone" property="phone" jdbcType="VARCHAR" />
-        <result column="wxid" property="wxid" jdbcType="VARCHAR" />
+        <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="TINYINT" />
         <result column="mini_wxid" property="miniWxid" jdbcType="VARCHAR" />
-        <result column="wx_unionid" property="wxUnionid" jdbcType="VARCHAR" />
         <result column="ali_id" property="aliId" jdbcType="VARCHAR" />
         <result column="type" property="type" jdbcType="TINYINT" />
-        <result column="deleted" property="deleted" jdbcType="BIT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-        <result column="last_login_time" property="lastLoginTime"
-                jdbcType="TIMESTAMP" />
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
     </resultMap>
 </mapper>

@@ -1,5 +1,6 @@
 package com.tp.admin.dao;
 
+import com.tp.admin.data.dto.UserDTO;
 import com.tp.admin.data.entity.User;
 import com.tp.admin.data.search.UserSearch;
 
@@ -9,5 +10,5 @@ public interface UserDao {
 
     int cntBySearch(UserSearch userSearch);
 
-    List<User> listBySearch(UserSearch userSearch);
+    List<UserDTO> listBySearch(UserSearch userSearch);
 }

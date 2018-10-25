@@ -2,6 +2,7 @@ package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.UserDao;
+import com.tp.admin.data.dto.UserDTO;
 import com.tp.admin.data.entity.User;
 import com.tp.admin.data.search.UserSearch;
 import com.tp.admin.data.table.ResultTable;
@@ -21,9 +22,9 @@ public class WashUserServiceImpl implements WashUserServiceI {
     @Override
     public ApiResult list(HttpServletRequest request, UserSearch userSearch) {
         userSearch.builData();
-        List<User> list = userDao.listBySearch(userSearch);
+        List<UserDTO> list = userDao.listBySearch(userSearch);
         if (null != list && !list.isEmpty()) {
-            for (User u : list) {
+            for (UserDTO u : list) {
                 u.build();
             }
             int cnt = userDao.cntBySearch(userSearch);
