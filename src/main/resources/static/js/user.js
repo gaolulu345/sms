@@ -50,8 +50,10 @@ var vm = new Vue({
             }).then(function(res){
                 let data = res.json().data;
                 let result = data.result;
+                let genderList = ['未知', '男', '女']
                 if(result && result[0]) {
                     result.forEach(function(val) {
+                        val.gender = genderList[val.gender]
                         val.createTime = formatTimestampToSecond(val.createTime)
                         val.lastLoginTime = formatTimestampToSecond(val.lastLoginTime)
                     })
