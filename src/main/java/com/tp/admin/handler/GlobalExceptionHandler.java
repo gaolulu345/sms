@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
         if (req.getMethod().equals("POST")) {
             String code = e.getErrorCode();
             if (StringUtil.isEmpty(code)) {
-                return ApiResult.error(ExceptionCode.UNKNOWN_EXCEPTION, e.getMessage(), null);
+                return ApiResult.error(ExceptionCode.UNKNOWN_EXCEPTION, e.getErrorMsg(), null);
             }
             return ApiResult.error(code, e.getMessage(), null);
         } else {

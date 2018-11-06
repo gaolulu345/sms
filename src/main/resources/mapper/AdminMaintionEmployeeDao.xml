@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.AdminMaintionEmployeeDao">
+
+    <select id="findByWxMiniId" parameterType="java.lang.String" resultMap="AdminMaintionEmployeeMap">
+      SELECT * FROM
+      `admin_maintion_employee`
+      WHERE
+      `mini_wx_id` = #{code}
+      LIMIT 0 , 1
+    </select>
+
+    <resultMap id="AdminMaintionEmployeeMap" type="com.tp.admin.data.entity.AdminMaintionEmployee">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="mini_wx_id" property="miniWxId" jdbcType="VARCHAR"/>
+        <result column="wx_union_id" property="wxUnionId" jdbcType="VARCHAR"/>
+        <result column="deleted" property="deleted" jdbcType="BIT" />
+        <result column="enable" property="enable" jdbcType="BIT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+</mapper>
