@@ -1,7 +1,7 @@
 package com.tp.admin.controller;
 
 /**
- * 维保登录认证
+ * 微信小程序-维保授权接口
  */
 public class WxMiniMaintainAuthController {
 

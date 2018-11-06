@@ -1,4 +1,10 @@
 package com.tp.admin.service;
 
-public class WxMiniMaintainHelper {
+/**
+ * 微信小程序-维保辅助接口
+ */
+public interface WxMiniMaintainHelper {
+
+
+
 }

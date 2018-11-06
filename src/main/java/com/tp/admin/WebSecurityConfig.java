@@ -48,11 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .anyRequest().authenticated()
             .and()
-            .formLogin()
-            .loginPage("/login")
-            .and()
             .addFilter(new AuthBasicAuthenticationFilter(authenticationManagerBean()));
-        http.sessionManagement().maximumSessions(1).sessionRegistry(getSessionRegistry()).expiredUrl("/login");
         http.csrf().disable();
     }
 

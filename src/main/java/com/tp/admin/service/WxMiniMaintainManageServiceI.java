@@ -1,4 +1,61 @@
 package com.tp.admin.service;
 
+import com.tp.admin.ajax.ApiResult;
+
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * 微信小程序-维保管理接口
+ */
 public interface WxMiniMaintainManageServiceI {
+
+    /**
+     * 区域（地市级）
+     * @param request
+     * @return
+     */
+    ApiResult region(HttpServletRequest request);
+
+    /**
+     * 洗车站点查询
+     * @param request
+     * @return
+     */
+    ApiResult siteListSearch(HttpServletRequest request);
+
+    /**
+     * 站点上线
+     * @param request
+     * @return
+     */
+    ApiResult siteOnline(HttpServletRequest request);
+
+    /**
+     * 网点设备复位
+     * @param request
+     * @return
+     */
+    ApiResult siteDeviceReset(HttpServletRequest request);
+
+    /**
+     * 站点信息
+     * @param request
+     * @return
+     */
+    ApiResult siteInfo(HttpServletRequest request);
+
+    /**
+     * 站点下线
+     * @param request
+     * @return
+     */
+    ApiResult siteOffline(HttpServletRequest request);
+
+    /**
+     * 站点操作日志
+     * @param request
+     * @return
+     */
+    ApiResult siteOperationLog(HttpServletRequest request);
+
 }
