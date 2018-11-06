@@ -92,13 +92,14 @@
         ti.title ,
         o.user_id ,
         o.operation_id ,
+        op.status AS operation_status,
         o.amount ,
         o.status ,
         o.type ,
         o.channel ,
         o.pay_time
         FROM
-        `order` AS o INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id
+        `order` AS o INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id LEFT JOIN operation AS op ON op.id = o.operation_id
         WHERE
         o.id = #{id}
         AND

@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping(WashOrderController.ROUTER_INDEX)
 public class WashOrderController {
 
-    public static final String ROUTER_INDEX = "/api/private/order";
+    public static final String ROUTER_INDEX = "/api/private/wash/order";
 
     @Autowired
     WashOrderServiceI washOrderService;

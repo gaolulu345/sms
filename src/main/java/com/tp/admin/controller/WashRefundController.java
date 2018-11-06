@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(WashRefundController.ROUTER_INDEX)
 public class WashRefundController {
 
-    public static final String ROUTER_INDEX = "/api/private/refund";
+    public static final String ROUTER_INDEX = "/api/private/wash/refund";
 
     @Autowired
     WashRefundServiceI refundService;

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(WashUserController.ROUTER_INDEX)
 public class WashUserController {
 
-    public static final String ROUTER_INDEX = "/api/private/user";
+    public static final String ROUTER_INDEX = "/api/private/wash/user";
 
     @Autowired
     WashUserServiceI userService;
