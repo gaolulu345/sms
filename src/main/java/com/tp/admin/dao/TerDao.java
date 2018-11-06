@@ -17,4 +17,8 @@ public interface TerDao {
 
     Integer cntTerInfoSearch(WxMiniTerSearch wxMiniTerSearch);
 
+    Integer updateOnline(int id);
+
+    Integer updateOffline(int id, String offlineDesc);
+
 }

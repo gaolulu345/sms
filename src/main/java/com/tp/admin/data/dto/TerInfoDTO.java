@@ -15,6 +15,8 @@ public class TerInfoDTO {
     private int status;
     private String title;
     private String code;
+    private String address;
+    private String geoCode;
     private String cover;
     private boolean online;
 
