@@ -1,9 +1,93 @@
 package com.tp.admin.controller;
 
+import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.service.WxMiniMaintainManageServiceI;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 微信小程序-维保管理
  */
+@RestController
+@RequestMapping(WxMiniMaintainManageController.ROUTER_INDEX)
 public class WxMiniMaintainManageController {
 
+    public static final String ROUTER_INDEX = "/api/open/wx/mini/maintain/manage";
 
+    @Autowired
+    WxMiniMaintainManageServiceI wxMiniMaintainManageService;
+
+    /**
+     * 区域（地市级）
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/region")
+    public ApiResult region(HttpServletRequest request){
+        return wxMiniMaintainManageService.region(request);
+    }
+
+    /**
+     * 地区站点列表
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/site/list")
+    public ApiResult siteListSearch(HttpServletRequest request){
+        return wxMiniMaintainManageService.siteListSearch(request);
+    }
+
+    /**
+     * 站点信息
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/site/info")
+    public ApiResult siteInfo(HttpServletRequest request){
+        return wxMiniMaintainManageService.siteInfo(request);
+    }
+
+    /**
+     * 站点上线
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/site/online")
+    public  ApiResult siteOnline(HttpServletRequest request){
+        return wxMiniMaintainManageService.siteOnline(request);
+    }
+
+    /**
+     * 站点下线
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/site/offline")
+    public ApiResult siteOffline(HttpServletRequest request){
+        return wxMiniMaintainManageService.siteOffline(request);
+    }
+
+    /**
+     * 网点设备复位
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/site/device/reset")
+    ApiResult siteDeviceReset(HttpServletRequest request){
+        return wxMiniMaintainManageService.siteDeviceReset(request);
+    }
+
+    /**
+     * 站点操作日志
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/site/operation/log")
+    ApiResult siteOperationLog(HttpServletRequest request){
+        return wxMiniMaintainManageService.siteOperationLog(request);
+    }
 }

@@ -24,20 +24,6 @@ public interface WxMiniMaintainManageServiceI {
     ApiResult siteListSearch(HttpServletRequest request);
 
     /**
-     * 站点上线
-     * @param request
-     * @return
-     */
-    ApiResult siteOnline(HttpServletRequest request);
-
-    /**
-     * 网点设备复位
-     * @param request
-     * @return
-     */
-    ApiResult siteDeviceReset(HttpServletRequest request);
-
-    /**
      * 站点信息
      * @param request
      * @return
@@ -45,11 +31,25 @@ public interface WxMiniMaintainManageServiceI {
     ApiResult siteInfo(HttpServletRequest request);
 
     /**
+     * 站点上线
+     * @param request
+     * @return
+     */
+    ApiResult siteOnline(HttpServletRequest request);
+
+    /**
      * 站点下线
      * @param request
      * @return
      */
     ApiResult siteOffline(HttpServletRequest request);
+
+    /**
+     * 网点设备复位
+     * @param request
+     * @return
+     */
+    ApiResult siteDeviceReset(HttpServletRequest request);
 
     /**
      * 站点操作日志
