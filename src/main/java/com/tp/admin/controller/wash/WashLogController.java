@@ -1,4 +1,4 @@
-package com.tp.admin.controller;
+package com.tp.admin.wash.controller;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.search.WashLogSearch;

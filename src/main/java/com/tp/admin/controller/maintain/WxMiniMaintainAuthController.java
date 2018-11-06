@@ -1,4 +1,4 @@
-package com.tp.admin.controller;
+package com.tp.admin.controller.maintain;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.service.WxMiniMaintainAuthServiceI;
