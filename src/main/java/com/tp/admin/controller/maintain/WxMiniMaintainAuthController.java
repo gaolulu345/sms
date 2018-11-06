@@ -26,6 +26,16 @@ public class WxMiniMaintainAuthController {
      * @param request
      * @return
      */
+    @PostMapping(value = "/login")
+    public ApiResult login(HttpServletRequest request){
+        return wxMiniMaintainAuthService.login(request);
+    }
+
+    /**
+     * 微信授权
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/auth")
     public ApiResult auth(HttpServletRequest request){
         return wxMiniMaintainAuthService.auth(request);

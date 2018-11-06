@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
             if (StringUtil.isEmpty(code)) {
                 return ApiResult.error(ExceptionCode.UNKNOWN_EXCEPTION, e.getErrorMsg(), null);
             }
-            return ApiResult.error(code, e.getMessage(), null);
+            return ApiResult.error(code, e.getErrorMsg(), null);
         } else {
             ModelAndView mav = new ModelAndView("error");
             mav.addObject("exception", e);

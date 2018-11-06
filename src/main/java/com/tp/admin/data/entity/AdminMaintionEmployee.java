@@ -1,6 +1,7 @@
 package com.tp.admin.data.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,17 +13,20 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminMaintionEmployee {
-    @Expose
+    @JsonIgnore
     private int id;
     private String miniWxId;
+    @JsonIgnore
     private String wxUnionId;
-    @Expose
+    private String name;
+    private String phone;
+    @JsonIgnore
     private Timestamp createTime;
-    @Expose
+    @JsonIgnore
     private Timestamp modifyTime;
-    @Expose
+    @JsonIgnore
     private boolean enable;
-    @Expose
+    @JsonIgnore
     private boolean deleted;
     private Timestamp lastLoginTime;
 

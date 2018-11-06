@@ -10,11 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 public interface WxMiniMaintainAuthServiceI {
 
     /**
-     * 授权登录
+     * 微信授权
      * @param request
      * @return
      */
     ApiResult auth(HttpServletRequest request);
+
+    /**
+     * 授权登录
+     * @param request
+     * @return
+     */
+    ApiResult login(HttpServletRequest request);
 
     /**
      * 登录注册

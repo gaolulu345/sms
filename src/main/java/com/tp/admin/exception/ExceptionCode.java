@@ -16,6 +16,7 @@ public enum ExceptionCode {
     NO_THIS_USER("2001","查无此用户"),
     NO_PERMIT("2002", "未登陆"),
     LOGIN_TIMEOUT("2003", "登录超时"),
+    USER_NOT_PERMISSION("2004", "账号已经申请注册，暂未通过审核"),
 
     ALI_OSS_OPEN_STORAGE_SERVICE_ERROR("9000","当访问对象存储服务 Open Storage Service 失败时抛出该异常类实例，请重新尝试"),
     ALI_OSS_REMOTE_ERROR("9001","尝试访问阿里云服务时的异常,请重新尝试"),

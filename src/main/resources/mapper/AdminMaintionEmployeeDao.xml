@@ -2,6 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tp.admin.dao.AdminMaintionEmployeeDao">
 
+    <insert id="insert" parameterType="com.tp.admin.data.entity.AdminMaintionEmployee" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        INSERT INTO `admin_maintion_employee` (
+			`mini_wx_id`,
+			`wx_union_id`,
+			`name`,
+			`phone`,
+			`enable`
+		) VALUES (
+			#{miniWxId},
+			#{wxUnionId},
+			#{name},
+			#{phone},
+			#{enable}
+		)
+    </insert>
+
     <select id="findByWxMiniId" parameterType="java.lang.String" resultMap="AdminMaintionEmployeeMap">
       SELECT * FROM
       `admin_maintion_employee`
@@ -10,10 +27,20 @@
       LIMIT 0 , 1
     </select>
 
+    <select id="findByPhone" resultMap="AdminMaintionEmployeeMap">
+    SELECT * FROM
+      `admin_maintion_employee`
+      WHERE
+      `phone` = #{phone}
+      LIMIT 0 , 1
+    </select>
+
     <resultMap id="AdminMaintionEmployeeMap" type="com.tp.admin.data.entity.AdminMaintionEmployee">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="mini_wx_id" property="miniWxId" jdbcType="VARCHAR"/>
         <result column="wx_union_id" property="wxUnionId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="deleted" property="deleted" jdbcType="BIT" />
         <result column="enable" property="enable" jdbcType="BIT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />

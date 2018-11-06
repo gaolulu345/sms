@@ -13,7 +13,7 @@ public class WxJscodeSessionResult {
     @SerializedName("session_key")
     private String sessionKey;
     @SerializedName("openid")
-    private String openid;
+    private String openId;
     @SerializedName("unionid")
-    private String unionid;
+    private String unionId;
 }

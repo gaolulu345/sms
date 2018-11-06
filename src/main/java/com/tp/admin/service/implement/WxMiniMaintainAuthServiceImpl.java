@@ -5,7 +5,9 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
 import com.tp.admin.dao.AdminMaintionEmployeeDao;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
+import com.tp.admin.data.entity.FileUploadLog;
 import com.tp.admin.data.parameter.WxMiniAuthDTO;
+import com.tp.admin.data.parameter.WxMiniRegisterDTO;
 import com.tp.admin.data.result.WxJscodeSessionResult;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -32,6 +34,23 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniMaintainAuthServiceI
     AdminMaintionEmployeeDao adminMaintionEmployeeDao;
 
     @Override
+    public ApiResult login(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        WxMiniAuthDTO wxMiniAuthDTO = new Gson().fromJson(body, WxMiniAuthDTO.class);
+        if (StringUtils.isBlank(wxMiniAuthDTO.getOpenId())) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
+        }
+        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByWxMiniId(wxMiniAuthDTO.getOpenId());
+        if (null == adminMaintionEmployee) {
+            throw new BaseException(ExceptionCode.NO_THIS_USER);
+        }
+        if (!adminMaintionEmployee.isEnable()) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        return ApiResult.ok(adminMaintionEmployee);
+    }
+
+    @Override
     public ApiResult auth(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniAuthDTO wxMiniAuthDTO = new Gson().fromJson(body, WxMiniAuthDTO.class);
@@ -50,26 +69,57 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniMaintainAuthServiceI
         }catch (Exception e){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "微信授权失败" );
         }
-        if (StringUtils.isBlank(wxJscodeSessionResult.getOpenid())) {
+        if (StringUtils.isBlank(wxJscodeSessionResult.getOpenId())) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , result );
         }
         log.info(wxJscodeSessionResult.toString());
-        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByWxMiniId(wxJscodeSessionResult.getOpenid());
-        if (null == adminMaintionEmployee) {
-            throw new BaseException(ExceptionCode.NO_THIS_USER);
-        }
-        return ApiResult.ok(adminMaintionEmployee);
+        return ApiResult.ok(wxJscodeSessionResult);
     }
 
     @Override
     public ApiResult register(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        return ApiResult.ok(body);
+        WxMiniRegisterDTO wxMiniRegisterDTO = new Gson().fromJson(body, WxMiniRegisterDTO.class);
+        if (StringUtils.isBlank(wxMiniRegisterDTO.getOpenId()) ||
+                StringUtils.isBlank(wxMiniRegisterDTO.getName()) ||
+                StringUtils.isBlank(wxMiniRegisterDTO.getPhone())) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByWxMiniId(wxMiniRegisterDTO.getOpenId());
+        if (null != adminMaintionEmployee) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        adminMaintionEmployee = adminMaintionEmployeeDao.findByPhone(wxMiniRegisterDTO.getPhone());
+        if (null != adminMaintionEmployee) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"该手机号已经申请注册,请尝试其它手机号。或联系系统管理员");
+        }
+        adminMaintionEmployee = new AdminMaintionEmployee();
+        adminMaintionEmployee.setMiniWxId(wxMiniRegisterDTO.getOpenId());
+        adminMaintionEmployee.setWxUnionId("");
+        adminMaintionEmployee.setName(wxMiniRegisterDTO.getName());
+        adminMaintionEmployee.setPhone(wxMiniRegisterDTO.getPhone());
+        adminMaintionEmployee.setEnable(false);
+        int res = adminMaintionEmployeeDao.insert(adminMaintionEmployee);
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+        }
+        return ApiResult.ok();
     }
 
     @Override
     public ApiResult registerCheck(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        return ApiResult.ok(body);
+        WxMiniRegisterDTO wxMiniRegisterDTO = new Gson().fromJson(body, WxMiniRegisterDTO.class);
+        if (StringUtils.isBlank(wxMiniRegisterDTO.getOpenId())) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByWxMiniId(wxMiniRegisterDTO.getOpenId());
+        if (null == adminMaintionEmployee ) {
+            throw new BaseException(ExceptionCode.NO_THIS_USER);
+        }
+        if (!adminMaintionEmployee.isEnable()) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        return ApiResult.ok();
     }
 }
