@@ -12,6 +12,10 @@ public class WxMiniTerSearch extends Search {
 
     Integer cityCode;
 
+    Integer online;
+
+    Integer status;
+
     @Override
     protected void builData() {
         super.build();

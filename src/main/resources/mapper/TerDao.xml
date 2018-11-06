@@ -17,4 +17,59 @@
 		ter AS t
 		GROUP BY t.city
     </select>
+
+    <select id="terInfoSearch" parameterType="com.tp.admin.data.parameter.WxMiniTerSearch" resultMap="TerInfoDTOMap">
+		SELECT
+		t.id ,
+		ti.online ,
+		ti.title ,
+		ti.status ,
+		ti.cover ,
+		t.code
+		FROM
+		ter AS t INNER JOIN ter_info AS ti ON t.id = ti.ter_id
+		WHERE
+		ti.deleted = 0
+		<if test="cityCode !=null and cityCode != 0">
+			AND t.city = #{cityCode}
+		</if>
+		<if test="online != null">
+			AND ti.online = #{online}
+		</if>
+		<if test="status != null and status == 1">
+			AND ti.status = #{status}
+		</if>
+		ORDER BY ti.id ASC
+		<if test="offset != null and pageSize != null and pageSize != 0">
+			LIMIT #{offset},#{pageSize}
+		</if>
+	</select>
+
+	<select id="cntTerInfoSearch" parameterType="com.tp.admin.data.parameter.WxMiniTerSearch"
+			resultType="java.lang.Integer">
+		SELECT
+		COUNT(t.id)
+		FROM
+		ter AS t INNER JOIN ter_info AS ti ON t.id = ti.ter_id
+		WHERE
+		ti.deleted = 0
+		<if test="cityCode !=null and cityCode != 0">
+			AND t.city = #{cityCode}
+		</if>
+		<if test="online != null">
+			AND ti.online = #{online}
+		</if>
+		<if test="status != null and status == 1">
+			AND ti.status = #{status}
+		</if>
+	</select>
+
+	<resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="code" property="code" jdbcType="VARCHAR" />
+		<id column="title" property="title" jdbcType="VARCHAR" />
+		<result column="online" property="online" jdbcType="BIT" />
+		<result column="status" property="status" jdbcType="SMALLINT" />
+	</resultMap>
+
 </mapper>
