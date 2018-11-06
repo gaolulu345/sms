@@ -40,7 +40,7 @@ public abstract class Search {
         }
     }
 
-    abstract void builData();
+    protected abstract void builData();
 
     
 }

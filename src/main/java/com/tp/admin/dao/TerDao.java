@@ -7,4 +7,6 @@ public interface TerDao {
 
     List<Map<String, Object>> findAllTerIdAndTitle();
 
+    List<Integer> listTerCityId();
+
 }
