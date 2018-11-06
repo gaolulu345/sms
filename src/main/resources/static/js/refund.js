@@ -45,7 +45,7 @@ var vm = new Vue({
 
     methods: {
         getRefundList: function(pageSize, pageIndex, status, reason, orderId, startTime, endTime) {
-            this.$http.post("/api/private/refund/list", {
+            this.$http.post("/api/private/wash/refund/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
                 status: status,
@@ -78,7 +78,7 @@ var vm = new Vue({
         },
 
         check: function(refundId, status) {
-            this.$http.post("/api/private/refund/approved", {
+            this.$http.post("/api/private/wash/refund/approved", {
                 id: refundId,
                 status: status
             }).then(function(res){
@@ -92,7 +92,7 @@ var vm = new Vue({
         },
 
         payback: function(refundId) {
-            this.$http.post("/api/private/refund/back", {
+            this.$http.post("/api/private/wash/refund/back", {
                 id: refundId
             }).then(function(res){
                 let result = res.json()
@@ -125,7 +125,7 @@ var vm = new Vue({
                 } else {
                     if (vm.totalCnt > 0) {
                         // window.location.href = '/api/private/refund/list/exprot?st=' + st + '&et=' + et + '&reason=' + '' + '&status=' + '';
-                        window.location.href = '/api/private/refund/list/exprot?st=' + st + '&et=' + et + '&reason=' + reason + '&status=' + status;
+                        window.location.href = '/api/private/wash/refund/list/exprot?st=' + st + '&et=' + et + '&reason=' + reason + '&status=' + status;
                     } else {
                         vm.$message.error('无结果')
                     }
@@ -136,7 +136,7 @@ var vm = new Vue({
         },
 
         showOrderInfo: function(orderId) {
-            this.$http.post("/api/private/order/info", {
+            this.$http.post("/api/private/wash/order/info", {
                 orderId: orderId
             }).then(function(res){
                 let result = res.json();

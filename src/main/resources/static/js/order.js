@@ -54,7 +54,7 @@ var vm = new Vue({
             console.log(terIds)
             let ids = terIds
             // let ids = terIds[0] ? terIds : []
-            this.$http.post("/api/private/order/list", {
+            this.$http.post("/api/private/wash/order/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
                 orderId: orderId,
@@ -86,7 +86,7 @@ var vm = new Vue({
         },
 
         getTerList: function() {
-            this.$http.post("/api/private/order/ter/selection", {}).then(function(res){
+            this.$http.post("/api/private/wash/order/ter/selection", {}).then(function(res){
                 let result = res.json()
                 vm.terOptions = result.data
             })
@@ -108,7 +108,7 @@ var vm = new Vue({
                     vm.$message.error('请选择近3个月的订单')
                 } else {
                    if (vm.totalCnt > 0) {
-                        window.location.href = "/api/private/order/list/exprot?st=" + st + "&et=" + et + "&terId=" + terId + "&type=" + type + '&status=' + status;
+                        window.location.href = "/api/private/wash/order/list/exprot?st=" + st + "&et=" + et + "&terId=" + terId + "&type=" + type + '&status=' + status;
                     } else {
                         vm.$message.error('无结果')
                     }

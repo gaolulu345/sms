@@ -40,7 +40,7 @@ var vm = new Vue({
 
     methods: {
         getUserList: function(pageSize, pageIndex, id, phone, startTime, endTime) {
-            this.$http.post("/api/private/user/list", {
+            this.$http.post("/api/private/wash/user/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
                 id: id,
