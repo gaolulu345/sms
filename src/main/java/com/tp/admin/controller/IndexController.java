@@ -37,7 +37,7 @@ public class IndexController {
     public String error() { return "error"; }
 
     /**
-     * 用户
+     * 洗车用户
      * @return
      */
     @GetMapping(value = {"/pages/user"})
@@ -46,7 +46,7 @@ public class IndexController {
     }
 
     /**
-     * 订单列表
+     * 洗车订单列表
      * @return
      */
     @RequestMapping(value = {"/pages/order"})
@@ -55,7 +55,16 @@ public class IndexController {
     }
 
     /**
-     * 退款
+     * 维保人员
+     * @return
+     */
+    @GetMapping(value = {"/pages/maintion/employee"})
+    public String maintionEmployee(HttpServletRequest request, Model model ) {
+        return "maintion_employee";
+    }
+
+    /**
+     * 洗车退款
      * @return
      */
     @GetMapping(value = {"/pages/refund"})
