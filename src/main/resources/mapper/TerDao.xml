@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tp.admin.dao.TerDao">
 
-    <select id="findAllTerIdAndTitle" resultType="java.util.Map">
+
+	<select id="findAllTerIdAndTitle" resultType="java.util.Map">
         SELECT t.id , ti.title
  		FROM
 		ter AS t INNER JOIN ter_info AS ti ON t.id = ter_id
@@ -17,4 +18,86 @@
 		ter AS t
 		GROUP BY t.city
     </select>
+
+    <select id="terInfoSearch" parameterType="com.tp.admin.data.parameter.WxMiniTerSearch" resultMap="TerInfoDTOMap">
+		SELECT
+		t.id ,
+		ti.online ,
+		ti.title ,
+		ti.status ,
+		ti.cover ,
+		ti.address ,
+		ti.geo_code ,
+		t.code
+		FROM
+		ter AS t INNER JOIN ter_info AS ti ON t.id = ti.ter_id
+		WHERE
+		ti.deleted = 0
+		<if test="terId !=null and terId != 0">
+			AND t.id = #{terId}
+		</if>
+		<if test="cityCode !=null and cityCode != 0">
+			AND t.city = #{cityCode}
+		</if>
+		<if test="online != null">
+			AND ti.online = #{online}
+		</if>
+		<if test="status != null and status == 1">
+			AND ti.status = #{status}
+		</if>
+		ORDER BY ti.id ASC
+		<if test="offset != null and pageSize != null and pageSize != 0">
+			LIMIT #{offset},#{pageSize}
+		</if>
+	</select>
+
+	<select id="cntTerInfoSearch" parameterType="com.tp.admin.data.parameter.WxMiniTerSearch"
+			resultType="java.lang.Integer">
+		SELECT
+		COUNT(t.id)
+		FROM
+		ter AS t INNER JOIN ter_info AS ti ON t.id = ti.ter_id
+		WHERE
+		ti.deleted = 0
+		<if test="terId !=null and terId != 0">
+			AND t.id = #{terId}
+		</if>
+		<if test="cityCode !=null and cityCode != 0">
+			AND t.city = #{cityCode}
+		</if>
+		<if test="online != null">
+			AND ti.online = #{online}
+		</if>
+		<if test="status != null and status == 1">
+			AND ti.status = #{status}
+		</if>
+	</select>
+
+	<update id="updateOnline" parameterType="java.lang.Integer">
+		UPDATE
+		`ter_info`
+		SET
+		`online`= 1
+		WHERE ter_id = #{id}
+	</update>
+
+	<update id="updateOffline">
+		UPDATE
+		`ter_info`
+		SET
+		`online`= 0,
+		`offline_desc` = #{offlineDesc}
+		WHERE ter_id = #{id}
+	</update>
+
+	<resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="code" property="code" jdbcType="VARCHAR" />
+		<id column="address" property="address" jdbcType="VARCHAR" />
+		<id column="geo_code" property="geoCode" jdbcType="VARCHAR" />
+		<id column="title" property="title" jdbcType="VARCHAR" />
+		<result column="online" property="online" jdbcType="BIT" />
+		<result column="status" property="status" jdbcType="SMALLINT" />
+	</resultMap>
+
 </mapper>

@@ -10,7 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WxMiniTerSearch extends Search {
 
+    Integer terId;
+
     Integer cityCode;
+
+    Integer online;
+
+    Integer status;
+
+    String msg;
 
     @Override
     protected void builData() {

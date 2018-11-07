@@ -3,6 +3,7 @@ package com.tp.admin.service.implement;
 import com.google.gson.Gson;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.TerDao;
+import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.parameter.WxMiniAuthDTO;
 import com.tp.admin.data.parameter.WxMiniTerSearch;
 import com.tp.admin.data.table.ResultTable;
@@ -11,7 +12,6 @@ import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
 import com.tp.admin.service.WxMiniMaintainManageServiceI;
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.usermodel.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,21 +46,45 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     public ApiResult siteListSearch(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniTerSearch wxMiniTerSearch = new Gson().fromJson(body, WxMiniTerSearch.class);
-
-
-
+        if (null == wxMiniTerSearch.getCityCode()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty cityCode");
+        }
+        List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniTerSearch);
+        if (null != results && !results.isEmpty()) {
+            for (TerInfoDTO t : results){
+                t.build();
+            }
+            int cnt = terDao.cntTerInfoSearch(wxMiniTerSearch);
+            wxMiniTerSearch.setTotalCnt(cnt);
+        }else {
+            wxMiniTerSearch.setTotalCnt(0);
+        }
+        wxMiniTerSearch.setResult(results);
         return ApiResult.ok(new ResultTable(wxMiniTerSearch));
     }
 
     @Override
     public ApiResult siteInfo(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        return ApiResult.ok(body);
+        WxMiniTerSearch wxMiniTerSearch = new Gson().fromJson(body, WxMiniTerSearch.class);
+        if (null == wxMiniTerSearch.getTerId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        }
+        List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniTerSearch);
+        TerInfoDTO dto = null;
+        if (null != results && !results.isEmpty()) {
+            dto = results.get(0);
+            dto.build();
+        }
+        return ApiResult.ok(dto);
     }
 
     @Override
     public ApiResult siteOnline(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
+
+
+
         return ApiResult.ok(body);
     }
 
