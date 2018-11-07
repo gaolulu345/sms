@@ -13,7 +13,6 @@ import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
 import com.tp.admin.service.WxMiniMaintainAuthServiceI;
-import com.tp.admin.utils.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +57,7 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniMaintainAuthServiceI
         if (StringUtils.isBlank(wxMiniAuthDTO.getCode())) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty code");
         }
-        String query = "?appid=" + Constant.WxMiniMaintain.APP_ID
+        String query =    "?appid=" + Constant.WxMiniMaintain.APP_ID
                         + "&secret=" + Constant.WxMiniMaintain.APP_SECRET
                         + "&js_code=" + wxMiniAuthDTO.getCode()
                         + "&grant_type=authorization_code";

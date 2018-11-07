@@ -68,6 +68,6 @@ public interface WxMiniMaintainManageServiceI {
      * @param washTerOperatingLogTypeEnum
      */
     void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMaintionEmployee adminMaintionEmployee,
-                  WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum);
+                  WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum , Boolean sucess);
 
 }

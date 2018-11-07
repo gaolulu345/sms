@@ -114,9 +114,10 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         }
         int res = terDao.updateOnline(wxMiniTerSearch.getTerId());
         if (res == 0) {
+            buildTerOperationLog(dto , adminMaintionEmployee , WashTerOperatingLogTypeEnum.ONLINE,false);
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
-        buildTerOperationLog(dto , adminMaintionEmployee , WashTerOperatingLogTypeEnum.ONLINE);
+        buildTerOperationLog(dto , adminMaintionEmployee , WashTerOperatingLogTypeEnum.ONLINE,true);
         return ApiResult.ok();
     }
 
@@ -139,9 +140,10 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         }
         int res = terDao.updateOffline(wxMiniTerSearch.getTerId(),wxMiniTerSearch.getMsg());
         if (res == 0) {
+            buildTerOperationLog(dto , adminMaintionEmployee , WashTerOperatingLogTypeEnum.NOT_ONLINE,false);
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
-        buildTerOperationLog(dto , adminMaintionEmployee , WashTerOperatingLogTypeEnum.NOT_ONLINE);
+        buildTerOperationLog(dto , adminMaintionEmployee , WashTerOperatingLogTypeEnum.NOT_ONLINE,true);
         return ApiResult.ok();
     }
 
@@ -165,17 +167,22 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     }
 
     @Override
-    public void buildTerOperationLog(TerInfoDTO terInfoDTO ,AdminMaintionEmployee adminMaintionEmployee,
-                                                      WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum
+    public void buildTerOperationLog(TerInfoDTO terInfoDTO ,
+                                     AdminMaintionEmployee adminMaintionEmployee,
+                                     WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum ,
+                                     Boolean sucess
                                                       ) {
         String titile = terInfoDTO.getTitle() + washTerOperatingLogTypeEnum.getDesc();
         String intros = adminMaintionEmployee.getName() + " 将网点 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum.getDesc();
         AdminMaintionEmployeeLogTerOperating adminMaintionEmployeeLogTerOperating = new
                 AdminMaintionEmployeeLogTerOperating();
         adminMaintionEmployeeLogTerOperating.setEmployeeId(adminMaintionEmployee.getId());
+        adminMaintionEmployeeLogTerOperating.setUsername(adminMaintionEmployee.getName());
         adminMaintionEmployeeLogTerOperating.setTerId(terInfoDTO.getId());
         adminMaintionEmployeeLogTerOperating.setTitle(titile);
         adminMaintionEmployeeLogTerOperating.setIntros(intros);
+        adminMaintionEmployeeLogTerOperating.setType(washTerOperatingLogTypeEnum.getValue());
+        adminMaintionEmployeeLogTerOperating.setSucess(sucess);
         int res = adminMaintionEmployeeLogTerOperatingDao.insert(adminMaintionEmployeeLogTerOperating);
         if (res == 0) {
             log.error("维保人员操作日志存储失败 {} " + adminMaintionEmployeeLogTerOperating.toString());
