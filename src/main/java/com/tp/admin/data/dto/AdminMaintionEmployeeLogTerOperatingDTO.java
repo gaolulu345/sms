@@ -25,7 +25,7 @@ public class AdminMaintionEmployeeLogTerOperatingDTO {
     private String typeDesc;
 
     public void build(){
-        typeDesc = WashTerOperatingLogTypeEnum.getByCode(terId).getDesc();
+        typeDesc = WashTerOperatingLogTypeEnum.getByCode(type).getDesc();
     }
 
 }

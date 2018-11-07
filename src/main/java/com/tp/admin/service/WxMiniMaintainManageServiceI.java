@@ -3,6 +3,7 @@ package com.tp.admin.service;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
+import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,5 +70,7 @@ public interface WxMiniMaintainManageServiceI {
      */
     void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMaintionEmployee adminMaintionEmployee,
                   WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum , Boolean sucess);
+
+    TerInfoDTO terCheck(WxMiniSearch wxMiniSearch);
 
 }

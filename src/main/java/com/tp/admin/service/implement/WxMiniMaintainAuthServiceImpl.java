@@ -47,6 +47,9 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniMaintainAuthServiceI
         if (!adminMaintionEmployee.isEnable()) {
             throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
         }
+        if (!adminMaintionEmployee.isDeleted()) {
+            throw new BaseException(ExceptionCode.USER_DELETE_REGISTERED);
+        }
         return ApiResult.ok(adminMaintionEmployee);
     }
 

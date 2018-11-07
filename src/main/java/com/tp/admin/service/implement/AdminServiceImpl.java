@@ -103,10 +103,9 @@ public class AdminServiceImpl implements AdminServiceI {
         return ApiResult.ok(new ResultTable(adminSearch));
     }
 
-
     @Override
     public ApiResult bachUpdateDeleted(HttpServletRequest request, AdminSearch adminSearch) {
-        if (null == adminSearch.getIds() || adminSearch.getIds().length == 0) {
+        if (null == adminSearch.getIds() || adminSearch.getIds().length == 0 || null == adminSearch.getDeleted()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         int res = adminAccountDao.bachUpdateDeleted(adminSearch);

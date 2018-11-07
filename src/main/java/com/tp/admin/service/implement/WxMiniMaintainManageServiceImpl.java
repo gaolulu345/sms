@@ -1,7 +1,9 @@
 package com.tp.admin.service.implement;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.common.Constant;
 import com.tp.admin.dao.AdminMaintionEmployeeDao;
 import com.tp.admin.dao.AdminMaintionEmployeeLogTerOperatingDao;
 import com.tp.admin.dao.TerDao;
@@ -18,6 +20,7 @@ import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
 import com.tp.admin.service.WxMiniMaintainAuthServiceI;
 import com.tp.admin.service.WxMiniMaintainManageServiceI;
+import com.tp.admin.utils.SecurityUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -87,14 +91,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
-        List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniSearch);
-        TerInfoDTO dto = null;
-        if (null != results && !results.isEmpty()) {
-            dto = results.get(0);
-            dto.build();
-        }else{
-            throw new BaseException(ExceptionCode.NOT_TER);
-        }
+        TerInfoDTO dto = terCheck(wxMiniSearch);
         return ApiResult.ok(dto);
     }
 
@@ -106,14 +103,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
         AdminMaintionEmployee adminMaintionEmployee = wxMiniMaintainAuthService.check(wxMiniSearch.getOpenId());
-        List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniSearch);
-        TerInfoDTO dto = null;
-        if (null != results && !results.isEmpty()) {
-            dto = results.get(0);
-            dto.build();
-        }else {
-            throw new BaseException(ExceptionCode.NOT_TER);
-        }
+        TerInfoDTO dto = terCheck(wxMiniSearch);
         if (dto.isOnline()) {
             throw new BaseException(ExceptionCode.REPEAT_OPERATION , "该网点已经上线");
         }
@@ -134,15 +124,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         AdminMaintionEmployee adminMaintionEmployee = wxMiniMaintainAuthService.check(wxMiniSearch.getOpenId());
-        List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniSearch);
-        TerInfoDTO dto = null;
-        if (null != results && !results.isEmpty()) {
-            dto = results.get(0);
-            dto.build();
-        }
-        if (null == dto) {
-            throw new BaseException(ExceptionCode.NOT_TER);
-        }
+        TerInfoDTO dto = terCheck(wxMiniSearch);
         if (!dto.isOnline()) {
             throw new BaseException(ExceptionCode.REPEAT_OPERATION , "该网点已经下线");
         }
@@ -158,9 +140,11 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     @Override
     public ApiResult siteDeviceReset(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-
-
-        return ApiResult.ok(body);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getTerId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        }
+        return ApiResult.error(ExceptionCode.NOT_PERMISSION_ERROR);
     }
 
     @Override
@@ -192,7 +176,6 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
                                      WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum ,
                                      Boolean sucess
                                                       ) {
-
         String intros = adminMaintionEmployee.getName() + " 操作 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum
                 .getDesc();
         AdminMaintionEmployeeLogTerOperating adminMaintionEmployeeLogTerOperating = new
@@ -209,5 +192,46 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             log.error("维保人员操作日志存储失败 {} " + adminMaintionEmployeeLogTerOperating.toString());
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
+    }
+
+    @Override
+    public TerInfoDTO terCheck(WxMiniSearch wxMiniSearch) {
+        if (null == wxMiniSearch) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        }
+        wxMiniSearch.builData();
+        List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniSearch);
+        TerInfoDTO dto = null;
+        if (null != results && !results.isEmpty()) {
+            dto = results.get(0);
+            dto.build();
+        }else {
+            throw new BaseException(ExceptionCode.NOT_TER);
+        }
+        return dto;
+    }
+
+    private final JsonObject signOrderInfo(int terId, String orderId) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", terId);
+        jsonObject.addProperty("key", "TPAuto@2015");
+        try {
+            int order = Integer.valueOf(orderId);
+            jsonObject.addProperty("orderId", order);
+        } catch (NumberFormatException e) {
+            jsonObject.addProperty("orderId", orderId);
+        }
+        jsonObject.addProperty("time", new Timestamp(System.currentTimeMillis()).toString());
+        String sign = new String();
+        try {
+            sign = SecurityUtil.RsaUtil.sign(jsonObject.toString(), Constant.RemoteTer.PRIVATE_KEY, true);
+        } catch (Exception e) {
+            throw new BaseException(ExceptionCode.SIGN_FAILURE_FOR_REMOTE_TER);
+        }
+        if (StringUtils.isEmpty(sign) || sign.length() < 2) {
+            throw new BaseException(ExceptionCode.SIGN_ERROR_FOR_REMOTE_TER);
+        }
+        jsonObject.addProperty("sign", sign);
+        return jsonObject;
     }
 }

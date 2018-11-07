@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminMaintionEmployee {
-    @JsonIgnore
     private int id;
     private String miniWxId;
     @JsonIgnore
@@ -24,9 +23,7 @@ public class AdminMaintionEmployee {
     private Timestamp createTime;
     @JsonIgnore
     private Timestamp modifyTime;
-    @JsonIgnore
     private boolean enable;
-    @JsonIgnore
     private boolean deleted;
     private Timestamp lastLoginTime;
 

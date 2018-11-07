@@ -33,6 +33,7 @@
 		emp.name AS employee_username ,
 		ti.title AS ter_title,
 		log.intros ,
+		log.type ,
 		log.sucess
 		FROM
 			`admin_maintion_employee_log_ter_operating` AS log
