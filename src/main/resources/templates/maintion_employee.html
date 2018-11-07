@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <#include "common/meta.html">
+   <script src="/js/common/md5.js"></script>
+</head>
+维保
+<body>
+<div v-cloak id="app" class="clearfix">
+    <#include "common/left.html">
+    <div class="rightSide fl">
+        <#include "common/top.html">
+        <div class="content">
+            <div class="searchBox">
+                <el-button v-if="deleted == false" type="primary" size="mini"  @click="getAdminList(currentPageSize, 1, null)">查看全部</el-button>
+                <el-button v-if="deleted == null" type="success" size="mini"  @click="getAdminList(currentPageSize, 1, false)">仅看有效</el-button>
+                
+                <el-button v-if="opPer['/api/private/admin/register']"  @click="showAddAdmin = true" type="primary" icon="el-icon-plus" size="mini">注册</el-button>
+                <el-button v-if="opPer['/api/private/admin/update/delete']"  @click="updateDeleteAdmin(true)" type="primary" icon="el-icon-delete" size="mini">批量删除</el-button>
+                <el-button v-if="opPer['/api/private/admin/update/delete']"  @click="updateDeleteAdmin(false)" type="success" icon="el-icon-refresh" size="mini">批量恢复</el-button>
+            </div>
+
+
+            <!-- 用户列表 -->
+            <el-table
+                ref="multipleTable"
+                @selection-change="handleAdminSelectionChange"
+                :data="adminList"
+                size="mini"
+                style="width: 100%">
+
+                <el-table-column  type="selection" width="55"></el-table-column>
+                <el-table-column prop="id" label="用户ID"></el-table-column>
+              
+
+                <el-table-column label="登录账号">
+                    <template slot-scope="scope">
+                        <span style="color: gray;" v-if="scope.row.enable == false && scope.row.deleted == false">{{scope.row.username}}  (未启用）</span>
+                        <span style="color: red;" v-if="scope.row.deleted == true">{{scope.row.username}}  (已删除）</span>
+                        <span v-if="scope.row.enable == true && scope.row.deleted == false">{{scope.row.username}}</span>
+                    </template>
+                </el-table-column>
+
+
+                <el-table-column prop="rolesName" label="角色"></el-table-column>
+                <el-table-column prop="name" label="昵称"></el-table-column>
+                <el-table-column prop="intros" label="简介"></el-table-column>
+                <el-table-column prop="createTime" label="创建时间"></el-table-column>
+                <el-table-column prop="modifyTime" label="修改时间"></el-table-column>
+                <el-table-column prop="lastLoginTime" label="上次登录时间"></el-table-column>
+                <el-table-column label="操作" v-if="opPer['/api/private/admin/update'] || opPer['/api/private/admin/reset/pw']">
+                    <template slot-scope="scope" v-if="scope.row.deleted == false">
+                        <el-button v-if="opPer['/api/private/admin/update']" @click="clickEditAdmin(scope.row)" plain type="primary" size="mini">编辑</el-button>
+                        <el-button v-if="opPer['/api/private/admin/reset/pw']" @click="resetPw(scope.row.id)" plain type="danger" size="mini">重置密码</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <!-- 分页 -->
+            <#include "common/pages2.html">
+        </div>
+    </div>
+</div>
+
+<script src="/js/common/per.js"></script>
+<script src="/js/maintain_employee.js"></script>
+</body>
+</html>
