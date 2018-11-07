@@ -82,16 +82,47 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     @Override
     public ApiResult siteOnline(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-
-
-
-        return ApiResult.ok(body);
+        WxMiniTerSearch wxMiniTerSearch = new Gson().fromJson(body, WxMiniTerSearch.class);
+        if (null == wxMiniTerSearch.getTerId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        }
+        List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniTerSearch);
+        TerInfoDTO dto = null;
+        if (null != results && !results.isEmpty()) {
+            dto = results.get(0);
+            dto.build();
+        }
+        if (null == dto) {
+            throw new BaseException(ExceptionCode.NOT_TER);
+        }
+        int res = terDao.updateOnline(wxMiniTerSearch.getTerId());
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        return ApiResult.ok();
     }
 
     @Override
     public ApiResult siteOffline(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        return ApiResult.ok(body);
+        WxMiniTerSearch wxMiniTerSearch = new Gson().fromJson(body, WxMiniTerSearch.class);
+        if (null == wxMiniTerSearch.getTerId() || StringUtils.isBlank(wxMiniTerSearch.getMsg()) ) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniTerSearch);
+        TerInfoDTO dto = null;
+        if (null != results && !results.isEmpty()) {
+            dto = results.get(0);
+            dto.build();
+        }
+        if (null == dto) {
+            throw new BaseException(ExceptionCode.NOT_TER);
+        }
+        int res = terDao.updateOffline(wxMiniTerSearch.getTerId(),wxMiniTerSearch.getMsg());
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        return ApiResult.ok();
     }
 
     @Override

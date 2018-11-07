@@ -11,7 +11,7 @@ public enum ExceptionCode {
     SIGN_FAILURE("1020","签名失败"),
     SIGN_ERROR("1021","签名错误"),
     REPEAT_OPERATION("1030", "重复操作"),
-    
+    NOT_TER("1080", "此编号网点不存在"),
     INVALID_ACCESS_EXCEPTION("2000","用户名或者密码错误"),
     NO_THIS_USER("2001","查无此用户"),
     NO_PERMIT("2002", "未登陆"),

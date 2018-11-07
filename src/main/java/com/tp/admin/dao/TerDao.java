@@ -17,8 +17,8 @@ public interface TerDao {
 
     Integer cntTerInfoSearch(WxMiniTerSearch wxMiniTerSearch);
 
-    Integer updateOnline(int id);
+    Integer updateOnline(@Param("id") int id);
 
-    Integer updateOffline(int id, String offlineDesc);
+    Integer updateOffline(@Param("id") int id, @Param("offlineDesc") String offlineDesc);
 
 }
