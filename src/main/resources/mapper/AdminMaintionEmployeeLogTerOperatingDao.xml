@@ -23,5 +23,40 @@
 		)
     </insert>
 
+    <select id="listBySearch" resultMap="AdminMaintionEmployeeLogTerOperatingDTOMap">
+		SELECT
+
+		FROM
+		admin_maintion_employee_log_ter_operating AS log INNER JOIN ter_info AS ti ON log.ter_id = ti.ter_id
+		WHERE
+		log.ter_id = #{terId}
+		ORDER BY log.create_time DESC
+		<if test="pageSize != null and pageSize !=0 and offset != null">
+			LIMIT #{offset},#{pageSize}
+		</if>
+	</select>
+
+	<select id="cntBySearch" resultType="java.lang.Integer">
+		SELECT
+		COUNT(log.id)
+		FROM
+		admin_maintion_employee_log_ter_operating AS log INNER JOIN ter_info AS ti ON log.ter_id = ti.ter_id
+		WHERE
+		log.ter_id = #{terId}
+	</select>
+
+	<resultMap id="AdminMaintionEmployeeLogTerOperatingDTOMap"
+			   type="com.tp.admin.data.dto.AdminMaintionEmployeeLogTerOperatingDTO">
+		<id column="id" property="id" jdbcType="INTERGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="ter_id" property="terId" jdbcType="INTEGER"/>
+		<result column="employee_id" property="employeeId" jdbcType="INTEGER"/>
+		<result column="employee_username" property="username" jdbcType="VARCHAR"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="intros" property="intros" jdbcType="VARCAR"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<result
+
+	</resultMap>
 
 </mapper>

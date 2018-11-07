@@ -1,7 +1,7 @@
 package com.tp.admin.dao;
 
 import com.tp.admin.data.dto.TerInfoDTO;
-import com.tp.admin.data.parameter.WxMiniTerSearch;
+import com.tp.admin.data.parameter.WxMiniSearch;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,9 +13,9 @@ public interface TerDao {
 
     List<Integer> listTerCityId();
 
-    List<TerInfoDTO> terInfoSearch(WxMiniTerSearch wxMiniTerSearch);
+    List<TerInfoDTO> terInfoSearch(WxMiniSearch wxMiniTerSearch);
 
-    Integer cntTerInfoSearch(WxMiniTerSearch wxMiniTerSearch);
+    Integer cntTerInfoSearch(WxMiniSearch wxMiniTerSearch);
 
     Integer updateOnline(@Param("id") int id);
 

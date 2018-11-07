@@ -19,7 +19,7 @@
 		GROUP BY t.city
     </select>
 
-    <select id="terInfoSearch" parameterType="com.tp.admin.data.parameter.WxMiniTerSearch" resultMap="TerInfoDTOMap">
+    <select id="terInfoSearch" parameterType="com.tp.admin.data.parameter.WxMiniSearch" resultMap="TerInfoDTOMap">
 		SELECT
 		t.id ,
 		ti.online ,
@@ -51,7 +51,7 @@
 		</if>
 	</select>
 
-	<select id="cntTerInfoSearch" parameterType="com.tp.admin.data.parameter.WxMiniTerSearch"
+	<select id="cntTerInfoSearch" parameterType="com.tp.admin.data.parameter.WxMiniSearch"
 			resultType="java.lang.Integer">
 		SELECT
 		COUNT(t.id)

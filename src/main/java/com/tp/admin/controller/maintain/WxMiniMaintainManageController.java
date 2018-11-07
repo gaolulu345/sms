@@ -86,7 +86,7 @@ public class WxMiniMaintainManageController {
      * @param request
      * @return
      */
-    @PostMapping(value = "/site/operation/log")
+    @PostMapping(value = "/site/operation/log/list")
     ApiResult siteOperationLog(HttpServletRequest request){
         return wxMiniMaintainManageService.siteOperationLog(request);
     }

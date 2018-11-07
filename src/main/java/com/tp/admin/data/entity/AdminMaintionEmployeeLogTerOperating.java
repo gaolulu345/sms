@@ -24,28 +24,6 @@ public class AdminMaintionEmployeeLogTerOperating {
     private int type;
     private boolean sucess;
 
-    public void sucess(Integer terId, Integer employeeId, String username, String title, String intros,
-                       int type) {
-        this.terId = terId;
-        this.employeeId = employeeId;
-        this.username = username;
-        this.title = title;
-        this.intros = intros;
-        this.type = type;
-        this.sucess = true;
-    }
-
-    public void failed(Integer terId, Integer employeeId, String username, String title, String
-            intros, int type) {
-        this.terId = terId;
-        this.employeeId = employeeId;
-        this.username = username;
-        this.title = title;
-        this.intros = intros;
-        this.type = type;
-        this.sucess = false;
-    }
-
     @Override
     public String toString() {
         return new Gson().toJson(this);

@@ -110,14 +110,11 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniMaintainAuthServiceI
     public ApiResult registerCheck(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniRegisterDTO wxMiniRegisterDTO = new Gson().fromJson(body, WxMiniRegisterDTO.class);
-        if (StringUtils.isBlank(wxMiniRegisterDTO.getOpenId())) {
+        if (StringUtils.isBlank(wxMiniRegisterDTO.getPhone())) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
-        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByWxMiniId(wxMiniRegisterDTO.getOpenId());
-        if (null == adminMaintionEmployee ) {
-            throw new BaseException(ExceptionCode.NO_THIS_USER);
-        }
-        if (!adminMaintionEmployee.isEnable()) {
+        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByPhone(wxMiniRegisterDTO.getPhone());
+        if (null != adminMaintionEmployee && !adminMaintionEmployee.isEnable()) {
             throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
         }
         return ApiResult.ok();

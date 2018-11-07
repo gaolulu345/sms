@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class WxMiniTerSearch extends Search {
+public class WxMiniSearch extends Search {
 
     String openId;
 
