@@ -114,8 +114,8 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniMaintainAuthServiceI
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByPhone(wxMiniRegisterDTO.getPhone());
-        if (null != adminMaintionEmployee && !adminMaintionEmployee.isEnable()) {
-            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        if (null != adminMaintionEmployee ) {
+            throw new BaseException(ExceptionCode.USER_PHONE_HAS_REGISTERED);
         }
         return ApiResult.ok();
     }

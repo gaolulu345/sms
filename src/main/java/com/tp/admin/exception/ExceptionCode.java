@@ -17,7 +17,7 @@ public enum ExceptionCode {
     NO_PERMIT("2002", "未登陆"),
     LOGIN_TIMEOUT("2003", "登录超时"),
     USER_NOT_PERMISSION("2004", "账号已经申请注册，暂未通过审核"),
-
+    USER_PHONE_HAS_REGISTERED("2005", "该手机号已经申请注册"),
     ALI_OSS_OPEN_STORAGE_SERVICE_ERROR("9000","当访问对象存储服务 Open Storage Service 失败时抛出该异常类实例，请重新尝试"),
     ALI_OSS_REMOTE_ERROR("9001","尝试访问阿里云服务时的异常,请重新尝试"),
     ALI_OSS_UPDATE_ERROR("9002","上传文件失败,请重新尝试"),
