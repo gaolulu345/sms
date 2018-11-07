@@ -1,6 +1,9 @@
 package com.tp.admin.service;
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.data.dto.TerInfoDTO;
+import com.tp.admin.data.entity.AdminMaintionEmployee;
+import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,5 +60,14 @@ public interface WxMiniMaintainManageServiceI {
      * @return
      */
     ApiResult siteOperationLog(HttpServletRequest request);
+
+    /**
+     * 构建操作日志
+     * @param terInfoDTO
+     * @param adminMaintionEmployee
+     * @param washTerOperatingLogTypeEnum
+     */
+    void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMaintionEmployee adminMaintionEmployee,
+                  WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum);
 
 }

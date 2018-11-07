@@ -13,6 +13,7 @@ import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
 import com.tp.admin.service.WxMiniMaintainAuthServiceI;
+import com.tp.admin.utils.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,5 +122,17 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniMaintainAuthServiceI
             throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
         }
         return ApiResult.ok();
+    }
+
+    @Override
+    public AdminMaintionEmployee check(String openId) {
+        if (StringUtils.isBlank(openId)) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
+        }
+        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByWxMiniId(openId);
+        if (null == adminMaintionEmployee) {
+            throw new BaseException(ExceptionCode.NO_THIS_USER);
+        }
+        return adminMaintionEmployee;
     }
 }

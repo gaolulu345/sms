@@ -1,6 +1,7 @@
 package com.tp.admin.service;
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.data.entity.AdminMaintionEmployee;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,5 +37,13 @@ public interface WxMiniMaintainAuthServiceI {
      * @return
      */
     ApiResult registerCheck(HttpServletRequest request);
+
+    /**
+     * 检查用户
+     * @param openId
+     * @return
+     */
+    AdminMaintionEmployee check(String openId);
+
 
 }

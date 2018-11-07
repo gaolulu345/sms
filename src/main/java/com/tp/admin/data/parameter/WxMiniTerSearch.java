@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WxMiniTerSearch extends Search {
 
+    String openId;
+
     Integer terId;
 
     Integer cityCode;
@@ -21,7 +23,7 @@ public class WxMiniTerSearch extends Search {
     String msg;
 
     @Override
-    protected void builData() {
+    public void builData() {
         super.build();
     }
 }
