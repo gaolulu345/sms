@@ -23,11 +23,21 @@
 		)
     </insert>
 
-    <select id="listBySearch" resultMap="AdminMaintionEmployeeLogTerOperatingDTOMap">
+    <select id="listBySearch" parameterType="com.tp.admin.data.parameter.WxMiniSearch" resultMap="AdminMaintionEmployeeLogTerOperatingDTOMap">
 		SELECT
-
+		log.id ,
+		log.title ,
+		log.create_time ,
+		log.ter_id ,
+		log.employee_id ,
+		emp.name AS employee_username ,
+		ti.title AS ter_title,
+		log.intros ,
+		log.sucess
 		FROM
-		admin_maintion_employee_log_ter_operating AS log INNER JOIN ter_info AS ti ON log.ter_id = ti.ter_id
+			`admin_maintion_employee_log_ter_operating` AS log
+			INNER JOIN `ter_info` AS ti ON log.ter_id = ti.ter_id
+			INNER JOIN `admin_maintion_employee` AS emp ON emp.id = log.employee_id
 		WHERE
 		log.ter_id = #{terId}
 		ORDER BY log.create_time DESC
@@ -36,27 +46,29 @@
 		</if>
 	</select>
 
-	<select id="cntBySearch" resultType="java.lang.Integer">
+	<select id="cntBySearch" parameterType="com.tp.admin.data.parameter.WxMiniSearch" resultType="java.lang.Integer">
 		SELECT
 		COUNT(log.id)
 		FROM
-		admin_maintion_employee_log_ter_operating AS log INNER JOIN ter_info AS ti ON log.ter_id = ti.ter_id
+		admin_maintion_employee_log_ter_operating AS log
+			INNER JOIN ter_info AS ti ON log.ter_id = ti.ter_id
+			INNER JOIN admin_maintion_employee AS emp ON emp.id = log.employee_id
 		WHERE
 		log.ter_id = #{terId}
 	</select>
 
 	<resultMap id="AdminMaintionEmployeeLogTerOperatingDTOMap"
 			   type="com.tp.admin.data.dto.AdminMaintionEmployeeLogTerOperatingDTO">
-		<id column="id" property="id" jdbcType="INTERGER" />
+		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
 		<result column="ter_id" property="terId" jdbcType="INTEGER"/>
+		<result column="ter_title" property="terTitle" jdbcType="VARCHAR"/>
 		<result column="employee_id" property="employeeId" jdbcType="INTEGER"/>
 		<result column="employee_username" property="username" jdbcType="VARCHAR"/>
 		<result column="title" property="title" jdbcType="VARCHAR"/>
-		<result column="intros" property="intros" jdbcType="VARCAR"/>
+		<result column="intros" property="intros" jdbcType="VARCHAR"/>
 		<result column="type" property="type" jdbcType="INTEGER"/>
-		<result
-
+		<result column="sucess" property="sucess" jdbcType="BIT"/>
 	</resultMap>
 
 </mapper>

@@ -5,6 +5,7 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.AdminMaintionEmployeeDao;
 import com.tp.admin.dao.AdminMaintionEmployeeLogTerOperatingDao;
 import com.tp.admin.dao.TerDao;
+import com.tp.admin.data.dto.AdminMaintionEmployeeLogTerOperatingDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMaintionEmployeeLogTerOperating;
@@ -113,6 +114,9 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         }else {
             throw new BaseException(ExceptionCode.NOT_TER);
         }
+        if (dto.isOnline()) {
+            throw new BaseException(ExceptionCode.REPEAT_OPERATION , "该网点已经上线");
+        }
         int res = terDao.updateOnline(wxMiniSearch.getTerId());
         if (res == 0) {
             buildTerOperationLog(dto , adminMaintionEmployee , WashTerOperatingLogTypeEnum.ONLINE,false);
@@ -139,6 +143,9 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (null == dto) {
             throw new BaseException(ExceptionCode.NOT_TER);
         }
+        if (!dto.isOnline()) {
+            throw new BaseException(ExceptionCode.REPEAT_OPERATION , "该网点已经下线");
+        }
         int res = terDao.updateOffline(wxMiniSearch.getTerId(),wxMiniSearch.getMsg());
         if (res == 0) {
             buildTerOperationLog(dto , adminMaintionEmployee , WashTerOperatingLogTypeEnum.NOT_ONLINE,false);
@@ -153,8 +160,6 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         String body = httpHelper.jsonBody(request);
 
 
-
-
         return ApiResult.ok(body);
     }
 
@@ -165,12 +170,20 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
+        wxMiniSearch.builData();
         wxMiniMaintainAuthService.check(wxMiniSearch.getOpenId());
-
-
-
-
-        return ApiResult.ok(body);
+        List<AdminMaintionEmployeeLogTerOperatingDTO> results = adminMaintionEmployeeLogTerOperatingDao.listBySearch
+                (wxMiniSearch);
+        if (null != results && !results.isEmpty()) {
+            for (AdminMaintionEmployeeLogTerOperatingDTO dto : results){
+                dto.build();
+            }
+            int cnt = adminMaintionEmployeeLogTerOperatingDao.cntBySearch(wxMiniSearch);
+            wxMiniSearch.setTotalCnt(cnt);
+        }else {
+            wxMiniSearch.setTotalCnt(0);
+        }
+        return ApiResult.ok(results);
     }
 
     @Override
@@ -179,14 +192,15 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
                                      WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum ,
                                      Boolean sucess
                                                       ) {
-        String titile = terInfoDTO.getTitle() + washTerOperatingLogTypeEnum.getDesc();
-        String intros = adminMaintionEmployee.getName() + " 将网点 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum.getDesc();
+
+        String intros = adminMaintionEmployee.getName() + " 操作 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum
+                .getDesc();
         AdminMaintionEmployeeLogTerOperating adminMaintionEmployeeLogTerOperating = new
                 AdminMaintionEmployeeLogTerOperating();
         adminMaintionEmployeeLogTerOperating.setEmployeeId(adminMaintionEmployee.getId());
         adminMaintionEmployeeLogTerOperating.setUsername(adminMaintionEmployee.getName());
         adminMaintionEmployeeLogTerOperating.setTerId(terInfoDTO.getId());
-        adminMaintionEmployeeLogTerOperating.setTitle(titile);
+        adminMaintionEmployeeLogTerOperating.setTitle(washTerOperatingLogTypeEnum.getDesc());
         adminMaintionEmployeeLogTerOperating.setIntros(intros);
         adminMaintionEmployeeLogTerOperating.setType(washTerOperatingLogTypeEnum.getValue());
         adminMaintionEmployeeLogTerOperating.setSucess(sucess);

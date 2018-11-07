@@ -24,8 +24,7 @@ public enum ExceptionCode {
     ALI_OSS_FILE_SAVE_ERROR("9003","上传文件保存失败,请重新尝试"),
 
     API_NOT_PERMISSION_ERROR("10000","数据未授权。"),
-    PAGES_NOT_PERMISSION_ERROR("10001","页面未授权。")
-    ;
+    PAGES_NOT_PERMISSION_ERROR("10001","页面未授权。");
 
     private String code;
     private String msg;

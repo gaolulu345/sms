@@ -1,11 +1,15 @@
 package com.tp.admin.data.dto;
 
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AdminMaintionEmployeeLogTerOperatingDTO {
 
     private int id;

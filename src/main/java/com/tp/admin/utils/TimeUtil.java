@@ -24,7 +24,6 @@ public class TimeUtil {
         return Shanghaidf.format(date);
     }
 
-
     /**
      * 获取当天的开始时间
      * @return yyyy-MM-dd HH:mm:ss  格式
