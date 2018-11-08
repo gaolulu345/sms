@@ -90,7 +90,15 @@
 		WHERE ter_id = #{id}
 	</update>
 
-	<resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
+    <update id="updateStateDefault">
+		UPDATE
+		`ter_info`
+		SET
+		`status` = 0
+		WHERE ter_id = #{id}
+	</update>
+
+    <resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<id column="code" property="code" jdbcType="VARCHAR" />
 		<id column="address" property="address" jdbcType="VARCHAR" />

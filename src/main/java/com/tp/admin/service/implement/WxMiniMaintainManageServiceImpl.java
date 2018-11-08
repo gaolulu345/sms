@@ -7,14 +7,17 @@ import com.tp.admin.common.Constant;
 import com.tp.admin.dao.AdminMaintionEmployeeDao;
 import com.tp.admin.dao.AdminMaintionEmployeeLogTerOperatingDao;
 import com.tp.admin.dao.TerDao;
+import com.tp.admin.dao.TerLogDao;
 import com.tp.admin.data.dto.AdminMaintionEmployeeLogTerOperatingDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMaintionEmployeeLogTerOperating;
+import com.tp.admin.data.entity.TerLog;
 import com.tp.admin.data.parameter.WxMiniAuthDTO;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
+import com.tp.admin.enums.WashTerStateEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
@@ -44,6 +47,9 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
 
     @Autowired
     TerDao terDao;
+
+    @Autowired
+    TerLogDao terLogDao;
 
     @Autowired
     AdminMaintionEmployeeLogTerOperatingDao adminMaintionEmployeeLogTerOperatingDao;
@@ -145,6 +151,42 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
         return ApiResult.error(ExceptionCode.NOT_PERMISSION_ERROR);
+    }
+
+    @Override
+    public ApiResult siteStatusReset(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getTerId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        }
+        AdminMaintionEmployee adminMaintionEmployee = wxMiniMaintainAuthService.check(wxMiniSearch.getOpenId());
+        TerInfoDTO dto = terCheck(wxMiniSearch);
+        if (StringUtils.isBlank(dto.getCode())) {
+            throw new BaseException(ExceptionCode.NOT_TER);
+        }
+        if (dto.getStatus() != WashTerStateEnum.PAUSED.ordinal() && dto.getStatus() != WashTerStateEnum.ERROR.ordinal()) {
+            TerLog terLog = terLogDao.latestRecordByCode(dto.getCode());
+            if (null != terLog) {
+                Long latestRecordTime = terLog.getCreateTime().getTime();
+                Long currentTime = System.currentTimeMillis();
+                long time = currentTime - latestRecordTime;
+                log.info("latestRecordTime {} , currentTime {} time {}" , latestRecordTime , currentTime , time);
+                if (time <= 1200000) {
+                    throw new BaseException(ExceptionCode.TER_STATUS_RESERT_ERROR, "该网点不需要重置状态,若执意操作。请直接联系软件部相关人员");
+                }
+                if (dto.getStatus() == WashTerStateEnum.DEFAULT.getValue()) {
+                    throw new BaseException(ExceptionCode.TER_STATUS_RESERT_ERROR, "该网点状态已经被重置");
+                }
+            }
+        }
+        int res = terDao.updateStateDefault(wxMiniSearch.getTerId());
+        if (res == 0) {
+            buildTerOperationLog(dto , adminMaintionEmployee , WashTerOperatingLogTypeEnum.TER_RESET_STATE,false);
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        buildTerOperationLog(dto , adminMaintionEmployee , WashTerOperatingLogTypeEnum.TER_RESET_STATE,true);
+        return ApiResult.ok();
     }
 
     @Override

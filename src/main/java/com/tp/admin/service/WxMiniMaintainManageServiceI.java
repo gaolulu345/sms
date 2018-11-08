@@ -55,6 +55,14 @@ public interface WxMiniMaintainManageServiceI {
      */
     ApiResult siteDeviceReset(HttpServletRequest request);
 
+
+    /**
+     * 网点状态复位
+     * @param request
+     * @return
+     */
+    ApiResult siteStatusReset(HttpServletRequest request);
+
     /**
      * 站点操作日志
      * @param request

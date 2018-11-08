@@ -25,6 +25,9 @@ public enum ExceptionCode {
     SIGN_FAILURE_FOR_REMOTE_TER("3006","网点订单加签失败"),
     SIGN_ERROR_FOR_REMOTE_TER("3007","网点订单加签错误"),
 
+    TER_STATUS_RESERT_ERROR("4007","网点状态复位操作失败"),
+    TER_DEVICE_RESERT_ERROR("4008","网点设备复位操作失败"),
+
     ALI_OSS_REMOTE_ERROR("9001","尝试访问阿里云服务时的异常,请重新尝试"),
     ALI_OSS_UPDATE_ERROR("9002","上传文件失败,请重新尝试"),
     ALI_OSS_FILE_SAVE_ERROR("9003","上传文件保存失败,请重新尝试"),

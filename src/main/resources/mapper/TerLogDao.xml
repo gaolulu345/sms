@@ -3,7 +3,8 @@
 <mapper namespace="com.tp.admin.dao.TerLogDao">
 
     <select id="listBySearch" parameterType="com.tp.admin.data.search.WashLogSearch" resultMap="TerLogMap">
-        SELECT * FROM `ter_log`
+        SELECT *
+        FROM `ter_log`
         WHERE order_id = #{orderId}
         ORDER BY create_time DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">
@@ -12,8 +13,19 @@
     </select>
 
     <select id="cntBySearch" resultType="java.lang.Integer">
-        SELECT COUNT(id) FROM `ter_log`
+        SELECT
+        COUNT(id)
+        FROM `ter_log`
         WHERE order_id = #{orderId}
+    </select>
+
+    <select id="latestRecordByCode" resultMap="TerLogMap">
+      SELECT *
+      FROM `ter_log`
+      WHERE
+      `code` = #{code}
+      ORDER BY create_time DESC
+      LIMIT 0 , 1
     </select>
 
     <resultMap id="TerLogMap" type="com.tp.admin.data.entity.TerLog">

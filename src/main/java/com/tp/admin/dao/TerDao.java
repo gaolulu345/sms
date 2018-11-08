@@ -21,4 +21,6 @@ public interface TerDao {
 
     Integer updateOffline(@Param("id") int id, @Param("offlineDesc") String offlineDesc);
 
+    Integer updateStateDefault(@Param("id") int id);
+
 }
