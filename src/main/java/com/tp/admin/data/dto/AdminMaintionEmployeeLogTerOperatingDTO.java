@@ -28,7 +28,7 @@ public class AdminMaintionEmployeeLogTerOperatingDTO {
     public void build(){
         typeDesc = WashTerOperatingLogTypeEnum.getByCode(type).getDesc();
         if(null != createTime){
-            createTimestamp = createTimestamp.longValue();
+            createTimestamp = createTime.getTime();
         }
     }
 
