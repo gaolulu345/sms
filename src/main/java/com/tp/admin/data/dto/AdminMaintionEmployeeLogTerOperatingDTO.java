@@ -14,6 +14,7 @@ public class AdminMaintionEmployeeLogTerOperatingDTO {
 
     private int id;
     private Timestamp createTime;
+    private Long createTimestamp;
     private int terId;
     private String terTitle;
     private int employeeId;
@@ -26,6 +27,9 @@ public class AdminMaintionEmployeeLogTerOperatingDTO {
 
     public void build(){
         typeDesc = WashTerOperatingLogTypeEnum.getByCode(type).getDesc();
+        if(null != createTime){
+            createTimestamp = createTimestamp.longValue();
+        }
     }
 
 }
