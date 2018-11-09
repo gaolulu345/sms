@@ -46,6 +46,8 @@
 
 .icon-excardlist:before { content: "\e651"; }
 
+.icon-maintain:before { content: "\e6eb"; }
+
 .icon-dingdan:before { content: "\e64a"; }
 
 .icon-roles:before { content: "\e602"; }

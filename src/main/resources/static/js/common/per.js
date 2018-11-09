@@ -33,6 +33,9 @@ $.ajax({
 			let menu = res.data.menu;
 			menu.forEach(function(val) {
 	            val.class = val.url.substring(7)
+	            if(val.url == '/pages/maintion/employee') {
+	            	val.class = 'maintain'
+	            }
 	        })
 	        menu = menu.sort(compare("order"))
 			menuPer = menu;

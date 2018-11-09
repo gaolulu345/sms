@@ -2,7 +2,7 @@
 var vm = new Vue({
     el: "#app",
     data: {
-        pageName: 'mantain',
+        pageName: 'maintain',
         pageTitle: '维保管理',
         adminId: adminId,
         adminRoleId: adminRoleId,
@@ -42,8 +42,6 @@ var vm = new Vue({
                 vm.currentPageIndex = data.pageIndex;
             })
         },
-
-
 
         // 删除、禁用
         clickDelete: function(id, deleted) {
@@ -95,10 +93,6 @@ var vm = new Vue({
             });
         },
 
-
-
-
-
         handleSizeChange(val) {
             this.getMaintainList(val, 1)
         },
@@ -108,8 +102,6 @@ var vm = new Vue({
   
     }    
 });
-
-
 
 
 $('.nav-each').removeClass('active');
