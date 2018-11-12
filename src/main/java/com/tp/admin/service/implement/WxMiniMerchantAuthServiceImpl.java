@@ -3,7 +3,11 @@ package com.tp.admin.service.implement;
 import com.google.gson.Gson;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
+import com.tp.admin.dao.AdminMerchantEmployeeDao;
+import com.tp.admin.data.entity.AdminMaintionEmployee;
+import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.parameter.WxMiniAuthDTO;
+import com.tp.admin.data.parameter.WxMiniRegisterDTO;
 import com.tp.admin.data.result.WxJscodeSessionResult;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -25,6 +29,9 @@ public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
 
     @Autowired
     HttpHelperI httpHelper;
+
+    @Autowired
+    AdminMerchantEmployeeDao adminMerchantEmployeeDao;
 
     @Override
     public ApiResult auth(HttpServletRequest request) {
@@ -55,19 +62,65 @@ public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
     @Override
     public ApiResult login(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        return ApiResult.ok(body);
+        WxMiniAuthDTO wxMiniAuthDTO = new Gson().fromJson(body, WxMiniAuthDTO.class);
+        if (StringUtils.isBlank(wxMiniAuthDTO.getOpenId())) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
+        }
+        AdminMerchantEmployee adminMerchantEmployee = adminMerchantEmployeeDao.findByWxMiniId(wxMiniAuthDTO.getOpenId());
+        if (null == adminMerchantEmployee) {
+            throw new BaseException(ExceptionCode.NO_THIS_USER);
+        }
+        if (!adminMerchantEmployee.isEnable()) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        if (adminMerchantEmployee.isDeleted()) {
+            throw new BaseException(ExceptionCode.USER_DELETE_REGISTERED);
+        }
+        return ApiResult.ok(adminMerchantEmployee);
     }
 
     @Override
     public ApiResult register(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        return ApiResult.ok(body);
+        WxMiniRegisterDTO wxMiniRegisterDTO = new Gson().fromJson(body, WxMiniRegisterDTO.class);
+        if (StringUtils.isBlank(wxMiniRegisterDTO.getOpenId()) ||
+                StringUtils.isBlank(wxMiniRegisterDTO.getName()) ||
+                StringUtils.isBlank(wxMiniRegisterDTO.getPhone())) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        AdminMerchantEmployee adminMerchantEmployee = adminMerchantEmployeeDao.findByWxMiniId(wxMiniRegisterDTO.getOpenId());
+        if (null != adminMerchantEmployee) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        adminMerchantEmployee = adminMerchantEmployeeDao.findByPhone(wxMiniRegisterDTO.getPhone());
+        if (null != adminMerchantEmployee) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"该手机号已经申请注册,请尝试其它手机号。或联系系统管理员");
+        }
+        adminMerchantEmployee = new AdminMerchantEmployee();
+        adminMerchantEmployee.setMiniWxId(wxMiniRegisterDTO.getOpenId());
+        adminMerchantEmployee.setWxUnionId("");
+        adminMerchantEmployee.setName(wxMiniRegisterDTO.getName());
+        adminMerchantEmployee.setPhone(wxMiniRegisterDTO.getPhone());
+        adminMerchantEmployee.setEnable(false);
+        int res = adminMerchantEmployeeDao.insert(adminMerchantEmployee);
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+        }
+        return ApiResult.ok();
     }
 
     @Override
     public ApiResult registerCheck(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        return ApiResult.ok(body);
+        WxMiniRegisterDTO wxMiniRegisterDTO = new Gson().fromJson(body, WxMiniRegisterDTO.class);
+        if (StringUtils.isBlank(wxMiniRegisterDTO.getPhone())) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        AdminMerchantEmployee adminMerchantEmployee = adminMerchantEmployeeDao.findByPhone(wxMiniRegisterDTO.getPhone());
+        if (null != adminMerchantEmployee ) {
+            throw new BaseException(ExceptionCode.USER_PHONE_HAS_REGISTERED);
+        }
+        return ApiResult.ok();
     }
 
 
