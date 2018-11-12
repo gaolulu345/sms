@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 微信小程序-维保授权
  */
-public interface WxMiniMaintainAuthServiceI {
+public interface WxMiniAuthServiceI {
 
     /**
      * 微信授权
@@ -38,12 +38,7 @@ public interface WxMiniMaintainAuthServiceI {
      */
     ApiResult registerCheck(HttpServletRequest request);
 
-    /**
-     * 检查用户
-     * @param openId
-     * @return
-     */
-    AdminMaintionEmployee check(String openId);
+
 
 
 }

@@ -21,7 +21,7 @@ import com.tp.admin.enums.WashTerStateEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
-import com.tp.admin.service.WxMiniMaintainAuthServiceI;
+import com.tp.admin.service.WxMiniAuthServiceI;
 import com.tp.admin.service.WxMiniMaintainManageServiceI;
 import com.tp.admin.utils.SecurityUtil;
 import org.apache.commons.lang.StringUtils;
@@ -55,7 +55,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     AdminMaintionEmployeeLogTerOperatingDao adminMaintionEmployeeLogTerOperatingDao;
 
     @Autowired
-    WxMiniMaintainAuthServiceI wxMiniMaintainAuthService;
+    WxMiniAuthServiceI wxMiniMaintainAuthService;
 
     @Override
     public ApiResult region(HttpServletRequest request) {
@@ -108,7 +108,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
-        AdminMaintionEmployee adminMaintionEmployee = wxMiniMaintainAuthService.check(wxMiniSearch.getOpenId());
+        AdminMaintionEmployee adminMaintionEmployee = check(wxMiniSearch.getOpenId());
         TerInfoDTO dto = terCheck(wxMiniSearch);
         if (dto.isOnline()) {
             throw new BaseException(ExceptionCode.REPEAT_OPERATION , "该网点已经上线");
@@ -129,7 +129,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (null == wxMiniSearch.getTerId() || StringUtils.isBlank(wxMiniSearch.getMsg()) ) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
-        AdminMaintionEmployee adminMaintionEmployee = wxMiniMaintainAuthService.check(wxMiniSearch.getOpenId());
+        AdminMaintionEmployee adminMaintionEmployee = check(wxMiniSearch.getOpenId());
         TerInfoDTO dto = terCheck(wxMiniSearch);
         if (!dto.isOnline()) {
             throw new BaseException(ExceptionCode.REPEAT_OPERATION , "该网点已经下线");
@@ -160,7 +160,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
-        AdminMaintionEmployee adminMaintionEmployee = wxMiniMaintainAuthService.check(wxMiniSearch.getOpenId());
+        AdminMaintionEmployee adminMaintionEmployee = check(wxMiniSearch.getOpenId());
         TerInfoDTO dto = terCheck(wxMiniSearch);
         if (StringUtils.isBlank(dto.getCode())) {
             throw new BaseException(ExceptionCode.NOT_TER);
@@ -197,7 +197,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
         wxMiniSearch.builData();
-        wxMiniMaintainAuthService.check(wxMiniSearch.getOpenId());
+        check(wxMiniSearch.getOpenId());
         List<AdminMaintionEmployeeLogTerOperatingDTO> results = adminMaintionEmployeeLogTerOperatingDao.listBySearch
                 (wxMiniSearch);
         if (null != results && !results.isEmpty()) {
@@ -210,6 +210,18 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             wxMiniSearch.setTotalCnt(0);
         }
         return ApiResult.ok(results);
+    }
+
+    @Override
+    public AdminMaintionEmployee check(String openId) {
+        if (StringUtils.isBlank(openId)) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
+        }
+        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByWxMiniId(openId);
+        if (null == adminMaintionEmployee) {
+            throw new BaseException(ExceptionCode.NO_THIS_USER);
+        }
+        return adminMaintionEmployee;
     }
 
     @Override

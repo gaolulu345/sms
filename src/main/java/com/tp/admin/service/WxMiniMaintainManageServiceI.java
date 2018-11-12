@@ -71,6 +71,13 @@ public interface WxMiniMaintainManageServiceI {
     ApiResult siteOperationLog(HttpServletRequest request);
 
     /**
+     * 检查用户
+     * @param openId
+     * @return
+     */
+    AdminMaintionEmployee check(String openId);
+
+    /**
      * 构建操作日志
      * @param terInfoDTO
      * @param adminMaintionEmployee

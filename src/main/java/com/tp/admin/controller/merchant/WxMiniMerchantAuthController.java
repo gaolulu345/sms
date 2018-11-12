@@ -1,8 +1,9 @@
-package com.tp.admin.controller.maintain;
+package com.tp.admin.controller.merchant;
+
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.controller.maintain.WxMiniMaintainAuthController;
 import com.tp.admin.service.WxMiniAuthServiceI;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,17 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 微信小程序-维保授权接口
+ * 微信小程序-商家授权接口
  */
+
 @RestController
-@RequestMapping(WxMiniMaintainAuthController.ROUTER_INDEX)
-public class WxMiniMaintainAuthController {
+@RequestMapping(WxMiniMerchantAuthController.ROUTER_INDEX)
+public class WxMiniMerchantAuthController {
 
-    public static final String ROUTER_INDEX = "/api/open/wx/mini/maintain";
+    public static final String ROUTER_INDEX = "/api/open/wx/mini/merchant";
 
-    @Autowired
-    @Qualifier(value = "wxMiniMaintainAuthService")
-    WxMiniAuthServiceI wxMiniMaintainAuthService;
+    @Qualifier(value = "wxMiniMerchantAuthService")
+    WxMiniAuthServiceI wxMiniMerchantAuthService;
 
     /**
      * 微信授权
@@ -30,7 +31,7 @@ public class WxMiniMaintainAuthController {
      */
     @PostMapping(value = "/auth")
     public ApiResult auth(HttpServletRequest request){
-        return wxMiniMaintainAuthService.auth(request);
+        return wxMiniMerchantAuthService.auth(request);
     }
 
     /**
@@ -40,7 +41,7 @@ public class WxMiniMaintainAuthController {
      */
     @PostMapping(value = "/login")
     public ApiResult login(HttpServletRequest request){
-        return wxMiniMaintainAuthService.login(request);
+        return wxMiniMerchantAuthService.login(request);
     }
 
     /**
@@ -50,7 +51,7 @@ public class WxMiniMaintainAuthController {
      */
     @PostMapping(value = "/register")
     public ApiResult register(HttpServletRequest request){
-        return wxMiniMaintainAuthService.register(request);
+        return wxMiniMerchantAuthService.register(request);
     }
 
     /**
@@ -60,8 +61,9 @@ public class WxMiniMaintainAuthController {
      */
     @PostMapping(value = "/register/check")
     public ApiResult registerCheck(HttpServletRequest request){
-        return wxMiniMaintainAuthService.registerCheck(request);
+        return wxMiniMerchantAuthService.registerCheck(request);
     }
+
 
 
 }

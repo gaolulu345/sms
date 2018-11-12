@@ -5,14 +5,13 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
 import com.tp.admin.dao.AdminMaintionEmployeeDao;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
-import com.tp.admin.data.entity.FileUploadLog;
 import com.tp.admin.data.parameter.WxMiniAuthDTO;
 import com.tp.admin.data.parameter.WxMiniRegisterDTO;
 import com.tp.admin.data.result.WxJscodeSessionResult;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
-import com.tp.admin.service.WxMiniMaintainAuthServiceI;
+import com.tp.admin.service.WxMiniAuthServiceI;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +21,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Service
-public class WxMiniMaintainAuthServiceImpl implements WxMiniMaintainAuthServiceI {
+@Service(value = "wxMiniMaintainAuthService")
+public class WxMiniMaintainAuthServiceImpl implements WxMiniAuthServiceI {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
@@ -123,15 +122,4 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniMaintainAuthServiceI
         return ApiResult.ok();
     }
 
-    @Override
-    public AdminMaintionEmployee check(String openId) {
-        if (StringUtils.isBlank(openId)) {
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
-        }
-        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByWxMiniId(openId);
-        if (null == adminMaintionEmployee) {
-            throw new BaseException(ExceptionCode.NO_THIS_USER);
-        }
-        return adminMaintionEmployee;
-    }
 }
