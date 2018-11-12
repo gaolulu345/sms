@@ -1,5 +1,6 @@
 package com.tp.admin.data.dto;
 
+import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +11,7 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminMaintionEmployeeLogTerOperatingDTO {
+public class AdminTerOperatingLogDTO {
 
     private int id;
     private Timestamp createTime;
@@ -22,11 +23,14 @@ public class AdminMaintionEmployeeLogTerOperatingDTO {
     private String title;
     private String intros;
     private int type;
+    private int opSource;
     private boolean sucess;
+    private String opSourceDesc;
     private String typeDesc;
 
     public void build(){
         typeDesc = WashTerOperatingLogTypeEnum.getByCode(type).getDesc();
+        opSourceDesc = AdminTerOperatingLogSourceEnum.getByCode(opSource).getDesc();
         if(null != createTime){
             createTimestamp = createTime.getTime();
         }

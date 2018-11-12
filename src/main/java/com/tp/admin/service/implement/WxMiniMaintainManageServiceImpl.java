@@ -4,18 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
-import com.tp.admin.dao.AdminMaintionEmployeeDao;
-import com.tp.admin.dao.AdminMaintionEmployeeLogTerOperatingDao;
-import com.tp.admin.dao.TerDao;
-import com.tp.admin.dao.TerLogDao;
-import com.tp.admin.data.dto.AdminMaintionEmployeeLogTerOperatingDTO;
+import com.tp.admin.dao.*;
+import com.tp.admin.data.dto.AdminTerOperatingLogDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMaintionEmployeeLogTerOperating;
+import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.entity.TerLog;
 import com.tp.admin.data.parameter.WxMiniAuthDTO;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.table.ResultTable;
+import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import com.tp.admin.enums.WashTerStateEnum;
 import com.tp.admin.exception.BaseException;
@@ -52,7 +51,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     TerLogDao terLogDao;
 
     @Autowired
-    AdminMaintionEmployeeLogTerOperatingDao adminMaintionEmployeeLogTerOperatingDao;
+    AdminTerOperatingLogDao adminTerOperatingLogDao;
 
     @Autowired
     WxMiniAuthServiceI wxMiniMaintainAuthService;
@@ -198,13 +197,12 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         }
         wxMiniSearch.builData();
         check(wxMiniSearch.getOpenId());
-        List<AdminMaintionEmployeeLogTerOperatingDTO> results = adminMaintionEmployeeLogTerOperatingDao.listBySearch
-                (wxMiniSearch);
+        List<AdminTerOperatingLogDTO> results = adminTerOperatingLogDao.listMaintionEmployeeLogBySearch(wxMiniSearch);
         if (null != results && !results.isEmpty()) {
-            for (AdminMaintionEmployeeLogTerOperatingDTO dto : results){
+            for (AdminTerOperatingLogDTO dto : results){
                 dto.build();
             }
-            int cnt = adminMaintionEmployeeLogTerOperatingDao.cntBySearch(wxMiniSearch);
+            int cnt = adminTerOperatingLogDao.cntMaintionEmployeeLogBySearch(wxMiniSearch);
             wxMiniSearch.setTotalCnt(cnt);
         }else {
             wxMiniSearch.setTotalCnt(0);
@@ -232,18 +230,19 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
                                                       ) {
         String intros = adminMaintionEmployee.getName() + " 操作 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum
                 .getDesc();
-        AdminMaintionEmployeeLogTerOperating adminMaintionEmployeeLogTerOperating = new
-                AdminMaintionEmployeeLogTerOperating();
-        adminMaintionEmployeeLogTerOperating.setEmployeeId(adminMaintionEmployee.getId());
-        adminMaintionEmployeeLogTerOperating.setUsername(adminMaintionEmployee.getName());
-        adminMaintionEmployeeLogTerOperating.setTerId(terInfoDTO.getId());
-        adminMaintionEmployeeLogTerOperating.setTitle(washTerOperatingLogTypeEnum.getDesc());
-        adminMaintionEmployeeLogTerOperating.setIntros(intros);
-        adminMaintionEmployeeLogTerOperating.setType(washTerOperatingLogTypeEnum.getValue());
-        adminMaintionEmployeeLogTerOperating.setSucess(sucess);
-        int res = adminMaintionEmployeeLogTerOperatingDao.insert(adminMaintionEmployeeLogTerOperating);
+        AdminTerOperatingLog adminTerOperatingLog = new
+                AdminTerOperatingLog();
+        adminTerOperatingLog.setEmployeeId(adminMaintionEmployee.getId());
+        adminTerOperatingLog.setUsername(adminMaintionEmployee.getName());
+        adminTerOperatingLog.setTerId(terInfoDTO.getId());
+        adminTerOperatingLog.setTitle(washTerOperatingLogTypeEnum.getDesc());
+        adminTerOperatingLog.setIntros(intros);
+        adminTerOperatingLog.setType(washTerOperatingLogTypeEnum.getValue());
+        adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.DEFAULT.getValue());
+        adminTerOperatingLog.setSucess(sucess);
+        int res = adminTerOperatingLogDao.insert(adminTerOperatingLog);
         if (res == 0) {
-            log.error("维保人员操作日志存储失败 {} " + adminMaintionEmployeeLogTerOperating.toString());
+            log.error("维保人员操作日志存储失败 {} " + adminTerOperatingLog.toString());
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
     }
