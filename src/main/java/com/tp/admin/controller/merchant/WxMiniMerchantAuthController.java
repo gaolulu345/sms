@@ -4,6 +4,7 @@ package com.tp.admin.controller.merchant;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.controller.maintain.WxMiniMaintainAuthController;
 import com.tp.admin.service.WxMiniAuthServiceI;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ public class WxMiniMerchantAuthController {
 
     public static final String ROUTER_INDEX = "/api/open/wx/mini/merchant";
 
+    @Autowired
     @Qualifier(value = "wxMiniMerchantAuthService")
     WxMiniAuthServiceI wxMiniMerchantAuthService;
 
