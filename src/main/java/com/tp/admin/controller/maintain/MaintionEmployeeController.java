@@ -19,8 +19,8 @@ public class MaintionEmployeeController {
 
     @Autowired
     MaintionEmployeeServiceI maintionEmployeeService;
-
     @PostMapping(value = "/list")
+
     public ApiResult list(HttpServletRequest request, @RequestBody MaintionEmployeeSearch
             maintionEmployeeSearch) {
         return maintionEmployeeService.list(request, maintionEmployeeSearch);

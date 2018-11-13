@@ -18,7 +18,7 @@
 		)
     </insert>
 
-    <select id="findByWxMiniId" resultMap="AdminMerchantEmployeeMap">
+	<select id="findByWxMiniId" resultMap="AdminMerchantEmployeeMap">
 	  SELECT * FROM
       `admin_merchant_employee`
       WHERE
@@ -34,10 +34,52 @@
       LIMIT 0 , 1
 	</select>
 
+    <select id="cntBySearch" parameterType="com.tp.admin.data.search.MerchantEmployeeSearch"
+			resultType="java.lang.Integer">
+		SELECT
+        COUNT(*)
+        FROM
+        `admin_merchant_employee`
+	</select>
+
+	<select id="listBySearch" parameterType="com.tp.admin.data.search.MerchantEmployeeSearch" resultMap="AdminMerchantEmployeeMap">
+		SELECT
+		*
+		FROM
+		`admin_merchant_employee`
+		ORDER BY id DESC
+		<if test="pageSize != null and pageSize !=0 and offset != null">
+			LIMIT #{offset},#{pageSize}
+		</if>
+	</select>
+
+	<update id="bachUpdateDeleted" parameterType="com.tp.admin.data.search.MerchantEmployeeSearch">
+		UPDATE
+		`admin_merchant_employee`
+		SET
+		deleted = #{deleted}
+		WHERE
+		id IN
+		<foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="updateEnable" parameterType="com.tp.admin.data.search.MerchantEmployeeSearch">
+		UPDATE
+		`admin_merchant_employee`
+		SET
+		enable = #{enable} ,
+		partner_id = #{partnerId}
+		WHERE
+		id = #{id}
+	</update>
+
 	<resultMap id="AdminMerchantEmployeeMap" type="com.tp.admin.data.entity.AdminMerchantEmployee">
 		<id column="id" property="id" jdbcType="INTEGER"/>
 		<result column="mini_wx_id" property="miniWxId" jdbcType="VARCHAR"/>
 		<result column="wx_union_id" property="wxUnionId" jdbcType="VARCHAR"/>
+		<result column="partner_id" property="partnerId" jdbcType="INTEGER"/>
 		<result column="name" property="name" jdbcType="VARCHAR"/>
 		<result column="phone" property="phone" jdbcType="VARCHAR"/>
 		<result column="deleted" property="deleted" jdbcType="BIT" />

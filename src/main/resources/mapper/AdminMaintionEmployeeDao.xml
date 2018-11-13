@@ -58,7 +58,6 @@
         `admin_maintion_employee`
         SET
         deleted = #{deleted}
-
         WHERE
         id IN
         <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">

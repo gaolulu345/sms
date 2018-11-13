@@ -16,6 +16,7 @@ public class AdminMerchantEmployee {
     private String miniWxId;
     @JsonIgnore
     private String wxUnionId;
+    private int partnerId;
     private String name;
     private String phone;
     @JsonIgnore
