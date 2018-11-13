@@ -18,7 +18,10 @@ public class AdminTerOperatingLogDTO {
     private Long createTimestamp;
     private int terId;
     private String terTitle;
-    private int employeeId;
+    private int maintionId;
+    private int merchantId;
+    private String maintionUsername;
+    private String merchantUsername;
     private String username;
     private String title;
     private String intros;
@@ -33,6 +36,11 @@ public class AdminTerOperatingLogDTO {
         opSourceDesc = AdminTerOperatingLogSourceEnum.getByCode(opSource).getDesc();
         if(null != createTime){
             createTimestamp = createTime.getTime();
+        }
+        if (AdminTerOperatingLogSourceEnum.MAINTAUN.getValue() == opSource) {
+            username = maintionUsername;
+        }else if(AdminTerOperatingLogSourceEnum.MERCHANT.getValue() == opSource){
+            username = merchantUsername;
         }
     }
 

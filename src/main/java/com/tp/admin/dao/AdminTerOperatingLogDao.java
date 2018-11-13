@@ -10,13 +10,10 @@ public interface AdminTerOperatingLogDao {
 
     int insert(AdminTerOperatingLog adminTerOperatingLog);
 
-    List<AdminTerOperatingLogDTO> listMaintionEmployeeLogBySearch(WxMiniSearch wxMiniSearch);
+    List<AdminTerOperatingLogDTO> listLogBySearch(WxMiniSearch wxMiniSearch);
 
-    Integer cntMaintionEmployeeLogBySearch(WxMiniSearch wxMiniSearch);
+    Integer cntBySearch(WxMiniSearch wxMiniSearch);
 
-    List<AdminTerOperatingLogDTO> listMerchantEmployeeLogBySearch(WxMiniSearch wxMiniSearch);
-
-    Integer cntMerchantEmployeeLogBySearch(WxMiniSearch wxMiniSearch);
 
 
 }

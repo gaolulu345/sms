@@ -85,6 +85,4 @@ public interface WxMiniMaintainManageServiceI {
     void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMaintionEmployee adminMaintionEmployee,
                   WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum , Boolean sucess);
 
-    TerInfoDTO terCheck(WxMiniSearch wxMiniSearch);
-
 }

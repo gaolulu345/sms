@@ -20,6 +20,7 @@ import com.tp.admin.enums.WashTerStateEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
+import com.tp.admin.service.WashSiteServiceI;
 import com.tp.admin.service.WxMiniAuthServiceI;
 import com.tp.admin.service.WxMiniMaintainManageServiceI;
 import com.tp.admin.utils.SecurityUtil;
@@ -45,16 +46,19 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     HttpHelperI httpHelper;
 
     @Autowired
-    TerDao terDao;
+    TerLogDao terLogDao;
 
     @Autowired
-    TerLogDao terLogDao;
+    TerDao terDao;
 
     @Autowired
     AdminTerOperatingLogDao adminTerOperatingLogDao;
 
     @Autowired
     WxMiniAuthServiceI wxMiniMaintainAuthService;
+
+    @Autowired
+    WashSiteServiceI washSiteService;
 
     @Override
     public ApiResult region(HttpServletRequest request) {
@@ -96,7 +100,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
-        TerInfoDTO dto = terCheck(wxMiniSearch);
+        TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         return ApiResult.ok(dto);
     }
 
@@ -108,7 +112,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
         AdminMaintionEmployee adminMaintionEmployee = check(wxMiniSearch.getOpenId());
-        TerInfoDTO dto = terCheck(wxMiniSearch);
+        TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         if (dto.isOnline()) {
             throw new BaseException(ExceptionCode.REPEAT_OPERATION , "该网点已经上线");
         }
@@ -129,7 +133,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         AdminMaintionEmployee adminMaintionEmployee = check(wxMiniSearch.getOpenId());
-        TerInfoDTO dto = terCheck(wxMiniSearch);
+        TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         if (!dto.isOnline()) {
             throw new BaseException(ExceptionCode.REPEAT_OPERATION , "该网点已经下线");
         }
@@ -160,7 +164,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
         AdminMaintionEmployee adminMaintionEmployee = check(wxMiniSearch.getOpenId());
-        TerInfoDTO dto = terCheck(wxMiniSearch);
+        TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         if (StringUtils.isBlank(dto.getCode())) {
             throw new BaseException(ExceptionCode.NOT_TER);
         }
@@ -197,17 +201,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         }
         wxMiniSearch.builData();
         check(wxMiniSearch.getOpenId());
-        List<AdminTerOperatingLogDTO> results = adminTerOperatingLogDao.listMaintionEmployeeLogBySearch(wxMiniSearch);
-        if (null != results && !results.isEmpty()) {
-            for (AdminTerOperatingLogDTO dto : results){
-                dto.build();
-            }
-            int cnt = adminTerOperatingLogDao.cntMaintionEmployeeLogBySearch(wxMiniSearch);
-            wxMiniSearch.setTotalCnt(cnt);
-        }else {
-            wxMiniSearch.setTotalCnt(0);
-        }
-        return ApiResult.ok(results);
+        return washSiteService.siteOperationLog(wxMiniSearch);
     }
 
     @Override
@@ -245,23 +239,6 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             log.error("维保人员操作日志存储失败 {} " + adminTerOperatingLog.toString());
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
-    }
-
-    @Override
-    public TerInfoDTO terCheck(WxMiniSearch wxMiniSearch) {
-        if (null == wxMiniSearch) {
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
-        }
-        wxMiniSearch.builData();
-        List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniSearch);
-        TerInfoDTO dto = null;
-        if (null != results && !results.isEmpty()) {
-            dto = results.get(0);
-            dto.build();
-        }else {
-            throw new BaseException(ExceptionCode.NOT_TER);
-        }
-        return dto;
     }
 
     private final JsonObject signOrderInfo(int terId, String orderId) {

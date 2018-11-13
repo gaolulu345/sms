@@ -30,8 +30,8 @@ public class WxMiniMaintainAuthController {
      * @return
      */
     @PostMapping(value = "/auth")
-    public ApiResult auth(HttpServletRequest request , @RequestBody String body){
-        return wxMiniMaintainAuthService.auth(request , body);
+    public ApiResult auth(HttpServletRequest request){
+        return wxMiniMaintainAuthService.auth(request );
     }
 
     /**
@@ -50,7 +50,7 @@ public class WxMiniMaintainAuthController {
      * @return
      */
     @PostMapping(value = "/register")
-    public ApiResult register(HttpServletRequest request){
+    public ApiResult register(HttpServletRequest request ){
         return wxMiniMaintainAuthService.register(request);
     }
 

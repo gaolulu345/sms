@@ -2,6 +2,7 @@ package com.tp.admin.service;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.dto.TerInfoDTO;
+import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import org.springframework.stereotype.Service;
@@ -73,6 +74,13 @@ public interface WxMiniMerchantManageServiceI {
      * @return
      */
     ApiResult siteOperationLog(HttpServletRequest request);
+
+    /**
+     * 检查用户
+     * @param openId
+     * @return
+     */
+    AdminMerchantEmployee check(String openId);
 
     void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMerchantEmployee adminMerchantEmployee,
                               WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum , Boolean sucess);
