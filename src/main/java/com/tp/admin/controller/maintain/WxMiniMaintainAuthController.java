@@ -5,6 +5,7 @@ import com.tp.admin.service.WxMiniAuthServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,8 +30,8 @@ public class WxMiniMaintainAuthController {
      * @return
      */
     @PostMapping(value = "/auth")
-    public ApiResult auth(HttpServletRequest request){
-        return wxMiniMaintainAuthService.auth(request);
+    public ApiResult auth(HttpServletRequest request , @RequestBody String body){
+        return wxMiniMaintainAuthService.auth(request , body);
     }
 
     /**

@@ -1,8 +1,6 @@
 package com.tp.admin.controller.merchant;
 
-
 import com.tp.admin.ajax.ApiResult;
-import com.tp.admin.controller.maintain.WxMiniMaintainAuthController;
 import com.tp.admin.service.WxMiniAuthServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 微信小程序-商家授权接口
  */
-
 @RestController
 @RequestMapping(WxMiniMerchantAuthController.ROUTER_INDEX)
 public class WxMiniMerchantAuthController {

@@ -238,7 +238,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         adminTerOperatingLog.setTitle(washTerOperatingLogTypeEnum.getDesc());
         adminTerOperatingLog.setIntros(intros);
         adminTerOperatingLog.setType(washTerOperatingLogTypeEnum.getValue());
-        adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.DEFAULT.getValue());
+        adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MAINTAUN.getValue());
         adminTerOperatingLog.setSucess(sucess);
         int res = adminTerOperatingLogDao.insert(adminTerOperatingLog);
         if (res == 0) {

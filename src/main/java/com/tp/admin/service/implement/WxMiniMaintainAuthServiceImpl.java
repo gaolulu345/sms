@@ -33,7 +33,7 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniAuthServiceI {
     AdminMaintionEmployeeDao adminMaintionEmployeeDao;
 
     @Override
-    public ApiResult login(HttpServletRequest request) {
+    public ApiResult login(HttpServletRequest request ) {
         String body = httpHelper.jsonBody(request);
         WxMiniAuthDTO wxMiniAuthDTO = new Gson().fromJson(body, WxMiniAuthDTO.class);
         if (StringUtils.isBlank(wxMiniAuthDTO.getOpenId())) {
@@ -79,8 +79,8 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniAuthServiceI {
     }
 
     @Override
-    public ApiResult register(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
+    public ApiResult register(HttpServletRequest request , String body) {
+//        String body = httpHelper.jsonBody(request);
         WxMiniRegisterDTO wxMiniRegisterDTO = new Gson().fromJson(body, WxMiniRegisterDTO.class);
         if (StringUtils.isBlank(wxMiniRegisterDTO.getOpenId()) ||
                 StringUtils.isBlank(wxMiniRegisterDTO.getName()) ||

@@ -15,7 +15,7 @@ public interface WxMiniAuthServiceI {
      * @param request
      * @return
      */
-    ApiResult auth(HttpServletRequest request);
+    ApiResult auth(HttpServletRequest request );
 
     /**
      * 授权登录
@@ -29,7 +29,7 @@ public interface WxMiniAuthServiceI {
      * @param request
      * @return
      */
-    ApiResult register(HttpServletRequest request);
+    ApiResult register(HttpServletRequest request );
 
     /**
      * 注册检查
