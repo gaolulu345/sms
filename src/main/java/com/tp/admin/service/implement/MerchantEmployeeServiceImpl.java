@@ -2,7 +2,9 @@ package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.AdminMerchantEmployeeDao;
+import com.tp.admin.dao.PartnerDao;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
+import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.search.MerchantEmployeeSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.exception.BaseException;
@@ -19,6 +21,9 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
 
     @Autowired
     AdminMerchantEmployeeDao adminMerchantEmployeeDao;
+
+    @Autowired
+    PartnerDao partnerDao;
 
     @Override
     public ApiResult list(HttpServletRequest request, MerchantEmployeeSearch merchantEmployeeSearch) {
@@ -50,6 +55,10 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
     public ApiResult updateEnable(HttpServletRequest request, MerchantEmployeeSearch merchantEmployeeSearch) {
         if (null == merchantEmployeeSearch.getId() || null == merchantEmployeeSearch.getPartnerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        Partner partner = partnerDao.findById(merchantEmployeeSearch.getPartnerId());
+        if (null == partner) {
+            throw new BaseException(ExceptionCode.NOT_PARTNER);
         }
         int res = adminMerchantEmployeeDao.updateEnable(merchantEmployeeSearch.getId(),merchantEmployeeSearch.getPartnerId());
         if (res == 0) {

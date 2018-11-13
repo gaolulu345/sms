@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.PartnerDao">
+
+    <select id="findById" resultMap="PartnerMap">
+        SELECT
+        p.*
+        FROM
+        partner AS p INNER JOIN partner_details AS pd ON p.id = pd.partner_id
+        WHERE
+        id = #{id}
+        LIMIT 0 , 1
+    </select>
+
+    <select id="listBySearch" parameterType="com.tp.admin.data.search.PartnerSearch" resultMap="PartnerMap">
+        SELECT
+        p.*
+        FROM
+        partner AS p INNER JOIN partner_details AS pd ON p.id = pd.partner_id
+        ORDER BY id DESC
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <select id="cntBySearch" parameterType="com.tp.admin.data.search.PartnerSearch" resultType="java.lang.Integer">
+        SELECT
+        COUNT(p.id)
+        FROM
+        partner AS p INNER JOIN partner_details AS pd ON p.id = pd.partner_id
+    </select>
+
+
+    <resultMap id="PartnerMap" type="com.tp.admin.data.entity.Partner">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="pw" property="pw" jdbcType="VARCHAR" />
+        <result column="intros" property="intros" jdbcType="VARCHAR" />
+        <result column="contract" property="contract" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="deleted" property="deleted" jdbcType="BIT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+</mapper>

@@ -28,6 +28,8 @@ public enum ExceptionCode {
     TER_STATUS_RESERT_ERROR("4007","网点状态复位操作失败"),
     TER_DEVICE_RESERT_ERROR("4008","网点设备复位操作失败"),
 
+    NOT_PARTNER("5000","查无此合作伙伴"),
+
     ALI_OSS_REMOTE_ERROR("9001","尝试访问阿里云服务时的异常,请重新尝试"),
     ALI_OSS_UPDATE_ERROR("9002","上传文件失败,请重新尝试"),
     ALI_OSS_FILE_SAVE_ERROR("9003","上传文件保存失败,请重新尝试"),
