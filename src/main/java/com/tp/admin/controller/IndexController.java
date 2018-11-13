@@ -64,6 +64,15 @@ public class IndexController {
     }
 
     /**
+     * 商户人员
+     * @return
+     */
+    @GetMapping(value = {"/pages/merchant/employee"})
+    public String merchantEmployee(HttpServletRequest request, Model model ) {
+        return "merchant_employee";
+    }
+
+    /**
      * 洗车退款
      * @return
      */
