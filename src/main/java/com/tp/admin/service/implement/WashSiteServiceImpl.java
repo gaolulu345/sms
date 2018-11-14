@@ -32,6 +32,7 @@ public class WashSiteServiceImpl implements WashSiteServiceI {
                 dto.build();
             }
             int cnt = adminTerOperatingLogDao.cntBySearch(wxMiniSearch);
+            wxMiniSearch.setResult(results);
             wxMiniSearch.setTotalCnt(cnt);
         }else {
             wxMiniSearch.setTotalCnt(0);

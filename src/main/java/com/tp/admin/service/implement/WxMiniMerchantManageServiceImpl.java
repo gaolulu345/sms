@@ -254,7 +254,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
                 .getDesc();
         AdminTerOperatingLog adminTerOperatingLog = new
                 AdminTerOperatingLog();
-        adminTerOperatingLog.setEmployeeId(adminMerchantEmployee.getId());
+        adminTerOperatingLog.setMerchantId(adminMerchantEmployee.getId());
         adminTerOperatingLog.setUsername(adminMerchantEmployee.getName());
         adminTerOperatingLog.setTerId(terInfoDTO.getId());
         adminTerOperatingLog.setTitle(washTerOperatingLogTypeEnum.getDesc());

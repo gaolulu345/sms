@@ -5,7 +5,8 @@
     <insert id="insert">
         INSERT INTO `admin_ter_operating_log` (
 			`ter_id`,
-			`employee_id`,
+			`maintion_id`,
+			`merchant_id`,
 			`username`,
 			`title`,
 			`intros`,
@@ -14,7 +15,8 @@
 			`sucess`
 		) VALUES (
 			#{terId},
-			#{employeeId},
+			#{maintionId},
+			#{merchantId},
 			#{username},
 			#{title},
 			#{intros},

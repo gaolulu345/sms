@@ -226,7 +226,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
                 .getDesc();
         AdminTerOperatingLog adminTerOperatingLog = new
                 AdminTerOperatingLog();
-        adminTerOperatingLog.setEmployeeId(adminMaintionEmployee.getId());
+        adminTerOperatingLog.setMaintionId(adminMaintionEmployee.getId());
         adminTerOperatingLog.setUsername(adminMaintionEmployee.getName());
         adminTerOperatingLog.setTerId(terInfoDTO.getId());
         adminTerOperatingLog.setTitle(washTerOperatingLogTypeEnum.getDesc());
