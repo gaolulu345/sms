@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,6 +25,8 @@ public class WxMiniSearch extends Search {
     Integer status;
 
     String msg;
+
+    List<Integer> ids;
 
     @Override
     public void builData() {

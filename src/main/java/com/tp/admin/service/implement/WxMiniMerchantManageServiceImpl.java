@@ -13,6 +13,7 @@ import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.RangeSearch;
+import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.enums.OrderStatusEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
@@ -79,13 +80,22 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         if (null != terIds && !terIds.isEmpty()) {
             orderTotal = orderDao.orderTatal(OrderStatusEnum.ASK_CHECK.getValue(), TimeUtil.getDayStartTime(begin30Day).toString()
                     , endDay.toString(),terIds);
+            if (null == orderTotal) {
+                orderTotal = 0L;
+            }
             // 七天完成订单金额总和
             sevenDaymoneyTotal = orderDao.moneyTatal(OrderStatusEnum.ASK_CHECK.getValue(), TimeUtil.getDayStartTime(sevenDays).toString
                     (), endDay
                     .toString(), terIds);
+            if (null == sevenDaymoneyTotal) {
+                sevenDaymoneyTotal = 0L;
+            }
             // 今天完成订单金额总和
             oneDayMoneyTotal = orderDao.moneyTatal(OrderStatusEnum.ASK_CHECK.getValue(), beginDay.toString(), endDay.toString()
                     , terIds);
+            if (null == oneDayMoneyTotal) {
+                oneDayMoneyTotal = 0L;
+            }
         }
         DataTotalDTO dataTotalDTO = new DataTotalDTO();
         dataTotalDTO.setOrderTotal(orderTotal);
@@ -98,10 +108,26 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     public ApiResult siteListSearch(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
-
-
-
-        return ApiResult.ok(body);
+        if (null == wxMiniSearch.getOpenId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
+        }
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
+        if (null != terIds && !terIds.isEmpty()) {
+            wxMiniSearch.setIds(terIds);
+            List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniSearch);
+            if (null != results && !results.isEmpty()) {
+                for (TerInfoDTO t : results){
+                    t.build();
+                }
+                int cnt = terDao.cntTerInfoSearch(wxMiniSearch);
+                wxMiniSearch.setTotalCnt(cnt);
+            }else {
+                wxMiniSearch.setTotalCnt(0);
+            }
+            wxMiniSearch.setResult(results);
+        }
+        return ApiResult.ok(new ResultTable(wxMiniSearch));
     }
 
     @Override
