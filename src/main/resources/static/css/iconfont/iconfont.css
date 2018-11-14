@@ -42,6 +42,8 @@
 
 .icon-money:before { content: "\e63f"; }
 
+.icon-merchant:before { content: "\e60b"; }
+
 .icon-logout:before { content: "\e653"; }
 
 .icon-excardlist:before { content: "\e651"; }

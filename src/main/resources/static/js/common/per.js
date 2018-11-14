@@ -36,6 +36,9 @@ $.ajax({
 	            if(val.url == '/pages/maintion/employee') {
 	            	val.class = 'maintain'
 	            }
+	            if(val.url == '/pages/merchant/employee') {
+	            	val.class = 'merchant'
+	            }
 	        })
 	        menu = menu.sort(compare("order"))
 			menuPer = menu;
