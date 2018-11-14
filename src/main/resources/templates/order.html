@@ -52,9 +52,9 @@
                 size="mini"
                 style="width: 100%">
 
-                <el-table-column prop="id" label="订单ID"></el-table-column>
-                <el-table-column prop="userId" label="用户ID"></el-table-column>
-                <el-table-column prop="terTitle" label="网点名称"></el-table-column>
+                <el-table-column width="60" prop="id" label="订单ID"></el-table-column>
+                <el-table-column width="60" prop="userId" label="用户ID"></el-table-column>
+                <el-table-column width="150" prop="terTitle" label="网点名称"></el-table-column>
                 <el-table-column prop="payTime" label="支付时间"></el-table-column>
                 <el-table-column label="订单状态">
                     <template slot-scope="scope">
@@ -64,14 +64,14 @@
 
                 <el-table-column prop="operationDesc" label="操作描述"></el-table-column>
 
-                <el-table-column label="总价（元）">
+                <el-table-column width="90" label="总价（元）">
                     <template slot-scope="scope">
                         <span>{{scope.row.amount/100}}</span>
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="cardId" label="洗车卡"></el-table-column>
-                <el-table-column prop="ticketId" label="优惠券"></el-table-column>
+                <el-table-column width="70" prop="cardId" label="洗车卡"></el-table-column>
+                <el-table-column width="70" prop="ticketId" label="优惠券"></el-table-column>
                 <el-table-column prop="typeDesc" label="支付方式"></el-table-column>
                 <el-table-column prop="channelDesc" label="订单来源"></el-table-column>
                 <el-table-column label="洗车机日志" v-if="opPer['/api/private/wash/order/log/list']">
