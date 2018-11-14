@@ -17,7 +17,8 @@ public class AdminTerOperatingLog {
     private Timestamp modifyTime;
     private boolean deleted;
     private int terId;
-    private int employeeId;
+    private Integer maintionId;
+    private Integer merchantId;
     private String username;
     private String title;
     private String intros;

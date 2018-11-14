@@ -10,6 +10,9 @@ public interface AdminAccountLoginLogDao {
 
     int insert(AdminAccountLoginLog adminAccountLoginLog);
 
-    List<AdminAccountLoginLog> listBySearch(@Param("more") Boolean more , @Param("username") String username , @Param("pageSize") Integer pageSize , @Param("offset") Integer offset);
+    List<AdminAccountLoginLog> listBySearch(@Param("more") Boolean more ,
+                                            @Param("username") String username ,
+                                            @Param("pageSize") Integer pageSize ,
+                                            @Param("offset") Integer offset);
 
 }

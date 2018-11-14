@@ -58,7 +58,7 @@ public class WashOrderController {
             search.setType(type);
         }
         if (null != terId) {
-            search.setTerIds(new int[]{terId});
+            search.getTerIds().add(terId);
         }
         return washOrderService.listExport(request, response, search);
     }

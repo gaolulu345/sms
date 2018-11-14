@@ -45,6 +45,13 @@
 		<if test="status != null and status == 1">
 			AND ti.status = #{status}
 		</if>
+		<if test="ids != null and ids.size != 0">
+			AND
+			t.id IN
+			<foreach collection="ids" index="index" item="item" separator="," open="(" 			close=")">
+				#{item}
+			</foreach>
+		</if>
 		ORDER BY ti.id ASC
 		<if test="offset != null and pageSize != null and pageSize != 0">
 			LIMIT #{offset},#{pageSize}
@@ -71,9 +78,28 @@
 		<if test="status != null and status == 1">
 			AND ti.status = #{status}
 		</if>
+		<if test="ids != null and ids.size != 0">
+			AND
+			t.id IN
+			<foreach collection="ids" index="index" item="item" separator="," open="(" 			close=")">
+				#{item}
+			</foreach>
+		</if>
 	</select>
 
-	<update id="updateOnline" parameterType="java.lang.Integer">
+    <select id="findRelatedTerByPartnerId" resultType="java.lang.Integer">
+		SELECT tpp.ter_id
+		FROM
+		ter_pk_partner AS tpp INNER JOIN ter AS t ON tpp.ter_id = t.id
+		WHERE
+		tpp.partner_id = #{partnerId}
+		AND
+		tpp.enable = 1
+		AND
+		t.deleted = 0
+	</select>
+
+    <update id="updateOnline" parameterType="java.lang.Integer">
 		UPDATE
 		`ter_info`
 		SET

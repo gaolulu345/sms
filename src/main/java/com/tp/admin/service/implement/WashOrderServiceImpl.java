@@ -56,8 +56,8 @@ public class WashOrderServiceImpl implements WashOrderServiceI {
                 o.build();
             }
             int cnt = orderDao.cntBySearch(orderSearch);
-            orderSearch.setResult(list);
             orderSearch.setTotalCnt(cnt);
+            orderSearch.setResult(list);
         }else {
             orderSearch.setTotalCnt(0);
         }

@@ -7,13 +7,17 @@ import com.tp.admin.dao.AdminTerOperatingLogDao;
 import com.tp.admin.dao.OrderDao;
 import com.tp.admin.dao.TerDao;
 import com.tp.admin.data.dto.DataTotalDTO;
+import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.parameter.WxMiniSearch;
+import com.tp.admin.data.search.OrderSearch;
 import com.tp.admin.data.search.RangeSearch;
+import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
+import com.tp.admin.enums.OrderStatusEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -29,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServiceI {
@@ -56,7 +61,11 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     @Override
     public ApiResult moneyTotal(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        RangeSearch rangeSearch = new Gson().fromJson(body, RangeSearch.class);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getOpenId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
+        }
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         Long orderTotal = 0L;
         Long sevenDaymoneyTotal = 0L;
         Long oneDayMoneyTotal = 0L;
@@ -69,31 +78,59 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         // 七天前的时间
         Date sevenDays = TimeUtil.getFrontDay(endDay, 6);
         // 近30天订单数
-//        orderTotal = orderDao.orderTatal(rangeSearch.getStatus(), TimeUtil.getDayStartTime(begin30Day).toString()
-//                , endDay.toString(),terIds);
-//        // 七天完成订单金额总和
-//        sevenDaymoneyTotal = orderDao.moneyTatal(rangeSearch.getStatus(), TimeUtil.getDayStartTime(sevenDays).toString
-//                (), endDay
-//                .toString(), terIds);
-//        // 今天完成订单金额总和
-//        oneDayMoneyTotal = orderDao.moneyTatal(rangeSearch.getStatus(), beginDay.toString(), endDay.toString()
-//                , terIds);
-//        DataTotalDTO dataTotalDTO = new DataTotalDTO();
-//        dataTotalDTO.setOrderTotal(orderTotal);
-//        dataTotalDTO.setSevenDayMoneyTotal(sevenDaymoneyTotal);
-//        dataTotalDTO.setOneDayMoneyTotal(oneDayMoneyTotal);
-//        return ApiResult.ok(dataTotalDTO);
-        return ApiResult.ok();
+        List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
+        if (null != terIds && !terIds.isEmpty()) {
+            orderTotal = orderDao.orderTatal(OrderStatusEnum.ASK_CHECK.getValue(), TimeUtil.getDayStartTime(begin30Day).toString()
+                    , endDay.toString(),terIds);
+            if (null == orderTotal) {
+                orderTotal = 0L;
+            }
+            // 七天完成订单金额总和
+            sevenDaymoneyTotal = orderDao.moneyTatal(OrderStatusEnum.ASK_CHECK.getValue(), TimeUtil.getDayStartTime(sevenDays).toString
+                    (), endDay
+                    .toString(), terIds);
+            if (null == sevenDaymoneyTotal) {
+                sevenDaymoneyTotal = 0L;
+            }
+            // 今天完成订单金额总和
+            oneDayMoneyTotal = orderDao.moneyTatal(OrderStatusEnum.ASK_CHECK.getValue(), beginDay.toString(), endDay.toString()
+                    , terIds);
+            if (null == oneDayMoneyTotal) {
+                oneDayMoneyTotal = 0L;
+            }
+        }
+        DataTotalDTO dataTotalDTO = new DataTotalDTO();
+        dataTotalDTO.setOrderTotal(orderTotal);
+        dataTotalDTO.setSevenDayMoneyTotal(sevenDaymoneyTotal);
+        dataTotalDTO.setOneDayMoneyTotal(oneDayMoneyTotal);
+        return ApiResult.ok(dataTotalDTO);
     }
 
     @Override
     public ApiResult siteListSearch(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
-
-
-
-        return ApiResult.ok(body);
+        if (null == wxMiniSearch.getOpenId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
+        }
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
+        if (null != terIds && !terIds.isEmpty()) {
+            wxMiniSearch.builData();
+            wxMiniSearch.setIds(terIds);
+            List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniSearch);
+            if (null != results && !results.isEmpty()) {
+                for (TerInfoDTO t : results){
+                    t.build();
+                }
+                int cnt = terDao.cntTerInfoSearch(wxMiniSearch);
+                wxMiniSearch.setTotalCnt(cnt);
+            }else {
+                wxMiniSearch.setTotalCnt(0);
+            }
+            wxMiniSearch.setResult(results);
+        }
+        return ApiResult.ok(new ResultTable(wxMiniSearch));
     }
 
     @Override
@@ -159,12 +196,31 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     public ApiResult orderListSearch(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
-        if (null == wxMiniSearch.getTerId()) {
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        if (null == wxMiniSearch.getOpenId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
         }
-        wxMiniSearch.builData();
-        check(wxMiniSearch.getOpenId());
-        return washSiteService.siteOperationLog(wxMiniSearch);
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
+        OrderSearch orderSearch = new OrderSearch();
+        if (null != terIds && !terIds.isEmpty()) {
+            wxMiniSearch.setIds(terIds);
+            orderSearch.setTerIds(terIds);
+            orderSearch.setPageIndex(wxMiniSearch.getPageIndex());
+            orderSearch.setPageSize(wxMiniSearch.getPageSize());
+            orderSearch.builData();
+            List<OrderDTO> list = orderDao.listBySearch(orderSearch);
+            if (null != list && !list.isEmpty()) {
+                for (OrderDTO o : list) {
+                    o.build();
+                }
+                int cnt = orderDao.cntBySearch(orderSearch);
+                orderSearch.setTotalCnt(cnt);
+                orderSearch.setResult(list);
+            }else {
+                orderSearch.setTotalCnt(0);
+            }
+        }
+        return ApiResult.ok(new ResultTable(orderSearch));
     }
 
     @Override
@@ -198,7 +254,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
                 .getDesc();
         AdminTerOperatingLog adminTerOperatingLog = new
                 AdminTerOperatingLog();
-        adminTerOperatingLog.setEmployeeId(adminMerchantEmployee.getId());
+        adminTerOperatingLog.setMerchantId(adminMerchantEmployee.getId());
         adminTerOperatingLog.setUsername(adminMerchantEmployee.getName());
         adminTerOperatingLog.setTerId(terInfoDTO.getId());
         adminTerOperatingLog.setTitle(washTerOperatingLogTypeEnum.getDesc());

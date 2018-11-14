@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(WxMiniMerchantAuthController.ROUTER_INDEX)
+@RequestMapping(WxMiniMerchantManageController.ROUTER_INDEX)
 public class WxMiniMerchantManageController {
 
     public static final String ROUTER_INDEX = "/api/open/wx/mini/merchant/manage";

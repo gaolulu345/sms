@@ -10,7 +10,7 @@
         `order` AS o INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id
         WHERE
         o.deleted = 0
-        <if test="terIds != null and terIds.length != 0">
+        <if test="terIds != null and terIds.size != 0">
             AND
             o.ter_id IN
             <foreach collection="terIds" item="terId" index="index"
@@ -55,7 +55,7 @@
         INNER JOIN ter_info AS ti ON o.ter_id = ti.ter_id LEFT JOIN operation AS op ON op.id = o.operation_id
         WHERE
         o.deleted = 0
-        <if test="terIds != null and terIds.length != 0">
+        <if test="terIds != null and terIds.size != 0">
             AND
             o.ter_id IN
             <foreach collection="terIds" item="terId" index="index"
@@ -125,6 +125,23 @@
         `order` AS o INNER JOIN ter AS t ON o.ter_id = t.id
         WHERE
         o.status = #{status}
+        AND
+        t.deleted = 0
+        AND
+        o.pay_time BETWEEN #{startTime} AND #{endTime}
+        AND
+        o.ter_id IN
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="moneyTatal" resultType="java.lang.Long">
+        SELECT
+        SUM(o.amount)
+        FROM
+        `order` AS o INNER JOIN ter AS t ON o.ter_id = t.id
+        WHERE
+        o.`status` = #{status}
         AND
         t.deleted = 0
         AND

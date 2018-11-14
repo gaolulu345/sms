@@ -13,6 +13,8 @@ public interface TerDao {
 
     List<Integer> listTerCityId();
 
+    List<Integer> findRelatedTerByPartnerId(Integer id);
+
     List<TerInfoDTO> terInfoSearch(WxMiniSearch wxMiniTerSearch);
 
     Integer cntTerInfoSearch(WxMiniSearch wxMiniTerSearch);
@@ -22,5 +24,7 @@ public interface TerDao {
     Integer updateOffline(@Param("id") int id, @Param("offlineDesc") String offlineDesc);
 
     Integer updateStateDefault(@Param("id") int id);
+
+
 
 }
