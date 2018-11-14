@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -17,7 +18,7 @@ public class OrderSearch extends Search {
     private Integer status;
     private Integer orderId;
     private Integer type;
-    private int[] terIds;
+    private List<Integer> terIds = new ArrayList<>();
 
     @Override
     public void builData() {

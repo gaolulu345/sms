@@ -2,6 +2,7 @@ package com.tp.admin.dao;
 
 import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.entity.Order;
+import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.OrderSearch;
 import org.apache.ibatis.annotations.Param;
 

@@ -7,11 +7,13 @@ import com.tp.admin.dao.AdminTerOperatingLogDao;
 import com.tp.admin.dao.OrderDao;
 import com.tp.admin.dao.TerDao;
 import com.tp.admin.data.dto.DataTotalDTO;
+import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.parameter.WxMiniSearch;
+import com.tp.admin.data.search.OrderSearch;
 import com.tp.admin.data.search.RangeSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
@@ -114,6 +116,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
         if (null != terIds && !terIds.isEmpty()) {
+            wxMiniSearch.builData();
             wxMiniSearch.setIds(terIds);
             List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniSearch);
             if (null != results && !results.isEmpty()) {
@@ -193,12 +196,31 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     public ApiResult orderListSearch(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
-        if (null == wxMiniSearch.getTerId()) {
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        if (null == wxMiniSearch.getOpenId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
         }
-        wxMiniSearch.builData();
-        check(wxMiniSearch.getOpenId());
-        return washSiteService.siteOperationLog(wxMiniSearch);
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
+        OrderSearch orderSearch = new OrderSearch();
+        if (null != terIds && !terIds.isEmpty()) {
+            wxMiniSearch.setIds(terIds);
+            orderSearch.setTerIds(terIds);
+            orderSearch.setPageIndex(wxMiniSearch.getPageIndex());
+            orderSearch.setPageSize(wxMiniSearch.getPageSize());
+            orderSearch.builData();
+            List<OrderDTO> list = orderDao.listBySearch(orderSearch);
+            if (null != list && !list.isEmpty()) {
+                for (OrderDTO o : list) {
+                    o.build();
+                }
+                int cnt = orderDao.cntBySearch(orderSearch);
+                orderSearch.setTotalCnt(cnt);
+                orderSearch.setResult(list);
+            }else {
+                orderSearch.setTotalCnt(0);
+            }
+        }
+        return ApiResult.ok(new ResultTable(orderSearch));
     }
 
     @Override
