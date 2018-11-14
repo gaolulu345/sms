@@ -19,16 +19,6 @@ public class WxMiniMerchantManageController {
     WxMiniMerchantManageServiceI wxMiniMerchantManageService;
 
     /**
-     * 登录用户信息
-     * @param request
-     * @return
-     */
-    @PostMapping(value = "/user/info")
-    public ApiResult userInfo(HttpServletRequest request){
-        return wxMiniMerchantManageService.userInfo(request);
-    }
-
-    /**
      * 站点金额统计
      * @param request
      * @return

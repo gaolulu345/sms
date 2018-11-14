@@ -4,8 +4,11 @@ import com.google.gson.Gson;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
 import com.tp.admin.dao.AdminMerchantEmployeeDao;
+import com.tp.admin.dao.PartnerDao;
+import com.tp.admin.data.dto.AdminMerchantEmployeeInfoDTO;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
+import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.parameter.WxMiniAuthDTO;
 import com.tp.admin.data.parameter.WxMiniRegisterDTO;
 import com.tp.admin.data.result.WxJscodeSessionResult;
@@ -29,6 +32,9 @@ public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
 
     @Autowired
     HttpHelperI httpHelper;
+
+    @Autowired
+    PartnerDao partnerDao;
 
     @Autowired
     AdminMerchantEmployeeDao adminMerchantEmployeeDao;
@@ -76,7 +82,19 @@ public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
         if (adminMerchantEmployee.isDeleted()) {
             throw new BaseException(ExceptionCode.USER_DELETE_REGISTERED);
         }
-        return ApiResult.ok(adminMerchantEmployee);
+        if (adminMerchantEmployee.getPartnerId() == 0) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        Partner partner = partnerDao.findById(adminMerchantEmployee.getPartnerId());
+        if (null == partner) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        AdminMerchantEmployeeInfoDTO adminMerchantEmployeeInfoDTO = new AdminMerchantEmployeeInfoDTO();
+        adminMerchantEmployeeInfoDTO.setId(adminMerchantEmployee.getId());
+        adminMerchantEmployeeInfoDTO.setOpenId(adminMerchantEmployee.getMiniWxId());
+        adminMerchantEmployeeInfoDTO.setPartnerTitle(partner.getTitle());
+        adminMerchantEmployeeInfoDTO.setUsername(adminMerchantEmployee.getName());
+        return ApiResult.ok(adminMerchantEmployeeInfoDTO);
     }
 
     @Override

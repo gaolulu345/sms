@@ -46,12 +46,6 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     TerDao terDao;
 
     @Override
-    public ApiResult userInfo(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
-        return ApiResult.ok(body);
-    }
-
-    @Override
     public ApiResult moneyTotal(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         return ApiResult.ok(body);

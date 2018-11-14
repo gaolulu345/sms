@@ -18,6 +18,14 @@
 		)
     </insert>
 
+	<select id="findById" resultMap="AdminMerchantEmployeeMap">
+	  SELECT * FROM
+      `admin_merchant_employee`
+      WHERE
+      `id` = #{code}
+      LIMIT 0 , 1
+	</select>
+
 	<select id="findByWxMiniId" resultMap="AdminMerchantEmployeeMap">
 	  SELECT * FROM
       `admin_merchant_employee`
@@ -53,7 +61,8 @@
 		</if>
 	</select>
 
-	<update id="bachUpdateDeleted" parameterType="com.tp.admin.data.search.MerchantEmployeeSearch">
+
+    <update id="bachUpdateDeleted" parameterType="com.tp.admin.data.search.MerchantEmployeeSearch">
 		UPDATE
 		`admin_merchant_employee`
 		SET

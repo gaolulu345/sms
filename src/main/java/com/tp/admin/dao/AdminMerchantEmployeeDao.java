@@ -14,6 +14,8 @@ public interface AdminMerchantEmployeeDao {
 
     AdminMerchantEmployee findByPhone(@Param("phone") String phone);
 
+    AdminMerchantEmployee findById(@Param("id") Integer id);
+
     int insert(AdminMerchantEmployee employee);
 
     int cntBySearch(MerchantEmployeeSearch merchantEmployeeSearch);

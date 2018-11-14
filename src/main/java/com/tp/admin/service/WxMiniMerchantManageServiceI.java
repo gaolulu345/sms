@@ -12,12 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface WxMiniMerchantManageServiceI {
 
-    /**
-     * 登录用户信息
-     * @param request
-     * @return
-     */
-    ApiResult userInfo(HttpServletRequest request);
 
     /**
      * 相关网点金额统计
