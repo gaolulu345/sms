@@ -24,6 +24,6 @@ public interface AdminMerchantEmployeeDao {
 
     int bachUpdateDeleted(MerchantEmployeeSearch merchantEmployeeSearch);
 
-    int updateEnable(Integer id , Integer partnerId);
+    int updateEnable(@Param("id") Integer id , @Param("enable") Boolean enable , @Param("partnerId") Integer partnerId);
 
 }

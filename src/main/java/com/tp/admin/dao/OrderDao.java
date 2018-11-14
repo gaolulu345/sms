@@ -19,4 +19,7 @@ public interface OrderDao {
 
     int updateOrderStatus(@Param("orderId") int orderId , @Param("status") int status);
 
+    Long orderTatal(@Param("status") int status, @Param("startTime") String startTime, @Param("endTime") String
+            endTime, @Param("ids") List<Integer> ids);
+
 }

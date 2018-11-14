@@ -65,7 +65,9 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
         if (null == adminMerchantEmployee) {
             throw new BaseException(ExceptionCode.NO_THIS_USER);
         }
-        int res = adminMerchantEmployeeDao.updateEnable(merchantEmployeeSearch.getId(),merchantEmployeeSearch.getPartnerId());
+        int res = adminMerchantEmployeeDao.updateEnable(merchantEmployeeSearch.getId(),merchantEmployeeSearch.getEnable(),
+                merchantEmployeeSearch
+                .getPartnerId());
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }

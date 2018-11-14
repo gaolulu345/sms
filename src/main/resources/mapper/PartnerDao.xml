@@ -8,7 +8,7 @@
         FROM
         partner AS p INNER JOIN partner_details AS pd ON p.id = pd.partner_id
         WHERE
-        id = #{id}
+        p.id = #{id}
         LIMIT 0 , 1
     </select>
 

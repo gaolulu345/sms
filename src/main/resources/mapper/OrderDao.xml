@@ -118,6 +118,24 @@
       deleted = 0
     </select>
 
+    <select id="orderTatal" resultType="java.lang.Long">
+        SELECT
+        COUNT(o.id)
+        FROM
+        `order` AS o INNER JOIN ter AS t ON o.ter_id = t.id
+        WHERE
+        o.status = #{status}
+        AND
+        t.deleted = 0
+        AND
+        o.pay_time BETWEEN #{startTime} AND #{endTime}
+        AND
+        o.ter_id IN
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <update id="updateOrderStatus">
         UPDATE
         `order`

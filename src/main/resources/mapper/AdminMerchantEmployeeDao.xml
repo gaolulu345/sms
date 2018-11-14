@@ -22,7 +22,7 @@
 	  SELECT * FROM
       `admin_merchant_employee`
       WHERE
-      `id` = #{code}
+      `id` = #{id}
       LIMIT 0 , 1
 	</select>
 

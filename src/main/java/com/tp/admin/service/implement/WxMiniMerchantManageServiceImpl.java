@@ -4,12 +4,15 @@ import com.google.gson.Gson;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.AdminMerchantEmployeeDao;
 import com.tp.admin.dao.AdminTerOperatingLogDao;
+import com.tp.admin.dao.OrderDao;
 import com.tp.admin.dao.TerDao;
+import com.tp.admin.data.dto.DataTotalDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.parameter.WxMiniSearch;
+import com.tp.admin.data.search.RangeSearch;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import com.tp.admin.exception.BaseException;
@@ -17,6 +20,7 @@ import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
 import com.tp.admin.service.WashSiteServiceI;
 import com.tp.admin.service.WxMiniMerchantManageServiceI;
+import com.tp.admin.utils.TimeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @Service
 public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServiceI {
@@ -45,15 +50,49 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     @Autowired
     TerDao terDao;
 
+    @Autowired
+    OrderDao orderDao;
+
     @Override
     public ApiResult moneyTotal(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        return ApiResult.ok(body);
+        RangeSearch rangeSearch = new Gson().fromJson(body, RangeSearch.class);
+        Long orderTotal = 0L;
+        Long sevenDaymoneyTotal = 0L;
+        Long oneDayMoneyTotal = 0L;
+        // 当天开始时间
+        Date beginDay = TimeUtil.getDayBegin();
+        // 当天结束时间
+        Date endDay = TimeUtil.getDayEnd();
+        // 30天前的时间。
+        Date begin30Day = TimeUtil.getFrontDay(endDay, 29);
+        // 七天前的时间
+        Date sevenDays = TimeUtil.getFrontDay(endDay, 6);
+        // 近30天订单数
+//        orderTotal = orderDao.orderTatal(rangeSearch.getStatus(), TimeUtil.getDayStartTime(begin30Day).toString()
+//                , endDay.toString(),terIds);
+//        // 七天完成订单金额总和
+//        sevenDaymoneyTotal = orderDao.moneyTatal(rangeSearch.getStatus(), TimeUtil.getDayStartTime(sevenDays).toString
+//                (), endDay
+//                .toString(), terIds);
+//        // 今天完成订单金额总和
+//        oneDayMoneyTotal = orderDao.moneyTatal(rangeSearch.getStatus(), beginDay.toString(), endDay.toString()
+//                , terIds);
+//        DataTotalDTO dataTotalDTO = new DataTotalDTO();
+//        dataTotalDTO.setOrderTotal(orderTotal);
+//        dataTotalDTO.setSevenDayMoneyTotal(sevenDaymoneyTotal);
+//        dataTotalDTO.setOneDayMoneyTotal(oneDayMoneyTotal);
+//        return ApiResult.ok(dataTotalDTO);
+        return ApiResult.ok();
     }
 
     @Override
     public ApiResult siteListSearch(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+
+
+
         return ApiResult.ok(body);
     }
 
