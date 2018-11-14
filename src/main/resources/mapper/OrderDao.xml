@@ -135,6 +135,23 @@
             #{item}
         </foreach>
     </select>
+    <select id="moneyTatal" resultType="java.lang.Long">
+        SELECT
+        SUM(o.amount)
+        FROM
+        `order` AS o INNER JOIN ter AS t ON o.ter_id = t.id
+        WHERE
+        o.`status` = #{status}
+        AND
+        t.deleted = 0
+        AND
+        o.pay_time BETWEEN #{startTime} AND #{endTime}
+        AND
+        o.ter_id IN
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
 
     <update id="updateOrderStatus">
         UPDATE

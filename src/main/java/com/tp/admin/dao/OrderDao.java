@@ -22,4 +22,7 @@ public interface OrderDao {
     Long orderTatal(@Param("status") int status, @Param("startTime") String startTime, @Param("endTime") String
             endTime, @Param("ids") List<Integer> ids);
 
+    Long moneyTatal(@Param("status") int status, @Param("startTime") String startTime, @Param("endTime") String
+            endTime, @Param("ids") List<Integer> ids);
+
 }

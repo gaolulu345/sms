@@ -14,6 +14,7 @@ import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.RangeSearch;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
+import com.tp.admin.enums.OrderStatusEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServiceI {
@@ -56,7 +58,11 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     @Override
     public ApiResult moneyTotal(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        RangeSearch rangeSearch = new Gson().fromJson(body, RangeSearch.class);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getOpenId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
+        }
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         Long orderTotal = 0L;
         Long sevenDaymoneyTotal = 0L;
         Long oneDayMoneyTotal = 0L;
@@ -69,21 +75,23 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         // 七天前的时间
         Date sevenDays = TimeUtil.getFrontDay(endDay, 6);
         // 近30天订单数
-//        orderTotal = orderDao.orderTatal(rangeSearch.getStatus(), TimeUtil.getDayStartTime(begin30Day).toString()
-//                , endDay.toString(),terIds);
-//        // 七天完成订单金额总和
-//        sevenDaymoneyTotal = orderDao.moneyTatal(rangeSearch.getStatus(), TimeUtil.getDayStartTime(sevenDays).toString
-//                (), endDay
-//                .toString(), terIds);
-//        // 今天完成订单金额总和
-//        oneDayMoneyTotal = orderDao.moneyTatal(rangeSearch.getStatus(), beginDay.toString(), endDay.toString()
-//                , terIds);
-//        DataTotalDTO dataTotalDTO = new DataTotalDTO();
-//        dataTotalDTO.setOrderTotal(orderTotal);
-//        dataTotalDTO.setSevenDayMoneyTotal(sevenDaymoneyTotal);
-//        dataTotalDTO.setOneDayMoneyTotal(oneDayMoneyTotal);
-//        return ApiResult.ok(dataTotalDTO);
-        return ApiResult.ok();
+        List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
+        if (null != terIds && !terIds.isEmpty()) {
+            orderTotal = orderDao.orderTatal(OrderStatusEnum.ASK_CHECK.getValue(), TimeUtil.getDayStartTime(begin30Day).toString()
+                    , endDay.toString(),terIds);
+            // 七天完成订单金额总和
+            sevenDaymoneyTotal = orderDao.moneyTatal(OrderStatusEnum.ASK_CHECK.getValue(), TimeUtil.getDayStartTime(sevenDays).toString
+                    (), endDay
+                    .toString(), terIds);
+            // 今天完成订单金额总和
+            oneDayMoneyTotal = orderDao.moneyTatal(OrderStatusEnum.ASK_CHECK.getValue(), beginDay.toString(), endDay.toString()
+                    , terIds);
+        }
+        DataTotalDTO dataTotalDTO = new DataTotalDTO();
+        dataTotalDTO.setOrderTotal(orderTotal);
+        dataTotalDTO.setSevenDayMoneyTotal(sevenDaymoneyTotal);
+        dataTotalDTO.setOneDayMoneyTotal(oneDayMoneyTotal);
+        return ApiResult.ok(dataTotalDTO);
     }
 
     @Override
