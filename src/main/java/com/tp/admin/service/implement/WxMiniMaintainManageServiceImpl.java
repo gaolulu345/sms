@@ -67,6 +67,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (StringUtils.isBlank(wxMiniAuthDTO.getOpenId())) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty openId");
         }
+        check(wxMiniAuthDTO.getOpenId());
         List<Integer> cityIds = terDao.listTerCityId();
         return ApiResult.ok(cityIds);
     }
@@ -78,6 +79,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (null == wxMiniSearch.getCityCode()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty cityCode");
         }
+        check(wxMiniSearch.getOpenId());
         wxMiniSearch.builData();
         List<TerInfoDTO> results = terDao.terInfoSearch(wxMiniSearch);
         if (null != results && !results.isEmpty()) {
@@ -100,6 +102,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
+        check(wxMiniSearch.getOpenId());
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         return ApiResult.ok(dto);
     }
@@ -153,6 +156,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
+        check(wxMiniSearch.getOpenId());
         return ApiResult.error(ExceptionCode.NOT_PERMISSION_ERROR);
     }
 
@@ -212,6 +216,15 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByWxMiniId(openId);
         if (null == adminMaintionEmployee) {
             throw new BaseException(ExceptionCode.NO_THIS_USER);
+        }
+        if (null == adminMaintionEmployee) {
+            throw new BaseException(ExceptionCode.NO_THIS_USER);
+        }
+        if (!adminMaintionEmployee.isEnable()) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        if (adminMaintionEmployee.isDeleted()) {
+            throw new BaseException(ExceptionCode.USER_DELETE_REGISTERED);
         }
         return adminMaintionEmployee;
     }
