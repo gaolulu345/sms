@@ -46,7 +46,7 @@ public interface WxMiniMaintainManageServiceI {
      * @param request
      * @return
      */
-    ApiResult siteOffline(HttpServletRequest request);
+    ApiResult siteOffline(HttpServletRequest request , String body);
 
     /**
      * 网点设备复位

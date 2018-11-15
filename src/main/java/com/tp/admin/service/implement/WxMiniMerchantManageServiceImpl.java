@@ -179,8 +179,8 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     }
 
     @Override
-    public ApiResult siteOffline(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
+    public ApiResult siteOffline(HttpServletRequest request , String body) {
+//        String body = httpHelper.jsonBody(request);
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
         if (null == wxMiniSearch.getTerId() || StringUtils.isBlank(wxMiniSearch.getMsg()) ) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);

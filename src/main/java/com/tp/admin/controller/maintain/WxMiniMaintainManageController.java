@@ -4,6 +4,7 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.service.WxMiniMaintainManageServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,8 +68,8 @@ public class WxMiniMaintainManageController {
      * @return
      */
     @PostMapping(value = "/site/offline")
-    public ApiResult siteOffline(HttpServletRequest request){
-        return wxMiniMaintainManageService.siteOffline(request);
+    public ApiResult siteOffline(HttpServletRequest request , @RequestBody String body){
+        return wxMiniMaintainManageService.siteOffline(request , body);
     }
 
     /**
