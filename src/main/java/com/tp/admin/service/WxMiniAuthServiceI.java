@@ -29,7 +29,7 @@ public interface WxMiniAuthServiceI {
      * @param request
      * @return
      */
-    ApiResult register(HttpServletRequest request );
+    ApiResult register(HttpServletRequest request , String body);
 
     /**
      * 注册检查
