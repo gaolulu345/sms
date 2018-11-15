@@ -53,7 +53,7 @@ public interface WxMiniMerchantManageServiceI {
      * @param request
      * @return
      */
-    ApiResult siteOffline(HttpServletRequest request);
+    ApiResult siteOffline(HttpServletRequest request , String body);
 
     /**
      * 相关订单列表查询

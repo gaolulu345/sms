@@ -2,16 +2,14 @@ package com.tp.admin.service.implement;
 
 import com.google.gson.Gson;
 import com.tp.admin.ajax.ApiResult;
-import com.tp.admin.dao.AdminMerchantEmployeeDao;
-import com.tp.admin.dao.AdminTerOperatingLogDao;
-import com.tp.admin.dao.OrderDao;
-import com.tp.admin.dao.TerDao;
+import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.DataTotalDTO;
 import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
+import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.OrderSearch;
 import com.tp.admin.data.search.RangeSearch;
@@ -57,6 +55,9 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
 
     @Autowired
     OrderDao orderDao;
+
+    @Autowired
+    PartnerDao partnerDao;
 
     @Override
     public ApiResult moneyTotal(HttpServletRequest request) {
@@ -140,6 +141,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
+        check(wxMiniSearch.getOpenId());
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         return ApiResult.ok(dto);
     }
@@ -147,7 +149,12 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     @Override
     public ApiResult siteStatus(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
-        return ApiResult.ok(body);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getTerId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        }
+        check(wxMiniSearch.getOpenId());
+        return ApiResult.ok();
     }
 
     @Override
@@ -172,8 +179,8 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     }
 
     @Override
-    public ApiResult siteOffline(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
+    public ApiResult siteOffline(HttpServletRequest request , String body) {
+//        String body = httpHelper.jsonBody(request);
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
         if (null == wxMiniSearch.getTerId() || StringUtils.isBlank(wxMiniSearch.getMsg()) ) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
@@ -243,6 +250,19 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         AdminMerchantEmployee adminMerchantEmployee = adminMerchantEmployeeDao.findByWxMiniId(openId);
         if (null == adminMerchantEmployee) {
             throw new BaseException(ExceptionCode.NO_THIS_USER);
+        }
+        if (!adminMerchantEmployee.isEnable()) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        if (adminMerchantEmployee.isDeleted()) {
+            throw new BaseException(ExceptionCode.USER_DELETE_REGISTERED);
+        }
+        if (adminMerchantEmployee.getPartnerId() == 0) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        Partner partner = partnerDao.findById(adminMerchantEmployee.getPartnerId());
+        if (null == partner) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
         }
         return adminMerchantEmployee;
     }
