@@ -15,6 +15,8 @@ public class MaintionEmployeeSearch extends Search {
 
     Boolean enable;
 
+    Integer id;
+
     int[] ids;
 
     @Override

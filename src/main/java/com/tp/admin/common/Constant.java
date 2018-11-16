@@ -34,12 +34,14 @@ public interface Constant {
     interface WxMiniMaintain{
         String APP_ID = "wxc76b3b03cc234f1c";
         String APP_SECRET  = "47fcec6231f6322c9ba084a593126dcd";
+        String TEMPLATE_ID = "gFk-jx-YMRg1UZrb4Z9OvEn5427L9SzOyLHdSQSBexU";
 
     }
 
     interface WxMiniMerchant{
         String APP_ID = "wxfb7dff8a45d33764";
         String APP_SECRET  = "eea031dda83b4cbe2a01ced18d122614";
+        String TEMPLATE_ID = "G9T6fXsWUbwgev80dv6lB3gNaxcH-CFsfUr0aYuHdto";
     }
 
 

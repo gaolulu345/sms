@@ -33,9 +33,9 @@ public class MaintionEmployeeController {
     }
 
     @PostMapping(value = "/update/enable")
-    public ApiResult bachUpdateEnable(HttpServletRequest request, @RequestBody MaintionEmployeeSearch
+    public ApiResult updateEnable(HttpServletRequest request, @RequestBody MaintionEmployeeSearch
             maintionEmployeeSearch) {
-        return maintionEmployeeService.bachUpdateEnable(request, maintionEmployeeSearch);
+        return maintionEmployeeService.updateEnable(request, maintionEmployeeSearch);
     }
 
 }

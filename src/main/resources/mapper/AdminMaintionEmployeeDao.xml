@@ -9,12 +9,14 @@
 			`wx_union_id`,
 			`name`,
 			`phone`,
+			`form_id`,
 			`enable`
 		) VALUES (
 			#{miniWxId},
 			#{wxUnionId},
 			#{name},
 			#{phone},
+			#{formId},
 			#{enable}
 		)
     </insert>
@@ -53,6 +55,14 @@
         </if>
     </select>
 
+    <select id="findById" resultMap="AdminMaintionEmployeeMap" >
+      SELECT * FROM
+      `admin_maintion_employee`
+      WHERE
+      `id` = #{id}
+      LIMIT 0 , 1
+    </select>
+
     <update id="bachUpdateDeleted" parameterType="com.tp.admin.data.search.MaintionEmployeeSearch">
         UPDATE
         `admin_maintion_employee`
@@ -83,6 +93,7 @@
         <result column="wx_union_id" property="wxUnionId" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="form_id" property="formId" jdbcType="VARCHAR"/>
         <result column="deleted" property="deleted" jdbcType="BIT" />
         <result column="enable" property="enable" jdbcType="BIT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />

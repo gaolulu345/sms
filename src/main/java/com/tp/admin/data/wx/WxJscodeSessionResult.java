@@ -1,4 +1,4 @@
-package com.tp.admin.data.result;
+package com.tp.admin.data.wx;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;

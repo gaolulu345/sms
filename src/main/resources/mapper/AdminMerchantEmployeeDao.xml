@@ -8,12 +8,14 @@
 			`wx_union_id`,
 			`name`,
 			`phone`,
+			`form_id`,
 			`enable`
 		) VALUES (
 			#{miniWxId},
 			#{wxUnionId},
 			#{name},
 			#{phone},
+			#{formId},
 			#{enable}
 		)
     </insert>

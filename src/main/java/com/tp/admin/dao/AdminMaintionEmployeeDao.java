@@ -15,6 +15,8 @@ public interface AdminMaintionEmployeeDao {
 
     AdminMaintionEmployee findByPhone(@Param("phone") String phone);
 
+    AdminMaintionEmployee findById(Integer id);
+
     int insert(AdminMaintionEmployee employee);
 
     int cntBySearch(MaintionEmployeeSearch maintionEmployeeSearch);

@@ -1,6 +1,8 @@
 package com.tp.admin.service.implement;
 
+import com.google.gson.JsonObject;
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.common.Constant;
 import com.tp.admin.dao.AdminMerchantEmployeeDao;
 import com.tp.admin.dao.PartnerDao;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
@@ -8,13 +10,17 @@ import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.search.MerchantEmployeeSearch;
 import com.tp.admin.data.table.ResultTable;
+import com.tp.admin.data.wx.WxTemplateData;
+import com.tp.admin.data.wx.WxTemplateMessage;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.service.MerchantEmployeeServiceI;
+import com.tp.admin.service.WxMiniServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +31,9 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
 
     @Autowired
     PartnerDao partnerDao;
+
+    @Autowired
+    WxMiniServiceI wxMiniService;
 
     @Override
     public ApiResult list(HttpServletRequest request, MerchantEmployeeSearch merchantEmployeeSearch) {
@@ -70,6 +79,41 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
                 .getPartnerId());
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+        }
+        if(merchantEmployeeSearch.getEnable()){
+            int empId = merchantEmployeeSearch.getIds()[0];
+            adminMerchantEmployee = adminMerchantEmployeeDao.findById(empId);
+            if (null == adminMerchantEmployee) {
+                throw new BaseException(ExceptionCode.NO_THIS_USER);
+            }
+            String result = wxMiniService.getAccessToken(Constant.WxMiniMerchant.APP_ID,Constant.WxMiniMerchant.APP_SECRET);
+            if (null != result) {
+                List<WxTemplateData> params = new ArrayList<>();
+                params.add(new WxTemplateData(adminMerchantEmployee.getName(),"#ffffff"));
+                params.add(new WxTemplateData("申请审核","#ffffff"));
+                params.add(new WxTemplateData("审核通过","#ffffff"));
+                params.add(new WxTemplateData(adminMerchantEmployee.getCreateTime().toString(),"#ffffff"));
+                params.add(new WxTemplateData(adminMerchantEmployee.getModifyTime().toString(),"#ffffff"));
+                WxTemplateMessage wxTextMessage = new WxTemplateMessage(result , adminMerchantEmployee.getMiniWxId(),
+                        Constant.WxMiniMerchant.TEMPLATE_ID,adminMerchantEmployee.getFormId(),
+                        "pages/index/index?t="+System.currentTimeMillis());
+                JsonObject body = new JsonObject();
+                body.addProperty("access_token", wxTextMessage.getAccessToken());
+                body.addProperty("touser", wxTextMessage.getTouser());
+                body.addProperty("template_id", wxTextMessage.getTemplateId());
+                body.addProperty("form_id", wxTextMessage.getFormId());
+                body.addProperty("page", wxTextMessage.getPage());
+                JsonObject bodyData =  new JsonObject();
+                JsonObject bodyDataParams =  null;
+                for (int i = 0 ; i < params.size() ; i++){
+                    bodyDataParams = new JsonObject();
+                    bodyDataParams.addProperty("value",params.get(i).getValue());
+                    bodyDataParams.addProperty("color",params.get(i).getColor());
+                    bodyData.add("keyword"+(i + 1),bodyDataParams);
+                }
+                body.add("data",bodyData);
+                wxMiniService.sendTemplateMessage(result , body.toString());
+            }
         }
         return ApiResult.ok();
     }
