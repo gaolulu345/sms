@@ -9,12 +9,14 @@
 			`wx_union_id`,
 			`name`,
 			`phone`,
+			`from_id`,
 			`enable`
 		) VALUES (
 			#{miniWxId},
 			#{wxUnionId},
 			#{name},
 			#{phone},
+			#{fromId},
 			#{enable}
 		)
     </insert>
@@ -51,6 +53,14 @@
         <if test="pageSize != null and pageSize !=0 and offset != null">
             LIMIT #{offset},#{pageSize}
         </if>
+    </select>
+
+    <select id="findById" resultMap="AdminMaintionEmployeeMap" >
+      SELECT * FROM
+      `admin_maintion_employee`
+      WHERE
+      `id` = #{id}
+      LIMIT 0 , 1
     </select>
 
     <update id="bachUpdateDeleted" parameterType="com.tp.admin.data.search.MaintionEmployeeSearch">
