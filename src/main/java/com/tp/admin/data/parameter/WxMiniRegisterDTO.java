@@ -16,5 +16,5 @@ public class WxMiniRegisterDTO {
 
     String phone;
 
-    String fromId;
+    String formId;
 }

@@ -9,14 +9,14 @@
 			`wx_union_id`,
 			`name`,
 			`phone`,
-			`from_id`,
+			`form_id`,
 			`enable`
 		) VALUES (
 			#{miniWxId},
 			#{wxUnionId},
 			#{name},
 			#{phone},
-			#{fromId},
+			#{formId},
 			#{enable}
 		)
     </insert>
@@ -93,6 +93,7 @@
         <result column="wx_union_id" property="wxUnionId" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="form_id" property="formId" jdbcType="VARCHAR"/>
         <result column="deleted" property="deleted" jdbcType="BIT" />
         <result column="enable" property="enable" jdbcType="BIT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />

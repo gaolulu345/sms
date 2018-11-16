@@ -82,7 +82,8 @@ public class MaintionEmployeeServiceImpl implements MaintionEmployeeServiceI {
                 params.add(new WxTemplateData(adminMaintionEmployee.getCreateTime().toString(),"#ffffff"));
                 params.add(new WxTemplateData(adminMaintionEmployee.getModifyTime().toString(),"#ffffff"));
                 WxTemplateMessage wxTextMessage = new WxTemplateMessage(result , adminMaintionEmployee.getMiniWxId(),
-                        Constant.WxMiniMaintain.TEMPLATE_ID,adminMaintionEmployee.getFromId(),"");
+                        Constant.WxMiniMerchant.TEMPLATE_ID,adminMaintionEmployee.getFormId(),
+                        "pages/index/index?t="+System.currentTimeMillis());
                 JsonObject body = new JsonObject();
                 body.addProperty("access_token", wxTextMessage.getAccessToken());
                 body.addProperty("touser", wxTextMessage.getTouser());

@@ -19,6 +19,7 @@ public class AdminMerchantEmployee {
     private int partnerId;
     private String name;
     private String phone;
+    private String formId;
     @JsonIgnore
     private Timestamp createTime;
     @JsonIgnore

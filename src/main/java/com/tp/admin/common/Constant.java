@@ -41,6 +41,7 @@ public interface Constant {
     interface WxMiniMerchant{
         String APP_ID = "wxfb7dff8a45d33764";
         String APP_SECRET  = "eea031dda83b4cbe2a01ced18d122614";
+        String TEMPLATE_ID = "G9T6fXsWUbwgev80dv6lB3gNaxcH-CFsfUr0aYuHdto";
     }
 
 

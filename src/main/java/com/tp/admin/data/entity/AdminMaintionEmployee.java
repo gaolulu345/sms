@@ -23,7 +23,7 @@ public class AdminMaintionEmployee {
     private Timestamp createTime;
     @JsonIgnore
     private Timestamp modifyTime;
-    private String fromId;
+    private String formId;
     private boolean enable;
     private boolean deleted;
     private Timestamp lastLoginTime;

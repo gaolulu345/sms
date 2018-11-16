@@ -102,7 +102,8 @@ public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
         WxMiniRegisterDTO wxMiniRegisterDTO = new Gson().fromJson(body, WxMiniRegisterDTO.class);
         if (StringUtils.isBlank(wxMiniRegisterDTO.getOpenId()) ||
                 StringUtils.isBlank(wxMiniRegisterDTO.getName()) ||
-                StringUtils.isBlank(wxMiniRegisterDTO.getPhone())) {
+                StringUtils.isBlank(wxMiniRegisterDTO.getPhone()) ||
+                StringUtils.isBlank(wxMiniRegisterDTO.getFormId())) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         AdminMerchantEmployee adminMerchantEmployee = adminMerchantEmployeeDao.findByWxMiniId(wxMiniRegisterDTO.getOpenId());
@@ -118,6 +119,7 @@ public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
         adminMerchantEmployee.setWxUnionId("");
         adminMerchantEmployee.setName(wxMiniRegisterDTO.getName());
         adminMerchantEmployee.setPhone(wxMiniRegisterDTO.getPhone());
+        adminMerchantEmployee.setFormId(wxMiniRegisterDTO.getFormId());
         adminMerchantEmployee.setEnable(false);
         int res = adminMerchantEmployeeDao.insert(adminMerchantEmployee);
         if (res == 0) {

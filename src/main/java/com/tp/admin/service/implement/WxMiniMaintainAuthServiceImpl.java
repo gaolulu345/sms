@@ -85,7 +85,7 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniAuthServiceI {
         if (StringUtils.isBlank(wxMiniRegisterDTO.getOpenId()) ||
                 StringUtils.isBlank(wxMiniRegisterDTO.getName()) ||
                 StringUtils.isBlank(wxMiniRegisterDTO.getPhone()) ||
-                StringUtils.isBlank(wxMiniRegisterDTO.getFromId())) {
+                StringUtils.isBlank(wxMiniRegisterDTO.getFormId())) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findByWxMiniId(wxMiniRegisterDTO.getOpenId());
@@ -101,7 +101,7 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniAuthServiceI {
         adminMaintionEmployee.setWxUnionId("");
         adminMaintionEmployee.setName(wxMiniRegisterDTO.getName());
         adminMaintionEmployee.setPhone(wxMiniRegisterDTO.getPhone());
-        adminMaintionEmployee.setFromId(wxMiniRegisterDTO.getFromId());
+        adminMaintionEmployee.setFormId(wxMiniRegisterDTO.getFormId());
         adminMaintionEmployee.setEnable(false);
         int res = adminMaintionEmployeeDao.insert(adminMaintionEmployee);
         if (res == 0) {

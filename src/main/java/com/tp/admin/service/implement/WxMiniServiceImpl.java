@@ -46,7 +46,7 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
         headers.add("Accept", MediaType.APPLICATION_JSON.toString());
         HttpEntity<String> httpEntity = new HttpEntity<String>(requestBody, headers);
         RestTemplate rest = new RestTemplate();
-        ResponseEntity<String> result = rest.postForEntity("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token="+query, httpEntity, String.class);
+        ResponseEntity<String> result = rest.postForEntity("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send"+query, httpEntity, String.class);
         log.info(result.getBody());
     }
 }
