@@ -77,7 +77,7 @@ var vm = new Vue({
                 type: 'warning'
             }).then(() => {
                 vm.$http.post("/api/private/maintion/employee/update/enable", {
-                    ids: id,
+                    id: id,
                     enable: enable
                 }).then(function(res){
                     let result = res.json();
