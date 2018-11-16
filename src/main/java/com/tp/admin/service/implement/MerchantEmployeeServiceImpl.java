@@ -82,20 +82,20 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
         }
         if(merchantEmployeeSearch.getEnable()){
             int empId = merchantEmployeeSearch.getIds()[0];
-            AdminMerchantEmployee adminMerchantEmployee1 = adminMerchantEmployeeDao.findById(empId);
-            if (null == adminMerchantEmployee1) {
+            adminMerchantEmployee = adminMerchantEmployeeDao.findById(empId);
+            if (null == adminMerchantEmployee) {
                 throw new BaseException(ExceptionCode.NO_THIS_USER);
             }
-            String result = wxMiniService.getAccessToken(Constant.WxMiniMaintain.APP_ID,Constant.WxMiniMaintain.APP_SECRET);
+            String result = wxMiniService.getAccessToken(Constant.WxMiniMerchant.APP_ID,Constant.WxMiniMerchant.APP_SECRET);
             if (null != result) {
                 List<WxTemplateData> params = new ArrayList<>();
-                params.add(new WxTemplateData(adminMerchantEmployee1.getName(),"#ffffff"));
+                params.add(new WxTemplateData(adminMerchantEmployee.getName(),"#ffffff"));
                 params.add(new WxTemplateData("申请审核","#ffffff"));
                 params.add(new WxTemplateData("审核通过","#ffffff"));
-                params.add(new WxTemplateData(adminMerchantEmployee1.getCreateTime().toString(),"#ffffff"));
-                params.add(new WxTemplateData(adminMerchantEmployee1.getModifyTime().toString(),"#ffffff"));
-                WxTemplateMessage wxTextMessage = new WxTemplateMessage(result , adminMerchantEmployee1.getMiniWxId(),
-                        Constant.WxMiniMaintain.TEMPLATE_ID,adminMerchantEmployee1.getFormId(),
+                params.add(new WxTemplateData(adminMerchantEmployee.getCreateTime().toString(),"#ffffff"));
+                params.add(new WxTemplateData(adminMerchantEmployee.getModifyTime().toString(),"#ffffff"));
+                WxTemplateMessage wxTextMessage = new WxTemplateMessage(result , adminMerchantEmployee.getMiniWxId(),
+                        Constant.WxMiniMerchant.TEMPLATE_ID,adminMerchantEmployee.getFormId(),
                         "pages/index/index?t="+System.currentTimeMillis());
                 JsonObject body = new JsonObject();
                 body.addProperty("access_token", wxTextMessage.getAccessToken());

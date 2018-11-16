@@ -58,21 +58,19 @@ public class MaintionEmployeeServiceImpl implements MaintionEmployeeServiceI {
     }
 
     @Override
-    public ApiResult bachUpdateEnable(HttpServletRequest request, MaintionEmployeeSearch maintionEmployeeSearch) {
-        if (null == maintionEmployeeSearch.getIds() || maintionEmployeeSearch.getIds().length == 0 || null ==
-                maintionEmployeeSearch.getEnable()) {
+    public ApiResult updateEnable(HttpServletRequest request, MaintionEmployeeSearch maintionEmployeeSearch) {
+        if (null == maintionEmployeeSearch.getId() || null == maintionEmployeeSearch.getEnable()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findById(maintionEmployeeSearch.getId());
+        if (null == adminMaintionEmployee) {
+            throw new BaseException(ExceptionCode.NO_THIS_USER);
         }
         int res = adminMaintionEmployeeDao.bachUpdateEnable(maintionEmployeeSearch);
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
         if(maintionEmployeeSearch.getEnable()){
-            int empId = maintionEmployeeSearch.getIds()[0];
-            AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findById(empId);
-            if (null == adminMaintionEmployee) {
-                throw new BaseException(ExceptionCode.NO_THIS_USER);
-            }
             String result = wxMiniService.getAccessToken(Constant.WxMiniMaintain.APP_ID,Constant.WxMiniMaintain.APP_SECRET);
             if (null != result) {
                 List<WxTemplateData> params = new ArrayList<>();

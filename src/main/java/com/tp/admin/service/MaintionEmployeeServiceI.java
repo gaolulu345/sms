@@ -12,6 +12,6 @@ public interface MaintionEmployeeServiceI {
 
     ApiResult bachUpdateDeleted(HttpServletRequest request , MaintionEmployeeSearch maintionEmployeeSearch);
 
-    ApiResult bachUpdateEnable(HttpServletRequest request , MaintionEmployeeSearch maintionEmployeeSearch);
+    ApiResult updateEnable(HttpServletRequest request , MaintionEmployeeSearch maintionEmployeeSearch);
 
 }
