@@ -19,7 +19,7 @@ public enum ExceptionCode {
     LOGIN_TIMEOUT("2003", "登录超时"),
     USER_NOT_PERMISSION("2004", "账号已经申请注册，暂未通过审核"),
     USER_PHONE_HAS_REGISTERED("2005", "该手机号已经申请注册"),
-    USER_DELETE_REGISTERED("2006", "该员工权限已经被禁止使用"),
+    USER_DELETE_REGISTERED("2006", "该账号权限已经被禁止使用"),
     ALI_OSS_OPEN_STORAGE_SERVICE_ERROR("9000","当访问对象存储服务 Open Storage Service 失败时抛出该异常类实例，请重新尝试"),
 
     SIGN_FAILURE_FOR_REMOTE_TER("3006","网点订单加签失败"),
