@@ -81,11 +81,6 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
         if(merchantEmployeeSearch.getEnable()){
-            int empId = merchantEmployeeSearch.getIds()[0];
-            adminMerchantEmployee = adminMerchantEmployeeDao.findById(empId);
-            if (null == adminMerchantEmployee) {
-                throw new BaseException(ExceptionCode.NO_THIS_USER);
-            }
             String result = wxMiniService.getAccessToken(Constant.WxMiniMerchant.APP_ID,Constant.WxMiniMerchant.APP_SECRET);
             if (null != result) {
                 List<WxTemplateData> params = new ArrayList<>();

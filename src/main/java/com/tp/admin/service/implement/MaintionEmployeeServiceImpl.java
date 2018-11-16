@@ -66,7 +66,7 @@ public class MaintionEmployeeServiceImpl implements MaintionEmployeeServiceI {
         if (null == adminMaintionEmployee) {
             throw new BaseException(ExceptionCode.NO_THIS_USER);
         }
-        int res = adminMaintionEmployeeDao.bachUpdateEnable(maintionEmployeeSearch);
+        int res = adminMaintionEmployeeDao.updateEnable(maintionEmployeeSearch);
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
@@ -80,7 +80,7 @@ public class MaintionEmployeeServiceImpl implements MaintionEmployeeServiceI {
                 params.add(new WxTemplateData(adminMaintionEmployee.getCreateTime().toString(),"#ffffff"));
                 params.add(new WxTemplateData(adminMaintionEmployee.getModifyTime().toString(),"#ffffff"));
                 WxTemplateMessage wxTextMessage = new WxTemplateMessage(result , adminMaintionEmployee.getMiniWxId(),
-                        Constant.WxMiniMerchant.TEMPLATE_ID,adminMaintionEmployee.getFormId(),
+                        Constant.WxMiniMaintain.TEMPLATE_ID,adminMaintionEmployee.getFormId(),
                         "pages/index/index?t="+System.currentTimeMillis());
                 JsonObject body = new JsonObject();
                 body.addProperty("access_token", wxTextMessage.getAccessToken());
