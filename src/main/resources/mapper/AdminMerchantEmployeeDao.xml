@@ -93,6 +93,7 @@
 		<result column="partner_id" property="partnerId" jdbcType="INTEGER"/>
 		<result column="name" property="name" jdbcType="VARCHAR"/>
 		<result column="phone" property="phone" jdbcType="VARCHAR"/>
+		<result column="form_id" property="formId" jdbcType="VARCHAR"/>
 		<result column="deleted" property="deleted" jdbcType="BIT" />
 		<result column="enable" property="enable" jdbcType="BIT" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />

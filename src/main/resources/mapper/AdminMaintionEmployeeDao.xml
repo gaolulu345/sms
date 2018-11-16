@@ -75,16 +75,13 @@
         </foreach>
     </update>
 
-    <update id="bachUpdateEnable" parameterType="com.tp.admin.data.search.MaintionEmployeeSearch">
+    <update id="updateEnable" parameterType="com.tp.admin.data.search.MaintionEmployeeSearch">
         UPDATE
         `admin_maintion_employee`
         SET
         enable = #{enable}
         WHERE
-        id IN
-        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
-            #{item}
-        </foreach>
+        id = #{id}
     </update>
 
     <resultMap id="AdminMaintionEmployeeMap" type="com.tp.admin.data.entity.AdminMaintionEmployee">

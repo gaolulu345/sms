@@ -25,6 +25,6 @@ public interface AdminMaintionEmployeeDao {
 
     int bachUpdateDeleted(MaintionEmployeeSearch maintionEmployeeSearch);
 
-    int bachUpdateEnable(MaintionEmployeeSearch maintionEmployeeSearch);
+    int updateEnable(MaintionEmployeeSearch maintionEmployeeSearch);
 
 }

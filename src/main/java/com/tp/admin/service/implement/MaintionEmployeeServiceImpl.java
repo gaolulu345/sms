@@ -66,7 +66,7 @@ public class MaintionEmployeeServiceImpl implements MaintionEmployeeServiceI {
         if (null == adminMaintionEmployee) {
             throw new BaseException(ExceptionCode.NO_THIS_USER);
         }
-        int res = adminMaintionEmployeeDao.bachUpdateEnable(maintionEmployeeSearch);
+        int res = adminMaintionEmployeeDao.updateEnable(maintionEmployeeSearch);
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
