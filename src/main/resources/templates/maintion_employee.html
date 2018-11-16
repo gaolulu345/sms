@@ -44,7 +44,7 @@
                 <el-table-column width="120" label="是否审批" v-if="opPer['/api/private/maintion/employee/update/enable']">
                     <template slot-scope="scope" >
                         <el-button v-if="scope.row.enable == false" @click="clickEnable(scope.row.id, true)" plain type="seccess" size="mini">通过</el-button>
-                        <el-button v-if="scope.row.enable == true" @click="clickEnable(scope.row.id, false)" plain type="danger" size="mini">拒绝</el-button>
+                        <!-- <el-button v-if="scope.row.enable == true" @click="clickEnable(scope.row.id, false)" plain type="danger" size="mini">拒绝</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
