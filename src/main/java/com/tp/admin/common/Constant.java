@@ -28,6 +28,7 @@ public interface Constant {
         String SITE_START = "/api/open/site/start";
         String SITE_STATE = "/api/open/site/state";
         String SITE_RESET = "/api/open/site/reset";
+        String SITE_STATUS_RESET = "/api/open/site/status/reset";
         String SITE_STOP = "/api/open/site/stop";
         String SITE_ONLINE = "/api/open/site/online";
         String SITE_OFFLINE = "/api/open/site/offline";

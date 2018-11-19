@@ -1,24 +1,34 @@
 package com.tp.admin.manage.impl;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.tp.admin.common.Constant;
+import com.tp.admin.config.TpProperties;
+import com.tp.admin.data.wash.WashSiteRequest;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
+import com.tp.admin.utils.SecurityUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.security.interfaces.RSAPublicKey;
 
 @Service
 public class HttpHelperImpl implements HttpHelperI {
 
     private Logger log = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    TpProperties tpProperties;
 
     @Override
     public String jsonBody(HttpServletRequest request) {
@@ -53,6 +63,41 @@ public class HttpHelperImpl implements HttpHelperI {
         String resultStr = result.getBody();
         log.info(resultStr);
         return resultStr;
+    }
+
+    @Override
+    public WashSiteRequest signInfo(Integer deviceId, String orderId, String msg) {
+        JsonObject jsonObject = new JsonObject();
+        String key = tpProperties.getWashManageKey();
+        Long timestamp = System.currentTimeMillis();
+        jsonObject.addProperty("deviceId", deviceId);
+        try {
+            int order = Integer.valueOf(orderId);
+            jsonObject.addProperty("orderId", order);
+        } catch (NumberFormatException e) {
+            jsonObject.addProperty("orderId", orderId);
+        }
+        jsonObject.addProperty("msg", msg);
+        jsonObject.addProperty("key", key);
+        jsonObject.addProperty("time", timestamp);
+        String sign = "";
+        try {
+            RSAPublicKey publicKey = SecurityUtil.RsaUtil.getPublicKey(Constant.RemoteTer.PUBLIC_KEY);
+            sign = SecurityUtil.RsaUtil.encrypt(jsonObject.toString(), publicKey);
+        } catch (Exception e) {
+            throw new BaseException(ExceptionCode.SIGN_FAILURE_FOR_REMOTE_TER);
+        }
+        if (StringUtils.isEmpty(sign) || sign.length() < 2) {
+            throw new BaseException(ExceptionCode.SIGN_ERROR_FOR_REMOTE_TER);
+        }
+        WashSiteRequest washSiteRequest = new WashSiteRequest();
+        washSiteRequest.setDeviceId(deviceId);
+        washSiteRequest.setOrderId(orderId);
+        washSiteRequest.setMsg(msg);
+        washSiteRequest.setKey(key);
+        washSiteRequest.setTime(timestamp);
+        washSiteRequest.setSign(sign);
+        return washSiteRequest;
     }
 
     private boolean validate(String jsonStr) {
