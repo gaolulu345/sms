@@ -9,4 +9,6 @@ public interface HttpHelperI {
 
     String jsonBody(HttpServletRequest request);
 
+    String sendPostByJsonData(String url , String requestBody);
+
 }

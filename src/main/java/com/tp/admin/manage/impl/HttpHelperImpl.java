@@ -8,7 +8,9 @@ import com.tp.admin.manage.HttpHelperI;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -34,6 +36,23 @@ public class HttpHelperImpl implements HttpHelperI {
             e.printStackTrace();
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
+    }
+
+    @Override
+    public String sendPostByJsonData(String url , String requestBody) {
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+        headers.setContentType(type);
+        headers.add("Accept", MediaType.APPLICATION_JSON.toString());
+        HttpEntity<String> httpEntity = new HttpEntity<String>(requestBody, headers);
+        RestTemplate rest = new RestTemplate();
+        ResponseEntity<String> result = rest.postForEntity(url, httpEntity, String.class);
+        if (result.getStatusCode() != HttpStatus.OK) {
+            throw new BaseException(ExceptionCode.SIGN_ERROR_FOR_REMOTE_OP);
+        }
+        String resultStr = result.getBody();
+        log.info(resultStr);
+        return resultStr;
     }
 
     private boolean validate(String jsonStr) {
