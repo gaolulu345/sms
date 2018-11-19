@@ -56,4 +56,37 @@ public class WashSiteServiceImpl implements WashSiteServiceI {
         }
         return dto;
     }
+
+    @Override
+    public ApiResult siteStart(WxMiniSearch wxMiniSearch) {
+        return null;
+    }
+
+    @Override
+    public ApiResult siteState(WxMiniSearch wxMiniSearch) {
+        return null;
+    }
+
+    @Override
+    public ApiResult siteReset(WxMiniSearch wxMiniSearch) {
+        return null;
+    }
+
+    @Override
+    public ApiResult siteStop(WxMiniSearch wxMiniSearch) {
+        return null;
+    }
+
+    @Override
+    public ApiResult siteOnline(WxMiniSearch wxMiniSearch) {
+
+        return null;
+    }
+
+    @Override
+    public ApiResult siteOffline(WxMiniSearch wxMiniSearch) {
+
+
+        return null;
+    }
 }
