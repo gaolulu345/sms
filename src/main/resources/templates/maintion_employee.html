@@ -31,9 +31,6 @@
                 <el-table-column  width="120" prop="phone" label="手机号"></el-table-column>
                 <el-table-column prop="miniWxId" label="openId"></el-table-column>
                 <el-table-column prop="lastLoginTime" label="最近登录时间"></el-table-column>
-
-                <el-table-column prop="lastLoginTime" label="上次登录时间"></el-table-column>
-
                 <el-table-column width="120" label="是否禁用" v-if="opPer['/api/private/maintion/employee/update/delete']">
                     <template slot-scope="scope" >
                         <el-button v-if="scope.row.deleted == false" @click="clickDelete(scope.row.id, true)" plain type="danger" size="mini">禁用</el-button>
