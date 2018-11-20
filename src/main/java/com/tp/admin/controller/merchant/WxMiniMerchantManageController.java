@@ -3,10 +3,8 @@ package com.tp.admin.controller.merchant;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.service.WxMiniMerchantManageServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -98,4 +96,6 @@ public class WxMiniMerchantManageController {
     public ApiResult siteOperationLog(HttpServletRequest request){
         return wxMiniMerchantManageService.siteOperationLog(request);
     }
+
+
 }
