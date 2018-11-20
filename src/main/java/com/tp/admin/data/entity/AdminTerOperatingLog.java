@@ -24,7 +24,7 @@ public class AdminTerOperatingLog {
     private String intros;
     private int type;
     private int opSource; // 操作来源
-    private boolean sucess;
+    private boolean success;
 
     @Override
     public String toString() {

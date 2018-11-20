@@ -12,7 +12,7 @@
 			`intros`,
 			`type`,
 			`op_source`,
-			`sucess`
+			`success`
 		) VALUES (
 			#{terId},
 			#{maintionId},
@@ -22,7 +22,7 @@
 			#{intros},
 			#{type},
 			#{opSource},
-			#{sucess}
+			#{success}
 		)
     </insert>
 
@@ -40,7 +40,7 @@
 		log.intros ,
 		log.type ,
 		log.op_source ,
-		log.sucess
+		log.success
 		FROM
 		`admin_ter_operating_log` AS log
 		INNER JOIN `ter_info` AS ti ON log.ter_id = ti.ter_id
