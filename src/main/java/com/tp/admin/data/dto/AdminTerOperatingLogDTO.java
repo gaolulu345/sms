@@ -27,7 +27,7 @@ public class AdminTerOperatingLogDTO {
     private String intros;
     private int type;
     private int opSource;
-    private boolean sucess;
+    private boolean success;
     private String opSourceDesc;
     private String typeDesc;
 

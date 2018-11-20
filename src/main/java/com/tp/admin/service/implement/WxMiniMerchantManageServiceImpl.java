@@ -279,7 +279,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         adminTerOperatingLog.setIntros(intros);
         adminTerOperatingLog.setType(washTerOperatingLogTypeEnum.getValue());
         adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MERCHANT.getValue());
-        adminTerOperatingLog.setSucess(sucess);
+        adminTerOperatingLog.setSuccess(sucess);
         int res = adminTerOperatingLogDao.insert(adminTerOperatingLog);
         if (res == 0) {
             log.error("维保人员操作日志存储失败 {} " + adminTerOperatingLog.toString());

@@ -220,7 +220,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     public void buildTerOperationLog(TerInfoDTO terInfoDTO,
                                      AdminMaintionEmployee adminMaintionEmployee,
                                      WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum,
-                                     Boolean sucess
+                                     Boolean success
     ) {
         String intros = adminMaintionEmployee.getName() + " 操作 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum
                 .getDesc();
@@ -233,7 +233,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         adminTerOperatingLog.setIntros(intros);
         adminTerOperatingLog.setType(washTerOperatingLogTypeEnum.getValue());
         adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MAINTAUN.getValue());
-        adminTerOperatingLog.setSucess(sucess);
+        adminTerOperatingLog.setSuccess(success);
         int res = adminTerOperatingLogDao.insert(adminTerOperatingLog);
         if (res == 0) {
             log.error("维保人员操作日志存储失败 {} " + adminTerOperatingLog.toString());
@@ -250,7 +250,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             if (null == apiResult) {
                 throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
             }
-            if (apiResult.getCode() == ResultCode.SUCCESS.getCode()) {
+            if (apiResult.getCode().equals(ResultCode.SUCCESS.getCode())) {
                 buildTerOperationLog(dto, adminMaintionEmployee, washTerOperatingLogTypeEnum, true);
             } else {
                 buildTerOperationLog(dto, adminMaintionEmployee, washTerOperatingLogTypeEnum, false);

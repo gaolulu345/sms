@@ -79,7 +79,7 @@
 		<result column="intros" property="intros" jdbcType="VARCHAR"/>
 		<result column="type" property="type" jdbcType="INTEGER"/>
 		<result column="op_source" property="opSource" jdbcType="INTEGER"/>
-		<result column="sucess" property="sucess" jdbcType="BIT"/>
+		<result column="success" property="success" jdbcType="BIT"/>
 	</resultMap>
 
 </mapper>
