@@ -280,6 +280,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         adminTerOperatingLog.setIntros(intros);
         adminTerOperatingLog.setType(washTerOperatingLogTypeEnum.getValue());
         adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MERCHANT.getValue());
+        adminTerOperatingLog.setImgs("");
         adminTerOperatingLog.setSuccess(sucess);
         int res = adminTerOperatingLogDao.insert(adminTerOperatingLog);
         if (res == 0) {

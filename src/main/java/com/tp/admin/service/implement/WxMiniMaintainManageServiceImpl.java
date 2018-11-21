@@ -139,7 +139,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         String jsonBody = new Gson().toJson(washSiteRequest);
         String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
                         .SITE_ONLINE,jsonBody);
-        return buildApiResult(result,dto,adminMaintionEmployee,WashTerOperatingLogTypeEnum.ONLINE);
+        return buildApiResult(result,dto,adminMaintionEmployee,"",WashTerOperatingLogTypeEnum.ONLINE);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         String jsonBody = new Gson().toJson(washSiteRequest);
         String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
                         .SITE_OFFLINE,jsonBody);
-        return buildApiResult(result,dto,adminMaintionEmployee,WashTerOperatingLogTypeEnum.NOT_ONLINE);
+        return buildApiResult(result,dto,adminMaintionEmployee,"",WashTerOperatingLogTypeEnum.NOT_ONLINE);
     }
 
     @Override
@@ -168,14 +168,25 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
         }
         check(wxMiniSearch.getOpenId());
-        log.info(wxMiniSearch.getImgs().toString());
+
+        StringBuffer imgs = new StringBuffer();
+        if (null != wxMiniSearch.getImgs() || wxMiniSearch.getImgs().length != 0) {
+            log.info(wxMiniSearch.getImgs().toString());
+            int length = wxMiniSearch.getImgs().length;
+            for (int i = 0; i < length; i++) {
+                imgs.append(wxMiniSearch.getImgs()[0]);
+                if ((length - 1) > i) {
+                    imgs.append(",");
+                }
+            }
+        }
         AdminMaintionEmployee adminMaintionEmployee = check(wxMiniSearch.getOpenId());
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
         String jsonBody = new Gson().toJson(washSiteRequest);
         String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
                 .SITE_RESET, jsonBody);
-        return buildApiResult(result,dto,adminMaintionEmployee,WashTerOperatingLogTypeEnum.TER_RESET);
+        return buildApiResult(result,dto,adminMaintionEmployee,imgs.toString(),WashTerOperatingLogTypeEnum.TER_RESET);
     }
 
     @Override
@@ -192,7 +203,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         String jsonBody = new Gson().toJson(washSiteRequest);
         String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
                 .SITE_STATUS_RESET, jsonBody);
-        return buildApiResult(result,dto,adminMaintionEmployee,WashTerOperatingLogTypeEnum.TER_RESET_STATE);
+        return buildApiResult(result,dto,adminMaintionEmployee,"",WashTerOperatingLogTypeEnum.TER_RESET_STATE);
     }
 
     @Override
@@ -245,7 +256,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     public void buildTerOperationLog(TerInfoDTO terInfoDTO,
                                      AdminMaintionEmployee adminMaintionEmployee,
                                      WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum,
-                                     Boolean success
+                                     String imgs ,Boolean success
     ) {
         String intros = adminMaintionEmployee.getName() + " 操作 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum
                 .getDesc();
@@ -258,6 +269,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         adminTerOperatingLog.setIntros(intros);
         adminTerOperatingLog.setType(washTerOperatingLogTypeEnum.getValue());
         adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MAINTAUN.getValue());
+        adminTerOperatingLog.setImgs(imgs);
         adminTerOperatingLog.setSuccess(success);
         int res = adminTerOperatingLogDao.insert(adminTerOperatingLog);
         if (res == 0) {
@@ -267,7 +279,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     }
 
     private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMaintionEmployee
-            adminMaintionEmployee, WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum
+            adminMaintionEmployee, String imgs ,WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum
     ) {
         ApiResult apiResult = null;
         try {
@@ -276,9 +288,9 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
                 throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
             }
             if (apiResult.getCode().equals(ResultCode.SUCCESS.getCode())) {
-                buildTerOperationLog(dto, adminMaintionEmployee, washTerOperatingLogTypeEnum, true);
+                buildTerOperationLog(dto, adminMaintionEmployee, washTerOperatingLogTypeEnum, imgs,true);
             } else {
-                buildTerOperationLog(dto, adminMaintionEmployee, washTerOperatingLogTypeEnum, false);
+                buildTerOperationLog(dto, adminMaintionEmployee, washTerOperatingLogTypeEnum, imgs,false);
             }
         } catch (JsonSyntaxException ex) {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);

@@ -12,6 +12,7 @@
 			`intros`,
 			`type`,
 			`op_source`,
+			`imgs`,
 			`success`
 		) VALUES (
 			#{terId},
@@ -22,6 +23,7 @@
 			#{intros},
 			#{type},
 			#{opSource},
+			#{imgs},
 			#{success}
 		)
     </insert>
@@ -40,6 +42,7 @@
 		log.intros ,
 		log.type ,
 		log.op_source ,
+		log.imgs ,
 		log.success
 		FROM
 		`admin_ter_operating_log` AS log
@@ -79,6 +82,7 @@
 		<result column="intros" property="intros" jdbcType="VARCHAR"/>
 		<result column="type" property="type" jdbcType="INTEGER"/>
 		<result column="op_source" property="opSource" jdbcType="INTEGER"/>
+		<result column="imgs" property="imgs" jdbcType="INTEGER"/>
 		<result column="success" property="success" jdbcType="BIT"/>
 	</resultMap>
 

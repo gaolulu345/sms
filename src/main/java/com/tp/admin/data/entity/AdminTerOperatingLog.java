@@ -24,6 +24,7 @@ public class AdminTerOperatingLog {
     private String intros;
     private int type;
     private int opSource; // 操作来源
+    private String imgs;
     private boolean success;
 
     @Override

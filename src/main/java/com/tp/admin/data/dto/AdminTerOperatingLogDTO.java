@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,6 +29,8 @@ public class AdminTerOperatingLogDTO {
     private String intros;
     private int type;
     private int opSource;
+    private String imgs;
+    private String[] img;
     private boolean success;
     private String opSourceDesc;
     private String typeDesc;
@@ -41,6 +45,13 @@ public class AdminTerOperatingLogDTO {
             username = maintionUsername;
         }else if(AdminTerOperatingLogSourceEnum.MERCHANT.getValue() == opSource){
             username = merchantUsername;
+        }
+        if (null != imgs && imgs.trim().length() != 0) {
+            try{
+                img = imgs.split(",");
+            }catch (Exception e){
+                img = new String[]{};
+            }
         }
     }
 
