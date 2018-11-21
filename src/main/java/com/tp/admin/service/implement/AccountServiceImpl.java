@@ -10,7 +10,6 @@ import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.AdminAccountLoginLog;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
-import com.tp.admin.security.AutoResource;
 import com.tp.admin.service.AccountServiceI;
 import com.tp.admin.utils.StringUtil;
 import org.apache.commons.lang.StringUtils;
@@ -29,8 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class AccountServiceImpl implements AccountServiceI {

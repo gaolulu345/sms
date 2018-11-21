@@ -7,7 +7,6 @@ import com.tp.admin.data.dto.AutoResourceDTO;
 import com.tp.admin.data.dto.PermissionDTO;
 import com.tp.admin.data.dto.UserAutoResourceDTO;
 import com.tp.admin.data.entity.*;
-import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.data.search.SystemSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.exception.BaseException;

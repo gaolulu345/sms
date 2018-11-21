@@ -2,7 +2,6 @@ package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.PartnerDao;
-import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.search.PartnerSearch;
 import com.tp.admin.data.table.ResultTable;

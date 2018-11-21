@@ -1,15 +1,12 @@
 package com.tp.admin.service.implement;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.ajax.ResultCode;
 import com.tp.admin.common.Constant;
-import com.tp.admin.config.AliyunOssProperties;
 import com.tp.admin.config.TpProperties;
 import com.tp.admin.dao.*;
-import com.tp.admin.data.dto.AdminTerOperatingLogDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.dto.UploadFileDTO;
 import com.tp.admin.data.entity.*;
@@ -19,7 +16,6 @@ import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.data.wash.WashSiteRequest;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
-import com.tp.admin.enums.WashTerStateEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.AliyunOssManagerI;
@@ -27,20 +23,15 @@ import com.tp.admin.manage.HttpHelperI;
 import com.tp.admin.service.WashSiteServiceI;
 import com.tp.admin.service.WxMiniAuthServiceI;
 import com.tp.admin.service.WxMiniMaintainManageServiceI;
-import com.tp.admin.utils.SecurityUtil;
-import com.tp.admin.utils.SessionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.interfaces.RSAPublicKey;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -74,9 +65,6 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
 
     @Autowired
     AliyunOssManagerI aliyunOssManager;
-
-    @Autowired
-    AliyunOssProperties aliyunOssProperties;
 
     @Override
     public ApiResult region(HttpServletRequest request) {

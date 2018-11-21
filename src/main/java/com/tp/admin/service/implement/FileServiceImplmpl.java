@@ -1,10 +1,8 @@
 package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
-import com.tp.admin.common.Constant;
 import com.tp.admin.config.AliyunOssProperties;
 import com.tp.admin.dao.FileUploadLogDao;
-import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.dto.UploadFileDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.FileUploadLog;
@@ -16,8 +14,6 @@ import com.tp.admin.manage.AliyunOssManagerI;
 import com.tp.admin.service.FileServiceI;
 import com.tp.admin.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
