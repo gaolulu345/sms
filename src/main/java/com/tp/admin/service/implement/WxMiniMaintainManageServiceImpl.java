@@ -162,7 +162,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
             log.info(wxMiniSearch.getImgs().toString());
             int length = wxMiniSearch.getImgs().length;
             for (int i = 0; i < length; i++) {
-                imgs.append(wxMiniSearch.getImgs()[0]);
+                imgs.append(wxMiniSearch.getImgs()[i]);
                 if ((length - 1) > i) {
                     imgs.append(",");
                 }
