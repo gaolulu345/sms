@@ -47,6 +47,20 @@ public interface WxMiniMerchantManageServiceI {
     ApiResult siteStatus(HttpServletRequest request);
 
     /**
+     * 网点设备复位
+     * @param request
+     * @return
+     */
+    ApiResult siteDeviceReset(HttpServletRequest request);
+
+    /**
+     * 网点状态复位
+     * @param request
+     * @return
+     */
+    ApiResult siteStatusReset(HttpServletRequest request);
+
+    /**
      * 站点上线
      *
      * @param request

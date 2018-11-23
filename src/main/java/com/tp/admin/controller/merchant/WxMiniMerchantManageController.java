@@ -76,6 +76,16 @@ public class WxMiniMerchantManageController {
         return wxMiniMerchantManageService.siteOffline(request , body);
     }
 
+//    /**
+//     * 网点设备复位
+//     * @param request
+//     * @return
+//     */
+//    @PostMapping(value = "/site/device/reset")
+//    public ApiResult siteDeviceReset(HttpServletRequest request ,@RequestBody String body){
+//        return wxMiniMerchantManageService.siteDeviceReset(request);
+//    }
+
     /**
      * 订单列表查询
      * @param request

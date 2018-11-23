@@ -165,6 +165,16 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     }
 
     @Override
+    public ApiResult siteDeviceReset(HttpServletRequest request) {
+        return ApiResult.ok();
+    }
+
+    @Override
+    public ApiResult siteStatusReset(HttpServletRequest request) {
+        return ApiResult.ok();
+    }
+
+    @Override
     public ApiResult siteOnline(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);

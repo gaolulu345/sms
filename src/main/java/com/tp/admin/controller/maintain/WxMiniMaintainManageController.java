@@ -76,7 +76,7 @@ public class WxMiniMaintainManageController {
      * @return
      */
     @PostMapping(value = "/site/device/reset")
-    public ApiResult siteDeviceReset(HttpServletRequest request){
+    public ApiResult siteDeviceReset(HttpServletRequest request ,@RequestBody String body){
         return wxMiniMaintainManageService.siteDeviceReset(request);
     }
 

@@ -141,7 +141,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
 
         AdminMaintionEmployee adminMaintionEmployee = check(wxMiniSearch.getOpenId());
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
-        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
+        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", wxMiniSearch.getMsg());
         String jsonBody = new Gson().toJson(washSiteRequest);
         String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
                         .SITE_OFFLINE,jsonBody);
