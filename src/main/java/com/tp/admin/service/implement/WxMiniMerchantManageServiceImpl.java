@@ -165,12 +165,29 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     }
 
     @Override
-    public ApiResult siteDeviceReset(HttpServletRequest request) {
+    public ApiResult siteDeviceReset(HttpServletRequest request , String body) {
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getTerId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        }
+
+
+
+
+
         return ApiResult.ok();
     }
 
     @Override
     public ApiResult siteStatusReset(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getTerId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        }
+
+
+
         return ApiResult.ok();
     }
 

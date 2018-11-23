@@ -149,14 +149,12 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     }
 
     @Override
-    public ApiResult siteDeviceReset(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
+    public ApiResult siteDeviceReset(HttpServletRequest request , String body) {
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
         }
         check(wxMiniSearch.getOpenId());
-
         StringBuffer imgs = new StringBuffer();
         if (null != wxMiniSearch.getImgs() || wxMiniSearch.getImgs().length != 0) {
             log.info(wxMiniSearch.getImgs().toString());

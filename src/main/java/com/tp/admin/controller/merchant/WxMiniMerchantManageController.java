@@ -18,91 +18,111 @@ public class WxMiniMerchantManageController {
 
     /**
      * 站点金额统计
+     *
      * @param request
      * @return
      */
     @PostMapping(value = "/money/total")
-    public ApiResult moneyTotal(HttpServletRequest request){
+    public ApiResult moneyTotal(HttpServletRequest request) {
         return wxMiniMerchantManageService.moneyTotal(request);
     }
 
     /**
      * 站点列表查询
+     *
      * @param request
      * @return
      */
     @PostMapping(value = "/site/list")
-    public ApiResult siteListSearch(HttpServletRequest request){
+    public ApiResult siteListSearch(HttpServletRequest request) {
         return wxMiniMerchantManageService.siteListSearch(request);
     }
 
     /**
      * 站点信息
+     *
      * @param request
      * @return
      */
     @PostMapping(value = "/site/info")
-    public ApiResult siteInfo(HttpServletRequest request){
+    public ApiResult siteInfo(HttpServletRequest request) {
         return wxMiniMerchantManageService.siteInfo(request);
     }
 
     /**
      * 站点洗车机运行状态
+     *
      * @param request
      * @return
      */
     @PostMapping(value = "/site/status")
-    public ApiResult siteStatus(HttpServletRequest request){
+    public ApiResult siteStatus(HttpServletRequest request) {
         return wxMiniMerchantManageService.siteStatus(request);
     }
 
     /**
      * 站点上线
+     *
      * @param request
      * @return
      */
     @PostMapping(value = "/site/online")
-    public ApiResult siteOnline(HttpServletRequest request){
+    public ApiResult siteOnline(HttpServletRequest request) {
         return wxMiniMerchantManageService.siteOnline(request);
     }
 
     /**
      * 站点下线
+     *
      * @param request
      * @return
      */
-    @PostMapping(value = "/site/offline" )
-    public ApiResult siteOffline(HttpServletRequest request , @RequestBody String body){
-        return wxMiniMerchantManageService.siteOffline(request , body);
+    @PostMapping(value = "/site/offline")
+    public ApiResult siteOffline(HttpServletRequest request, @RequestBody String body) {
+        return wxMiniMerchantManageService.siteOffline(request, body);
     }
 
-//    /**
-//     * 网点设备复位
-//     * @param request
-//     * @return
-//     */
-//    @PostMapping(value = "/site/device/reset")
-//    public ApiResult siteDeviceReset(HttpServletRequest request ,@RequestBody String body){
-//        return wxMiniMerchantManageService.siteDeviceReset(request);
-//    }
+    /**
+     * 网点设备复位
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/site/device/reset")
+    public ApiResult siteDeviceReset(HttpServletRequest request, @RequestBody String body) {
+        return wxMiniMerchantManageService.siteDeviceReset(request, body);
+    }
+
+    /**
+     * 网点设备状态重置
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/site/status/reset")
+    public ApiResult siteStatusReset(HttpServletRequest request) {
+        return wxMiniMerchantManageService.siteStatusReset(request);
+    }
 
     /**
      * 订单列表查询
+     *
      * @param request
      * @return
      */
     @PostMapping(value = "/site/order/list")
-    public ApiResult orderListSearch(HttpServletRequest request){
+    public ApiResult orderListSearch(HttpServletRequest request) {
         return wxMiniMerchantManageService.orderListSearch(request);
     }
 
     /**
      * 站点操作日志
+     *
      * @param request
      * @return
      */
     @PostMapping(value = "/site/operation/log/list")
-    public ApiResult siteOperationLog(HttpServletRequest request){
+    public ApiResult siteOperationLog(HttpServletRequest request) {
         return wxMiniMerchantManageService.siteOperationLog(request);
     }
 

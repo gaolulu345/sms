@@ -51,7 +51,7 @@ public interface WxMiniMerchantManageServiceI {
      * @param request
      * @return
      */
-    ApiResult siteDeviceReset(HttpServletRequest request);
+    ApiResult siteDeviceReset(HttpServletRequest request , String body);
 
     /**
      * 网点状态复位
@@ -91,8 +91,6 @@ public interface WxMiniMerchantManageServiceI {
      * @return
      */
     ApiResult siteOperationLog(HttpServletRequest request);
-
-
 
     /**
      * 检查用户
