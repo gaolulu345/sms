@@ -43,6 +43,7 @@ public interface Constant {
         String APP_ID = "wxc76b3b03cc234f1c";
         String APP_SECRET = "47fcec6231f6322c9ba084a593126dcd";
         String TEMPLATE_ID = "gFk-jx-YMRg1UZrb4Z9OvEn5427L9SzOyLHdSQSBexU";
+        String MINI_SITE_RESET_PHOTO = "mini/site/reset";
 
     }
 

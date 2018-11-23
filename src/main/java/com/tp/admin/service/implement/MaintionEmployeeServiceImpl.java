@@ -1,13 +1,11 @@
 package com.tp.admin.service.implement;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
 import com.tp.admin.dao.AdminMaintionEmployeeDao;
 import com.tp.admin.data.wx.WxTemplateData;
 import com.tp.admin.data.wx.WxTemplateMessage;
-import com.tp.admin.data.wx.WxTextMessage;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.search.MaintionEmployeeSearch;
 import com.tp.admin.data.table.ResultTable;

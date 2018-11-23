@@ -1,19 +1,22 @@
 package com.tp.admin.service.implement;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.ajax.ResultCode;
+import com.tp.admin.common.Constant;
+import com.tp.admin.config.TpProperties;
 import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.DataTotalDTO;
 import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
-import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.OrderSearch;
-import com.tp.admin.data.search.RangeSearch;
 import com.tp.admin.data.table.ResultTable;
+import com.tp.admin.data.wash.WashSiteRequest;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.enums.OrderStatusEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
@@ -49,6 +52,9 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
 
     @Autowired
     HttpHelperI httpHelper;
+
+    @Autowired
+    TpProperties tpProperties;
 
     @Autowired
     TerDao terDao;
@@ -154,6 +160,34 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
         check(wxMiniSearch.getOpenId());
+        // 基础数据不够
+        return ApiResult.ok();
+    }
+
+    @Override
+    public ApiResult siteDeviceReset(HttpServletRequest request , String body) {
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getTerId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        }
+
+
+
+
+
+        return ApiResult.ok();
+    }
+
+    @Override
+    public ApiResult siteStatusReset(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getTerId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
+        }
+
+
+
         return ApiResult.ok();
     }
 
@@ -166,37 +200,26 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         }
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
-        if (dto.isOnline()) {
-            throw new BaseException(ExceptionCode.REPEAT_OPERATION , "该网点已经上线");
-        }
-        int res = terDao.updateOnline(wxMiniSearch.getTerId());
-        if (res == 0) {
-            buildTerOperationLog(dto , adminMerchantEmployee , WashTerOperatingLogTypeEnum.ONLINE,false);
-            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-        }
-        buildTerOperationLog(dto , adminMerchantEmployee , WashTerOperatingLogTypeEnum.ONLINE,true);
-        return ApiResult.ok();
+        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
+        String jsonBody = new Gson().toJson(washSiteRequest);
+        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+                .SITE_ONLINE,jsonBody);
+        return buildApiResult(result,dto,adminMerchantEmployee,WashTerOperatingLogTypeEnum.ONLINE);
     }
 
     @Override
     public ApiResult siteOffline(HttpServletRequest request , String body) {
-//        String body = httpHelper.jsonBody(request);
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
         if (null == wxMiniSearch.getTerId() || StringUtils.isBlank(wxMiniSearch.getMsg()) ) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
-        if (!dto.isOnline()) {
-            throw new BaseException(ExceptionCode.REPEAT_OPERATION , "该网点已经下线");
-        }
-        int res = terDao.updateOffline(wxMiniSearch.getTerId(),wxMiniSearch.getMsg());
-        if (res == 0) {
-            buildTerOperationLog(dto , adminMerchantEmployee , WashTerOperatingLogTypeEnum.NOT_ONLINE,false);
-            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-        }
-        buildTerOperationLog(dto , adminMerchantEmployee , WashTerOperatingLogTypeEnum.NOT_ONLINE,true);
-        return ApiResult.ok();
+        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
+        String jsonBody = new Gson().toJson(washSiteRequest);
+        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+                .SITE_OFFLINE,jsonBody);
+        return buildApiResult(result,dto,adminMerchantEmployee,WashTerOperatingLogTypeEnum.NOT_ONLINE);
     }
 
     @Override
@@ -281,11 +304,32 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         adminTerOperatingLog.setIntros(intros);
         adminTerOperatingLog.setType(washTerOperatingLogTypeEnum.getValue());
         adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MERCHANT.getValue());
-        adminTerOperatingLog.setSucess(sucess);
+        adminTerOperatingLog.setImgs("");
+        adminTerOperatingLog.setSuccess(sucess);
         int res = adminTerOperatingLogDao.insert(adminTerOperatingLog);
         if (res == 0) {
             log.error("维保人员操作日志存储失败 {} " + adminTerOperatingLog.toString());
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
+    }
+
+    private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMerchantEmployee
+             adminMerchantEmployee, WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum
+    ) {
+        ApiResult apiResult = null;
+        try {
+            apiResult = new Gson().fromJson(result, ApiResult.class);
+            if (null == apiResult) {
+                throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+            }
+            if (apiResult.getCode() == ResultCode.SUCCESS.getCode()) {
+                buildTerOperationLog(dto, adminMerchantEmployee, washTerOperatingLogTypeEnum, true);
+            } else {
+                buildTerOperationLog(dto, adminMerchantEmployee, washTerOperatingLogTypeEnum, false);
+            }
+        } catch (JsonSyntaxException ex) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        return apiResult;
     }
 }

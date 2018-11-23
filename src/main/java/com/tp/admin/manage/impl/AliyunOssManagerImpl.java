@@ -28,10 +28,10 @@ public class AliyunOssManagerImpl implements AliyunOssManagerI {
 
     // 直接扔到OSS
     @Override
-    public UploadFileDTO uploadFileToAliyunOss(MultipartFile picture) {
+    public UploadFileDTO uploadFileToAliyunOss(MultipartFile picture , String basePath) {
         String fileName = picture.getOriginalFilename();
-        String uoloadPath = this.aliyunOssProperties.getPath() + "/" + fileName;
-        String key = "/" + this.aliyunOssProperties.getPath() + "/" + fileName;
+        String uoloadPath =  basePath + "/" + fileName;
+        String key = "/" + basePath + "/" + fileName;
         OSSClient ossClient = new OSSClient(this.aliyunOssProperties.getEndpoint(), this.aliyunOssProperties
                 .getAccessKeyId(), this.aliyunOssProperties.getAccessKeySecret());
         InputStream inputStream = null;
@@ -50,7 +50,7 @@ public class AliyunOssManagerImpl implements AliyunOssManagerI {
         } finally {
             ossClient.shutdown();
         }
-        dto.setNmae(fileName);
+        dto.setName(fileName);
         dto.setKey(key);
         dto.setUrl(this.aliyunOssProperties.getServerUrl()+key);
         return dto;

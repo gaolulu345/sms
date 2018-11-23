@@ -99,31 +99,6 @@
 		t.deleted = 0
 	</select>
 
-    <update id="updateOnline" parameterType="java.lang.Integer">
-		UPDATE
-		`ter_info`
-		SET
-		`online`= 1
-		WHERE ter_id = #{id}
-	</update>
-
-	<update id="updateOffline">
-		UPDATE
-		`ter_info`
-		SET
-		`online`= 0,
-		`offline_desc` = #{offlineDesc}
-		WHERE ter_id = #{id}
-	</update>
-
-    <update id="updateStateDefault">
-		UPDATE
-		`ter_info`
-		SET
-		`status` = 0
-		WHERE ter_id = #{id}
-	</update>
-
     <resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<id column="code" property="code" jdbcType="VARCHAR" />

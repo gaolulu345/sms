@@ -27,47 +27,4 @@ public interface WashSiteServiceI {
      */
     TerInfoDTO terCheck(WxMiniSearch wxMiniSearch);
 
-
-    /**
-     * 洗车站点启动
-     * @param wxMiniSearch
-     * @return
-     */
-    ApiResult siteStart(WxMiniSearch wxMiniSearch);
-
-    /**
-     * 洗车站点状态
-     * @param wxMiniSearch
-     * @return
-     */
-    ApiResult siteState(WxMiniSearch wxMiniSearch);
-
-    /**
-     * 洗车站点复位
-     * @param wxMiniSearch
-     * @return
-     */
-    ApiResult siteReset(WxMiniSearch wxMiniSearch);
-
-    /**
-     * 洗车站点暂停
-     * @param wxMiniSearch
-     * @return
-     */
-    ApiResult siteStop(WxMiniSearch wxMiniSearch);
-
-    /**
-     * 站点上线
-     * @param wxMiniSearch
-     * @return
-     */
-    ApiResult siteOnline(WxMiniSearch wxMiniSearch);
-
-    /**
-     * 站点下线
-     * @param wxMiniSearch
-     * @return
-     */
-    ApiResult siteOffline(WxMiniSearch wxMiniSearch);
-
 }

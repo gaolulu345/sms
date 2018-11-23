@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UploadFileDTO {
 
-    String nmae;
+    String name;
 
     String key;
 

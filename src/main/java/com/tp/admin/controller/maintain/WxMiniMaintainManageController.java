@@ -3,10 +3,8 @@ package com.tp.admin.controller.maintain;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.service.WxMiniMaintainManageServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -78,8 +76,8 @@ public class WxMiniMaintainManageController {
      * @return
      */
     @PostMapping(value = "/site/device/reset")
-    public ApiResult siteDeviceReset(HttpServletRequest request){
-        return wxMiniMaintainManageService.siteDeviceReset(request);
+    public ApiResult siteDeviceReset(HttpServletRequest request ,@RequestBody String body){
+        return wxMiniMaintainManageService.siteDeviceReset(request , body);
     }
 
     /**
@@ -98,7 +96,22 @@ public class WxMiniMaintainManageController {
      * @return
      */
     @PostMapping(value = "/site/operation/log/list")
-    ApiResult siteOperationLog(HttpServletRequest request){
+    public ApiResult siteOperationLog(HttpServletRequest request){
         return wxMiniMaintainManageService.siteOperationLog(request);
     }
+
+    /**
+     * 上传站点图片
+     * @param request
+     * @param file
+     * @return
+     */
+    @PostMapping(value = "/site/upload/reset/photo")
+    public ApiResult uploadSitePhoto(HttpServletRequest request, @RequestPart("file") MultipartFile file ,
+                                     @RequestParam(value = "openId") String
+            openId) {
+        return wxMiniMaintainManageService.uploadSitePhoto(request, file , openId);
+    }
+
+
 }

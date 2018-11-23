@@ -13,9 +13,6 @@ public enum ResultCode {
     ShieldException("9999","该设备已被列入黑名单"),
     NoThisUserException("1008","用户不存在"),
     InvalidAccessException("2001", "授权无效，请登录"),
-    AdoptAlreadyDoneException("2002", "送养已完成"),
-    TooMuchApplyException("2003", "申请次数超限"),
-    NoGroupHelpAuditException("2004","无代审团体"),
     ParamChangedException("1010","数据变更");
 
     private String code;

@@ -29,6 +29,7 @@ public class OrderDTO {
     private int channel;
     @ExcelField(title = "支付时间", order = 5)
     private Timestamp payTime;
+    private Long payTimestamp;
 
     private String operationDesc; // 洗车操作状态
 
@@ -52,6 +53,9 @@ public class OrderDTO {
             this.operationDesc = "未启动洗车机";
         }else {
             this.operationDesc = OperationStateEnum.getByCode(this.operationStatus).getDesc();
+        }
+        if (null != payTime) {
+            payTimestamp = payTime.getTime();
         }
     }
 

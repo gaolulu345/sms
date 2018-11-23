@@ -5,6 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface AliyunOssManagerI {
 
-    UploadFileDTO uploadFileToAliyunOss(MultipartFile paramMultipartFile);
+    UploadFileDTO uploadFileToAliyunOss(MultipartFile paramMultipartFile , String basePath);
 
 }

@@ -5,6 +5,7 @@ import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -53,7 +54,7 @@ public interface WxMiniMaintainManageServiceI {
      * @param request
      * @return
      */
-    ApiResult siteDeviceReset(HttpServletRequest request);
+    ApiResult siteDeviceReset(HttpServletRequest request , String body);
 
     /**
      * 网点状态复位
@@ -77,12 +78,20 @@ public interface WxMiniMaintainManageServiceI {
     AdminMaintionEmployee check(String openId);
 
     /**
+     * 上传站点照片
+     * @param request
+     * @param file
+     * @return
+     */
+    ApiResult uploadSitePhoto(HttpServletRequest request, MultipartFile file , String openId);
+
+    /**
      * 构建操作日志
      * @param terInfoDTO
      * @param adminMaintionEmployee
      * @param washTerOperatingLogTypeEnum
      */
     void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMaintionEmployee adminMaintionEmployee,
-                  WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum , Boolean sucess);
+                  WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum , String imgs ,Boolean sucess);
 
 }

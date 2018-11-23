@@ -1,6 +1,7 @@
 package com.tp.admin.manage.impl;
 
 import com.tp.admin.manage.JsonRequestWrapperI;
+import com.tp.admin.xss.SQLFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;

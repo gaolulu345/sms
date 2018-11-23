@@ -28,6 +28,8 @@ public class WxMiniSearch extends Search {
 
     List<Integer> ids;
 
+    String[] imgs;
+
     @Override
     public void builData() {
         super.build();

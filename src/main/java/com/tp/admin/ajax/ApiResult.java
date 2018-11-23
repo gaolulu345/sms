@@ -47,7 +47,7 @@ public class ApiResult {
         result.setCode(code.getCode());
         result.setMessage(message);
         result.setData(obj == null ? EMPTY_RESULT : obj);
-        logger.info(result.toString());
+        logger.error(result.toString());
         if (code == ExceptionCode.DB_BUSY_EXCEPTION || code == ExceptionCode.DB_ERR_EXCEPTION) {
             result.setMessage(SQL_FAILURE_RETURNMSG);
         }
@@ -59,7 +59,7 @@ public class ApiResult {
         result.setCode(code);
         result.setMessage(message);
         result.setData(obj == null ? EMPTY_RESULT : obj);
-        logger.info(result.toString());
+        logger.error(result.toString());
         return result;
     }
     

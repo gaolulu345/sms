@@ -6,6 +6,7 @@ import com.tp.admin.data.entity.AdminMaintionEmployee;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +16,7 @@ public interface WxMiniMerchantManageServiceI {
 
     /**
      * 相关网点金额统计
+     *
      * @param request
      * @return
      */
@@ -22,6 +24,7 @@ public interface WxMiniMerchantManageServiceI {
 
     /**
      * 相关网点列表查询
+     *
      * @param request
      * @return
      */
@@ -29,6 +32,7 @@ public interface WxMiniMerchantManageServiceI {
 
     /**
      * 站点信息
+     *
      * @param request
      * @return
      */
@@ -36,13 +40,29 @@ public interface WxMiniMerchantManageServiceI {
 
     /**
      * 站点洗车机运行状态
+     *
      * @param request
      * @return
      */
     ApiResult siteStatus(HttpServletRequest request);
 
     /**
+     * 网点设备复位
+     * @param request
+     * @return
+     */
+    ApiResult siteDeviceReset(HttpServletRequest request , String body);
+
+    /**
+     * 网点状态复位
+     * @param request
+     * @return
+     */
+    ApiResult siteStatusReset(HttpServletRequest request);
+
+    /**
      * 站点上线
+     *
      * @param request
      * @return
      */
@@ -50,13 +70,15 @@ public interface WxMiniMerchantManageServiceI {
 
     /**
      * 站点下线
+     *
      * @param request
      * @return
      */
-    ApiResult siteOffline(HttpServletRequest request , String body);
+    ApiResult siteOffline(HttpServletRequest request, String body);
 
     /**
      * 相关订单列表查询
+     *
      * @param request
      * @return
      */
@@ -64,6 +86,7 @@ public interface WxMiniMerchantManageServiceI {
 
     /**
      * 站点操作日志
+     *
      * @param request
      * @return
      */
@@ -71,12 +94,13 @@ public interface WxMiniMerchantManageServiceI {
 
     /**
      * 检查用户
+     *
      * @param openId
      * @return
      */
     AdminMerchantEmployee check(String openId);
 
     void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMerchantEmployee adminMerchantEmployee,
-                              WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum , Boolean sucess);
+                              WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, Boolean sucess);
 
 }

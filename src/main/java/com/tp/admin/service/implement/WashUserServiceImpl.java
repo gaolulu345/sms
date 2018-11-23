@@ -3,7 +3,6 @@ package com.tp.admin.service.implement;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.UserDao;
 import com.tp.admin.data.dto.UserDTO;
-import com.tp.admin.data.entity.User;
 import com.tp.admin.data.search.UserSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.service.WashUserServiceI;

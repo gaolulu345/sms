@@ -2,7 +2,6 @@ package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.TerLogDao;
-import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.entity.TerLog;
 import com.tp.admin.data.search.WashLogSearch;
 import com.tp.admin.data.table.ResultTable;
