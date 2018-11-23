@@ -24,6 +24,10 @@ var vm = new Vue({
         currentTerIds: [],
         currentOrderId: null,
 
+        currentUserId: null,
+        currentUserInfo: {},
+        showUserInfoDialog: false,
+
         orderList: [],
 
         showLog: false,
@@ -41,6 +45,7 @@ var vm = new Vue({
                 return time.getTime() > Date.now();
             }
         },
+        dialogLabelWidth: '200px',
     },
 
     mounted: function() {
@@ -116,6 +121,32 @@ var vm = new Vue({
             } else {
                 vm.$message.error('请选择开始和结束日期！');
             }
+        },
+
+        // 查看用户信息
+        getUserInfo: function(userId) {
+            this.$http.post("/api/private/wash/user/list", {
+                pageSize: 10,
+                pageIndex: 1,
+                id: userId,
+                phone: null,
+                startTime: '',
+                endTime: ''
+            }).then(function(res){
+                let data = res.json().data;
+                let result = data.result;
+                let genderList = ['未知', '男', '女']
+                if(result && result[0]) {
+                    let userInfo = result[0]
+                    userInfo.gender = genderList[userInfo.gender]
+                    userInfo.createTime = formatTimestampToSecond(userInfo.createTime)
+                    userInfo.lastLoginTime = formatTimestampToSecond(userInfo.lastLoginTime)
+                    vm.currentUserInfo = userInfo;
+                    vm.showUserInfoDialog = true
+                } else {
+                    vm.$message.error('查无此用户')
+                }
+            })
         },
 
         // 查看日志
