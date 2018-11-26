@@ -170,12 +170,13 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
-
-
-
-
-
-        return ApiResult.ok();
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
+        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
+        String jsonBody = new Gson().toJson(washSiteRequest);
+        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+                .SITE_RESET,jsonBody);
+        return buildApiResult(result,dto,adminMerchantEmployee,WashTerOperatingLogTypeEnum.TER_RESET);
     }
 
     @Override
@@ -185,10 +186,13 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty terId");
         }
-
-
-
-        return ApiResult.ok();
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
+        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
+        String jsonBody = new Gson().toJson(washSiteRequest);
+        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+                .SITE_STATUS_RESET,jsonBody);
+        return buildApiResult(result,dto,adminMerchantEmployee,WashTerOperatingLogTypeEnum.TER_RESET_STATE);
     }
 
     @Override
@@ -215,7 +219,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         }
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
-        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
+        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", wxMiniSearch.getMsg());
         String jsonBody = new Gson().toJson(washSiteRequest);
         String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
                 .SITE_OFFLINE,jsonBody);
