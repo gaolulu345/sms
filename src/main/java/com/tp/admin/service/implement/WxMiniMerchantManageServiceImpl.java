@@ -10,6 +10,7 @@ import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.DataTotalDTO;
 import com.tp.admin.data.dto.OrderDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
+import com.tp.admin.data.dto.UploadFileDTO;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.entity.Partner;
@@ -22,15 +23,18 @@ import com.tp.admin.enums.OrderStatusEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
+import com.tp.admin.manage.AliyunOssManagerI;
 import com.tp.admin.manage.HttpHelperI;
 import com.tp.admin.service.WashSiteServiceI;
 import com.tp.admin.service.WxMiniMerchantManageServiceI;
 import com.tp.admin.utils.TimeUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -64,6 +68,9 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
 
     @Autowired
     PartnerDao partnerDao;
+
+    @Autowired
+    AliyunOssManagerI aliyunOssManager;
 
     @Override
     public ApiResult moneyTotal(HttpServletRequest request) {
@@ -267,6 +274,19 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         wxMiniSearch.builData();
         check(wxMiniSearch.getOpenId());
         return washSiteService.siteOperationLog(wxMiniSearch);
+    }
+
+    @Override
+    public ApiResult uploadSitePhoto(HttpServletRequest request, MultipartFile file, String openId) {
+        if (Strings.isBlank(openId)) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty openId");
+        }
+        check(openId);
+        UploadFileDTO uploadFileDTO = aliyunOssManager.uploadFileToAliyunOss(file ,Constant.WxMiniMaintain.MINI_SITE_RESET_PHOTO);
+        if (!uploadFileDTO.isSuccess()) {
+            throw new BaseException(ExceptionCode.ALI_OSS_UPDATE_ERROR);
+        }
+        return ApiResult.ok(uploadFileDTO);
     }
 
     @Override

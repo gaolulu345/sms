@@ -4,6 +4,7 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.service.WxMiniMerchantManageServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -126,5 +127,17 @@ public class WxMiniMerchantManageController {
         return wxMiniMerchantManageService.siteOperationLog(request);
     }
 
+    /**
+     * 上传站点图片
+     * @param request
+     * @param file
+     * @return
+     */
+    @PostMapping(value = "/site/upload/reset/photo")
+    public ApiResult uploadSitePhoto(HttpServletRequest request, @RequestPart("file") MultipartFile file ,
+                                     @RequestParam(value = "openId") String
+                                             openId) {
+        return wxMiniMerchantManageService.uploadSitePhoto(request, file , openId);
+    }
 
 }

@@ -93,6 +93,14 @@ public interface WxMiniMerchantManageServiceI {
     ApiResult siteOperationLog(HttpServletRequest request);
 
     /**
+     * 上传站点照片
+     * @param request
+     * @param file
+     * @return
+     */
+    ApiResult uploadSitePhoto(HttpServletRequest request, MultipartFile file , String openId);
+
+    /**
      * 检查用户
      *
      * @param openId
