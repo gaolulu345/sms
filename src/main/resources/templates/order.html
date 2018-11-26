@@ -53,7 +53,12 @@
                 style="width: 100%">
 
                 <el-table-column width="60" prop="id" label="订单ID"></el-table-column>
-                <el-table-column width="60" prop="userId" label="用户ID"></el-table-column>
+                <el-table-column width="100" label="用户ID">
+                    <template slot-scope="scope">
+                        <span style="color: #2981ff;" @click="getUserInfo(scope.row.userId)">{{scope.row.userId}}</span>
+                    </template>
+                </el-table-column>
+
                 <el-table-column width="150" prop="terTitle" label="网点名称"></el-table-column>
                 <el-table-column prop="payTime" label="支付时间"></el-table-column>
                 <el-table-column label="订单状态">
@@ -107,7 +112,45 @@
         <div class="dialogPages" style="text-align: center; margin-top: 10px;">
             <el-pagination @size-change="logSizeChange" @current-change="logCurrentChange" :current-page.sycn="logList.pageIndex" :page-sizes="dialogPageSizes" :page-size.sync="logList.pageSize"  layout="total, sizes, prev, pager, next, jumper" :total="logList.totalCnt"></el-pagination>
         </div>
-    </el-dialog>   
+    </el-dialog> 
+
+    <!-- 用户信息弹出框 -->
+    <el-dialog title="用户信息" :visible.sync="showUserInfoDialog">
+        <el-form :model="currentUserInfo">
+            <el-form-item label="用户ID" :label-width="dialogLabelWidth">
+                <el-input v-model="currentUserInfo.id" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="用户来源" :label-width="dialogLabelWidth">
+                <el-input v-model="currentUserInfo.typeDesc" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="昵称" :label-width="dialogLabelWidth">
+                <el-input v-model="currentUserInfo.nickname" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号" :label-width="dialogLabelWidth">
+                <el-input v-model="currentUserInfo.phone" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item label="性别" :label-width="dialogLabelWidth">
+                <el-input v-model="currentUserInfo.gender" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="头像" :label-width="dialogLabelWidth">
+                <img v-if="currentUserInfo.avatar" :src="currentUserInfo.avatar" style="margin:0;width: 100px;height:100px;" alt="">
+                <el-input v-else size="mini" value="暂无" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="城市" :label-width="dialogLabelWidth">
+                <el-input v-model="currentUserInfo.city" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="注册时间" :label-width="dialogLabelWidth">
+                <el-input v-model="currentUserInfo.createTime" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="最近登录时间" :label-width="dialogLabelWidth">
+                <el-input v-model="currentUserInfo.lastLoginTime" size="mini" disabled auto-complete="off"></el-input>
+            </el-form-item>
+
+            
+                    
+        </el-form>
+    </el-dialog>  
 </div>
 
 <script src="/js/common/per.js"></script>
