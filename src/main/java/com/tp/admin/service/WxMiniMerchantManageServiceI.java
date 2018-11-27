@@ -109,6 +109,6 @@ public interface WxMiniMerchantManageServiceI {
     AdminMerchantEmployee check(String openId);
 
     void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMerchantEmployee adminMerchantEmployee,
-                              WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, Boolean sucess);
+                              WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, String img ,Boolean sucess);
 
 }
