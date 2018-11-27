@@ -142,7 +142,7 @@ public class WxMiniMerchantManageController {
 
     @PostMapping(value = "/merchant/refund/list")
     public ApiResult merchantRefundInfo(HttpServletRequest request){
-        return wxMiniMerchantManageService.merchantRefundsearch(request);
+        return wxMiniMerchantManageService.merchantRefundSearch(request);
     }
 
 }
