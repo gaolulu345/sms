@@ -81,6 +81,28 @@
         AND
           id = #{id}
     </update>
+    
+    <select id="findRefundInfo" parameterType="RefundSearch" resultMap="RefundMap">
+        SELECT r.*
+        FROM refund r
+        INNER JOIN `order` o
+        ON r.order_id=o.id
+        INNER JOIN ter_info ti
+        ON o.ter_id=ti.ter_id
+        WHERE
+        <if test="terIds != null and terIds.size != 0">
+            AND
+            o.ter_id IN
+            <foreach collection="terIds" item="terId" index="index"
+                     open="(" close=")" separator=",">
+                #{terId}
+            </foreach>
+        </if>
+        ORDER BY r.create_time DESC
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
 
     <resultMap id="RefundMap" type="com.tp.admin.data.entity.Refund">
         <id column="id" property="id" jdbcType="INTEGER" />

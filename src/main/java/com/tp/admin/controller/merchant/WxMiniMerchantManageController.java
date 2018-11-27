@@ -136,8 +136,13 @@ public class WxMiniMerchantManageController {
     @PostMapping(value = "/site/upload/reset/photo")
     public ApiResult uploadSitePhoto(HttpServletRequest request, @RequestPart("file") MultipartFile file ,
                                      @RequestParam(value = "openId") String
-                                             openId) {
+                                               openId) {
         return wxMiniMerchantManageService.uploadSitePhoto(request, file , openId);
+    }
+
+    @PostMapping(value = "/merchant/refund/list")
+    public ApiResult merchantRefundInfo(HttpServletRequest request){
+        return wxMiniMerchantManageService.merchantRefundsearch(request);
     }
 
 }

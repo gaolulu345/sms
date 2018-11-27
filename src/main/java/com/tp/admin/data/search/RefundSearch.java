@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,6 +18,7 @@ public class RefundSearch extends Search {
     Integer orderId;
     Integer status;
     Integer reason;  // 现在用type枚举映射
+    List<Integer> terIds = new ArrayList<>();
 
     @Override
     public void builData() {

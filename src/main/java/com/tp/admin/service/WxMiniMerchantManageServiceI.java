@@ -108,6 +108,8 @@ public interface WxMiniMerchantManageServiceI {
      */
     AdminMerchantEmployee check(String openId);
 
+    ApiResult merchantRefundSearch(HttpServletRequest request);
+
     void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMerchantEmployee adminMerchantEmployee,
                               WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, String img ,Boolean sucess);
 
