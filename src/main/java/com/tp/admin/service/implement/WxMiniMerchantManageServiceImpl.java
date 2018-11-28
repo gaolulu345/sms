@@ -39,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -340,8 +341,8 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         }
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
-        RefundSearch refundSearch = null;
-        List<Refund> refundList = null;
+        RefundSearch refundSearch = new RefundSearch();
+        List<Refund> refundList = new ArrayList<Refund>();
         if (null != terIds && !terIds.isEmpty()) {
             refundSearch.setTerIds(terIds);
             refundList =  refundDao.findRefundInfo(refundSearch);

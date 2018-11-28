@@ -140,6 +140,12 @@ public class WxMiniMerchantManageController {
         return wxMiniMerchantManageService.uploadSitePhoto(request, file , openId);
     }
 
+    /**
+     * 查询站点下的退款信息
+     *
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/merchant/refund/list")
     public ApiResult merchantRefundInfo(HttpServletRequest request){
         return wxMiniMerchantManageService.merchantRefundSearch(request);

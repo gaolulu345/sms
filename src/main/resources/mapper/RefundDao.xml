@@ -89,6 +89,7 @@
         INNER JOIN ter_info ti
         ON o.ter_id=ti.ter_id
         WHERE
+        o.deleted = 0
         <if test="terIds != null and terIds.size != 0">
             AND
             o.ter_id IN
