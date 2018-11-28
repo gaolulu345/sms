@@ -81,8 +81,7 @@
         AND
           id = #{id}
     </update>
-    
-    <select id="findRefundInfo" parameterType="RefundSearch" resultMap="RefundMap">
+    <select id="findRefundInfo" parameterType="com.tp.admin.data.search.RefundSearch" resultMap="RefundMap">
         SELECT r.*
         FROM refund r
         INNER JOIN `order` o
@@ -103,6 +102,7 @@
             LIMIT #{offset},#{pageSize}
         </if>
     </select>
+
 
     <resultMap id="RefundMap" type="com.tp.admin.data.entity.Refund">
         <id column="id" property="id" jdbcType="INTEGER" />
