@@ -1,5 +1,7 @@
 package com.tp.admin.controller.wash;
 
+
+
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.service.AdminTerPropertyServiceI;
 import org.springframework.beans.factory.annotation.Autowired;

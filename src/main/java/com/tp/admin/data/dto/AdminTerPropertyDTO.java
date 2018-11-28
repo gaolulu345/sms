@@ -1,5 +1,6 @@
 package com.tp.admin.data.dto;
 
+import com.tp.admin.enums.AdminNetMethodEnum;
 import com.tp.admin.enums.AdminTerBusinessModeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,10 +24,12 @@ public class AdminTerPropertyDTO {
     private int highLimit;
     private int wideLimit;
     private int startOnline;
-    private String terBusiModeDesc;//网店运营模式 描述
+    private String netMethodDesc;//联网方式描述
+    private String terBusiModeDesc;//网店运营模式描述
 
     public void build(){
         this.terBusiModeDesc = AdminTerBusinessModeEnum.getByValue(this.terBusiMode).getDesc();
+        this.netMethodDesc = AdminNetMethodEnum.getByValue(this.netMethod).getDesc();
     }
 
 
