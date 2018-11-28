@@ -1,5 +1,6 @@
 package com.tp.admin.dao;
 
+import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import org.apache.ibatis.annotations.Param;
@@ -19,8 +20,6 @@ public interface TerDao {
 
     Integer cntTerInfoSearch(WxMiniSearch wxMiniTerSearch);
 
-
-
-
+    AdminTerPropertyDTO findTerStartInfo(int terId);
 
 }
