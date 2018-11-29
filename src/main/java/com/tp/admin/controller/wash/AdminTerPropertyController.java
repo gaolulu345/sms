@@ -20,6 +20,12 @@ public class AdminTerPropertyController {
     @Autowired
     AdminTerPropertyServiceI adminTerPropertyServiceI;
 
+    /**
+     * 查询某个网点的属性信息
+     *
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/search")
     public ApiResult terPropertyInfoSearch(HttpServletRequest request){
         return adminTerPropertyServiceI.terPropertySearch(request);

@@ -3,9 +3,11 @@ package com.tp.admin.service.implement;
 import com.google.gson.Gson;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.AdminMerchantEmployeeDao;
+import com.tp.admin.dao.PartnerDao;
 import com.tp.admin.dao.TerDao;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
+import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
 @Service
 public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
 
@@ -28,6 +32,9 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     @Autowired
     AdminMerchantEmployeeDao adminMerchantEmployeeDao;
 
+    @Autowired
+    PartnerDao partnerDao;
+
     @Override
     public ApiResult terPropertySearch(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
@@ -35,7 +42,19 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         if (null == wxMiniSearch.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
         }
-        check(wxMiniSearch.getOpenId());
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
+        if (null != terIds && !terIds.isEmpty()){
+            int flag = 0;
+            for (int terId : terIds) {
+                if (wxMiniSearch.getTerId() == terId){
+                    flag = 1;
+                }
+            }
+            if (flag == 0){
+                throw new BaseException(ExceptionCode.PARAMETER_WRONG,"terId mismatch partnerId");
+            }
+        }
         AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(wxMiniSearch.getTerId());
         adminTerPropertyDTO.build();
         return ApiResult.ok(adminTerPropertyDTO);
@@ -57,6 +76,10 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             throw new BaseException(ExceptionCode.USER_DELETE_REGISTERED);
         }
         if (adminMerchantEmployee.getPartnerId() == 0) {
+            throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
+        }
+        Partner partner = partnerDao.findById(adminMerchantEmployee.getPartnerId());
+        if (null == partner) {
             throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
         }
         return adminMerchantEmployee;
