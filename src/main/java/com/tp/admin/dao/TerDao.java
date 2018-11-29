@@ -3,6 +3,7 @@ package com.tp.admin.dao;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.parameter.WxMiniSearch;
+import com.tp.admin.data.search.TerPropertySearch;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,5 +22,7 @@ public interface TerDao {
     Integer cntTerInfoSearch(WxMiniSearch wxMiniTerSearch);
 
     AdminTerPropertyDTO findTerStartInfo(int terId);
+
+    int updateOnlineFreeStartState(WxMiniSearch wxMiniTerSearch);
 
 }

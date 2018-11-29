@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(AdminTerPropertyController.ROUTER_INDEX)
 public class AdminTerPropertyController {
 
-    public static final String ROUTER_INDEX = "/api/private/wash/ter/property";
+    public static final String ROUTER_INDEX = "/api/open/wash/ter/property";
 
     @Autowired
     AdminTerPropertyServiceI adminTerPropertyServiceI;
@@ -29,5 +29,16 @@ public class AdminTerPropertyController {
     @PostMapping(value = "/search")
     public ApiResult terPropertyInfoSearch(HttpServletRequest request){
         return adminTerPropertyServiceI.terPropertySearch(request);
+    }
+
+    /**
+     * 线上免费开启
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/site/online/start")
+    public ApiResult onlineFreeStart(HttpServletRequest request){
+        return adminTerPropertyServiceI.onlineFreeStart(request);
     }
 }

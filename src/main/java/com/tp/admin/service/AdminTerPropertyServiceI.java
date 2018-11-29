@@ -9,5 +9,7 @@ public interface AdminTerPropertyServiceI {
 
     ApiResult terPropertySearch(HttpServletRequest request);
 
+    ApiResult onlineFreeStart(HttpServletRequest request);
+
     AdminMerchantEmployee check(String openId);
 }

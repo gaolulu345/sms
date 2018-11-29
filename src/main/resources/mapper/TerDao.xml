@@ -119,6 +119,17 @@
 				WHERE t.id=#{terId}
 	</select>
 
+	<update id="updateOnlineFreeStartState" parameterType="com.tp.admin.data.parameter.WxMiniSearch">
+		update admin_ter_property
+		<trim prefix="set" suffixOverrides=",">
+			<if test="start_online != 1">
+				`start_online` = 1,
+			</if>
+		</trim>
+		WHERE
+		ter_id=#{terId}
+	</update>
+
     <resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<id column="code" property="code" jdbcType="VARCHAR" />
