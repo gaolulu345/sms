@@ -39,6 +39,7 @@ public class AdminTerPropertyController {
      */
     @PostMapping("/site/online/start")
     public ApiResult onlineFreeStart(HttpServletRequest request){
-        return adminTerPropertyServiceI.onlineFreeStart(request);
+        return null;
+        //return adminTerPropertyServiceI.onlineFreeStart(request);
     }
 }
