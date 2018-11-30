@@ -6,7 +6,8 @@ public enum RefundStatusEnum {
     REQUEST_REFUND(1, "请求退款"),
     APPROVED(2, "请求通过审核"),
     REFUNDED(3, "已退款"),
-    REQUEST_REJECTION(4, "请求被拒绝");
+    REQUEST_REJECTION(4, "请求被拒绝"),
+    REFUNDING(5,"退款中");
 
     private int value;
     private String desc;
