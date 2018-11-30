@@ -90,7 +90,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(wxMiniSearch.getTerId());
         if (adminTerPropertyDTO.getStartOnline() != 1){
-            terDao.updateOnlineFreeStartState(wxMiniSearch);
+            terDao.updateOnlineFreeStartState(wxMiniSearch.getTerId());
             adminTerPropertyDTO.setStartOnline(1);
             //添加日志
             TerInfoDTO terInfoDTO = washSiteServiceI.terCheck(wxMiniSearch);
@@ -100,6 +100,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
                     .SITE_ONLINE_START, jsonBody);
             return buildApiResult(result,terInfoDTO,adminMerchantEmployee,"",WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED);
         }
+        //return Api;
         return null;
     }
 

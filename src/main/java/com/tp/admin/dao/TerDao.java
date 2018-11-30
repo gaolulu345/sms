@@ -23,6 +23,6 @@ public interface TerDao {
 
     AdminTerPropertyDTO findTerStartInfo(int terId);
 
-    int updateOnlineFreeStartState(WxMiniSearch wxMiniTerSearch);
+    int updateOnlineFreeStartState(int terId);
 
 }
