@@ -17,4 +17,6 @@ public interface RefundDao {
 
     int update(Refund refund);
 
+    List<Refund> findRefundInfo(RefundSearch refundSearch);
+
 }

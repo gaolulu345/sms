@@ -14,8 +14,10 @@ import com.tp.admin.data.dto.UploadFileDTO;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.entity.Partner;
+import com.tp.admin.data.entity.Refund;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.OrderSearch;
+import com.tp.admin.data.search.RefundSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.data.wash.WashSiteRequest;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
@@ -37,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -71,6 +74,9 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
 
     @Autowired
     AliyunOssManagerI aliyunOssManager;
+
+    @Autowired
+    RefundDao refundDao;
 
     @Override
     public ApiResult moneyTotal(HttpServletRequest request) {
@@ -324,6 +330,24 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
             throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
         }
         return adminMerchantEmployee;
+    }
+
+    @Override
+    public ApiResult merchantRefundSearch(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getOpenId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty openId");
+        }
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
+        RefundSearch refundSearch = new RefundSearch();
+        List<Refund> refundList = new ArrayList<Refund>();
+        if (null != terIds && !terIds.isEmpty()) {
+            refundSearch.setTerIds(terIds);
+            refundList =  refundDao.findRefundInfo(refundSearch);
+        }
+        return ApiResult.ok(refundList);
     }
 
     @Override
