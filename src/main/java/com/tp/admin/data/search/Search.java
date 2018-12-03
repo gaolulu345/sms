@@ -17,7 +17,7 @@ public abstract class Search {
     private String endTime;
     protected List<? extends Object> result;
 
-    protected final void build(){
+    public final void build(){
         if (pageIndex < 1) {
             pageIndex = Constant.Page.DEFAULT_INDEX;
         }
