@@ -7,4 +7,8 @@ public interface MiniOrderPayManagerI {
     void aliPayBack(Order order);
 
     void wxinPayBack(Order order);
+
+    void aliPayBackCredence(Order order);
+
+    void wxinPayBackCredence(Order order);
 }

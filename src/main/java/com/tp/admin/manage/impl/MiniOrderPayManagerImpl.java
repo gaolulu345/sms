@@ -2,7 +2,9 @@ package com.tp.admin.manage.impl;
 
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
+import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.tp.admin.common.ConfigUtil;
 import com.tp.admin.common.MiniConstant;
@@ -58,7 +60,8 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
         if (aliRes.equals("10000")) {
-            logger.info("订单号：{} 支付凭证 {}  支付宝退款成功并删除二维码", order.getId(), order.getAlipayStr());
+            //logger.info("订单号：{} 支付凭证 {}  支付宝退款成功并删除二维码", order.getId(), order.getAlipayStr());
+            logger.info("订单号：{} 支付凭证 {}  支付宝退款调用成功", order.getId(), order.getAlipayStr());
             return;
         }
         logger.error("响应信息 {} ", refundResponse.toString());
@@ -100,13 +103,11 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
             packageParams.put("out_trade_no", String.valueOf(order.getId()));// 商户订单号
             packageParams.put("out_refund_no", order.getWxpayStr());//商户退款单号
             String totalFee = String.valueOf(order.getAmount());
-            packageParams.put("total_fee", totalFee);// 总金额
-            packageParams.put("refund_fee", totalFee);//退款金额
             packageParams.put("op_user_id", mch_id);//操作员帐号, 默认为商户号
             String sign = createSign("UTF-8", packageParams, key);
             packageParams.put("sign", sign);// 签名
             String requestXML = getRequestXml(packageParams);
-            String weixinPost = ClientCustomSSL.requestOnce(ConfigUtil.REFUND_URL, requestXML, 5000 , 3000 , true );
+            String weixinPost = ClientCustomSSL.requestOnce(ConfigUtil.CHECK_REFUND_URL, requestXML, 5000 , 3000 , true );
             Map map = doXMLParse(weixinPost);
             String returnCode = (String) map.get("return_code");
             if ("SUCCESS".equals(returnCode)) {
@@ -129,6 +130,69 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
             logger.error("订单号：{} 支付凭证 {} 微信支付失败(系统异常)", order.getId(), order.getWxpayStr(), e.getMessage());
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
+    }
+
+    @Override
+    public void aliPayBackCredence(Order order) {
+        logger.info("支付宝小程序支付凭证：{} ", order.getAlipayStr());
+        String aliURL = "https://openapi.alipay.com/gateway.do";
+        String appId = MiniConstant.ALiMiniAppID;
+        String privateKey = MiniConstant.ALiMiniAppPrivateKey;
+        String praviteKey = MiniConstant.ALiMiniAppPublicKey;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("out_trade_no", order.getAlipayStr());
+        AlipayClient alipayClient = new DefaultAlipayClient(aliURL, appId, privateKey, "json", "GBK", praviteKey, "RSA2");
+        AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
+
+        request.setBizContent(jsonObject.toString());
+        String aliRes = "";
+        String aliRefundAccount = "";
+        AlipayTradeFastpayRefundQueryResponse refundResponse = null;
+        try {
+            refundResponse = alipayClient.execute(request);
+            aliRes = refundResponse.getCode();
+            aliRefundAccount = refundResponse.getRefundAmount();
+        } catch (Exception e) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        if (StringUtils.isEmpty(aliRes)) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        if (aliRes.equals("10000") && !aliRefundAccount.equals("")) {
+            logger.info("订单号：{} 支付凭证 {}  支付宝退款成功并删除二维码", order.getId(), order.getAlipayStr());
+            return;
+        }
+        logger.error("响应信息 {} ", refundResponse.toString());
+        if (aliRes.equals("20000")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "invalid service");
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "invalid service");
+        }
+        if (aliRes.equals("20001")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "no auth to payback");
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "no auth to payback");
+        }
+        if (aliRes.equals("40001")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "param miss");
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "param miss");
+        }
+        if (aliRes.equals("40002")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "illegal param");
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "illegal param");
+        }
+        if (aliRes.equals("40004")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "service fails");
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "service fails");
+        }
+        if (aliRes.equals("40006")) {
+            logger.error("订单号：{} 支付凭证 {} ", order.getId(), order.getAlipayStr(), "another: no auth to payback");
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "another: no auth to payback");
+        }
+    }
+
+    @Override
+    public void wxinPayBackCredence(Order order) {
+
+
     }
 
     private void commonParams(SortedMap<Object, Object> packageParams) {

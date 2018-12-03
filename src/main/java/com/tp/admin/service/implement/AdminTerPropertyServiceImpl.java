@@ -104,40 +104,6 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         return null;
     }
 
-
-    //APP
-    /*@Override
-    public ApiResult terPropertySearch(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
-        TerPropertySearch terPropertySearch = new Gson().fromJson(body, TerPropertySearch.class);
-        if (null == terPropertySearch.getTerId()) {
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
-        }
-        AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(terPropertySearch.getTerId());
-        adminTerPropertyDTO.build();
-        return ApiResult.ok(adminTerPropertyDTO);
-    }*/
-
-    //APP
-    /*@Override
-    public ApiResult onlineFreeStart(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
-        TerPropertySearch terPropertySearch = new Gson().fromJson(body,TerPropertySearch.class);
-        if (null == terPropertySearch.getTerId()) {
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
-        }
-        AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(terPropertySearch.getTerId());
-        if (adminTerPropertyDTO.getStartOnline() != 1){
-            terDao.updateOnlineFreeStartState(terPropertySearch);
-            adminTerPropertyDTO.setStartOnline(1);
-            //添加日志
-
-        }
-        adminTerPropertyDTO.build();
-        return ApiResult.ok(adminTerPropertyDTO);
-    }*/
-
-
     private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMerchantEmployee
             adminMerchantEmployee, String img, WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum
     ) {

@@ -26,4 +26,5 @@ public interface AdminMerchantEmployeeDao {
 
     int updateEnable(@Param("id") Integer id , @Param("enable") Boolean enable , @Param("partnerId") Integer partnerId);
 
+    int updateMerchantLoginTime(AdminMerchantEmployee adminMerchantEmployee);
 }

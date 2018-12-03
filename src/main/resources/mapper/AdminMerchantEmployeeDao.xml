@@ -80,10 +80,16 @@
 		UPDATE
 		`admin_merchant_employee`
 		SET
-		enable = #{enable} ,
+		enable = #{enable},
 		partner_id = #{partnerId}
 		WHERE
 		id = #{id}
+	</update>
+
+	<update id="updateMerchantLoginTime" parameterType="com.tp.admin.data.entity.AdminMerchantEmployee">
+		UPDATE admin_merchant_employee
+		SET last_login_time=#{lastLoginTime}
+		WHERE id=#{id}
 	</update>
 
 	<resultMap id="AdminMerchantEmployeeMap" type="com.tp.admin.data.entity.AdminMerchantEmployee">
