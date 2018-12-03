@@ -99,6 +99,33 @@
 		t.deleted = 0
 	</select>
 
+	<select id="findTerStartInfo" parameterType="java.lang.Integer" resultMap="AdminTerPropertyDTOMap">
+		SELECT t.id AS terId,
+				t.ip,
+				t.port,
+				atp.net_method,
+				atp.video_control,
+				atp.bubble_limit,
+				atp.ter_clientversion,
+				atp.ter_busi_mode,
+				atp.ter_model,
+				atp.ter_remark,
+				atp.high_limit,
+				atp.wide_limit,
+				atp.start_online
+        FROM admin_ter_property AS atp
+        INNER JOIN ter AS t
+        ON t.id=atp.ter_id
+				WHERE t.id=#{terId}
+	</select>
+
+	<update id="updateOnlineFreeStartState" parameterType="java.lang.Integer">
+		update admin_ter_property
+		SET start_online=1
+		WHERE
+		ter_id=#{terId}
+	</update>
+
     <resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<id column="code" property="code" jdbcType="VARCHAR" />
@@ -107,6 +134,22 @@
 		<id column="title" property="title" jdbcType="VARCHAR" />
 		<result column="online" property="online" jdbcType="BIT" />
 		<result column="status" property="status" jdbcType="SMALLINT" />
+	</resultMap>
+
+	<resultMap id="AdminTerPropertyDTOMap" type="com.tp.admin.data.dto.AdminTerPropertyDTO">
+		<id column="terId" property="terId" javaType="INTEGER"/>
+		<id column="ip" property="ip" jdbcType="VARCHAR" />
+		<id column="port" property="port" jdbcType="VARCHAR" />
+		<id column="net_method" property="netMethod" jdbcType="INTEGER"/>
+		<id column="video_control" property="videoControl" jdbcType="VARCHAR"/>
+		<id column="bubble_limit" property="bubbleLimit" jdbcType="INTEGER"/>
+		<id column="ter_clientversion" property="terClientVersion" jdbcType="VARCHAR"/>
+		<id column="ter_busi_mode" property="terBusiMode" jdbcType="INTEGER"/>
+		<id column="ter_model" property="terModel" jdbcType="VARCHAR"/>
+		<id column="ter_remark" property="terRemark" jdbcType="VARCHAR"/>
+		<id column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
+		<id column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
+		<id column="start_online" property="startOnline" jdbcType="INTEGER"/>
 	</resultMap>
 
 </mapper>
