@@ -103,6 +103,49 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
             packageParams.put("out_trade_no", String.valueOf(order.getId()));// 商户订单号
             packageParams.put("out_refund_no", order.getWxpayStr());//商户退款单号
             String totalFee = String.valueOf(order.getAmount());
+            packageParams.put("total_fee", totalFee);// 总金额
+            packageParams.put("refund_fee", totalFee);//退款金额
+            packageParams.put("op_user_id", mch_id);//操作员帐号, 默认为商户号
+            String sign = createSign("UTF-8", packageParams, key);
+            packageParams.put("sign", sign);// 签名
+            String requestXML = getRequestXml(packageParams);
+            String weixinPost = ClientCustomSSL.requestOnce(ConfigUtil.REFUND_URL, requestXML, 5000 , 3000 , true );
+            Map map = doXMLParse(weixinPost);
+            String returnCode = (String) map.get("return_code");
+            if ("SUCCESS".equals(returnCode)) {
+                String resultCode = (String) map.get("result_code");
+                if ("SUCCESS".equals(resultCode)) {
+                    logger.info("订单号：{} 支付凭证 {}  微信退款成功并删除二维码", order.getId(), order.getWxpayStr());
+                    return;
+                } else {
+                    String errCodeDes = (String) map.get("err_code_des");
+                    logger.error("订单号：{} 支付凭证 {}  微信退款失败:{}", order.getId(), order.getWxpayStr(), errCodeDes);
+                    throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+                }
+            } else {
+                String returnMsg = (String) map.get("return_msg");
+                logger.error("订单号：{} 支付凭证 {}  微信退款失败:{}", order.getId(), order.getWxpayStr(), returnMsg);
+                throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("订单号：{} 支付凭证 {} 微信支付失败(系统异常)", order.getId(), order.getWxpayStr(), e.getMessage());
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+    }
+
+    @Override
+    public void wxinPayBackCredence(Order order) {
+        logger.info("微信小程序订单号：{} ", order.getWxpayStr());
+        try {
+            // 账号信息
+            String mch_id = MiniConstant.WxMchID; // 商业号
+            String key = MiniConstant.WXMiniAppApiKey; // key
+            SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
+            commonParams(packageParams);
+            packageParams.put("out_trade_no", String.valueOf(order.getId()));// 商户订单号
+            packageParams.put("out_refund_no", order.getWxpayStr());//商户退款单号
+            //String totalFee = String.valueOf(order.getAmount());
             packageParams.put("op_user_id", mch_id);//操作员帐号, 默认为商户号
             String sign = createSign("UTF-8", packageParams, key);
             packageParams.put("sign", sign);// 签名
@@ -189,11 +232,7 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
         }
     }
 
-    @Override
-    public void wxinPayBackCredence(Order order) {
 
-
-    }
 
     private void commonParams(SortedMap<Object, Object> packageParams) {
         // 账号信息

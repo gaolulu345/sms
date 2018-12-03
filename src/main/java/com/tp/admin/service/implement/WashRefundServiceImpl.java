@@ -161,14 +161,14 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                 throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
             }
             miniOrderPayManager.aliPayBack(order);
-            miniOrderPayManager.aliPayBackCredence(order);
+            //miniOrderPayManager.aliPayBackCredence(order);
         }else if (orderType == OrderTypeEnum.WXPAY.ordinal() || orderType == OrderTypeEnum.TEST.ordinal()) {
             int res = orderDao.updateOrderStatus(order.getId(),RefundStatusEnum.REFUNDING.getValue());
             if (res == 0){
                 throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
             }
             miniOrderPayManager.wxinPayBack(order);
-            miniOrderPayManager.wxinPayBackCredence(order);
+            //miniOrderPayManager.wxinPayBackCredence(order);
         }else {
             // 如果订单状态不正确则拒绝退款。
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
