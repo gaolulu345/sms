@@ -126,6 +126,10 @@
 		ter_id=#{terId}
 	</update>
 
+	<update id="updateTerProperty" parameterType="com.tp.admin.data.entity.AdminTerProperty">
+
+	</update>
+
     <resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<id column="code" property="code" jdbcType="VARCHAR" />
@@ -138,18 +142,34 @@
 
 	<resultMap id="AdminTerPropertyDTOMap" type="com.tp.admin.data.dto.AdminTerPropertyDTO">
 		<id column="terId" property="terId" javaType="INTEGER"/>
-		<id column="ip" property="ip" jdbcType="VARCHAR" />
-		<id column="port" property="port" jdbcType="VARCHAR" />
-		<id column="net_method" property="netMethod" jdbcType="INTEGER"/>
-		<id column="video_control" property="videoControl" jdbcType="VARCHAR"/>
-		<id column="bubble_limit" property="bubbleLimit" jdbcType="INTEGER"/>
-		<id column="ter_clientversion" property="terClientVersion" jdbcType="VARCHAR"/>
-		<id column="ter_busi_mode" property="terBusiMode" jdbcType="INTEGER"/>
-		<id column="ter_model" property="terModel" jdbcType="VARCHAR"/>
-		<id column="ter_remark" property="terRemark" jdbcType="VARCHAR"/>
-		<id column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
-		<id column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
-		<id column="start_online" property="startOnline" jdbcType="INTEGER"/>
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="port" property="port" jdbcType="VARCHAR" />
+		<result column="net_method" property="netMethod" jdbcType="INTEGER"/>
+		<result column="video_control" property="videoControl" jdbcType="VARCHAR"/>
+		<result column="bubble_limit" property="bubbleLimit" jdbcType="INTEGER"/>
+		<result column="ter_clientversion" property="terClientVersion" jdbcType="VARCHAR"/>
+		<result column="ter_busi_mode" property="terBusiMode" jdbcType="INTEGER"/>
+		<result column="ter_model" property="terModel" jdbcType="VARCHAR"/>
+		<result column="ter_remark" property="terRemark" jdbcType="VARCHAR"/>
+		<result column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
+		<result column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
+		<result column="start_online" property="startOnline" jdbcType="INTEGER"/>
+	</resultMap>
+
+	<resultMap id="AdminTerPropertyMap" type="com.tp.admin.data.entity.AdminTerProperty">
+		<id column="id" property="id" javaType="INTEGER"/>
+		<id column="terId" property="terId" javaType="INTEGER"/>
+		<result column="net_method" property="netMethod" jdbcType="INTEGER"/>
+		<result column="video_control" property="videoControl" jdbcType="VARCHAR"/>
+		<result column="bubble_limit" property="bubbleLimit" jdbcType="INTEGER"/>
+		<result column="ter_clientversion" property="terClientVersion" jdbcType="VARCHAR"/>
+		<result column="ter_busi_mode" property="terBusiMode" jdbcType="INTEGER"/>
+		<result column="ter_model" property="terModel" jdbcType="VARCHAR"/>
+		<result column="ter_remark" property="terRemark" jdbcType="VARCHAR"/>
+		<result column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
+		<result column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
+		<result column="start_online" property="startOnline" jdbcType="INTEGER"/>
+		<result column="ad_exist" property="adExist" jdbcType="BIT" />
 	</resultMap>
 
 </mapper>

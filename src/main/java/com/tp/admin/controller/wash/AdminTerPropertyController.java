@@ -42,4 +42,6 @@ public class AdminTerPropertyController {
         //return null;
         return adminTerPropertyServiceI.onlineFreeStart(request);
     }
+
+
 }
