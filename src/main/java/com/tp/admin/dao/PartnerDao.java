@@ -16,6 +16,4 @@ public interface PartnerDao {
 
     List<Integer> partnerWashCardIdSearch(int createPartnerId);
 
-    List<Integer> userIdOfWashCard(UserSearch userSearch);
-
 }

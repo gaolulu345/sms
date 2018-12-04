@@ -36,20 +36,6 @@
         WHERE create_partner_id=#{createPartnerId}
     </select>
 
-    <select id="userIdOfWashCard" parameterType="com.tp.admin.data.search.UserSearch" resultType="java.lang.Integer">
-        SELECT DISTINCT user_id
-        FROM partner_user_wash_card
-        WHERE
-        <if test="ids != null and ids.size != 0">
-            partner_card_id IN
-            <foreach collection="ids" item="createPartnerId" index="index"
-                     open="(" close=")" separator=",">
-                #{createPartnerId}
-            </foreach>
-        </if>
-    </select>
-
-
     <resultMap id="PartnerMap" type="com.tp.admin.data.entity.Partner">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="name" property="name" jdbcType="VARCHAR" />

@@ -385,16 +385,37 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         List<Integer> washCardIds = partnerDao.partnerWashCardIdSearch(adminMerchantEmployee.getPartnerId());
         UserSearch userSearch = new UserSearch();
-        List<UserDTO> list = new ArrayList<>();
+        List<UserMemberDTO> userIdsOfUserMember = new ArrayList<>();
         if (washCardIds != null && washCardIds.size() != 0){
             userSearch.setIds(washCardIds);
-            List<Integer> userIds = partnerDao.userIdOfWashCard(userSearch);
-            if (userIds != null && userIds.size() != 0){
+            //查找会员id以及信息
+            userIdsOfUserMember = userDao.userIdOfWashCard(userSearch);
+            if (userIdsOfUserMember != null && userIdsOfUserMember.size() != 0){
+                List<Integer> userIds = new ArrayList<>();
+                for (UserMemberDTO userId:userIdsOfUserMember) {
+                    userIds.add(userId.getId());
+                }
                 userSearch.setIds(userIds);
-                list = userDao.listUserInfoOfWashCard(userSearch);
+                List<UserMemberDTO> list = userDao.listUserInfoOfWashCard(userSearch);
+                if (list != null && list.size() != 0){
+                    for (UserMemberDTO userMemberDTO:userIdsOfUserMember) {
+                        for (UserMemberDTO userMemberDTOC:list) {
+                            if (userMemberDTOC.getId().equals(userMemberDTO.getId())){
+                                userMemberDTO.setAvatar(userMemberDTOC.getAvatar());
+                                userMemberDTO.setCity(userMemberDTOC.getCity());
+                                userMemberDTO.setNickname(userMemberDTOC.getNickname());
+                                userMemberDTO.setPhone(userMemberDTOC.getPhone());
+                                userMemberDTO.setType(userMemberDTOC.getType());
+                                userMemberDTO.build();
+                                break;
+                            }
+
+                        }
+                    }
+                }
             }
         }
-        return ApiResult.ok(list);
+        return ApiResult.ok(userIdsOfUserMember);
     }
 
     private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMerchantEmployee
