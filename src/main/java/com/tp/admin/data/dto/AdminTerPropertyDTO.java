@@ -12,27 +12,35 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdminTerPropertyDTO {
 
-    private int terId;
+    private Integer terId;
+    private String openId;
     private String ip;
     private String port;
-    private int netMethod;
+    private Integer netMethod;
     private String videoControl;
-    private int bubbleLimit;
+    private Integer bubbleLimit;
     private String terClientVersion;
-    private int terBusiMode;
+    private Integer terBusiMode;
     private String terModel;
     private String terRemark;
-    private int highLimit;
-    private int wideLimit;
-    private int startOnline;
+    private Integer highLimit;
+    private Integer wideLimit;
+    private Integer startOnline;
+    private boolean adExist;
     private String netMethodDesc;//联网方式描述
     private String terBusiModeDesc;//网店运营模式描述
     private String startOnlineDesc;//若为单网点有人值守，0表示未启动，1表示启动
 
     public void build(){
-        this.terBusiModeDesc = AdminTerBusinessModeEnum.getByValue(this.terBusiMode).getDesc();
-        this.netMethodDesc = AdminNetMethodEnum.getByValue(this.netMethod).getDesc();
-        this.startOnlineDesc = AdminOnlineFreeStartEnum.getByValue(this.startOnline).getDesc();
+        if (terBusiMode != null){
+            this.terBusiModeDesc = AdminTerBusinessModeEnum.getByValue(this.terBusiMode).getDesc();
+        }
+        if (netMethod != null){
+            this.netMethodDesc = AdminNetMethodEnum.getByValue(this.netMethod).getDesc();
+        }
+        if (startOnline != null){
+            this.startOnlineDesc = AdminOnlineFreeStartEnum.getByValue(this.startOnline).getDesc();
+        }
     }
 
 

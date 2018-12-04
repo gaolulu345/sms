@@ -63,18 +63,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
         }
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
-        List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
-        if (null != terIds && !terIds.isEmpty()){
-            int flag = 0;
-            for (int terId : terIds) {
-                if (wxMiniSearch.getTerId() == terId){
-                    flag = 1;
-                }
-            }
-            if (flag == 0){
-                throw new BaseException(ExceptionCode.PARAMETER_WRONG,"terId mismatch partnerId");
-            }
-        }
+        checkTerAndPartner(wxMiniSearch.getTerId(),adminMerchantEmployee.getPartnerId());
         AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(wxMiniSearch.getTerId());
         adminTerPropertyDTO.build();
         return ApiResult.ok(adminTerPropertyDTO);
@@ -102,6 +91,23 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         }
         //return Api;
         return null;
+    }
+
+    @Override
+    public ApiResult updateTerProperty(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        AdminTerPropertyDTO adminTerPropertyDTO = new Gson().fromJson(body,AdminTerPropertyDTO.class);
+        if (null == adminTerPropertyDTO.getTerId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
+        }
+        AdminMerchantEmployee adminMerchantEmployee = check(adminTerPropertyDTO.getOpenId());
+        checkTerAndPartner(adminTerPropertyDTO.getTerId(),adminMerchantEmployee.getPartnerId());
+        //int res = terDao.updateTerProperty(adminTerPropertyDTO);
+        terDao.updateTerProperty(adminTerPropertyDTO);
+        //if (res == 0){
+        //    throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+       // }
+        return ApiResult.ok();
     }
 
     private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMerchantEmployee
@@ -147,4 +153,23 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         }
         return adminMerchantEmployee;
     }
+
+    @Override
+    public void checkTerAndPartner(int terId, int partnerId) {
+        List<Integer> terIds = terDao.findRelatedTerByPartnerId(partnerId);
+        if (null != terIds && !terIds.isEmpty()){
+            int flag = 0;
+            for (int terIdc : terIds) {
+                if (terId == terIdc){
+                    flag = 1;
+                    break;
+                }
+            }
+            if (flag == 0){
+                throw new BaseException(ExceptionCode.PARAMETER_WRONG,"terId mismatch partnerId");
+            }
+        }
+    }
+
+
 }
