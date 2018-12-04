@@ -156,17 +156,9 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
         if (orderType == OrderTypeEnum.FREE.ordinal()) {
             // 免费的什么都不做.直接更新数据库。
         }else if (orderType == OrderTypeEnum.ALIPAY.ordinal()) {
-            int res = orderDao.updateOrderStatus(order.getId(),RefundStatusEnum.REFUNDING.getValue());
-            if (res == 0){
-                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-            }
             miniOrderPayManager.aliPayBack(order);
             //miniOrderPayManager.aliPayBackCredence(order);
         }else if (orderType == OrderTypeEnum.WXPAY.ordinal() || orderType == OrderTypeEnum.TEST.ordinal()) {
-            int res = orderDao.updateOrderStatus(order.getId(),RefundStatusEnum.REFUNDING.getValue());
-            if (res == 0){
-                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-            }
             miniOrderPayManager.wxinPayBack(order);
             //miniOrderPayManager.wxinPayBackCredence(order);
         }else {
