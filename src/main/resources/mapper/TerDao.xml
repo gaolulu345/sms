@@ -132,39 +132,39 @@
 			<if test="netMethod != null">
 				`net_method` = #{netMethod},
 			</if>
-			<if test="videoControl ！= null">
+			<if test="videoControl != null">
 				`video_control` = #{videoControl},
 			</if>
-			<if test="bubbleLimit ！= null">
+			<if test="bubbleLimit != null">
 				`bubble_limit` = #{bubbleLimit},
 			</if>
-			<if test="terClientVersion  ！= null">
+			<if test="terClientVersion  != null">
 				`ter_clientversion` = #{terClientVersion},
 			</if>
-			<if test="terBusiMode  ！= null">
+			<if test="terBusiMode  != null">
 				`ter_busi_mode` = #{terBusiMode},
 			</if>
-			<if test="terModel ！= null">
+			<if test="terModel != null">
 				`ter_model` = #{terModel},
 			</if>
-			<if test="terRemark ！= null">
+			<if test="terRemark != null">
 				`ter_remark` = #{terRemark},
 			</if>
-			<if test="highLimit ！= null">
+			<if test="highLimit != null">
 				`high_limit` = #{highLimit},
 			</if>
-			<if test="wideLimit ！= null">
+			<if test="wideLimit != null">
 				`wide_limit` = #{wideLimit},
 			</if>
-			<if test="startOnline ！= null">
+			<if test="startOnline != null">
 				`start_online` = #{startOnline},
 			</if>
-			<if test="adExist ！= null">
+			<if test="adExist != null">
 				`ad_exist` = #{adExist},
 			</if>
 		</trim>
 		WHERE
-			ter_id = #{terId}
+			ter_id=#{terId}
 	</update>
 
     <resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >

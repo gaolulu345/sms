@@ -94,19 +94,18 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     }
 
     @Override
-    public ApiResult updateTerProperty(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
-        AdminTerPropertyDTO adminTerPropertyDTO = new Gson().fromJson(body,AdminTerPropertyDTO.class);
+    public ApiResult updateTerProperty(HttpServletRequest request,AdminTerPropertyDTO adminTerPropertyDTO) {
+        //String body = httpHelper.jsonBody(request);
+        //AdminTerPropertyDTO adminTerPropertyDTO = new Gson().fromJson(body,AdminTerPropertyDTO.class);
         if (null == adminTerPropertyDTO.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
         }
         AdminMerchantEmployee adminMerchantEmployee = check(adminTerPropertyDTO.getOpenId());
         checkTerAndPartner(adminTerPropertyDTO.getTerId(),adminMerchantEmployee.getPartnerId());
-        //int res = terDao.updateTerProperty(adminTerPropertyDTO);
-        terDao.updateTerProperty(adminTerPropertyDTO);
-        //if (res == 0){
-        //    throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-       // }
+        int res = terDao.updateTerProperty(adminTerPropertyDTO);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
         return ApiResult.ok();
     }
 

@@ -13,7 +13,7 @@ public interface AdminTerPropertyServiceI {
 
     ApiResult onlineFreeStart(HttpServletRequest request);
 
-    ApiResult updateTerProperty(HttpServletRequest request);
+    ApiResult updateTerProperty(HttpServletRequest request,AdminTerPropertyDTO adminTerPropertyDTO);
 
     AdminMerchantEmployee check(String openId);
 

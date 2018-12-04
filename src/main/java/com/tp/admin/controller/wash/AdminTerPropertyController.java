@@ -52,8 +52,8 @@ public class AdminTerPropertyController {
      * @return
      */
     @PostMapping("/info/update")
-    public ApiResult terPropertyInfoUpdate(HttpServletRequest request){
-        return adminTerPropertyServiceI.updateTerProperty(request);
+    public ApiResult terPropertyInfoUpdate(HttpServletRequest request,@RequestBody AdminTerPropertyDTO adminTerPropertyDTO){
+        return adminTerPropertyServiceI.updateTerProperty(request,adminTerPropertyDTO);
     }
 
 }
