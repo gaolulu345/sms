@@ -47,6 +47,25 @@
             LIMIT #{offset},#{pageSize}
         </if>
     </select>
+    
+    <select id="listUserInfoOfWashCard" parameterType="com.tp.admin.data.search.UserSearch" resultMap="UserDTOMap">
+        SELECT `user`.id,`user`.phone,user_info.avatar,user_info.province,user_info.city,user_info.nickname
+        FROM user_info
+        INNER JOIN `user`
+        ON `user`.id=user_info.user_id
+        WHERE `user`.deleted=0
+        <if test="ids != null and ids.size != 0">
+            AND
+            `user`.id IN
+            <foreach collection="ids" item="userId" index="index"
+                     open="(" close=")" separator=",">
+                #{userId}
+            </foreach>
+        </if>
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
 
     <resultMap id="UserDTOMap" type="com.tp.admin.data.dto.UserDTO">
         <id column="id" property="id" jdbcType="INTEGER" />

@@ -95,8 +95,6 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
 
     @Override
     public ApiResult updateTerProperty(HttpServletRequest request,AdminTerPropertyDTO adminTerPropertyDTO) {
-        //String body = httpHelper.jsonBody(request);
-        //AdminTerPropertyDTO adminTerPropertyDTO = new Gson().fromJson(body,AdminTerPropertyDTO.class);
         if (null == adminTerPropertyDTO.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
         }

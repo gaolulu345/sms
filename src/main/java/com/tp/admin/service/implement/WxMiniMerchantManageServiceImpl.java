@@ -7,10 +7,7 @@ import com.tp.admin.ajax.ResultCode;
 import com.tp.admin.common.Constant;
 import com.tp.admin.config.TpProperties;
 import com.tp.admin.dao.*;
-import com.tp.admin.data.dto.DataTotalDTO;
-import com.tp.admin.data.dto.OrderDTO;
-import com.tp.admin.data.dto.TerInfoDTO;
-import com.tp.admin.data.dto.UploadFileDTO;
+import com.tp.admin.data.dto.*;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.entity.Partner;
@@ -18,6 +15,7 @@ import com.tp.admin.data.entity.Refund;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.OrderSearch;
 import com.tp.admin.data.search.RefundSearch;
+import com.tp.admin.data.search.UserSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.data.wash.WashSiteRequest;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
@@ -77,6 +75,9 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
 
     @Autowired
     RefundDao refundDao;
+
+    @Autowired
+    UserDao userDao;
 
     @Override
     public ApiResult moneyTotal(HttpServletRequest request) {
@@ -372,6 +373,28 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
             log.error("维保人员操作日志存储失败 {} " + adminTerOperatingLog.toString());
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
+    }
+
+    @Override
+    public ApiResult listUserInfoUnderWashCard(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (wxMiniSearch.getOpenId() == null){
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty openId");
+        }
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        List<Integer> washCardIds = partnerDao.partnerWashCardIdSearch(adminMerchantEmployee.getPartnerId());
+        UserSearch userSearch = new UserSearch();
+        List<UserDTO> list = new ArrayList<>();
+        if (washCardIds != null && washCardIds.size() != 0){
+            userSearch.setIds(washCardIds);
+            List<Integer> userIds = partnerDao.userIdOfWashCard(userSearch);
+            if (userIds != null && userIds.size() != 0){
+                userSearch.setIds(userIds);
+                list = userDao.listUserInfoOfWashCard(userSearch);
+            }
+        }
+        return ApiResult.ok(list);
     }
 
     private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMerchantEmployee

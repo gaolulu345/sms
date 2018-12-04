@@ -11,4 +11,6 @@ public interface UserDao {
     int cntBySearch(UserSearch userSearch);
 
     List<UserDTO> listBySearch(UserSearch userSearch);
+
+    List<UserDTO> listUserInfoOfWashCard(UserSearch userSearch);
 }

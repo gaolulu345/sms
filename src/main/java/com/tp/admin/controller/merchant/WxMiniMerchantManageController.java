@@ -151,4 +151,13 @@ public class WxMiniMerchantManageController {
         return wxMiniMerchantManageService.merchantRefundSearch(request);
     }
 
+    /**
+     * 查询商家"我的会员"下面的所有洗车卡用户的信息
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/wash/card/user/info")
+    public ApiResult merchantWashCardUserInfo(HttpServletRequest request){
+        return wxMiniMerchantManageService.listUserInfoUnderWashCard(request);
+    }
 }
