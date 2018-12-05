@@ -2,6 +2,7 @@ package com.tp.admin.service.implement;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.ajax.ResultCode;
 import com.tp.admin.common.Constant;
@@ -39,6 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -388,6 +390,9 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         List<UserMemberDTO> userIdsOfUserMember = new ArrayList<>();
         if (washCardIds != null && washCardIds.size() != 0){
             userSearch.setIds(washCardIds);
+            if (wxMiniSearch.getWashCardType() != null){
+                userSearch.setWashCardType(wxMiniSearch.getWashCardType());
+            }
             //查找会员id以及信息
             userIdsOfUserMember = userDao.userIdOfWashCard(userSearch);
             if (userIdsOfUserMember != null && userIdsOfUserMember.size() != 0){
@@ -395,7 +400,12 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
                 for (UserMemberDTO userId:userIdsOfUserMember) {
                     userIds.add(userId.getId());
                 }
-                userSearch.setIds(userIds);
+                if (userIds != null && userIds.size() != 0){
+                    userSearch.setIds(userIds);
+                }
+                if (wxMiniSearch.getUserType() != null){
+                    userSearch.setUserType(wxMiniSearch.getUserType());
+                }
                 List<UserMemberDTO> list = userDao.listUserInfoOfWashCard(userSearch);
                 if (list != null && list.size() != 0){
                     for (UserMemberDTO userMemberDTO:userIdsOfUserMember) {
@@ -407,12 +417,19 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
                                 userMemberDTO.setPhone(userMemberDTOC.getPhone());
                                 userMemberDTO.setType(userMemberDTOC.getType());
                                 userMemberDTO.build();
-                                break;
+                                continue;
                             }
 
                         }
                     }
                 }
+            }
+        }
+        Iterator<UserMemberDTO> it = userIdsOfUserMember.iterator();
+        while (it.hasNext()){
+            UserMemberDTO userMemberDTO = it.next();
+            if (userMemberDTO.getType() == null || userMemberDTO.getWashCardType() == null){
+                it.remove();
             }
         }
         return ApiResult.ok(userIdsOfUserMember);

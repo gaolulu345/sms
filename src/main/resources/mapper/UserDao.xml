@@ -55,6 +55,9 @@
         INNER JOIN `user`
         ON `user`.id=user_info.user_id
         WHERE `user`.deleted=0
+        <if test="userType != null">
+            AND `user`.type = #{userType}
+        </if>
         <if test="ids != null and ids.size != 0">
             AND
             `user`.id IN
@@ -71,8 +74,12 @@
         SELECT DISTINCT puwc.user_id AS id,puwc.type AS wash_card_type,puwc.cnt,puwc.partner_card_id
         FROM partner_user_wash_card puwc
         WHERE
+          puwc.deleted = 0
+        <if test="washCardType != null">
+            AND puwc.type = #{washCardType}
+        </if>
         <if test="ids != null and ids.size != 0">
-            puwc.partner_card_id IN
+            AND puwc.partner_card_id IN
             <foreach collection="ids" item="createPartnerId" index="index"
                      open="(" close=")" separator=",">
                 #{createPartnerId}

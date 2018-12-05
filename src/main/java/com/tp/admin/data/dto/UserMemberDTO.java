@@ -1,5 +1,6 @@
 package com.tp.admin.data.dto;
 
+import com.tp.admin.enums.CardTypeEnum;
 import com.tp.admin.enums.UserChanneEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,9 +27,9 @@ public class UserMemberDTO {
         if (type != null){
             this.typeDesc = UserChanneEnum.getByCode(this.type).getDesc();
         }
-        //if (washCardType != null){
-            //this.washCardTypeDesc = ;
-        //}
+        if (washCardType != null){
+            this.washCardTypeDesc = CardTypeEnum.getByCode(this.washCardType).getDesc();
+        }
     }
 
 }

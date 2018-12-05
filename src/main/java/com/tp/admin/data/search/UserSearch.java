@@ -15,6 +15,8 @@ public class UserSearch extends Search {
 
     Integer id;
     String phone;
+    Integer userType;
+    Integer washCardType;
     List<Integer> ids;
 
     @Override
