@@ -152,7 +152,7 @@ public class WxMiniMerchantManageController {
     }
 
     /**
-     * 查询商家"我的会员"下面的所有洗车卡用户的信息
+     * 查询商家"我的用户会员卡"信息
      * @param request
      * @return
      */
