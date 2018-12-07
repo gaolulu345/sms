@@ -39,7 +39,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     TerRatationDao terRatationDao;
 
     @Override
-    public ApiResult uploadTerRatationPicture(HttpServletRequest request, MultipartFile file) {
+    public ApiResult uploadAppointTerRatationPicture(HttpServletRequest request, MultipartFile file) {
         Integer terId = Integer.parseInt(request.getParameter("terId"));
         Integer type = Integer.parseInt(request.getParameter("type"));
         TerRatationPictureSearch terRatationPictureSearch = new TerRatationPictureSearch();
@@ -69,7 +69,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     }
 
     @Override
-    public ApiResult listTerRatationPicture(HttpServletRequest request) {
+    public ApiResult terRatationPictureShow(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body, TerRatationPictureSearch.class);
         if (terRatationPictureSearch.getTerId() == null){
@@ -86,7 +86,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     }
 
     @Override
-    public ApiResult startTerRatationPicture(HttpServletRequest request) {
+    public ApiResult startAppointTerRatationPicture(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body, TerRatationPictureSearch.class);
         if (terRatationPictureSearch.getId() == null){
@@ -107,7 +107,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     }
 
     @Override
-    public ApiResult deleteTerRatationPicture(HttpServletRequest request) {
+    public ApiResult deleteAppointTerRatationPicture(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body, TerRatationPictureSearch.class);
         if (terRatationPictureSearch.getIds() == null){
@@ -119,7 +119,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
-        String info = adminAccount.getName() + "批量删除id为" + Arrays.toString(terRatationPictureSearch.getIds()) + "数据";
+        String info = adminAccount.getName() + "批量删除id为" + Arrays.toString(terRatationPictureSearch.getIds()) + "轮播图";
         res = terRatationDao.addTerRatationLog(new TerRatationPictureLog(Arrays.toString(terRatationPictureSearch.getIds()),adminAccount.getName(),info));
         if (res == 0){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);

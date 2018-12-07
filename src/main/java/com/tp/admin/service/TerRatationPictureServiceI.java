@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface TerRatationPictureServiceI {
 
-    ApiResult uploadTerRatationPicture(HttpServletRequest request, MultipartFile file);
+    ApiResult uploadAppointTerRatationPicture(HttpServletRequest request, MultipartFile file);
 
-    ApiResult listTerRatationPicture(HttpServletRequest request);
+    ApiResult terRatationPictureShow(HttpServletRequest request);
 
-    ApiResult startTerRatationPicture(HttpServletRequest request);
+    ApiResult startAppointTerRatationPicture(HttpServletRequest request);
 
-    ApiResult deleteTerRatationPicture(HttpServletRequest request);
+    ApiResult deleteAppointTerRatationPicture(HttpServletRequest request);
 }

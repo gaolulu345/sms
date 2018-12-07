@@ -118,5 +118,5 @@ public interface WxMiniMerchantManageServiceI {
      * @param request
      * @return
      */
-    ApiResult listUserInfoUnderWashCard(HttpServletRequest request);
+    ApiResult merchantWashCardUserInfo(HttpServletRequest request);
 }

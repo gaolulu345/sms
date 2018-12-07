@@ -26,8 +26,8 @@ public class TerRatationPictureController {
      * @return
      */
     @PostMapping(value = "/appoint/upload")
-    public ApiResult uploadTerRatationPicture(HttpServletRequest request , @RequestPart("file") MultipartFile file){
-        return terRatationPictureServiceI.uploadTerRatationPicture(request,file);
+    public ApiResult uploadAppointTerRatationPicture(HttpServletRequest request , @RequestPart("file") MultipartFile file){
+        return terRatationPictureServiceI.uploadAppointTerRatationPicture(request,file);
     }
 
     /**
@@ -38,7 +38,7 @@ public class TerRatationPictureController {
      */
     @PostMapping(value = "/show")
     public ApiResult terRatationPictureShow(HttpServletRequest request){
-        return terRatationPictureServiceI.listTerRatationPicture(request);
+        return terRatationPictureServiceI.terRatationPictureShow(request);
     }
 
     /**
@@ -48,8 +48,8 @@ public class TerRatationPictureController {
      * @return
      */
     @PostMapping(value = "/appoint/start")
-    public ApiResult startTerRatationPicture(HttpServletRequest request){
-        return terRatationPictureServiceI.startTerRatationPicture(request);
+    public ApiResult startAppointTerRatationPicture(HttpServletRequest request){
+        return terRatationPictureServiceI.startAppointTerRatationPicture(request);
     }
 
     /**
@@ -60,7 +60,7 @@ public class TerRatationPictureController {
      */
     @PostMapping(value = "/appoint/delete")
     public ApiResult deleteTerRatationPicture(HttpServletRequest request){
-        return terRatationPictureServiceI.deleteTerRatationPicture(request);
+        return terRatationPictureServiceI.deleteAppointTerRatationPicture(request);
     }
 
 }

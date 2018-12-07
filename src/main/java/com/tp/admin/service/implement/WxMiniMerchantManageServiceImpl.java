@@ -378,7 +378,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     }
 
     @Override
-    public ApiResult listUserInfoUnderWashCard(HttpServletRequest request) {
+    public ApiResult merchantWashCardUserInfo(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
         if (wxMiniSearch.getOpenId() == null){

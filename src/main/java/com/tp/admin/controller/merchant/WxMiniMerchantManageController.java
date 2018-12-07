@@ -158,6 +158,6 @@ public class WxMiniMerchantManageController {
      */
     @PostMapping(value = "/wash/card/user/info")
     public ApiResult merchantWashCardUserInfo(HttpServletRequest request){
-        return wxMiniMerchantManageService.listUserInfoUnderWashCard(request);
+        return wxMiniMerchantManageService.merchantWashCardUserInfo(request);
     }
 }
