@@ -7,15 +7,18 @@ import com.tp.admin.ajax.ResultCode;
 import com.tp.admin.common.Constant;
 import com.tp.admin.config.TpProperties;
 import com.tp.admin.dao.AdminMerchantEmployeeDao;
+import com.tp.admin.dao.AdminTerOperatingLogDao;
 import com.tp.admin.dao.PartnerDao;
 import com.tp.admin.dao.TerDao;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
+import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.TerPropertySearch;
 import com.tp.admin.data.wash.WashSiteRequest;
+import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -54,6 +57,9 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     @Autowired
     WxMiniMerchantManageServiceI wxMiniMerchantManageServiceI;
 
+    @Autowired
+    AdminTerOperatingLogDao adminTerOperatingLogDao;
+
     //微信小程序
     @Override
     public ApiResult terPropertySearch(HttpServletRequest request) {
@@ -83,14 +89,17 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             adminTerPropertyDTO.setStartOnline(1);
             //添加日志
             TerInfoDTO terInfoDTO = washSiteServiceI.terCheck(wxMiniSearch);
-            WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
-            String jsonBody = new Gson().toJson(washSiteRequest);
-            String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
-                    .SITE_ONLINE_START, jsonBody);
-            return buildApiResult(result,terInfoDTO,adminMerchantEmployee,"",WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED);
+            AdminTerOperatingLog adminTerOperatingLog = new AdminTerOperatingLog();
+            adminTerOperatingLog.setTerId(wxMiniSearch.getTerId());
+            adminTerOperatingLog.setMerchantId(adminMerchantEmployee.getId());
+            adminTerOperatingLog.setUsername(adminMerchantEmployee.getName());
+            adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MERCHANT.getValue());
+            adminTerOperatingLog.setTitle(WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED.getDesc());
+            adminTerOperatingLog.setIntros(adminMerchantEmployee.getName() + " 操作" + terInfoDTO.getTitle() + WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED.getDesc());
+            adminTerOperatingLog.setImgs("");
+            adminTerOperatingLogDao.insert(adminTerOperatingLog);
         }
-        //return Api;
-        return null;
+        return ApiResult.ok();
     }
 
     @Override

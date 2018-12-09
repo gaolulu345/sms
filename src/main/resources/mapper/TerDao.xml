@@ -112,7 +112,10 @@
 				atp.ter_remark,
 				atp.high_limit,
 				atp.wide_limit,
-				atp.start_online
+				atp.start_online,
+				atp.ad_exist,
+				atp.screen_wide,
+				atp.screen_high
         FROM admin_ter_property AS atp
         INNER JOIN ter AS t
         ON t.id=atp.ter_id
@@ -162,6 +165,12 @@
 			<if test="adExist != null">
 				`ad_exist` = #{adExist},
 			</if>
+			<if test="screenWide != null">
+				`screen_wide` = #{screenWide},
+			</if>
+			<if test="screenHigh != null">
+				`screen_high` = #{screenHigh},
+			</if>
 		</trim>
 		WHERE
 			ter_id=#{terId}
@@ -191,6 +200,9 @@
 		<result column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
 		<result column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
 		<result column="start_online" property="startOnline" jdbcType="INTEGER"/>
+		<result column="ad_exist" property="adExist" jdbcType="BIT"/>
+		<result column="screen_wide" property="screenWide" jdbcType="INTEGER"/>
+		<result column="screen_high" property="screenHigh" jdbcType="INTEGER"/>
 	</resultMap>
 
 </mapper>

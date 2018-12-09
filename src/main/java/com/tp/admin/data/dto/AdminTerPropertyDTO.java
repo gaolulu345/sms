@@ -27,6 +27,8 @@ public class AdminTerPropertyDTO {
     private Integer wideLimit;
     private Integer startOnline;
     private boolean adExist;
+    private Integer screenWide;
+    private Integer screenHigh;
     private String netMethodDesc;//联网方式描述
     private String terBusiModeDesc;//网店运营模式描述
     private String startOnlineDesc;//若为单网点有人值守，0表示未启动，1表示启动
