@@ -7,5 +7,5 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface ALiMiniServiceI {
 
-    ApiResult sendAliTemplate(TemplateSearch templateSearch);
+    //ApiResult sendAliTemplate(TemplateSearch templateSearch);
 }

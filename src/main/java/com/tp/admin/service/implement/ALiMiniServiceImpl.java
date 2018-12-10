@@ -5,9 +5,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayOpenAppMiniTemplatemessageSendRequest;
 import com.alipay.api.response.AlipayOpenAppMiniTemplatemessageSendResponse;
-import com.google.gson.Gson;
 
-import com.sun.tools.internal.ws.wsdl.document.jaxws.Exception;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.TemplateDao;
 import com.tp.admin.data.search.TemplateSearch;
@@ -34,7 +32,7 @@ public class ALiMiniServiceImpl implements ALiMiniServiceI {
     @Autowired
     HttpHelperI httpHelper;
 
-    @Override
+    /*@Override
     public ApiResult sendAliTemplate(TemplateSearch templateSearch) {
         if (templateSearch.getTouser() == null || templateSearch.getFormId() == null || templateSearch.getData() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"参数");
@@ -98,5 +96,5 @@ public class ALiMiniServiceImpl implements ALiMiniServiceI {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "another: no auth to payback");
         }
         return ApiResult.error(ExceptionCode.UNKNOWN_EXCEPTION);
-    }
+    }*/
 }
