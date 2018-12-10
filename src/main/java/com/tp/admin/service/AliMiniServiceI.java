@@ -3,9 +3,8 @@ package com.tp.admin.service;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.search.TemplateSearch;
 
-import javax.servlet.http.HttpServletRequest;
 
-public interface ALiMiniServiceI {
+public interface AliMiniServiceI {
 
     //ApiResult sendAliTemplate(TemplateSearch templateSearch);
 }

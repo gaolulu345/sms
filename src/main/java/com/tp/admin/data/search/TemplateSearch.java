@@ -16,10 +16,11 @@ public class TemplateSearch extends Search {
 
     private String touser;//微信支付宝模板发送人
     private Integer formId;
-    private String data;
+    private Object data;
     private String page;
-    private Integer type;
+    private Integer type;//判断是支付宝还是微信
 
+    private String templateInfo;
 
 
     @Override

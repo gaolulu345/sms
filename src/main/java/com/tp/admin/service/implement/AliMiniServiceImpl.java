@@ -8,11 +8,13 @@ import com.alipay.api.response.AlipayOpenAppMiniTemplatemessageSendResponse;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.TemplateDao;
+import com.tp.admin.data.entity.AdminTemplateInfo;
 import com.tp.admin.data.search.TemplateSearch;
+import com.tp.admin.enums.AdminTemplateInfoEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
-import com.tp.admin.service.ALiMiniServiceI;
+import com.tp.admin.service.AliMiniServiceI;
 import com.tp.admin.utils.StringUtil;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -20,11 +22,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 @Service
-public class ALiMiniServiceImpl implements ALiMiniServiceI {
+public class AliMiniServiceImpl implements AliMiniServiceI {
 
-    private static final Logger logger = LoggerFactory.getLogger(ALiMiniServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AliMiniServiceImpl.class);
 
     @Autowired
     TemplateDao templateDao;
@@ -41,10 +42,20 @@ public class ALiMiniServiceImpl implements ALiMiniServiceI {
         String appId = templateDao.searchMasterplateTool("ALiMiniAppID");
         String aLiMiniAppPublicKey = templateDao.searchMasterplateTool("ALiMiniAppPublicKey");
         String aLiMiniAppPrivateKey = templateDao.searchMasterplateTool("ALiMiniAppPrivateKey");
-        String aLiMiniTemplateId = templateDao.searchMasterplateTool("ALiMiniTemplateId");
+
+        String aLiMiniTemplateId = "";
+        if (templateSearch.getTemplateInfo() != null){
+            AdminTemplateInfo adminTemplateInfo = templateDao.searchTemplateId(AdminTemplateInfoEnum.getByValue(templateSearch.getTemplateInfo()).getValue());
+            aLiMiniTemplateId = adminTemplateInfo.getTemplateId();
+            if (aLiMiniTemplateId.equals("")){
+                throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty templateId");
+            }
+        }
+
         if (null == appId || null == aLiMiniAppPrivateKey || null == aLiMiniAppPublicKey || appId.equals("") || aLiMiniAppPrivateKey.equals("") || aLiMiniAppPublicKey.equals("")){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("to_user_id",templateSearch.getTouser());
         jsonObject.put("form_id",templateSearch.getFormId());

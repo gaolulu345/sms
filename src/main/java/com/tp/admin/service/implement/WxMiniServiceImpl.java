@@ -3,8 +3,10 @@ package com.tp.admin.service.implement;
 import com.google.gson.Gson;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.TemplateDao;
+import com.tp.admin.data.entity.AdminTemplateInfo;
 import com.tp.admin.data.search.TemplateSearch;
 import com.tp.admin.data.wx.WxAccessToken;
+import com.tp.admin.enums.AdminTemplateInfoEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
@@ -69,13 +71,20 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
 
     @Override
     public ApiResult sendWxTemplate(TemplateSearch templateSearch) {
-        //String body = httpHelper.jsonBody(request);
-        //TemplateSearch templateSearch = new Gson().fromJson(body,TemplateSearch.class);
         if (templateSearch.getFormId() == null || templateSearch.getTouser() == null || templateSearch.getData() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"缺少参数");
         }
         MultiValueMap<String,Object> requestBody = new LinkedMultiValueMap<>();
-        String templateId = templateDao.searchMasterplateTool("WXTEMPLATE_ID");
+
+        String templateId = "";
+        if (templateSearch.getTemplateInfo() != null){
+            AdminTemplateInfo adminTemplateInfo = templateDao.searchTemplateId(AdminTemplateInfoEnum.getByValue(templateSearch.getTemplateInfo()).getValue());
+            templateId = adminTemplateInfo.getTemplateId();
+            if (templateId.equals("")){
+                throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty templateId");
+            }
+        }
+
         requestBody.add("form_id",templateSearch.getFormId());
         requestBody.add("touser",templateSearch.getTouser());
         requestBody.add("data",templateSearch.getData());

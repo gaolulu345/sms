@@ -6,4 +6,19 @@
         FROM admin_key_value akv
         WHERE akv.key=#{key}
     </select>
+
+    <select id="searchTemplateId" parameterType="java.lang.Integer" resultMap="TemplateInfoMap">
+        SELECT ti.template_id,
+        ti.template_desc,
+        ti.type
+        FROM admin_template_info ti
+        WHERE id=#{id}
+    </select>
+
+    <resultMap id="TemplateInfoMap" type="com.tp.admin.data.entity.AdminTemplateInfo">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="template_id" property="templateId" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="template_desc" property="templateDesc" jdbcType="VARCHAR" />
+    </resultMap>
 </mapper>
