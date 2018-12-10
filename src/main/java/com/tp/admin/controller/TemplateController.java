@@ -22,17 +22,15 @@ public class TemplateController {
     ALiMiniServiceI aLiMiniServiceI;
 
     /**
-     * 微信发送模版
+     * 发送模版
      * @param request
      * @return
      */
-    @PostMapping(value = "/wx/template/send")
+    @PostMapping(value = "/template/send")
     public ApiResult sendWxTemplate(HttpServletRequest request){
-        return wxMiniServiceI.sendWxTemplate(request);
+        return null;
+        //return wxMiniServiceI.sendWxTemplate(request);
     }
 
-    @PostMapping(value = "/ali/template/send")
-    public ApiResult sendAliTemplate(HttpServletRequest request){
-        return aLiMiniServiceI.sendAliTemplate(request);
-    }
+
 }

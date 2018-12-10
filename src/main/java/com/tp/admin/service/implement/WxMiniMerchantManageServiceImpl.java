@@ -345,12 +345,11 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
         RefundSearch refundSearch = new RefundSearch();
-        List<Refund> refundList = new ArrayList<Refund>();
         if (null != terIds && !terIds.isEmpty()) {
             refundSearch.setTerIds(terIds);
-            refundList =  refundDao.findRefundInfo(refundSearch);
+            refundSearch.setResult(refundDao.findRefundInfo(refundSearch));
         }
-        return ApiResult.ok(refundList);
+        return ApiResult.ok(refundSearch.getResult());
     }
 
     @Override

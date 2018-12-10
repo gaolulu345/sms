@@ -15,9 +15,10 @@ import java.util.Map;
 public class TemplateSearch extends Search {
 
     private String touser;//微信支付宝模板发送人
-    private Integer form_id;
+    private Integer formId;
     private String data;
     private String page;
+    private Integer type;
 
 
 

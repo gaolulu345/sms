@@ -35,28 +35,28 @@ public class ALiMiniServiceImpl implements ALiMiniServiceI {
     HttpHelperI httpHelper;
 
     @Override
-    public ApiResult sendAliTemplate(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
-        TemplateSearch templateSearch = new Gson().fromJson(body,TemplateSearch.class);
-        if (templateSearch.getTouser() == null || templateSearch.getForm_id() == null || templateSearch.getData() == null){
+    public ApiResult sendAliTemplate(TemplateSearch templateSearch) {
+        //String body = httpHelper.jsonBody(request);
+        //TemplateSearch templateSearch = new Gson().fromJson(body,TemplateSearch.class);
+        if (templateSearch.getTouser() == null || templateSearch.getFormId() == null || templateSearch.getData() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"参数");
         }
-        String AliUrl = "https://openapi.alipay.com/gateway.do";
-        String AppId = templateDao.searchMasterplateTool("ALiMiniAppID");
-        String ALiMiniAppPublicKey = templateDao.searchMasterplateTool("ALiMiniAppPublicKey");
-        String ALiMiniAppPrivateKey = templateDao.searchMasterplateTool("ALiMiniAppPrivateKey");
-        String ALiMiniTemplateId = templateDao.searchMasterplateTool("ALiMiniTemplateId");
-        if (null == AppId || null == ALiMiniAppPrivateKey || null == ALiMiniAppPublicKey || AppId.equals("") || ALiMiniAppPrivateKey.equals("") || ALiMiniAppPublicKey.equals("")){
+        String aliUrl = "https://openapi.alipay.com/gateway.do";
+        String appId = templateDao.searchMasterplateTool("ALiMiniAppID");
+        String aLiMiniAppPublicKey = templateDao.searchMasterplateTool("ALiMiniAppPublicKey");
+        String aLiMiniAppPrivateKey = templateDao.searchMasterplateTool("ALiMiniAppPrivateKey");
+        String aLiMiniTemplateId = templateDao.searchMasterplateTool("ALiMiniTemplateId");
+        if (null == appId || null == aLiMiniAppPrivateKey || null == aLiMiniAppPublicKey || appId.equals("") || aLiMiniAppPrivateKey.equals("") || aLiMiniAppPublicKey.equals("")){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("to_user_id",String.valueOf(templateSearch.getTouser()));
-        jsonObject.put("form_id",templateSearch.getForm_id());
-        jsonObject.put("user_template_id",ALiMiniTemplateId);
+        jsonObject.put("to_user_id",templateSearch.getTouser());
+        jsonObject.put("form_id",templateSearch.getFormId());
+        jsonObject.put("user_template_id",aLiMiniTemplateId);
         jsonObject.put("page",templateSearch.getPage());
         jsonObject.put("data",templateSearch.getData());
 
-        AlipayClient alipayClient = new DefaultAlipayClient(AliUrl,AppId,ALiMiniAppPrivateKey,"json","GBK",ALiMiniAppPublicKey,"RSA2");
+        AlipayClient alipayClient = new DefaultAlipayClient(aliUrl,appId,aLiMiniAppPrivateKey,"json","GBK",aLiMiniAppPublicKey,"RSA2");
         AlipayOpenAppMiniTemplatemessageSendRequest request1 = new AlipayOpenAppMiniTemplatemessageSendRequest();
         request1.setBizContent(jsonObject.toString());
 
@@ -72,7 +72,7 @@ public class ALiMiniServiceImpl implements ALiMiniServiceI {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
         if (aliRes.equals("10000")){
-            logger.info("接收人：{} formId {}  发送成功",templateSearch.getTouser(),templateSearch.getForm_id());
+            logger.info("接收人：{} formId {}  发送成功",templateSearch.getTouser(),templateSearch.getFormId());
             return ApiResult.ok();
         }
         if (aliRes.equals("20000")){
@@ -80,23 +80,23 @@ public class ALiMiniServiceImpl implements ALiMiniServiceI {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "invalid service");
         }
         if (aliRes.equals("20001")) {
-            logger.error("接收人：{} formId {} ", templateSearch.getTouser(),templateSearch.getForm_id(), "no auth to payback");
+            logger.error("接收人：{} formId {} ", templateSearch.getTouser(),templateSearch.getFormId(), "no auth to payback");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "no auth to payback");
         }
         if (aliRes.equals("40001")) {
-            logger.error("接收人：{} formId {} ", templateSearch.getTouser(),templateSearch.getForm_id(), "param miss");
+            logger.error("接收人：{} formId {} ", templateSearch.getTouser(),templateSearch.getFormId(), "param miss");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "param miss");
         }
         if (aliRes.equals("40002")) {
-            logger.error("接收人：{} formId {} ", templateSearch.getTouser(),templateSearch.getForm_id(), "illegal param");
+            logger.error("接收人：{} formId {} ", templateSearch.getTouser(),templateSearch.getFormId(), "illegal param");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "illegal param");
         }
         if (aliRes.equals("40004")) {
-            logger.error("接收人：{} formId {} ", templateSearch.getTouser(),templateSearch.getForm_id(), "service fails");
+            logger.error("接收人：{} formId {} ", templateSearch.getTouser(),templateSearch.getFormId(), "service fails");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "service fails");
         }
         if (aliRes.equals("40006")) {
-            logger.error("接收人：{} formId {} ", templateSearch.getTouser(),templateSearch.getForm_id(), "another: no auth to payback");
+            logger.error("接收人：{} formId {} ", templateSearch.getTouser(),templateSearch.getFormId(), "another: no auth to payback");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "another: no auth to payback");
         }
         return ApiResult.error(ExceptionCode.UNKNOWN_EXCEPTION);

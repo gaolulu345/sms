@@ -68,18 +68,21 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
     }
 
     @Override
-    public ApiResult sendWxTemplate(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
-        TemplateSearch templateSearch = new Gson().fromJson(body,TemplateSearch.class);
-        if (templateSearch.getForm_id() == null || templateSearch.getTouser() == null || templateSearch.getData() == null){
+    public ApiResult sendWxTemplate(TemplateSearch templateSearch) {
+        //String body = httpHelper.jsonBody(request);
+        //TemplateSearch templateSearch = new Gson().fromJson(body,TemplateSearch.class);
+        if (templateSearch.getFormId() == null || templateSearch.getTouser() == null || templateSearch.getData() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"缺少参数");
         }
         MultiValueMap<String,Object> requestBody = new LinkedMultiValueMap<>();
         String templateId = templateDao.searchMasterplateTool("WXTEMPLATE_ID");
-        requestBody.add("form_id",templateSearch.getForm_id());
+        requestBody.add("form_id",templateSearch.getFormId());
         requestBody.add("touser",templateSearch.getTouser());
         requestBody.add("data",templateSearch.getData());
         requestBody.add("template_id",templateId);
+        if (templateSearch.getPage() != null){
+            requestBody.add("page",templateSearch.getPage());
+        }
         String appId = templateDao.searchMasterplateTool("WXAPP_ID");
         String appSecret = templateDao.searchMasterplateTool("WXAPP_SECRET");
         String accessToken = getAccessToken(appId,appSecret);
