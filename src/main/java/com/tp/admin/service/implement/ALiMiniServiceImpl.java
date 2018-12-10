@@ -36,8 +36,6 @@ public class ALiMiniServiceImpl implements ALiMiniServiceI {
 
     @Override
     public ApiResult sendAliTemplate(TemplateSearch templateSearch) {
-        //String body = httpHelper.jsonBody(request);
-        //TemplateSearch templateSearch = new Gson().fromJson(body,TemplateSearch.class);
         if (templateSearch.getTouser() == null || templateSearch.getFormId() == null || templateSearch.getData() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"参数");
         }
@@ -76,7 +74,7 @@ public class ALiMiniServiceImpl implements ALiMiniServiceI {
             return ApiResult.ok();
         }
         if (aliRes.equals("20000")){
-            logger.error("");
+            logger.error("接收人：{} formId {} ",templateSearch.getTouser(),templateSearch.getFormId(),"invalid service");
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "invalid service");
         }
         if (aliRes.equals("20001")) {

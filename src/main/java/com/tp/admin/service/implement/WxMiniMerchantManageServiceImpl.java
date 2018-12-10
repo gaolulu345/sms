@@ -347,7 +347,13 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         RefundSearch refundSearch = new RefundSearch();
         if (null != terIds && !terIds.isEmpty()) {
             refundSearch.setTerIds(terIds);
-            refundSearch.setResult(refundDao.findRefundInfo(refundSearch));
+            List<Refund> list = refundDao.findRefundInfo(refundSearch);
+            if (list != null){
+                for (Refund refund: list) {
+                    refund.build();
+                }
+            }
+            refundSearch.setResult(list);
         }
         return ApiResult.ok(refundSearch.getResult());
     }
