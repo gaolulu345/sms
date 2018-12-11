@@ -46,7 +46,7 @@ public class AdminTemplateInfoServiceImpl implements AdminTemplateInfoServiceI {
         if (adminTemplateInfo.getType() == 3){
             wxMiniServiceI.sendWxTemplate(templateSearch);
         }else if (adminTemplateInfo.getType() == 4){
-            aliMiniServiceI.sendAliTemplate(templateSearch);
+            //aliMiniServiceI.sendAliTemplate(templateSearch);
         }
         return ApiResult.ok();
     }
