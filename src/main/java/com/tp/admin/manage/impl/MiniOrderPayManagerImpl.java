@@ -8,6 +8,7 @@ import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.tp.admin.common.ConfigUtil;
 import com.tp.admin.common.MiniConstant;
+import com.tp.admin.config.AdminProperties;
 import com.tp.admin.data.entity.Order;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -20,12 +21,14 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -33,6 +36,9 @@ import java.util.*;
 public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
 
     private static final Logger logger = LoggerFactory.getLogger(MiniOrderPayManagerImpl.class);
+
+    @Autowired
+    AdminProperties adminProperties;
 
     @Override
     public void aliPayBack(Order order) {
@@ -43,7 +49,8 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
         String praviteKey = MiniConstant.ALiMiniAppPublicKey;
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("out_trade_no", order.getAlipayStr());
-        String refund_amount = String.valueOf(Float.valueOf(order.getAmount()) / 100);
+        String refund_amount =BigDecimal.valueOf(Long.valueOf(order.getAmount()))
+                .divide(new BigDecimal(100.00)).toString();
         jsonObject.put("refund_amount",refund_amount );
         AlipayClient alipayClient = new DefaultAlipayClient(aliURL, appId, privateKey, "json", "GBK", praviteKey, "RSA2");
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
@@ -100,7 +107,7 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
             String key = MiniConstant.WXMiniAppApiKey; // key
             SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
             commonParams(packageParams);
-            packageParams.put("out_trade_no", String.valueOf(order.getId()));// 商户订单号
+            packageParams.put("out_trade_no", adminProperties.washOrderPrefix()+ String.valueOf(order.getId()));// 商户订单号
             packageParams.put("out_refund_no", order.getWxpayStr());//商户退款单号
             String totalFee = String.valueOf(order.getAmount());
             packageParams.put("total_fee", totalFee);// 总金额
