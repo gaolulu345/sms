@@ -37,7 +37,7 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
     @Autowired
     HttpHelperI httpHelper;
 
-   /* @Override
+    @Override
     public ApiResult sendAliTemplate(TemplateSearch templateSearch) {
         if (templateSearch.getTouser() == null || templateSearch.getFormId() == null || templateSearch.getData() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"参数");
@@ -125,5 +125,5 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION, "another: no auth to payback");
         }
         return ApiResult.error(ExceptionCode.UNKNOWN_EXCEPTION);
-    }*/
+    }
 }
