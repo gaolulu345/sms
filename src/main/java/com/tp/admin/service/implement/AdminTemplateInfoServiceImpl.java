@@ -44,9 +44,9 @@ public class AdminTemplateInfoServiceImpl implements AdminTemplateInfoServiceI {
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
         if (adminTemplateInfo.getType() == 3){
-            //wxMiniServiceI.sendWxTemplate(templateSearch);
+            wxMiniServiceI.sendWxTemplate(templateSearch);
         }else if (adminTemplateInfo.getType() == 4){
-            //aliMiniServiceI.sendAliTemplate(templateSearch);
+            aliMiniServiceI.sendAliTemplate(templateSearch);
         }
         return ApiResult.ok();
     }

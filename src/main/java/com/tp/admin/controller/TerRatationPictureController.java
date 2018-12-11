@@ -16,7 +16,7 @@ public class TerRatationPictureController {
     @Autowired
     TerRatationPictureServiceI terRatationPictureServiceI;
 
-    public static final String ROUTER_INDEX = "/api/open/ter/ratation/picture";
+    public static final String ROUTER_INDEX = "/api/private/ter/ratation/picture";
 
 
     /**
