@@ -3,9 +3,11 @@ package com.tp.admin.controller.wash;
 
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.service.AdminTerPropertyServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,7 +41,18 @@ public class AdminTerPropertyController {
      */
     @PostMapping("/site/online/start")
     public ApiResult onlineFreeStart(HttpServletRequest request){
-        return null;
-        //return adminTerPropertyServiceI.onlineFreeStart(request);
+        return adminTerPropertyServiceI.onlineFreeStart(request);
     }
+
+    /**
+     * 修改网点属性信息
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/info/update")
+    public ApiResult terPropertyInfoUpdate(HttpServletRequest request,@RequestBody AdminTerPropertyDTO adminTerPropertyDTO){
+        return adminTerPropertyServiceI.updateTerProperty(request,adminTerPropertyDTO);
+    }
+
 }

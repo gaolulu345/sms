@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tp.admin.common.Constant;
-import com.tp.admin.config.TpProperties;
+import com.tp.admin.config.AdminProperties;
 import com.tp.admin.data.wash.WashSiteRequest;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -28,7 +28,7 @@ public class HttpHelperImpl implements HttpHelperI {
     private Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    TpProperties tpProperties;
+    AdminProperties adminProperties;
 
     @Override
     public String jsonBody(HttpServletRequest request) {
@@ -68,7 +68,7 @@ public class HttpHelperImpl implements HttpHelperI {
     @Override
     public WashSiteRequest signInfo(Integer deviceId, String orderId, String msg) {
         JsonObject jsonObject = new JsonObject();
-        String key = tpProperties.getWashManageKey();
+        String key = adminProperties.getWashManageKey();
         Long timestamp = System.currentTimeMillis();
         jsonObject.addProperty("deviceId", deviceId);
         try {

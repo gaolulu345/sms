@@ -30,6 +30,10 @@ public class WxMiniSearch extends Search {
 
     String[] imgs;
 
+    Integer userType;//支付宝或者微信
+
+    Integer washCardType;
+
     @Override
     public void builData() {
         super.build();

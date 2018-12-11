@@ -5,7 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.ajax.ResultCode;
 import com.tp.admin.common.Constant;
-import com.tp.admin.config.TpProperties;
+import com.tp.admin.config.AdminProperties;
 import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.dto.UploadFileDTO;
@@ -61,7 +61,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     WashSiteServiceI washSiteService;
 
     @Autowired
-    TpProperties tpProperties;
+    AdminProperties adminProperties;
 
     @Autowired
     AliyunOssManagerI aliyunOssManager;
@@ -125,7 +125,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
         String jsonBody = new Gson().toJson(washSiteRequest);
-        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                         .SITE_ONLINE,jsonBody);
         return buildApiResult(result,dto,adminMaintionEmployee,"",WashTerOperatingLogTypeEnum.ONLINE);
     }
@@ -143,7 +143,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", wxMiniSearch.getMsg());
         String jsonBody = new Gson().toJson(washSiteRequest);
-        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                         .SITE_OFFLINE,jsonBody);
         return buildApiResult(result,dto,adminMaintionEmployee,"",WashTerOperatingLogTypeEnum.NOT_ONLINE);
     }
@@ -170,7 +170,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
         String jsonBody = new Gson().toJson(washSiteRequest);
-        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                 .SITE_RESET, jsonBody);
         return buildApiResult(result,dto,adminMaintionEmployee,imgs.toString(),WashTerOperatingLogTypeEnum.TER_RESET);
     }
@@ -187,7 +187,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
         String jsonBody = new Gson().toJson(washSiteRequest);
-        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                 .SITE_STATUS_RESET, jsonBody);
         return buildApiResult(result,dto,adminMaintionEmployee,"",WashTerOperatingLogTypeEnum.TER_RESET_STATE);
     }

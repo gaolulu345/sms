@@ -5,22 +5,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class UserSearch extends Search {
+public class AdminAutoSearch extends Search {
 
-    Integer id;
-    String phone;
-    Integer userType;
-    Integer washCardType;
-    List<Integer> ids;
+    String key;
+
+    Integer type;
 
     @Override
-    public void builData() {
+    protected void builData() {
         super.build();
     }
 }

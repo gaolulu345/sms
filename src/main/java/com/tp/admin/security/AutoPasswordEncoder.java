@@ -12,7 +12,7 @@ public class AutoPasswordEncoder implements PasswordEncoder {
 
     private static PasswordEncoder INSTANCE = null;
 
-    /*@Override
+    @Override
     public String encode(CharSequence charSequence) {
         return charSequence.toString();
     }
@@ -20,20 +20,8 @@ public class AutoPasswordEncoder implements PasswordEncoder {
     @Override
     public boolean matches(CharSequence charSequence, String s) {
         return charSequence.toString().equals(s);
-    }*/
-
-    @Override
-    public String encode(CharSequence charSequence) {
-        String salt = UUID.randomUUID().toString();
-        byte[] passwordAndSaltBytes = (charSequence.toString() + salt).getBytes();
-
-        return null;
     }
 
-    @Override
-    public boolean matches(CharSequence charSequence, String s) {
-        return charSequence.toString().equals(s);
-    }
     public static PasswordEncoder getInstance() {
         if (null == INSTANCE) {
             synchronized (AutoPasswordEncoder.class){

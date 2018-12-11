@@ -27,4 +27,6 @@ public interface AdminMaintionEmployeeDao {
 
     int updateEnable(MaintionEmployeeSearch maintionEmployeeSearch);
 
+    int updateMaintionLoginTime(AdminMaintionEmployee adminMaintionEmployee);
+
 }

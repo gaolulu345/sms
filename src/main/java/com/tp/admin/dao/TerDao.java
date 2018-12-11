@@ -2,6 +2,7 @@ package com.tp.admin.dao;
 
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
+import com.tp.admin.data.entity.AdminTerProperty;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.TerPropertySearch;
 import org.apache.ibatis.annotations.Param;
@@ -24,5 +25,7 @@ public interface TerDao {
     AdminTerPropertyDTO findTerStartInfo(int terId);
 
     int updateOnlineFreeStartState(int terId);
+
+    int updateTerProperty(AdminTerPropertyDTO adminTerPropertyDTO);
 
 }

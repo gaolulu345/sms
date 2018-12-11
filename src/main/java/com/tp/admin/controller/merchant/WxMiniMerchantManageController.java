@@ -146,9 +146,18 @@ public class WxMiniMerchantManageController {
      * @param request
      * @return
      */
-    @PostMapping(value = "/merchant/refund/list")
+    @PostMapping(value = "/refund/list")
     public ApiResult merchantRefundInfo(HttpServletRequest request){
         return wxMiniMerchantManageService.merchantRefundSearch(request);
     }
 
+    /**
+     * 查询商家"我的用户会员卡"信息
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/wash/card/user/info")
+    public ApiResult merchantWashCardUserInfo(HttpServletRequest request){
+        return wxMiniMerchantManageService.merchantWashCardUserInfo(request);
+    }
 }

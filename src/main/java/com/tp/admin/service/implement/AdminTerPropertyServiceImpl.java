@@ -4,18 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.ajax.ResultCode;
-import com.tp.admin.common.Constant;
-import com.tp.admin.config.TpProperties;
 import com.tp.admin.dao.AdminMerchantEmployeeDao;
+import com.tp.admin.dao.AdminTerOperatingLogDao;
 import com.tp.admin.dao.PartnerDao;
 import com.tp.admin.dao.TerDao;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
+import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.parameter.WxMiniSearch;
-import com.tp.admin.data.search.TerPropertySearch;
-import com.tp.admin.data.wash.WashSiteRequest;
+import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -49,10 +48,10 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     WashSiteServiceI washSiteServiceI;
 
     @Autowired
-    TpProperties tpProperties;
+    WxMiniMerchantManageServiceI wxMiniMerchantManageServiceI;
 
     @Autowired
-    WxMiniMerchantManageServiceI wxMiniMerchantManageServiceI;
+    AdminTerOperatingLogDao adminTerOperatingLogDao;
 
     //微信小程序
     @Override
@@ -63,18 +62,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
         }
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
-        List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
-        if (null != terIds && !terIds.isEmpty()){
-            int flag = 0;
-            for (int terId : terIds) {
-                if (wxMiniSearch.getTerId() == terId){
-                    flag = 1;
-                }
-            }
-            if (flag == 0){
-                throw new BaseException(ExceptionCode.PARAMETER_WRONG,"terId mismatch partnerId");
-            }
-        }
+        checkTerAndPartner(wxMiniSearch.getTerId(),adminMerchantEmployee.getPartnerId());
         AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(wxMiniSearch.getTerId());
         adminTerPropertyDTO.build();
         return ApiResult.ok(adminTerPropertyDTO);
@@ -94,49 +82,32 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             adminTerPropertyDTO.setStartOnline(1);
             //添加日志
             TerInfoDTO terInfoDTO = washSiteServiceI.terCheck(wxMiniSearch);
-            WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
-            String jsonBody = new Gson().toJson(washSiteRequest);
-            String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
-                    .SITE_ONLINE_START, jsonBody);
-            return buildApiResult(result,terInfoDTO,adminMerchantEmployee,"",WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED);
+            AdminTerOperatingLog adminTerOperatingLog = new AdminTerOperatingLog();
+            adminTerOperatingLog.setTerId(wxMiniSearch.getTerId());
+            adminTerOperatingLog.setMerchantId(adminMerchantEmployee.getId());
+            adminTerOperatingLog.setUsername(adminMerchantEmployee.getName());
+            adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MERCHANT.getValue());
+            adminTerOperatingLog.setTitle(WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED.getDesc());
+            adminTerOperatingLog.setIntros(adminMerchantEmployee.getName() + " 操作" + terInfoDTO.getTitle() + WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED.getDesc());
+            adminTerOperatingLog.setImgs("");
+            adminTerOperatingLogDao.insert(adminTerOperatingLog);
         }
-        //return Api;
-        return null;
+        return ApiResult.ok();
     }
 
-
-    //APP
-    /*@Override
-    public ApiResult terPropertySearch(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
-        TerPropertySearch terPropertySearch = new Gson().fromJson(body, TerPropertySearch.class);
-        if (null == terPropertySearch.getTerId()) {
+    @Override
+    public ApiResult updateTerProperty(HttpServletRequest request,AdminTerPropertyDTO adminTerPropertyDTO) {
+        if (null == adminTerPropertyDTO.getTerId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
         }
-        AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(terPropertySearch.getTerId());
-        adminTerPropertyDTO.build();
-        return ApiResult.ok(adminTerPropertyDTO);
-    }*/
-
-    //APP
-    /*@Override
-    public ApiResult onlineFreeStart(HttpServletRequest request) {
-        String body = httpHelper.jsonBody(request);
-        TerPropertySearch terPropertySearch = new Gson().fromJson(body,TerPropertySearch.class);
-        if (null == terPropertySearch.getTerId()) {
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
+        AdminMerchantEmployee adminMerchantEmployee = check(adminTerPropertyDTO.getOpenId());
+        checkTerAndPartner(adminTerPropertyDTO.getTerId(),adminMerchantEmployee.getPartnerId());
+        int res = terDao.updateTerProperty(adminTerPropertyDTO);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
-        AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(terPropertySearch.getTerId());
-        if (adminTerPropertyDTO.getStartOnline() != 1){
-            terDao.updateOnlineFreeStartState(terPropertySearch);
-            adminTerPropertyDTO.setStartOnline(1);
-            //添加日志
-
-        }
-        adminTerPropertyDTO.build();
-        return ApiResult.ok(adminTerPropertyDTO);
-    }*/
-
+        return ApiResult.ok();
+    }
 
     private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMerchantEmployee
             adminMerchantEmployee, String img, WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum
@@ -181,4 +152,23 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         }
         return adminMerchantEmployee;
     }
+
+    @Override
+    public void checkTerAndPartner(int terId, int partnerId) {
+        List<Integer> terIds = terDao.findRelatedTerByPartnerId(partnerId);
+        if (null != terIds && !terIds.isEmpty()){
+            int flag = 0;
+            for (int terIdc : terIds) {
+                if (terId == terIdc){
+                    flag = 1;
+                    break;
+                }
+            }
+            if (flag == 0){
+                throw new BaseException(ExceptionCode.PARAMETER_WRONG,"terId mismatch partnerId");
+            }
+        }
+    }
+
+
 }

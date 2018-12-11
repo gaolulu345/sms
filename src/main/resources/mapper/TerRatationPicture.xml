@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.TerRatationDao">
+
+	<insert id="uploadTerRatationPicture" parameterType="com.tp.admin.data.search.TerRatationPictureSearch">
+		INSERT INTO
+			ter_ratation_picture(ter_id,create_time,picture,type)
+		VALUES(
+			#{terId},
+			#{createTime},
+			#{picture},
+			#{type})
+	</insert>
+
+	<select id="terRatationPictureShow" parameterType="com.tp.admin.data.search.TerRatationPictureSearch" resultMap="TerRatationPictureMap">
+		SELECT id,ter_id,deleted,picture,enable,ter_ratation_picture.type
+			FROM ter_ratation_picture
+			WHERE
+			deleted = 0
+			AND
+			ter_id = #{terId}
+		<if test="pageSize != null and pageSize !=0 and offset != null">
+			LIMIT #{offset},#{pageSize}
+		</if>
+	</select>
+
+	<update id="startTerRatationPicture" parameterType="com.tp.admin.data.search.TerRatationPictureSearch">
+		UPDATE
+		ter_ratation_picture
+		<trim prefix="set" suffixOverrides=",">
+			<if test="enable != null">
+				enable=#{enable},
+			</if>
+			<if test="enableTime != null">
+				enable_time = #{enableTime},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteTerRatationPicture" parameterType="com.tp.admin.data.search.TerRatationPictureSearch">
+		UPDATE
+			ter_ratation_picture
+		SET
+			deleted = #{deleted}
+		WHERE
+		id IN
+		<foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<insert id="addTerRatationLog" parameterType="com.tp.admin.data.entity.TerRatationPictureLog">
+		INSERT INTO
+			ter_ratation_picture_log(
+			admin_name,
+			info,
+			ter_ratation_picture_id)
+			VALUES(
+			#{adminName},
+			#{info},
+			#{terRatationPictureId}
+			)
+	</insert>
+
+	<resultMap id="TerRatationPictureMap" type="com.tp.admin.data.entity.TerRatationPicture">
+		<id column="id" property="id" javaType="INTEGER"/>
+		<result column="ter_id" property="terId" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+		<result column="deleted" property="deleted" jdbcType="BIT"/>
+		<result column="picture" property="picture" jdbcType="VARCHAR"/>
+		<result column="enable" property="enable" jdbcType="BIT"/>
+		<result column="enable_time" property="enableTime" jdbcType="TIMESTAMP"/>
+		<result column="type" property="type" jdbcType="TINYINT"/>
+	</resultMap>
+
+</mapper>

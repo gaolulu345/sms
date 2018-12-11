@@ -157,8 +157,10 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
             // 免费的什么都不做.直接更新数据库。
         }else if (orderType == OrderTypeEnum.ALIPAY.ordinal()) {
             miniOrderPayManager.aliPayBack(order);
+            //miniOrderPayManager.aliPayBackCredence(order);
         }else if (orderType == OrderTypeEnum.WXPAY.ordinal() || orderType == OrderTypeEnum.TEST.ordinal()) {
             miniOrderPayManager.wxinPayBack(order);
+            //miniOrderPayManager.wxinPayBackCredence(order);
         }else {
             // 如果订单状态不正确则拒绝退款。
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);

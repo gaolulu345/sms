@@ -84,6 +84,12 @@
         id = #{id}
     </update>
 
+    <update id="updateMaintionLoginTime" parameterType="com.tp.admin.data.entity.AdminMaintionEmployee">
+        UPDATE admin_maintion_employee
+		SET last_login_time=#{lastLoginTime}
+		WHERE id=#{id}
+    </update>
+
     <resultMap id="AdminMaintionEmployeeMap" type="com.tp.admin.data.entity.AdminMaintionEmployee">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="mini_wx_id" property="miniWxId" jdbcType="VARCHAR"/>

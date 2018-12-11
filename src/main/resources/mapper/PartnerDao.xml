@@ -29,7 +29,12 @@
         FROM
         partner AS p INNER JOIN partner_details AS pd ON p.id = pd.partner_id
     </select>
-
+    
+    <select id="partnerWashCardIdSearch" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT id
+        FROM partner_wash_card
+        WHERE create_partner_id=#{createPartnerId}
+    </select>
 
     <resultMap id="PartnerMap" type="com.tp.admin.data.entity.Partner">
         <id column="id" property="id" jdbcType="INTEGER" />

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 
 @Service(value = "wxMiniMerchantAuthService")
 public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
@@ -88,6 +89,9 @@ public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
         if (null == partner) {
             throw new BaseException(ExceptionCode.USER_NOT_PERMISSION);
         }
+        //更改商户的登陆时间
+        adminMerchantEmployee.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
+        adminMerchantEmployeeDao.updateMerchantLoginTime(adminMerchantEmployee);
         AdminMerchantEmployeeInfoDTO adminMerchantEmployeeInfoDTO = new AdminMerchantEmployeeInfoDTO();
         adminMerchantEmployeeInfoDTO.setId(adminMerchantEmployee.getId());
         adminMerchantEmployeeInfoDTO.setOpenId(adminMerchantEmployee.getMiniWxId());

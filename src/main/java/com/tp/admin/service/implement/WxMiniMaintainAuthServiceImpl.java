@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 
 @Service(value = "wxMiniMaintainAuthService")
 public class WxMiniMaintainAuthServiceImpl implements WxMiniAuthServiceI {
@@ -49,6 +50,8 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniAuthServiceI {
         if (adminMaintionEmployee.isDeleted()) {
             throw new BaseException(ExceptionCode.USER_DELETE_REGISTERED);
         }
+        adminMaintionEmployee.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
+        adminMaintionEmployeeDao.updateMaintionLoginTime(adminMaintionEmployee);
         return ApiResult.ok(adminMaintionEmployee);
     }
 

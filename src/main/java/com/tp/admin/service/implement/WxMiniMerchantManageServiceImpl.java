@@ -5,12 +5,9 @@ import com.google.gson.JsonSyntaxException;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.ajax.ResultCode;
 import com.tp.admin.common.Constant;
-import com.tp.admin.config.TpProperties;
+import com.tp.admin.config.AdminProperties;
 import com.tp.admin.dao.*;
-import com.tp.admin.data.dto.DataTotalDTO;
-import com.tp.admin.data.dto.OrderDTO;
-import com.tp.admin.data.dto.TerInfoDTO;
-import com.tp.admin.data.dto.UploadFileDTO;
+import com.tp.admin.data.dto.*;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
 import com.tp.admin.data.entity.Partner;
@@ -18,6 +15,7 @@ import com.tp.admin.data.entity.Refund;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.OrderSearch;
 import com.tp.admin.data.search.RefundSearch;
+import com.tp.admin.data.search.UserSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.data.wash.WashSiteRequest;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
@@ -41,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -61,7 +60,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     HttpHelperI httpHelper;
 
     @Autowired
-    TpProperties tpProperties;
+    AdminProperties adminProperties;
 
     @Autowired
     TerDao terDao;
@@ -77,6 +76,9 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
 
     @Autowired
     RefundDao refundDao;
+
+    @Autowired
+    UserDao userDao;
 
     @Override
     public ApiResult moneyTotal(HttpServletRequest request) {
@@ -198,7 +200,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
         String jsonBody = new Gson().toJson(washSiteRequest);
-        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                 .SITE_RESET, jsonBody);
         return buildApiResult(result, dto, adminMerchantEmployee, imgs.toString(), WashTerOperatingLogTypeEnum
                 .TER_RESET);
@@ -215,7 +217,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
         String jsonBody = new Gson().toJson(washSiteRequest);
-        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                 .SITE_STATUS_RESET, jsonBody);
         return buildApiResult(result, dto, adminMerchantEmployee, "", WashTerOperatingLogTypeEnum.TER_RESET_STATE);
     }
@@ -231,7 +233,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
         String jsonBody = new Gson().toJson(washSiteRequest);
-        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                 .SITE_ONLINE, jsonBody);
         return buildApiResult(result, dto, adminMerchantEmployee, "", WashTerOperatingLogTypeEnum.ONLINE);
     }
@@ -246,7 +248,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
         WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", wxMiniSearch.getMsg());
         String jsonBody = new Gson().toJson(washSiteRequest);
-        String result = httpHelper.sendPostByJsonData(tpProperties.getWashManageServer() + Constant.RemoteTer
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                 .SITE_OFFLINE, jsonBody);
         return buildApiResult(result, dto, adminMerchantEmployee, "", WashTerOperatingLogTypeEnum.NOT_ONLINE);
     }
@@ -342,12 +344,17 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         List<Integer> terIds = terDao.findRelatedTerByPartnerId(adminMerchantEmployee.getPartnerId());
         RefundSearch refundSearch = new RefundSearch();
-        List<Refund> refundList = new ArrayList<Refund>();
         if (null != terIds && !terIds.isEmpty()) {
             refundSearch.setTerIds(terIds);
-            refundList =  refundDao.findRefundInfo(refundSearch);
+            List<Refund> list = refundDao.findRefundInfo(refundSearch);
+            if (list != null){
+                for (Refund refund: list) {
+                    refund.build();
+                }
+            }
+            refundSearch.setResult(list);
         }
-        return ApiResult.ok(refundList);
+        return ApiResult.ok(refundSearch.getResult());
     }
 
     @Override
@@ -372,6 +379,64 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
             log.error("维保人员操作日志存储失败 {} " + adminTerOperatingLog.toString());
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
+    }
+
+    @Override
+    public ApiResult merchantWashCardUserInfo(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (wxMiniSearch.getOpenId() == null){
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty openId");
+        }
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        List<Integer> washCardIds = partnerDao.partnerWashCardIdSearch(adminMerchantEmployee.getPartnerId());
+        UserSearch userSearch = new UserSearch();
+        List<UserMemberDTO> userIdsOfUserMember = new ArrayList<>();
+        if (washCardIds != null && washCardIds.size() != 0){
+            userSearch.setIds(washCardIds);
+            if (wxMiniSearch.getWashCardType() != null){
+                userSearch.setWashCardType(wxMiniSearch.getWashCardType());
+            }
+            //查找会员id以及信息
+            userIdsOfUserMember = userDao.userIdOfWashCard(userSearch);
+            if (userIdsOfUserMember != null && userIdsOfUserMember.size() != 0){
+                List<Integer> userIds = new ArrayList<>();
+                for (UserMemberDTO userId:userIdsOfUserMember) {
+                    userIds.add(userId.getId());
+                }
+                if (userIds != null && userIds.size() != 0){
+                    userSearch.setIds(userIds);
+                }
+                if (wxMiniSearch.getUserType() != null){
+                    userSearch.setUserType(wxMiniSearch.getUserType());
+                }
+                List<UserMemberDTO> list = userDao.listUserInfoOfWashCard(userSearch);
+                if (list != null && list.size() != 0){
+                    for (UserMemberDTO userMemberDTO:userIdsOfUserMember) {
+                        for (UserMemberDTO userMemberDTOC:list) {
+                            if (userMemberDTOC.getId().equals(userMemberDTO.getId())){
+                                userMemberDTO.setAvatar(userMemberDTOC.getAvatar());
+                                userMemberDTO.setCity(userMemberDTOC.getCity());
+                                userMemberDTO.setNickname(userMemberDTOC.getNickname());
+                                userMemberDTO.setPhone(userMemberDTOC.getPhone());
+                                userMemberDTO.setType(userMemberDTOC.getType());
+                                userMemberDTO.build();
+                                continue;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        Iterator<UserMemberDTO> it = userIdsOfUserMember.iterator();
+        while (it.hasNext()){
+            UserMemberDTO userMemberDTO = it.next();
+            if (userMemberDTO.getType() == null || userMemberDTO.getWashCardType() == null){
+                it.remove();
+            }
+        }
+        return ApiResult.ok(userIdsOfUserMember);
     }
 
     private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMerchantEmployee

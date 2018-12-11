@@ -112,7 +112,10 @@
 				atp.ter_remark,
 				atp.high_limit,
 				atp.wide_limit,
-				atp.start_online
+				atp.start_online,
+				atp.ad_exist,
+				atp.screen_wide,
+				atp.screen_high
         FROM admin_ter_property AS atp
         INNER JOIN ter AS t
         ON t.id=atp.ter_id
@@ -124,6 +127,53 @@
 		SET start_online=1
 		WHERE
 		ter_id=#{terId}
+	</update>
+
+	<update id="updateTerProperty" parameterType="com.tp.admin.data.dto.AdminTerPropertyDTO">
+		UPDATE `admin_ter_property`
+		<trim prefix="set" suffixOverrides=",">
+			<if test="netMethod != null">
+				`net_method` = #{netMethod},
+			</if>
+			<if test="videoControl != null">
+				`video_control` = #{videoControl},
+			</if>
+			<if test="bubbleLimit != null">
+				`bubble_limit` = #{bubbleLimit},
+			</if>
+			<if test="terClientVersion  != null">
+				`ter_clientversion` = #{terClientVersion},
+			</if>
+			<if test="terBusiMode  != null">
+				`ter_busi_mode` = #{terBusiMode},
+			</if>
+			<if test="terModel != null">
+				`ter_model` = #{terModel},
+			</if>
+			<if test="terRemark != null">
+				`ter_remark` = #{terRemark},
+			</if>
+			<if test="highLimit != null">
+				`high_limit` = #{highLimit},
+			</if>
+			<if test="wideLimit != null">
+				`wide_limit` = #{wideLimit},
+			</if>
+			<if test="startOnline != null">
+				`start_online` = #{startOnline},
+			</if>
+			<if test="adExist != null">
+				`ad_exist` = #{adExist},
+			</if>
+			<if test="screenWide != null">
+				`screen_wide` = #{screenWide},
+			</if>
+			<if test="screenHigh != null">
+				`screen_high` = #{screenHigh},
+			</if>
+		</trim>
+		WHERE
+			ter_id=#{terId}
 	</update>
 
     <resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
@@ -138,18 +188,21 @@
 
 	<resultMap id="AdminTerPropertyDTOMap" type="com.tp.admin.data.dto.AdminTerPropertyDTO">
 		<id column="terId" property="terId" javaType="INTEGER"/>
-		<id column="ip" property="ip" jdbcType="VARCHAR" />
-		<id column="port" property="port" jdbcType="VARCHAR" />
-		<id column="net_method" property="netMethod" jdbcType="INTEGER"/>
-		<id column="video_control" property="videoControl" jdbcType="VARCHAR"/>
-		<id column="bubble_limit" property="bubbleLimit" jdbcType="INTEGER"/>
-		<id column="ter_clientversion" property="terClientVersion" jdbcType="VARCHAR"/>
-		<id column="ter_busi_mode" property="terBusiMode" jdbcType="INTEGER"/>
-		<id column="ter_model" property="terModel" jdbcType="VARCHAR"/>
-		<id column="ter_remark" property="terRemark" jdbcType="VARCHAR"/>
-		<id column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
-		<id column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
-		<id column="start_online" property="startOnline" jdbcType="INTEGER"/>
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="port" property="port" jdbcType="VARCHAR" />
+		<result column="net_method" property="netMethod" jdbcType="INTEGER"/>
+		<result column="video_control" property="videoControl" jdbcType="VARCHAR"/>
+		<result column="bubble_limit" property="bubbleLimit" jdbcType="INTEGER"/>
+		<result column="ter_clientversion" property="terClientVersion" jdbcType="VARCHAR"/>
+		<result column="ter_busi_mode" property="terBusiMode" jdbcType="INTEGER"/>
+		<result column="ter_model" property="terModel" jdbcType="VARCHAR"/>
+		<result column="ter_remark" property="terRemark" jdbcType="VARCHAR"/>
+		<result column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
+		<result column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
+		<result column="start_online" property="startOnline" jdbcType="INTEGER"/>
+		<result column="ad_exist" property="adExist" jdbcType="BIT"/>
+		<result column="screen_wide" property="screenWide" jdbcType="INTEGER"/>
+		<result column="screen_high" property="screenHigh" jdbcType="INTEGER"/>
 	</resultMap>
 
 </mapper>
