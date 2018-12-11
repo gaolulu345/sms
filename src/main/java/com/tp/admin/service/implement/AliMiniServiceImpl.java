@@ -11,6 +11,7 @@ import com.tp.admin.dao.TemplateDao;
 import com.tp.admin.data.entity.AdminServiceInfo;
 import com.tp.admin.data.entity.AdminTemplateInfo;
 import com.tp.admin.data.search.AdminAutoSearch;
+import com.tp.admin.data.search.AdminServiceSearch;
 import com.tp.admin.data.search.TemplateSearch;
 import com.tp.admin.enums.AdminTemplateInfoEnum;
 import com.tp.admin.exception.BaseException;
@@ -44,19 +45,18 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
         }
         String aliUrl = "https://openapi.alipay.com/gateway.do";
 
-        String appId = "";
-        String aLiMiniAppPublicKey = "";
-        String aLiMiniAppPrivateKey = "";
+
+        AdminServiceSearch adminServiceSearch = new AdminServiceSearch();
         AdminAutoSearch adminAutoSearch = new AdminAutoSearch();
         adminAutoSearch.setType(3);
         List<AdminServiceInfo> list = templateDao.searchTemplateList(adminAutoSearch);
         for (AdminServiceInfo adminServiceInfo:list) {
             if (adminServiceInfo.getKey().equals("ALiMiniAppID")){
-                appId = adminServiceInfo.getValue();
+                adminServiceSearch.setAppId(adminServiceInfo.getValue());
             }else if (adminServiceInfo.getKey().equals("ALiMiniAppPublicKey")){
-                aLiMiniAppPublicKey = adminServiceInfo.getValue();
+                adminServiceSearch.setAppPublicKey(adminServiceInfo.getValue());
             }else if (adminServiceInfo.getKey().equals("ALiMiniAppPrivateKey")){
-                aLiMiniAppPrivateKey = adminServiceInfo.getValue();
+                adminServiceSearch.setAppPrivateKey(adminServiceInfo.getValue());
             }
         }
 
@@ -70,7 +70,7 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
             }
         }
 
-        if (null == appId || null == aLiMiniAppPrivateKey || null == aLiMiniAppPublicKey || appId.equals("") || aLiMiniAppPrivateKey.equals("") || aLiMiniAppPublicKey.equals("")){
+        if (null == adminServiceSearch.getAppId() || null == adminServiceSearch.getAppPrivateKey() || null == adminServiceSearch.getAppPublicKey() || adminServiceSearch.getAppId().equals("") || adminServiceSearch.getAppPrivateKey().equals("") || adminServiceSearch.getAppPublicKey().equals("")){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
 
@@ -81,7 +81,7 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
         jsonObject.put("page",templateSearch.getPage());
         jsonObject.put("data",templateSearch.getData());
 
-        AlipayClient alipayClient = new DefaultAlipayClient(aliUrl,appId,aLiMiniAppPrivateKey,"json","GBK",aLiMiniAppPublicKey,"RSA2");
+        AlipayClient alipayClient = new DefaultAlipayClient(aliUrl,adminServiceSearch.getAppId(),adminServiceSearch.getAppPrivateKey(),"json","GBK",adminServiceSearch.getAppPublicKey(),"RSA2");
         AlipayOpenAppMiniTemplatemessageSendRequest request1 = new AlipayOpenAppMiniTemplatemessageSendRequest();
         request1.setBizContent(jsonObject.toString());
 

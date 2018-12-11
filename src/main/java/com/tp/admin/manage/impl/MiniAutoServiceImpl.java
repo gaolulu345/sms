@@ -7,6 +7,7 @@ import com.tp.admin.dao.TemplateDao;
 import com.tp.admin.data.entity.AdminServiceInfo;
 import com.tp.admin.data.parameter.WxMiniAuthDTO;
 import com.tp.admin.data.search.AdminAutoSearch;
+import com.tp.admin.data.search.AdminServiceSearch;
 import com.tp.admin.data.wx.WxJscodeSessionResult;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -43,22 +44,22 @@ public class MiniAutoServiceImpl implements MiniAutoServiceI {
 
         AdminAutoSearch adminAutoSearch = new AdminAutoSearch();
         adminAutoSearch.setType(wxMiniAuthDTO.getType());
-        String appId = "";
-        String appSecret = "";
+
+        AdminServiceSearch adminServiceSearch = new AdminServiceSearch();
         if (wxMiniAuthDTO.getType() != null){
             List<AdminServiceInfo> list = templateDao.searchTemplateList(adminAutoSearch);
             for (AdminServiceInfo adminServiceInfo:list) {
                 if (adminServiceInfo.getKey().equals("WX_APP_ID")){
-                    appId = adminServiceInfo.getValue();
+                    adminServiceSearch.setAppId(adminServiceInfo.getValue());
                 }
                 if (adminServiceInfo.getKey().equals("WX_APP_SECRET")){
-                    appSecret = adminServiceInfo.getValue();
+                    adminServiceSearch.setAppSecret(adminServiceInfo.getValue());
                 }
             }
         }
 
-        String query =    "?appid=" + appId
-                + "&secret=" + appSecret
+        String query =    "?appid=" + adminServiceSearch.getAppId()
+                + "&secret=" + adminServiceSearch.getAppSecret()
                 + "&js_code=" + wxMiniAuthDTO.getCode()
                 + "&grant_type=authorization_code";
         RestTemplate rest = new RestTemplate();

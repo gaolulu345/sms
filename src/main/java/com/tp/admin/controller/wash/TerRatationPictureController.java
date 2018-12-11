@@ -1,4 +1,5 @@
-package com.tp.admin.controller;
+package com.tp.admin.controller.wash;
+
 
 import com.sun.org.apache.bcel.internal.generic.RETURN;
 import com.tp.admin.ajax.ApiResult;
@@ -64,3 +65,4 @@ public class TerRatationPictureController {
     }
 
 }
+

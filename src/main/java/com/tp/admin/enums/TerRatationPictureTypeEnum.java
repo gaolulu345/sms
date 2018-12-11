@@ -1,8 +1,8 @@
 package com.tp.admin.enums;
 
 public enum TerRatationPictureTypeEnum {
-    GLOD_AD_POSITION(0,"黄金广告位置"),
-    SECOND_AD_POSITION(1,"第二位置");
+    GLOD_AD_POSITION(0,"轮播广告"),
+    SECOND_AD_POSITION(1,"广告位置");
 
     private int value;
     private String desc;

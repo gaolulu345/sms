@@ -1,6 +1,7 @@
 package com.tp.admin.controller.maintain;
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.manage.MiniAutoServiceI;
 import com.tp.admin.service.WxMiniAuthServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +25,9 @@ public class WxMiniMaintainAuthController {
     @Qualifier(value = "wxMiniMaintainAuthService")
     WxMiniAuthServiceI wxMiniMaintainAuthService;
 
+    @Autowired
+    MiniAutoServiceI miniAutoService;
+
     /**
      * 微信授权
      * @param request
@@ -31,7 +35,8 @@ public class WxMiniMaintainAuthController {
      */
     @PostMapping(value = "/auth")
     public ApiResult auth(HttpServletRequest request){
-        return wxMiniMaintainAuthService.auth(request );
+        //return wxMiniMaintainAuthService.auth(request );
+        return miniAutoService.miniAuto(request);
     }
 
     /**

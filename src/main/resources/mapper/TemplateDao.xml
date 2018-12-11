@@ -15,7 +15,7 @@
             AND asi.key = #{key}
         </if>
         <if test="type != null">
-            AND r.type = #{type}
+            AND asi.type = #{type}
         </if>
     </select>
 

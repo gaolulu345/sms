@@ -18,7 +18,7 @@ public class AdminTemplateController {
     AdminTemplateInfoServiceI adminTemplateInfoServiceI;
 
     /**
-     * 发送模版
+     * 发送模板消息
      * @param request
      * @return
      */
