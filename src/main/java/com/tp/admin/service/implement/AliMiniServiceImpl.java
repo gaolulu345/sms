@@ -8,7 +8,9 @@ import com.alipay.api.response.AlipayOpenAppMiniTemplatemessageSendResponse;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.dao.TemplateDao;
+import com.tp.admin.data.entity.AdminServiceInfo;
 import com.tp.admin.data.entity.AdminTemplateInfo;
+import com.tp.admin.data.search.AdminAutoSearch;
 import com.tp.admin.data.search.TemplateSearch;
 import com.tp.admin.enums.AdminTemplateInfoEnum;
 import com.tp.admin.exception.BaseException;
@@ -22,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AliMiniServiceImpl implements AliMiniServiceI {
 
@@ -33,15 +37,29 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
     @Autowired
     HttpHelperI httpHelper;
 
-    /*@Override
+   /* @Override
     public ApiResult sendAliTemplate(TemplateSearch templateSearch) {
         if (templateSearch.getTouser() == null || templateSearch.getFormId() == null || templateSearch.getData() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"参数");
         }
         String aliUrl = "https://openapi.alipay.com/gateway.do";
-        String appId = templateDao.searchMasterplateTool("ALiMiniAppID");
-        String aLiMiniAppPublicKey = templateDao.searchMasterplateTool("ALiMiniAppPublicKey");
-        String aLiMiniAppPrivateKey = templateDao.searchMasterplateTool("ALiMiniAppPrivateKey");
+
+        String appId = "";
+        String aLiMiniAppPublicKey = "";
+        String aLiMiniAppPrivateKey = "";
+        AdminAutoSearch adminAutoSearch = new AdminAutoSearch();
+        adminAutoSearch.setType(3);
+        List<AdminServiceInfo> list = templateDao.searchTemplateList(adminAutoSearch);
+        for (AdminServiceInfo adminServiceInfo:list) {
+            if (adminServiceInfo.getKey().equals("ALiMiniAppID")){
+                appId = adminServiceInfo.getValue();
+            }else if (adminServiceInfo.getKey().equals("ALiMiniAppPublicKey")){
+                aLiMiniAppPublicKey = adminServiceInfo.getValue();
+            }else if (adminServiceInfo.getKey().equals("ALiMiniAppPrivateKey")){
+                aLiMiniAppPrivateKey = adminServiceInfo.getValue();
+            }
+        }
+
 
         String aLiMiniTemplateId = "";
         if (templateSearch.getTemplateInfo() != null){

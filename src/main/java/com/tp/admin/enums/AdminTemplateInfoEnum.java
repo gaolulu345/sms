@@ -3,7 +3,7 @@ package com.tp.admin.enums;
 public enum AdminTemplateInfoEnum {
 
     WX_ORDER_INFO(1,"微信订单信息"),
-    WX_REFUND_INFO(2,"微信退款信息");
+    WX_REFUND_INFO(2,"微信退款通知");
 
     private int value;
     private String desc;
@@ -32,7 +32,7 @@ public enum AdminTemplateInfoEnum {
 
     public static AdminTemplateInfoEnum getByValue(String desc) {
         for (AdminTemplateInfoEnum ec : AdminTemplateInfoEnum.values()) {
-            if (ec.desc == desc) {
+            if (ec.desc.equals(desc)) {
                 return ec;
             }
         }

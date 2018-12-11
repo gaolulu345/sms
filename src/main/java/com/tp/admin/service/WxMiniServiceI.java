@@ -12,7 +12,7 @@ public interface WxMiniServiceI {
 
     void sendTemplateMessage(String accessToken , String requestBody);
 
-    ApiResult sendWxTemplate(TemplateSearch templateSearch);
+    void sendWxTemplate(TemplateSearch templateSearch);
 
 
 }
