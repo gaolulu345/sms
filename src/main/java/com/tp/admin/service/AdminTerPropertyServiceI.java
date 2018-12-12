@@ -8,6 +8,7 @@ import com.tp.admin.data.parameter.WxMiniSearch;
 import javax.servlet.http.HttpServletRequest;
 
 public interface AdminTerPropertyServiceI {
+    ApiResult allTerPropertyInfoList(HttpServletRequest request);
 
     ApiResult terPropertySearch(HttpServletRequest request);
 

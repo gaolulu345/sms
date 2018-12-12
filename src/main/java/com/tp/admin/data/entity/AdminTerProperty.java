@@ -21,4 +21,6 @@ public class AdminTerProperty {
     private Integer wideLimit;
     private Integer startOnline;
     private boolean adExist;
+    private Integer screenWide;
+    private Integer screenHigh;
 }

@@ -17,10 +17,15 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(AdminTerPropertyController.ROUTER_INDEX)
 public class AdminTerPropertyController {
 
-    public static final String ROUTER_INDEX = "/api/open/wash/ter/property";
+    public static final String ROUTER_INDEX = "/api/private/wash/ter/property";
 
     @Autowired
     AdminTerPropertyServiceI adminTerPropertyServiceI;
+
+    @PostMapping(value = "/all/list")
+    public ApiResult allTerPropertyInfoList(HttpServletRequest request){
+        return adminTerPropertyServiceI.allTerPropertyInfoList(request);
+    }
 
     /**
      * 查询某个网点的属性信息

@@ -99,6 +99,10 @@
 		t.deleted = 0
 	</select>
 
+	<select id="findAllTerProperty" resultMap="AdminTerPropertyMap">
+		SELECT * FROM admin_ter_property
+	</select>
+
 	<select id="findTerStartInfo" parameterType="java.lang.Integer" resultMap="AdminTerPropertyDTOMap">
 		SELECT t.id AS terId,
 				t.ip,
@@ -184,6 +188,23 @@
 		<id column="title" property="title" jdbcType="VARCHAR" />
 		<result column="online" property="online" jdbcType="BIT" />
 		<result column="status" property="status" jdbcType="SMALLINT" />
+	</resultMap>
+
+	<resultMap id="AdminTerPropertyMap" type="com.tp.admin.data.entity.AdminTerProperty">
+		<result column="ter_id" property="terId" javaType="INTEGER"/>
+		<result column="net_method" property="netMethod" jdbcType="INTEGER"/>
+		<result column="video_control" property="videoControl" jdbcType="VARCHAR"/>
+		<result column="bubble_limit" property="bubbleLimit" jdbcType="INTEGER"/>
+		<result column="ter_clientversion" property="terClientVersion" jdbcType="VARCHAR"/>
+		<result column="ter_busi_mode" property="terBusiMode" jdbcType="INTEGER"/>
+		<result column="ter_model" property="terModel" jdbcType="VARCHAR"/>
+		<result column="ter_remark" property="terRemark" jdbcType="VARCHAR"/>
+		<result column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
+		<result column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
+		<result column="start_online" property="startOnline" jdbcType="INTEGER"/>
+		<result column="ad_exist" property="adExist" jdbcType="BIT"/>
+		<result column="screen_wide" property="screenWide" jdbcType="INTEGER"/>
+		<result column="screen_high" property="screenHigh" jdbcType="INTEGER"/>
 	</resultMap>
 
 	<resultMap id="AdminTerPropertyDTOMap" type="com.tp.admin.data.dto.AdminTerPropertyDTO">

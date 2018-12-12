@@ -28,4 +28,6 @@ public interface TerDao {
 
     int updateTerProperty(AdminTerPropertyDTO adminTerPropertyDTO);
 
+    List<AdminTerProperty> findAllTerProperty();
+
 }

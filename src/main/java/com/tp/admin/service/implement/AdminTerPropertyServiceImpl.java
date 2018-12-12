@@ -12,6 +12,7 @@ import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.entity.AdminTerOperatingLog;
+import com.tp.admin.data.entity.AdminTerProperty;
 import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
@@ -52,6 +53,20 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
 
     @Autowired
     AdminTerOperatingLogDao adminTerOperatingLogDao;
+
+    @Override
+    public ApiResult allTerPropertyInfoList(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (null == wxMiniSearch.getOpenId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty openId");
+        }
+        List<AdminTerProperty> list = terDao.findAllTerProperty();
+        if (list != null){
+            wxMiniSearch.setResult(list);
+        }
+        return ApiResult.ok(wxMiniSearch.getResult());
+    }
 
     //微信小程序
     @Override
