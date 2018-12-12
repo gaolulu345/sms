@@ -49,7 +49,7 @@
         *
         FROM
         `admin_maintion_employee`
-        ORDER BY id DESC
+        ORDER BY deleted ASC , id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">
             LIMIT #{offset},#{pageSize}
         </if>
