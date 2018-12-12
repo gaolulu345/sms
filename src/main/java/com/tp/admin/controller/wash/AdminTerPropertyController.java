@@ -38,16 +38,6 @@ public class AdminTerPropertyController {
         return adminTerPropertyServiceI.terPropertySearch(request);
     }
 
-    /**
-     * 线上免费开启
-     *
-     * @param request
-     * @return
-     */
-    @PostMapping("/site/online/start")
-    public ApiResult onlineFreeStart(HttpServletRequest request){
-        return adminTerPropertyServiceI.onlineFreeStart(request);
-    }
 
     /**
      * 修改网点属性信息

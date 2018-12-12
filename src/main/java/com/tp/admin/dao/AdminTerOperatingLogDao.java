@@ -14,6 +14,4 @@ public interface AdminTerOperatingLogDao {
 
     Integer cntBySearch(WxMiniSearch wxMiniSearch);
 
-
-
 }

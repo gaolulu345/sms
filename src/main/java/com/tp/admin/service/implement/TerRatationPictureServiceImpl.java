@@ -40,14 +40,14 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
 
     @Override
     public ApiResult uploadAppointTerRatationPicture(HttpServletRequest request, MultipartFile file) {
-        Integer terId = Integer.parseInt(request.getParameter("terId"));
+        Integer deviceId = Integer.parseInt(request.getParameter("id"));
         Integer type = Integer.parseInt(request.getParameter("type"));
         TerRatationPictureSearch terRatationPictureSearch = new TerRatationPictureSearch();
 
-        if (terId == null){
+        if (deviceId == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty terId");
         }
-        terRatationPictureSearch.setTerId(terId);
+        terRatationPictureSearch.setDeviceId(deviceId);
         if (type == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty type");
         }
@@ -72,12 +72,12 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     public ApiResult terRatationPictureShow(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body, TerRatationPictureSearch.class);
-        if (terRatationPictureSearch.getTerId() == null){
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty terId");
+        if (terRatationPictureSearch.getDeviceId() == null){
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty deviceId");
         }
         List<TerRatationPicture> terRatationPictureList = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
         if (terRatationPictureList == null || terRatationPictureList.size() == 0){
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"该网点下无图片数据");
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"该设备下无图片数据");
         }
         for (TerRatationPicture terRatationPicture:terRatationPictureList) {
             terRatationPicture.build();

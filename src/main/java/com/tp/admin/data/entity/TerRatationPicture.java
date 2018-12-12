@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class TerRatationPicture {
     private Integer id;
-    private Integer terId;
+    private Integer deviceId;
     @JsonIgnore
     private Timestamp createTime;
     @JsonIgnore

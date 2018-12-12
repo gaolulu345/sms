@@ -91,6 +91,16 @@ public class IndexController {
     }
 
     /**
+     * 设备操作日志
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/pages/device/log")
+    public String deviceLog(HttpServletRequest request, Model model ) {
+        return "device_log";
+    }
+
+    /**
      * 系统管理
      * @return
      */
@@ -129,4 +139,14 @@ public class IndexController {
         return "admin";
     }
 
+    /**
+     * 设备
+     * @param request
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/pages/device")
+    public String device(HttpServletRequest request,Model model){
+        return "device";
+    };
 }

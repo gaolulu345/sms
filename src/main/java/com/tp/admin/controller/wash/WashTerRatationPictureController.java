@@ -1,7 +1,6 @@
 package com.tp.admin.controller.wash;
 
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.service.TerRatationPictureServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(TerRatationPictureController.ROUTER_INDEX)
-public class TerRatationPictureController {
+@RequestMapping(WashTerRatationPictureController.ROUTER_INDEX)
+public class WashTerRatationPictureController {
 
     @Autowired
     TerRatationPictureServiceI terRatationPictureServiceI;
