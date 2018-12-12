@@ -1,9 +1,8 @@
-
 var vm = new Vue({
-    el: "#app",
+    el: '#app',
     data: {
-    	pageName: 'index',
-        pageTitle: '登录日志',
+        pageName: 'index',
+        pageTitle: '设备日志管理',
         adminId: adminId,
         adminRoleId: adminRoleId,
         admin: admin,
@@ -13,7 +12,8 @@ var vm = new Vue({
 
         more: false,
         logList: [],
-    },
+    }, 
+
     mounted: function() {
         this.getLogList(false)
     },
@@ -38,10 +38,7 @@ var vm = new Vue({
             this.getLogList(true)
         }
     }
-});
-
+})
 
 $('.nav-each').removeClass('active');
 $('.'+vm.pageName).addClass('active');
-
-

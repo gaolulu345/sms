@@ -4,6 +4,49 @@
 <div class="topBox">
 	<p class="name">{{pageTitle}}</p>
 	<div class="infoBox">
+		<el-button type="text" @click="dialogVisible = true">查看小程序二维码</el-button>
+		<el-dialog
+			title="小程序二维码"
+			:visible.sync="dialogVisible"
+			width="80%" close-on-press-escape append-to-body>
+			<div class="qrCodeBox">
+				<div class="qrCodeItem">
+					<div class="qrCodeImg">
+						<img src="https://tp-app.oss-cn-hangzhou.aliyuncs.com/mini/qrCode/tpWashCode.jpg" alt="">
+					</div>
+					<div class="qrCodeTag">
+						<span>太仆洗车小程序微信版</span>
+					</div>
+				</div>
+				<div class="qrCodeItem">
+					<div class="qrCodeImg">
+						<img src="https://tp-app.oss-cn-hangzhou.aliyuncs.com/mini/qrCode/tpWashAliCode.jpg" alt="">
+					</div>
+					<div class="qrCodeTag">
+						<span>太仆洗车小程序支付宝版</span>
+					</div>
+				</div>
+				<div class="qrCodeItem">
+					<div class="qrCodeImg">
+						<img src="https://tp-app.oss-cn-hangzhou.aliyuncs.com/mini/qrCode/tpMaintainCode.jpg" alt="">
+					</div>
+					<div class="qrCodeTag">
+						<span>太仆维保小程序</span>
+					</div>
+				</div>
+				<div class="qrCodeItem">
+					<div class="qrCodeImg">
+						<img src="https://tp-app.oss-cn-hangzhou.aliyuncs.com/mini/qrCode/tpPartnerCode.jpg" alt="">
+					</div>
+					<div class="qrCodeTag">
+						<span>太仆商家小程序</span>
+					</div>
+				</div>
+			</div>
+			<span slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+			</span>
+		</el-dialog>
 		<img class="avatar" src="https://tp-app.oss-cn-hangzhou.aliyuncs.com/ios/appLogo.png" onclick="openChangePwDialog()">
 		<span class="adminName">{{admin}}</span>
 		<i class="iconfont icon-logout" onclick="logout()"></i>

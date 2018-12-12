@@ -324,3 +324,25 @@ body {
 #changePwDialog .mainBox .btnsBox {
   text-align: center;
 }
+.qrCodeBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.qrCodeBox .qrCodeItem {
+  flex: 1;
+}
+.qrCodeBox .qrCodeItem .qrCodeImg {
+  text-align: center;
+  height: 2.34375rem;
+}
+.qrCodeBox .qrCodeItem .qrCodeImg img {
+  width: 1.5625rem;
+  height: 1.5625rem;
+  text-align: center;
+  margin-bottom: .078125rem;
+}
+.qrCodeBox .qrCodeItem .qrCodeTag {
+  text-align: center;
+}
