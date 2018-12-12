@@ -1,7 +1,6 @@
 package com.tp.admin.controller.wash;
 
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.service.TerRatationPictureServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
