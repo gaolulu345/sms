@@ -139,4 +139,14 @@ public class IndexController {
         return "admin";
     }
 
+    /**
+     * 设备
+     * @param request
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/pages/device")
+    public String device(HttpServletRequest request,Model model){
+        return "device";
+    };
 }

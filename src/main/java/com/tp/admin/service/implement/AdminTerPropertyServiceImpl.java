@@ -161,7 +161,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MERCHANT.getValue());
         }else {
             adminMaintionEmployee = (AdminMaintionEmployee) object;
-            String intros = adminMaintionEmployee.getName() + " 商户操作 " + adminTerPropertyDTO.getTerId() + "号设备" + washTerOperatingLogTypeEnum
+            String intros = adminMaintionEmployee.getName() + " 维保操作 " + adminTerPropertyDTO.getTerId() + "号设备" + washTerOperatingLogTypeEnum
                     .getDesc();
             adminTerOperatingLog.setMerchantId(adminMaintionEmployee.getId());
             adminTerOperatingLog.setUsername(adminMaintionEmployee.getName());
