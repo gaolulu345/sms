@@ -160,4 +160,17 @@ public class WxMiniMerchantManageController {
     public ApiResult merchantWashCardUserInfo(HttpServletRequest request){
         return wxMiniMerchantManageService.merchantWashCardUserInfo(request);
     }
+
+    /**
+     * 线上免费开启
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/site/online/start")
+    public ApiResult onlineFreeStart(HttpServletRequest request){
+        return null;
+        //return adminTerPropertyServiceI.onlineFreeStart(request);
+    }
+
 }

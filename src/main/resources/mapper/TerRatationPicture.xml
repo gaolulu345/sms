@@ -4,21 +4,21 @@
 
 	<insert id="uploadTerRatationPicture" parameterType="com.tp.admin.data.search.TerRatationPictureSearch">
 		INSERT INTO
-			ter_ratation_picture(ter_id,create_time,picture,type)
+			ter_ratation_picture(device_id,create_time,picture,type)
 		VALUES(
-			#{terId},
+			#{deviceId},
 			#{createTime},
 			#{picture},
 			#{type})
 	</insert>
 
 	<select id="terRatationPictureShow" parameterType="com.tp.admin.data.search.TerRatationPictureSearch" resultMap="TerRatationPictureMap">
-		SELECT id,ter_id,deleted,picture,enable,ter_ratation_picture.type
+		SELECT id,device_id,deleted,picture,enable,ter_ratation_picture.type
 			FROM ter_ratation_picture
 			WHERE
 			deleted = 0
 			AND
-			ter_id = #{terId}
+			device_id = #{deviceId}
 		<if test="pageSize != null and pageSize !=0 and offset != null">
 			LIMIT #{offset},#{pageSize}
 		</if>
@@ -65,7 +65,7 @@
 
 	<resultMap id="TerRatationPictureMap" type="com.tp.admin.data.entity.TerRatationPicture">
 		<id column="id" property="id" javaType="INTEGER"/>
-		<result column="ter_id" property="terId" jdbcType="INTEGER" />
+		<result column="device_id" property="deviceId" jdbcType="INTEGER" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
 		<result column="deleted" property="deleted" jdbcType="BIT"/>

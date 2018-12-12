@@ -4,6 +4,8 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.parameter.WxMiniSearch;
+import com.tp.admin.data.search.TerPropertySearch;
+import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,12 +18,9 @@ public interface AdminTerPropertyServiceI {
 
     ApiResult updateTerProperty(HttpServletRequest request,AdminTerPropertyDTO adminTerPropertyDTO);
 
-    AdminMerchantEmployee check(String openId);
+    Object check(String openId);
 
-    /**
-     * 检验该登陆者是否有该网点操作权限
-     */
-    void checkTerAndPartner(int terId,int partnerId);
+    void buildTerOperateLog(Object object,AdminTerPropertyDTO adminTerPropertyDTO,WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum);
 
 
 }

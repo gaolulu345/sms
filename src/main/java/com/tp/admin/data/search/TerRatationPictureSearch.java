@@ -16,7 +16,7 @@ public class TerRatationPictureSearch extends Search{
 
     Integer id;
     int[] ids;
-    Integer terId;
+    Integer deviceId;
     @JsonIgnore
     Timestamp createTime;
     Integer type;

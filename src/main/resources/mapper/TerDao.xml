@@ -99,14 +99,16 @@
 		t.deleted = 0
 	</select>
 
-	<select id="findAllTerProperty" resultMap="AdminTerPropertyMap">
+	<select id="findAllTerProperty" parameterType="com.tp.admin.data.search.TerPropertySearch" resultMap="AdminTerPropertyDTOMap">
 		SELECT * FROM admin_ter_property
+		<if test="pageSize != null and pageSize !=0 and offset != null">
+			LIMIT #{offset},#{pageSize}
+		</if>
 	</select>
 
 	<select id="findTerStartInfo" parameterType="java.lang.Integer" resultMap="AdminTerPropertyDTOMap">
-		SELECT t.id AS terId,
-				t.ip,
-				t.port,
+		SELECT  atp.id,
+				atp.ter_id,
 				atp.net_method,
 				atp.video_control,
 				atp.bubble_limit,
@@ -121,16 +123,14 @@
 				atp.screen_wide,
 				atp.screen_high
         FROM admin_ter_property AS atp
-        INNER JOIN ter AS t
-        ON t.id=atp.ter_id
-				WHERE t.id=#{terId}
+				WHERE atp.id=#{id}
 	</select>
 
 	<update id="updateOnlineFreeStartState" parameterType="java.lang.Integer">
 		update admin_ter_property
 		SET start_online=1
 		WHERE
-		ter_id=#{terId}
+		id=#{id}
 	</update>
 
 	<update id="updateTerProperty" parameterType="com.tp.admin.data.dto.AdminTerPropertyDTO">
@@ -177,7 +177,7 @@
 			</if>
 		</trim>
 		WHERE
-			ter_id=#{terId}
+			id=#{id}
 	</update>
 
     <resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
@@ -208,9 +208,7 @@
 	</resultMap>
 
 	<resultMap id="AdminTerPropertyDTOMap" type="com.tp.admin.data.dto.AdminTerPropertyDTO">
-		<id column="terId" property="terId" javaType="INTEGER"/>
-		<result column="ip" property="ip" jdbcType="VARCHAR" />
-		<result column="port" property="port" jdbcType="VARCHAR" />
+		<id column="ter_id" property="terId" javaType="INTEGER"/>
 		<result column="net_method" property="netMethod" jdbcType="INTEGER"/>
 		<result column="video_control" property="videoControl" jdbcType="VARCHAR"/>
 		<result column="bubble_limit" property="bubbleLimit" jdbcType="INTEGER"/>

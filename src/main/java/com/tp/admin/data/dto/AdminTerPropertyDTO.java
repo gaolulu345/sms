@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdminTerPropertyDTO {
 
+    private Integer id;
     private Integer terId;
-    private String openId;
-    private String ip;
-    private String port;
+    //private String openId;
+    //private String ip;
+    //private String port;
     private Integer netMethod;
     private String videoControl;
     private Integer bubbleLimit;

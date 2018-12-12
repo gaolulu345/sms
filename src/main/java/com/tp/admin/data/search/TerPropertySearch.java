@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class TerPropertySearch extends Search {
 
-    private Integer terId;
+    private Integer id;//网点设备id
     private Integer startOnline;
+
+    private String openId;
 
 
     @Override
