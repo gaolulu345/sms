@@ -57,7 +57,7 @@
 		*
 		FROM
 		`admin_merchant_employee`
-		ORDER BY deleted DESC , id DESC
+		ORDER BY deleted ASC , id DESC
 		<if test="pageSize != null and pageSize !=0 and offset != null">
 			LIMIT #{offset},#{pageSize}
 		</if>
