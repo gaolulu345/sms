@@ -40,7 +40,7 @@ $.ajax({
 	            	val.class = 'merchant'
 				}
 				if(val.url == '/pages/device/log') {
-					val.class = 'device'
+					val.class = 'deviceLog'
 				}
 	        })
 			menu = menu.sort(compare("order"))
