@@ -9,8 +9,7 @@ var vm = new Vue({
         admin: admin,
         menuPer: menuPer,
         opPer: opPer,
-        dialogVisible: false,
-
+        qrcodeDialogVisible: false,
         more: false,
         logList: [],
     },
@@ -19,7 +18,7 @@ var vm = new Vue({
     },
     methods: {
         getLogList: function(more){
-            this.$http.post("/api/private/admin/login/log", {
+            this.$http.post("/api/private/device/operation/log/list", {
                 more: more
             }).then(function(res){
                 let data = res.json().data

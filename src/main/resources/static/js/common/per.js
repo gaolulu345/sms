@@ -40,8 +40,9 @@ $.ajax({
 	            	val.class = 'merchant'
 	            }
 	        })
-	        menu = menu.sort(compare("order"))
+			menu = menu.sort(compare("order"))
 			menuPer = menu;
+			// console.log('menuPer:',menuPer)
 		} else {
 			window.location.href = '/login';
 		}

@@ -14,6 +14,7 @@ var vm = new Vue({
         currentPageSize: null,
         currentPageIndex: null,
         deleted: false,
+        qrcodeDialogVisible: false,
 
         adminList: [],
         rolesList: [],
@@ -201,9 +202,6 @@ var vm = new Vue({
   
     }    
 });
-
-
-
 
 $('.nav-each').removeClass('active');
 $('.'+vm.pageName).addClass('active');

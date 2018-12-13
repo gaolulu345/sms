@@ -121,6 +121,12 @@ body {
   font-size: 12px;
   color: #2981FF;
 }
+.rightSide .topBox .infoBox .qrCode img {
+  width: 25px;
+  height: 25px;
+  margin-right: .078125rem;
+  vertical-align: middle;
+}
 .rightSide .content {
   width: 100%;
   height: 100vh;
@@ -335,7 +341,6 @@ body {
 }
 .qrCodeBox .qrCodeItem .qrCodeImg {
   text-align: center;
-  height: 2.34375rem;
 }
 .qrCodeBox .qrCodeItem .qrCodeImg img {
   width: 1.5625rem;

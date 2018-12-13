@@ -16,6 +16,7 @@ var vm = new Vue({
         operationList: [],
         currentRole: {},
         currentRolePermission: [],
+        qrcodeDialogVisible: false,
 
         roleSelection: [],
 

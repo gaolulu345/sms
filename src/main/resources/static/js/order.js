@@ -10,7 +10,8 @@ var vm = new Vue({
         admin: admin,
         menuPer: menuPer,
         opPer: opPer,
-
+        qrcodeDialogVisible: false,
+        
         totalCnt: null,
         currentPageSize: null,
         currentPageIndex: null,
@@ -49,14 +50,14 @@ var vm = new Vue({
     },
 
     mounted: function() {
-        console.log('mounted......')
+        console.log('mounted......', this.data)
         this.getTerList()
         this.getOrderList(10, 1, null, [], '', ' ', ' ', ' ')
     },
 
     methods: {
         getOrderList: function(pageSize, pageIndex, orderId, terIds, status, type, startTime, endTime) {
-            console.log(terIds)
+            console.log(terIds,  this.data)
             let ids = terIds
             // let ids = terIds[0] ? terIds : []
             this.$http.post("/api/private/wash/order/list", {

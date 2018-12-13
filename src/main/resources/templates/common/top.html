@@ -4,11 +4,11 @@
 <div class="topBox">
 	<p class="name">{{pageTitle}}</p>
 	<div class="infoBox">
-		<el-button type="text" @click="dialogVisible = true">查看小程序二维码</el-button>
+		<el-button class='qrCode' type="text" @click="qrcodeDialogVisible = true"><img src="http://tp-app.img-cn-hangzhou.aliyuncs.com//ios/qrcode_icon.png" alt=""></el-button>
 		<el-dialog
 			title="小程序二维码"
-			:visible.sync="dialogVisible"
-			width="80%" close-on-press-escape append-to-body>
+			:visible.sync="qrcodeDialogVisible"
+			width="70%" close-on-press-escape append-to-body>
 			<div class="qrCodeBox">
 				<div class="qrCodeItem">
 					<div class="qrCodeImg">
@@ -20,7 +20,7 @@
 				</div>
 				<div class="qrCodeItem">
 					<div class="qrCodeImg">
-						<img src="https://tp-app.oss-cn-hangzhou.aliyuncs.com/mini/qrCode/tpWashAliCode.jpg" alt="">
+						<img src="http://tp-app.img-cn-hangzhou.aliyuncs.com//ios/ali_wash_qrcode.jpg" alt="">
 					</div>
 					<div class="qrCodeTag">
 						<span>太仆洗车小程序支付宝版</span>
@@ -31,7 +31,7 @@
 						<img src="https://tp-app.oss-cn-hangzhou.aliyuncs.com/mini/qrCode/tpMaintainCode.jpg" alt="">
 					</div>
 					<div class="qrCodeTag">
-						<span>太仆维保小程序</span>
+						<span>太仆维保中心小程序</span>
 					</div>
 				</div>
 				<div class="qrCodeItem">
@@ -39,12 +39,12 @@
 						<img src="https://tp-app.oss-cn-hangzhou.aliyuncs.com/mini/qrCode/tpPartnerCode.jpg" alt="">
 					</div>
 					<div class="qrCodeTag">
-						<span>太仆商家小程序</span>
+						<span>太仆商家中心小程序</span>
 					</div>
 				</div>
 			</div>
 			<span slot="footer" class="dialog-footer">
-				<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+				<el-button type="primary" @click="qrcodeDialogVisible = false">确 定</el-button>
 			</span>
 		</el-dialog>
 		<img class="avatar" src="https://tp-app.oss-cn-hangzhou.aliyuncs.com/ios/appLogo.png" onclick="openChangePwDialog()">
