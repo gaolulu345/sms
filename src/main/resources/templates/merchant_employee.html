@@ -37,14 +37,14 @@
                     </template>
                 </el-table-column>
                 <el-table-column width="" prop="lastLoginTime" label="最近登录时间"></el-table-column>
-                <el-table-column width="100" label="是否禁用" v-if="opPer['/api/private/maintion/employee/update/delete']">
+                <el-table-column width="100" label="是否禁用" v-if="opPer['/api/private/merchant/employee/update/delete']">
                     <template slot-scope="scope" >
                         <el-button v-if="scope.row.deleted == false" @click="clickDelete(scope.row.id, true)" plain type="danger" size="mini">禁用</el-button>
                         <el-button v-if="scope.row.deleted == true" @click="clickDelete(scope.row.id, false)" plain type="success" size="mini">解禁</el-button>
                     </template>
                 </el-table-column>
 
-                <el-table-column width="100" label="关联并激活" v-if="opPer['/api/private/maintion/employee/update/enable']">
+                <el-table-column width="100" label="关联并激活" v-if="opPer['/api/private/merchant/employee/update/enable']">
                     <template slot-scope="scope" >
                         <el-button @click="clickConnect(scope.row.id,scope.row.name)" plain type="primary" size="mini">关联</el-button>
                     </template>

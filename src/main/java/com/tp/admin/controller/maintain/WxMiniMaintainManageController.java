@@ -1,6 +1,7 @@
 package com.tp.admin.controller.maintain;
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.service.AdminTerPropertyServiceI;
 import com.tp.admin.service.WxMiniMaintainManageServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,9 @@ public class WxMiniMaintainManageController {
 
     @Autowired
     WxMiniMaintainManageServiceI wxMiniMaintainManageService;
+
+    @Autowired
+    AdminTerPropertyServiceI adminTerPropertyServiceI;
 
     /**
      * 区域（地市级）
@@ -113,5 +117,15 @@ public class WxMiniMaintainManageController {
         return wxMiniMaintainManageService.uploadSitePhoto(request, file , openId);
     }
 
+    /**
+     * 一键下单
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/site/online/start")
+    public ApiResult onlineFreeStart(HttpServletRequest request){
+        return adminTerPropertyServiceI.onlineFreeStart(request);
+    }
 
 }

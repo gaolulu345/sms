@@ -3,9 +3,11 @@ package com.tp.admin.service.implement;
 import com.google.gson.Gson;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.config.AliyunOssProperties;
+import com.tp.admin.dao.FileUploadLogDao;
 import com.tp.admin.dao.TerRatationDao;
 import com.tp.admin.data.dto.UploadFileDTO;
 import com.tp.admin.data.entity.AdminAccount;
+import com.tp.admin.data.entity.FileUploadLog;
 import com.tp.admin.data.entity.TerRatationPicture;
 import com.tp.admin.data.entity.TerRatationPictureLog;
 import com.tp.admin.data.search.TerRatationPictureSearch;
@@ -38,16 +40,19 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     @Autowired
     TerRatationDao terRatationDao;
 
+    @Autowired
+    FileUploadLogDao fileUploadLogDao;
+
     @Override
     public ApiResult uploadAppointTerRatationPicture(HttpServletRequest request, MultipartFile file) {
-        Integer terId = Integer.parseInt(request.getParameter("terId"));
+        Integer deviceId = Integer.parseInt(request.getParameter("id"));
         Integer type = Integer.parseInt(request.getParameter("type"));
         TerRatationPictureSearch terRatationPictureSearch = new TerRatationPictureSearch();
 
-        if (terId == null){
+        if (deviceId == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty terId");
         }
-        terRatationPictureSearch.setTerId(terId);
+        terRatationPictureSearch.setDeviceId(deviceId);
         if (type == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty type");
         }
@@ -65,6 +70,12 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (res == 0){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
+        String fileName = uploadFileDTO.getKey();
+        AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
+        res = fileUploadLogDao.insert(new FileUploadLog(adminAccount.getName(),fileName));
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
         return ApiResult.ok();
     }
 
@@ -72,12 +83,12 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     public ApiResult terRatationPictureShow(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body, TerRatationPictureSearch.class);
-        if (terRatationPictureSearch.getTerId() == null){
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty terId");
+        if (terRatationPictureSearch.getDeviceId() == null){
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty deviceId");
         }
         List<TerRatationPicture> terRatationPictureList = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
         if (terRatationPictureList == null || terRatationPictureList.size() == 0){
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"该网点下无图片数据");
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"该设备下无图片数据");
         }
         for (TerRatationPicture terRatationPicture:terRatationPictureList) {
             terRatationPicture.build();

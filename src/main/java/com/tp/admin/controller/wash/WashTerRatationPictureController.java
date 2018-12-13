@@ -10,8 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(TerRatationPictureController.ROUTER_INDEX)
-public class TerRatationPictureController {
+@RequestMapping(WashTerRatationPictureController.ROUTER_INDEX)
+public class WashTerRatationPictureController {
 
     @Autowired
     TerRatationPictureServiceI terRatationPictureServiceI;
