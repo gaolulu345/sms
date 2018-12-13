@@ -3,7 +3,8 @@ package com.tp.admin.enums;
 public enum AdminTemplateInfoEnum {
 
     WX_ORDER_INFO(1,"微信订单信息"),
-    WX_REFUND_INFO(2,"微信退款通知");
+    WX_REFUND_INFO(2,"微信退款通知"),
+    MINI_SITE_RESET_PHOTO(3,"网点重置信息");
 
     private int value;
     private String desc;

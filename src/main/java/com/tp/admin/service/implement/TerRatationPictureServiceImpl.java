@@ -3,9 +3,11 @@ package com.tp.admin.service.implement;
 import com.google.gson.Gson;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.config.AliyunOssProperties;
+import com.tp.admin.dao.FileUploadLogDao;
 import com.tp.admin.dao.TerRatationDao;
 import com.tp.admin.data.dto.UploadFileDTO;
 import com.tp.admin.data.entity.AdminAccount;
+import com.tp.admin.data.entity.FileUploadLog;
 import com.tp.admin.data.entity.TerRatationPicture;
 import com.tp.admin.data.entity.TerRatationPictureLog;
 import com.tp.admin.data.search.TerRatationPictureSearch;
@@ -38,6 +40,9 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     @Autowired
     TerRatationDao terRatationDao;
 
+    @Autowired
+    FileUploadLogDao fileUploadLogDao;
+
     @Override
     public ApiResult uploadAppointTerRatationPicture(HttpServletRequest request, MultipartFile file) {
         Integer deviceId = Integer.parseInt(request.getParameter("id"));
@@ -62,6 +67,12 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         terRatationPictureSearch.setCreateTime(new Timestamp(System.currentTimeMillis()));
         terRatationPictureSearch.setPicture(uploadFileDTO.getUrl());
         int res = terRatationDao.uploadTerRatationPicture(terRatationPictureSearch);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        String fileName = uploadFileDTO.getKey();
+        AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
+        res = fileUploadLogDao.insert(new FileUploadLog(adminAccount.getName(),fileName));
         if (res == 0){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }

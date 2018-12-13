@@ -1,6 +1,7 @@
 package com.tp.admin.controller.merchant;
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.manage.MiniAutoServiceI;
 import com.tp.admin.service.WxMiniAuthServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +25,9 @@ public class WxMiniMerchantAuthController {
     @Qualifier(value = "wxMiniMerchantAuthService")
     WxMiniAuthServiceI wxMiniMerchantAuthService;
 
+    @Autowired
+    MiniAutoServiceI miniAutoServiceI;
+
     /**
      * 微信授权
      * @param request
@@ -31,7 +35,8 @@ public class WxMiniMerchantAuthController {
      */
     @PostMapping(value = "/auth")
     public ApiResult auth(HttpServletRequest request){
-        return wxMiniMerchantAuthService.auth(request);
+        //return wxMiniMerchantAuthService.auth(request);
+        return miniAutoServiceI.miniAuto(request);
     }
 
     /**

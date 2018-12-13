@@ -162,7 +162,7 @@ public class WxMiniMerchantManageController {
     }
 
     /**
-     * 线上免费开启
+     * 一键下单
      *
      * @param request
      * @return

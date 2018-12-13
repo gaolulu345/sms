@@ -22,13 +22,19 @@ public class AdminTerPropertyController {
     @Autowired
     AdminTerPropertyServiceI adminTerPropertyServiceI;
 
+    /**
+     * 列出所有的设备属性信息
+     *
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/all/list")
     public ApiResult allTerPropertyInfoList(HttpServletRequest request){
         return adminTerPropertyServiceI.allTerPropertyInfoList(request);
     }
 
     /**
-     * 查询某个网点的属性信息
+     * 查询某个设备的属性信息
      *
      * @param request
      * @return
@@ -40,7 +46,7 @@ public class AdminTerPropertyController {
 
 
     /**
-     * 修改网点属性信息
+     * 修改设备属性信息
      *
      * @param request
      * @return
