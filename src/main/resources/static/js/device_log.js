@@ -1,7 +1,7 @@
 var vm = new Vue({
     el: '#app',
     data: {
-        pageName: 'device',
+        pageName: 'deviceLog',
         pageTitle: '设备日志管理',
         adminId: adminId,
         adminRoleId: adminRoleId,
