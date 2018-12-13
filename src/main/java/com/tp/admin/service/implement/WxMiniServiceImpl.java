@@ -75,7 +75,6 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
             return;
         }else {
             log.error(errmsg);
-            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION,errmsg);
         }
     }
 
