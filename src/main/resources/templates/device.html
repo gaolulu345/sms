@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <#include "common/meta.html">
+   <link rel="stylesheet" href="/css/device.css">
+</head>
+
+<body>
+<div v-cloak id="app" class="clearfix">
+    <#include "common/left.html">
+    <div class="rightSide">
+        <#include "common/top.html">
+        <div class="content" style="width: 100%">
+            <el-table :data="deviceList" style="width: 100%">
+                <!-- <el-table-column prop="id" label="日志" width="100"></el-table-column>
+                <el-table-column prop="terId" label="网点ID" width="100"></el-table-column>
+                <el-table-column prop="terTitle" label="网点名称" width="300"></el-table-column>
+                <el-table-column prop="createTime" label="时间" width="200"></el-table-column>
+                <el-table-column prop="opSourceDesc" label="操作来源" width="200"></el-table-column>
+                <el-table-column prop="username" label="操作人" width="200"></el-table-column>
+                <el-table-column prop="title" label="操作描述" width="200"></el-table-column>
+                <el-table-column prop="handlerResult" label="操作结果" width="200"></el-table-column> -->
+            </el-table>
+            <#include "common/pages2.html">
+        </div>
+    </div>
+</div>
+
+<script src="/js/common/per.js"></script>
+<script src="/js/device.js"></script>
+</body>
+</html>
