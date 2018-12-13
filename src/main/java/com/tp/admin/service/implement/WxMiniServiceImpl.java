@@ -69,11 +69,12 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
         RestTemplate rest = new RestTemplate();
         ResponseEntity<String> result = rest.postForEntity("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send"+query, httpEntity, String.class);
         String errcode = JSONObject.fromObject(result.getBody()).getString("errcode");
+        String errmsg = JSONObject.fromObject(result.getBody()).getString("errmsg");
         if (errcode.equals("0")){
             log.info(result.getBody());
             return;
         }else {
-            log.error(result.getBody());
+            log.error(errmsg);
         }
     }
 
