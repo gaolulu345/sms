@@ -22,7 +22,8 @@
     <select id="searchTemplateId" parameterType="java.lang.Integer" resultMap="TemplateInfoMap">
         SELECT ti.template_id,
         ti.template_desc,
-        ti.type
+        ti.type,
+        ti.service_type
         FROM admin_template_info ti
         WHERE id=#{id}
     </select>
@@ -32,6 +33,7 @@
         <result column="template_id" property="templateId" jdbcType="VARCHAR" />
         <result column="type" property="type" jdbcType="INTEGER" />
         <result column="template_desc" property="templateDesc" jdbcType="VARCHAR" />
+        <result column="service_type" property="serviceType" jdbcType="INTEGER" />
     </resultMap>
 
     <resultMap id="AdminAutoMap" type="com.tp.admin.data.entity.AdminServiceInfo">

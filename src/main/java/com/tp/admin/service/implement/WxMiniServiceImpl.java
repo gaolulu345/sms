@@ -86,8 +86,9 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
 
         JSONObject requestBody = new JSONObject();
         String templateId = "";
+        AdminTemplateInfo adminTemplateInfo = new AdminTemplateInfo();
         if (templateSearch.getTemplateInfo() != null){
-            AdminTemplateInfo adminTemplateInfo = templateDao.searchTemplateId(AdminTemplateInfoEnum.getByValue(templateSearch.getTemplateInfo()).getValue());
+            adminTemplateInfo = templateDao.searchTemplateId(AdminTemplateInfoEnum.getByValue(templateSearch.getTemplateInfo()).getValue());
             templateId = adminTemplateInfo.getTemplateId();
             if (templateId.equals("")){
                 throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty templateId");
@@ -103,7 +104,7 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
         }
 
         AdminAutoSearch adminAutoSearch = new AdminAutoSearch();
-        adminAutoSearch.setType(1);
+        adminAutoSearch.setType(adminTemplateInfo.getServiceType());
         adminAutoSearch.setKey("WX_APP_ID");
         String appId = templateDao.searchMasterplateTool(adminAutoSearch);
         adminAutoSearch.setKey("WX_APP_SECRET");

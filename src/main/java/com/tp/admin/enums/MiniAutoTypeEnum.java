@@ -2,9 +2,9 @@ package com.tp.admin.enums;
 
 public enum MiniAutoTypeEnum {
 
-    MINI_MERCHANT(1,"微信商家授权"),
-    MINI_MAINTION(2,"微信维保授权"),
-    MINI_ALI(3,"支付宝授权");
+    MINI_MERCHANT(1,"微信商家"),
+    MINI_MAINTION(2,"微信维保"),
+    MINI_ALI(3,"支付宝");
 
     private int value;
     private String desc;

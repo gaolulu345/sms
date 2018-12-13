@@ -1,6 +1,7 @@
 package com.tp.admin.controller.merchant;
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.service.AdminTerPropertyServiceI;
 import com.tp.admin.service.WxMiniMerchantManageServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ public class WxMiniMerchantManageController {
 
     @Autowired
     WxMiniMerchantManageServiceI wxMiniMerchantManageService;
+
+    @Autowired
+    AdminTerPropertyServiceI adminTerPropertyServiceI;
 
     /**
      * 站点金额统计
@@ -169,8 +173,7 @@ public class WxMiniMerchantManageController {
      */
     @PostMapping("/site/online/start")
     public ApiResult onlineFreeStart(HttpServletRequest request){
-        return null;
-        //return adminTerPropertyServiceI.onlineFreeStart(request);
+        return adminTerPropertyServiceI.onlineFreeStart(request);
     }
 
 }
