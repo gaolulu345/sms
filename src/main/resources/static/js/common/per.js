@@ -38,7 +38,10 @@ $.ajax({
 	            }
 	            if(val.url == '/pages/merchant/employee') {
 	            	val.class = 'merchant'
-	            }
+				}
+				if(val.url == '/pages/device/log') {
+					val.class = 'device'
+				}
 	        })
 			menu = menu.sort(compare("order"))
 			menuPer = menu;
