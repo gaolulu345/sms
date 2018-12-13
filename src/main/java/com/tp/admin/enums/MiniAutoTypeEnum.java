@@ -4,7 +4,8 @@ public enum MiniAutoTypeEnum {
 
     MINI_MERCHANT(1,"微信商家"),
     MINI_MAINTION(2,"微信维保"),
-    MINI_ALI(3,"支付宝");
+    MINI_ALI(3,"支付宝"),
+    MINI_USER(4,"用户洗车小程序");
 
     private int value;
     private String desc;
