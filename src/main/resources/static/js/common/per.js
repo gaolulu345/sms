@@ -38,10 +38,14 @@ $.ajax({
 	            }
 	            if(val.url == '/pages/merchant/employee') {
 	            	val.class = 'merchant'
-	            }
+				}
+				if(val.url == '/pages/device/log') {
+					val.class = 'deviceLog'
+				}
 	        })
-	        menu = menu.sort(compare("order"))
+			menu = menu.sort(compare("order"))
 			menuPer = menu;
+			// console.log('menuPer:',menuPer)
 		} else {
 			window.location.href = '/login';
 		}

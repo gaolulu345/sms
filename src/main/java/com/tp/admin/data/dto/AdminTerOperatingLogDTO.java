@@ -41,10 +41,12 @@ public class AdminTerOperatingLogDTO {
         if(null != createTime){
             createTimestamp = createTime.getTime();
         }
-        if (AdminTerOperatingLogSourceEnum.MAINTAUN.getValue() == opSource) {
-            username = maintionUsername;
-        }else if(AdminTerOperatingLogSourceEnum.MERCHANT.getValue() == opSource){
-            username = merchantUsername;
+        if (null == username) {
+            if (AdminTerOperatingLogSourceEnum.MAINTAUN.getValue() == opSource) {
+                username = maintionUsername;
+            }else if(AdminTerOperatingLogSourceEnum.MERCHANT.getValue() == opSource){
+                username = merchantUsername;
+            }
         }
         if (null != imgs && imgs.trim().length() != 0) {
             try{

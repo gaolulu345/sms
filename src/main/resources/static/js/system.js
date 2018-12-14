@@ -9,6 +9,7 @@ var vm = new Vue({
         admin: admin,
         menuPer: menuPer,
         opPer: opPer,
+        qrcodeDialogVisible: false,
 
         // 下拉菜单
         menuOptions: [],

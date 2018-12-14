@@ -15,6 +15,7 @@ var vm = new Vue({
         currentPageSize: null,
         currentPageIndex: null,
         pageSizes: [10, 20, 50],
+        qrcodeDialogVisible: false,
 
         currentStatus: null,
         currentReason: null,

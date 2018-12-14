@@ -9,6 +9,7 @@ var vm = new Vue({
         admin: admin,
         menuPer: menuPer,
         opPer: opPer,
+        qrcodeDialogVisible: false,
 
         totalCnt: null,
         pageSizes: [1, 10, 20, 50],

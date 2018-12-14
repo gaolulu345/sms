@@ -14,6 +14,7 @@ var vm = new Vue({
         currentPageSize: null,
         currentPageIndex: null,
         deleted: false,
+        qrcodeDialogVisible: false,
 
         merchantList: [],
         partnerList: [],
