@@ -1,6 +1,11 @@
+.el-carousel__item {
+  text-align: center;
+}
 .el-carousel__item img {
   width: auto;
   height: auto;
   max-height: 100%;
   max-width: 100%;
+  text-align: center;
+  margin: 0 auto;
 }
