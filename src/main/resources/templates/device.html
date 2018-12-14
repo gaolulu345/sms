@@ -13,14 +13,25 @@
         <#include "common/top.html">
         <div class="content" style="width: 100%">
             <el-table :data="deviceList" style="width: 100%">
-                <!-- <el-table-column prop="id" label="日志" width="100"></el-table-column>
-                <el-table-column prop="terId" label="网点ID" width="100"></el-table-column>
-                <el-table-column prop="terTitle" label="网点名称" width="300"></el-table-column>
-                <el-table-column prop="createTime" label="时间" width="200"></el-table-column>
-                <el-table-column prop="opSourceDesc" label="操作来源" width="200"></el-table-column>
-                <el-table-column prop="username" label="操作人" width="200"></el-table-column>
-                <el-table-column prop="title" label="操作描述" width="200"></el-table-column>
-                <el-table-column prop="handlerResult" label="操作结果" width="200"></el-table-column> -->
+                <el-table-column prop="id" label="设备ID" width="70"></el-table-column>
+                <el-table-column prop="terId" label="网点ID" width="70"></el-table-column>
+                <el-table-column prop="terRemark" label="网点名称" width="130"></el-table-column>
+                <el-table-column prop="terBusiModeDesc" label="网点类型" width="130"></el-table-column>
+                <el-table-column prop="terModel" label="网点编号" width="90"></el-table-column>
+                <el-table-column prop="terClientVersion" label="程序版本" width="100"></el-table-column>
+                <el-table-column prop="highLimit" label="设备限高(米)" width="70"></el-table-column>
+                <el-table-column prop="wideLimit" label="设备限宽(米)" width="70"></el-table-column>
+                <el-table-column prop="bubbleLimit" label="泡沫可用次数" width="70"></el-table-column>
+                <el-table-column prop="netMethodDesc" label="网络类型" width="120"></el-table-column>
+                <el-table-column prop="adExistDesc" label="广告支持" width="120"></el-table-column>
+                <el-table-column prop="screenSize" label="屏幕尺寸" width="120"></el-table-column>
+                <el-table-column prop="videoControl" label="监控服务" width="120"></el-table-column>
+                <el-table-column prop="startOnlineDesc" label="startOnline" width="120"></el-table-column>
+                <el-table-column label="设备操作" width="180">
+                    <template slot-scope="scope">
+                        <el-button plain type="primary" size="mini" @click="handlerDevice(scope.row)">管理</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <#include "common/pages2.html">
         </div>
