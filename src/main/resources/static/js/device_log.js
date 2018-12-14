@@ -9,6 +9,8 @@ var vm = new Vue({
         menuPer: menuPer,
         opPer: opPer,
         qrcodeDialogVisible: false,
+        showCurrentImg: false,
+        currentLogByImg: null,
         logList: [],
 
         totalCnt: null,
@@ -52,6 +54,12 @@ var vm = new Vue({
         handleCurrentChange(val) {
             vm.getLogList(vm.currentPageSize, val);
 
+        },
+
+        showResetImg: function(val) {
+            vm.showCurrentImg = true
+            vm.currentLogByImg = val
+            console.log('in showResetImg: ', vm.currentLogByImg)
         }
     }
 })
