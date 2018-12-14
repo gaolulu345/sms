@@ -36,6 +36,7 @@
 		log.ter_id ,
 		log.maintion_id ,
 		log.merchant_id ,
+		log.username ,
 		maintion.name AS maintion_username ,
 		merchant.name AS merchant_username ,
 		ti.title AS ter_title,
