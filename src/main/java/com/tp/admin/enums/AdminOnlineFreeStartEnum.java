@@ -2,8 +2,8 @@ package com.tp.admin.enums;
 
 public enum AdminOnlineFreeStartEnum {
 
-    NOT_START(0,"线上免费未开启"),
-    STARTED(1,"线上免费启动");
+    NOT_START(0,"一键下单未开启"),
+    STARTED(1,"一键下单启动");
 
     private int value;
     private String desc;

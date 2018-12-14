@@ -13,7 +13,7 @@ public interface TemplateDao {
 
     String searchMasterplateTool(AdminAutoSearch adminAutoSearch);
 
-    List<AdminServiceInfo> searchTemplateList(AdminAutoSearch adminAutoSearch);
+    List<AdminServiceInfo> searchServiceInfoList(AdminAutoSearch adminAutoSearch);
 
     AdminTemplateInfo searchTemplateId(Integer id);
 }

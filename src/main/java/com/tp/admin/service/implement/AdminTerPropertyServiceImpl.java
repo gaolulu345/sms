@@ -4,12 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.ajax.ResultCode;
+import com.tp.admin.common.Constant;
+import com.tp.admin.config.AdminProperties;
 import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.*;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.TerPropertySearch;
+import com.tp.admin.data.wash.WashSiteRequest;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import com.tp.admin.exception.BaseException;
@@ -58,6 +61,9 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     @Autowired
     AdminTerOperatingLogDao adminTerOperatingLogDao;
 
+    @Autowired
+    AdminProperties adminProperties;
+
     @Override
     public ApiResult allTerPropertyInfoList(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
@@ -72,7 +78,9 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         for (AdminTerPropertyDTO adminTerProperty:list) {
             adminTerProperty.build();
         }
-        return ApiResult.ok(list);
+        terPropertySearch.setTotalCnt(list.size());
+        terPropertySearch.setResult(list);
+        return ApiResult.ok(terPropertySearch);
     }
 
 
@@ -105,14 +113,17 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
         AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(terPropertySearch.getId());
-        if (adminTerPropertyDTO.getStartOnline() != 1){
-            terDao.updateOnlineFreeStartState(terPropertySearch.getId());
-            adminTerPropertyDTO.setStartOnline(1);
-            //添加日志
-            buildTerOperateLog(ob,adminTerPropertyDTO,WashTerOperatingLogTypeEnum.getByCode(4));
-
+        if (adminTerPropertyDTO.getTerId() == 0){
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION,"未绑定网点，无法操作");
         }
-        return ApiResult.ok();
+        WxMiniSearch wxMiniSearch = new WxMiniSearch();
+        wxMiniSearch.setTerId(adminTerPropertyDTO.getTerId());
+        TerInfoDTO terInfoDTO = washSiteServiceI.terCheck(wxMiniSearch);
+        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
+        String jsonBody = new Gson().toJson(washSiteRequest);
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
+              .SITE_ONLINE_START, jsonBody);
+        return buildApiResult(ob,result,terInfoDTO,"",WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED);
     }
 
     @Override
@@ -147,13 +158,14 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     }
 
     @Override
-    public void buildTerOperateLog(Object object,AdminTerPropertyDTO adminTerPropertyDTO,WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum) {
+    public void buildTerOperateLog(Object object, TerInfoDTO terInfoDTO,WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, String img, Boolean
+            sucess) {
         AdminTerOperatingLog adminTerOperatingLog = new AdminTerOperatingLog();
         AdminMerchantEmployee adminMerchantEmployee;
         AdminMaintionEmployee adminMaintionEmployee;
         if (object instanceof AdminMerchantEmployee){
             adminMerchantEmployee = (AdminMerchantEmployee) object;
-            String intros = adminMerchantEmployee.getName() + " 商户操作 " + adminTerPropertyDTO.getId() + "号设备" + washTerOperatingLogTypeEnum
+            String intros = adminMerchantEmployee.getName() + " 操作 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum
                     .getDesc();
             adminTerOperatingLog.setMerchantId(adminMerchantEmployee.getId());
             adminTerOperatingLog.setUsername(adminMerchantEmployee.getName());
@@ -161,23 +173,43 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MERCHANT.getValue());
         }else {
             adminMaintionEmployee = (AdminMaintionEmployee) object;
-            String intros = adminMaintionEmployee.getName() + " 维保操作 " + adminTerPropertyDTO.getTerId() + "号设备" + washTerOperatingLogTypeEnum
+            String intros = adminMaintionEmployee.getName() + " 操作 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum
                     .getDesc();
-            adminTerOperatingLog.setMerchantId(adminMaintionEmployee.getId());
+            adminTerOperatingLog.setMaintionId(adminMaintionEmployee.getId());
             adminTerOperatingLog.setUsername(adminMaintionEmployee.getName());
             adminTerOperatingLog.setIntros(intros);
             adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MAINTAUN.getValue());
         }
-        adminTerOperatingLog.setTerId(adminTerPropertyDTO.getId());
+        adminTerOperatingLog.setTerId(terInfoDTO.getId());
         adminTerOperatingLog.setTitle(washTerOperatingLogTypeEnum.getDesc());
 
         adminTerOperatingLog.setType(washTerOperatingLogTypeEnum.getValue());
-        adminTerOperatingLog.setImgs("");
+        adminTerOperatingLog.setImgs(img);
+        adminTerOperatingLog.setSuccess(sucess);
         int res = adminTerOperatingLogDao.insert(adminTerOperatingLog);
         if (res == 0) {
             log.error("操作日志存储失败 {} " + adminTerOperatingLog.toString());
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
+    }
+
+    private final ApiResult buildApiResult(Object object,String result, TerInfoDTO dto, String img, WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum
+    ) {
+        ApiResult apiResult = null;
+        try {
+            apiResult = new Gson().fromJson(result, ApiResult.class);
+            if (null == apiResult) {
+                throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+            }
+            if (apiResult.getCode().equals(ResultCode.SUCCESS.getCode())) {
+                buildTerOperateLog(object,dto, washTerOperatingLogTypeEnum, img, true);
+            } else {
+                buildTerOperateLog(object,dto, washTerOperatingLogTypeEnum, img, false);
+            }
+        } catch (JsonSyntaxException ex) {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        return apiResult;
     }
 
 

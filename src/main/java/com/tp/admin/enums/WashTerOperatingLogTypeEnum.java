@@ -6,8 +6,7 @@ public enum WashTerOperatingLogTypeEnum {
     TER_RESET_STATE(1,"重置网点状态"),
     ONLINE(2,"网点上线"),
     NOT_ONLINE(3,"网点下线"),
-    ONLINE_FREE_STARTED(4,"线上免费开启"),
-    ONLINE_FREE_CLOSE(5,"线上免费关闭");
+    ONLINE_FREE_STARTED(4,"一键下单");
 
     private int value;
     private String desc;

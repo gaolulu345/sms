@@ -2,6 +2,7 @@ package com.tp.admin.service;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
+import com.tp.admin.data.dto.TerInfoDTO;
 import com.tp.admin.data.entity.AdminMerchantEmployee;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.TerPropertySearch;
@@ -20,7 +21,7 @@ public interface AdminTerPropertyServiceI {
 
     Object check(String openId);
 
-    void buildTerOperateLog(Object object,AdminTerPropertyDTO adminTerPropertyDTO,WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum);
-
+    void buildTerOperateLog(Object object, TerInfoDTO terInfoDTO,WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, String img, Boolean
+            sucess);
 
 }

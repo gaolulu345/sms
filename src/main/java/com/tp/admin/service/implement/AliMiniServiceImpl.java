@@ -49,7 +49,7 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
         AdminServiceSearch adminServiceSearch = new AdminServiceSearch();
         AdminAutoSearch adminAutoSearch = new AdminAutoSearch();
         adminAutoSearch.setType(3);
-        List<AdminServiceInfo> list = templateDao.searchTemplateList(adminAutoSearch);
+        List<AdminServiceInfo> list = templateDao.searchServiceInfoList(adminAutoSearch);
         for (AdminServiceInfo adminServiceInfo:list) {
             if (adminServiceInfo.getKey().equals("ALiMiniAppID")){
                 adminServiceSearch.setAppId(adminServiceInfo.getValue());
