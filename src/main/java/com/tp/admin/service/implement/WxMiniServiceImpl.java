@@ -69,12 +69,11 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
         RestTemplate rest = new RestTemplate();
         ResponseEntity<String> result = rest.postForEntity("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send"+query, httpEntity, String.class);
         String errcode = JSONObject.fromObject(result.getBody()).getString("errcode");
-        String errmsg = JSONObject.fromObject(result.getBody()).getString("errmsg");
         if (errcode.equals("0")){
             log.info(result.getBody());
             return;
         }else {
-            log.error(errmsg);
+            log.error(result.getBody());
         }
     }
 
@@ -83,7 +82,6 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
         if (templateSearch.getFormId() == null || templateSearch.getTouser() == null || templateSearch.getData() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"缺少参数");
         }
-
         JSONObject requestBody = new JSONObject();
         String templateId = "";
         AdminTemplateInfo adminTemplateInfo = new AdminTemplateInfo();
@@ -94,7 +92,6 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
                 throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty templateId");
             }
         }
-
         requestBody.put("form_id",templateSearch.getFormId());
         requestBody.put("touser",templateSearch.getTouser());
         requestBody.put("data",templateSearch.getData());
@@ -102,7 +99,6 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
         if (templateSearch.getPage() != null){
             requestBody.put("page",templateSearch.getPage());
         }
-
         AdminAutoSearch adminAutoSearch = new AdminAutoSearch();
         adminAutoSearch.setType(adminTemplateInfo.getServiceType());
         adminAutoSearch.setKey("WX_APP_ID");
@@ -110,6 +106,7 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
         adminAutoSearch.setKey("WX_APP_SECRET");
         String appSecret = templateDao.searchMasterplateTool(adminAutoSearch);
         String accessToken = getAccessToken(appId,appSecret);
+        requestBody.put("access_token",accessToken);
         sendTemplateMessage(accessToken,requestBody.toString());
     }
 

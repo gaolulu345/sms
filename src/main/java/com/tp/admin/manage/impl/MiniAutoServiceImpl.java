@@ -41,20 +41,22 @@ public class MiniAutoServiceImpl implements MiniAutoServiceI {
         if (StringUtils.isBlank(wxMiniAuthDTO.getCode())) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty code");
         }
+        if (wxMiniAuthDTO.getType() == null){
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"缺省参数");
+        }
 
         AdminAutoSearch adminAutoSearch = new AdminAutoSearch();
         adminAutoSearch.setType(wxMiniAuthDTO.getType());
 
         AdminServiceSearch adminServiceSearch = new AdminServiceSearch();
-        if (wxMiniAuthDTO.getType() != null){
-            List<AdminServiceInfo> list = templateDao.searchTemplateList(adminAutoSearch);
-            for (AdminServiceInfo adminServiceInfo:list) {
-                if (adminServiceInfo.getKey().equals("WX_APP_ID")){
-                    adminServiceSearch.setAppId(adminServiceInfo.getValue());
-                }
-                if (adminServiceInfo.getKey().equals("WX_APP_SECRET")){
-                    adminServiceSearch.setAppSecret(adminServiceInfo.getValue());
-                }
+
+        List<AdminServiceInfo> list = templateDao.searchServiceInfoList(adminAutoSearch);
+        for (AdminServiceInfo adminServiceInfo:list) {
+            if (adminServiceInfo.getKey().equals("WX_APP_ID")){
+                adminServiceSearch.setAppId(adminServiceInfo.getValue());
+            }
+            if (adminServiceInfo.getKey().equals("WX_APP_SECRET")){
+                adminServiceSearch.setAppSecret(adminServiceInfo.getValue());
             }
         }
 

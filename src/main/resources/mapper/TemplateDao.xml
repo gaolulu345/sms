@@ -8,7 +8,7 @@
         AND asi.type = #{type}
     </select>
 
-    <select id="searchTemplateList" parameterType="com.tp.admin.data.search.AdminAutoSearch" resultMap="AdminAutoMap">
+    <select id="searchServiceInfoList" parameterType="com.tp.admin.data.search.AdminAutoSearch" resultMap="AdminAutoMap">
         SELECT * FROM admin_service_info AS asi
         WHERE asi.deleted = 0
         <if test="key != null">
