@@ -78,7 +78,11 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         for (AdminTerPropertyDTO adminTerProperty:list) {
             adminTerProperty.build();
         }
-        terPropertySearch.setTotalCnt(list.size());
+        Integer num = terDao.findAllTerPropertyCount();
+        if (num == null){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        terPropertySearch.setTotalCnt(num);
         terPropertySearch.setResult(list);
         return ApiResult.ok(terPropertySearch);
     }

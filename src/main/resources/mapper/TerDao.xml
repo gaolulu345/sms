@@ -106,6 +106,10 @@
 		</if>
 	</select>
 
+	<select id="findAllTerPropertyCount" resultType="java.lang.Integer">
+		SELECT COUNT(atp.id) FROM admin_ter_property AS atp
+	</select>
+
 	<select id="findTerStartInfo" parameterType="java.lang.Integer" resultMap="AdminTerPropertyDTOMap">
 		SELECT  atp.id,
 				atp.ter_id,

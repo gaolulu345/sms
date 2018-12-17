@@ -22,6 +22,8 @@ public interface TerDao {
 
     Integer cntTerInfoSearch(WxMiniSearch wxMiniTerSearch);
 
+    Integer findAllTerPropertyCount();
+
     AdminTerPropertyDTO findTerStartInfo(int terId);
 
     int updateOnlineFreeStartState(int terId);
