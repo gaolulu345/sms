@@ -149,4 +149,27 @@ public class IndexController {
     public String device(HttpServletRequest request,Model model){
         return "device";
     };
+
+    /**
+     * 设备详情
+     * @param request
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/pages/detail")
+    public String deviceInfo(HttpServletRequest request,Model model){
+        return "device_detail";
+    };
+
+    /**
+     * 设备广告
+     * @param request
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/pages/advertising")
+    public String deviceAdvertising(HttpServletRequest request,Model model){
+        return "device_advertising";
+    };
+
 }
