@@ -18,18 +18,17 @@ var vm = new Vue({
     }, 
 
     mounted: function() {
-        this.geDeviceList(this.$data.currentPageSize, this.$data.currentPageIndex)
+        this.getDeviceList(this.$data.currentPageSize, this.$data.currentPageIndex)
     },
     methods: {
-        geDeviceList: function(pageSize, pageIndex){
+        getDeviceList: function(pageSize, pageIndex){
             this.$http.post("/api/private/wash/ter/property/all/list", {
                 pageSize: pageSize,
                 pageIndex: pageIndex,
             }).then(function(res){
                 let data = res.json().data
-                console.log(data)
-                // let result = data.result;
-                let result = data
+                console.log('res: ', data)
+                let result = data.result;
                 if(result && result[0]) {
                     result.forEach(function(val) {
                         val.screenSize = `${val.screenHigh}*${val.screenWide}`
@@ -42,11 +41,11 @@ var vm = new Vue({
         },
 
         handleSizeChange(val) {
-            vm.getLogList(val, 1);
+            vm.getDeviceList(val, 1);
         },
 
         handleCurrentChange(val) {
-            vm.getLogList(vm.currentPageSize, val);
+            vm.getDeviceList(vm.currentPageSize, val);
 
         },
 
