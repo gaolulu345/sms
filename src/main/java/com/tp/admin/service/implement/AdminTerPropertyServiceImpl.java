@@ -71,6 +71,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         if (null == terPropertySearch) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
+        terPropertySearch.build();
         List<AdminTerPropertyDTO> list = terDao.findAllTerProperty(terPropertySearch);
         if (list == null) {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
