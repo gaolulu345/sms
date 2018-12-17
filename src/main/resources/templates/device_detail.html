@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <#include "common/meta.html">
+    <!-- <link rel="stylesheet" href="/css/device_log.css"> -->
+</head>
+<body>
+<div v-cloak id="app" class="clearfix">
+    <#include "common/left.html">
+    <div class="rightSide">
+        <#include "common/top.html">
+        <div>
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span>设备硬件参数</span>
+            </div>
+            <el-table :data="device" border style="width: 100%">
+                <el-table-column prop="device.id" label="设备ID">
+                </el-table-column>
+                <el-table-column prop="device.highLimit" label="设备限高" width="180">
+                </el-table-column>
+                <el-table-column prop="device.wideLimit" label="设备限宽" width="180">
+                </el-table-column>
+                <el-table-column prop="device.bubbleLimit" label="泡沫可用次数">
+                </el-table-column>
+            </el-table>
+        </el-card>
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span>设备关联网点信息</span>
+            </div>
+            <el-table :data="device" border style="width: 100%">
+                <el-table-column prop="device.terId" label="网点ID">
+                </el-table-column>
+                <el-table-column prop="device.terModel" label="网点编号" width="180">
+                </el-table-column>
+                <el-table-column prop="device.terRemark" label="网点名称" width="180">
+                </el-table-column>
+                <el-table-column prop="device.terBusiModeDesc" label="网点类型">
+                </el-table-column>
+            </el-table>
+        </el-card>
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span>附属设备信息</span>
+            </div>
+            <el-table :data="device" border style="width: 100%">
+                <el-table-column prop="device.terClientVersion" label="工控程序版本">
+                </el-table-column>
+                <el-table-column prop="device.screenSize" label="屏幕尺寸">
+                </el-table-column>
+                <el-table-column prop="device.netMethodDesc" label="网点网络类型">
+                </el-table-column>
+                <el-table-column prop="device.videoControl" label="监控服务">
+                </el-table-column>
+                <el-table-column prop="device.adExist" label="是否支持广告">
+                </el-table-column>
+            </el-table>
+        </el-card>
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span>广告图片管理</span>
+                <el-button style="float: lift; padding: 3px 0" type="text">上传</el-button>
+                <el-button style="float: lift; padding: 3px 0" type="text">开启</el-button>
+                <el-button style="float: lift; padding: 3px 0" type="text">展示</el-button>
+                <el-button style="float: right; padding: 3px 0" type="text">批量删除</el-button>
+            </div>
+            <el-table :data="device" border style="width: 100%">
+                <el-table-column prop="terClientVersion" label="工控程序版本">
+                </el-table-column>
+                <el-table-column prop="screenSize" label="屏幕尺寸">
+                </el-table-column>
+                <el-table-column prop="netMethodDesc" label="网点网络类型">
+                </el-table-column>
+                <el-table-column prop="videoControl" label="监控服务">
+                </el-table-column>
+                <el-table-column prop="adExist" label="是否支持广告">
+                </el-table-column>
+            </el-table>
+        </el-card>
+        </div>
+    </div>
+</div>
+<script src="/js/common/per.js"></script>
+<script src="/js/device_detail.js"></script>
+</body>
+</html>

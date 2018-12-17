@@ -51,8 +51,13 @@ var vm = new Vue({
 
         handlerDevice: function(val) {
             vm.currentDevice = val
-            console.log('in showResetImg: ', vm.currentLogByImg)
-        }
+            console.log('device val', val)
+            this.toDeviceDetail(val.id)
+        },
+
+        toDeviceDetail: function(id) {
+            window.open('/pages/detail?id=' + id, "_blank");
+        },
     }
 })
 
