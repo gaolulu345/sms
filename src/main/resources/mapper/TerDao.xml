@@ -122,7 +122,6 @@
 				atp.ter_remark,
 				atp.high_limit,
 				atp.wide_limit,
-				atp.start_online,
 				atp.ad_exist,
 				atp.screen_wide,
 				atp.screen_high
@@ -130,16 +129,19 @@
 				WHERE atp.id=#{id}
 	</select>
 
-	<update id="updateOnlineFreeStartState" parameterType="java.lang.Integer">
+	<!--<update id="updateOnlineFreeStartState" parameterType="java.lang.Integer">
 		update admin_ter_property
 		SET start_online=1
 		WHERE
 		id=#{id}
-	</update>
+	</update>-->
 
 	<update id="updateTerProperty" parameterType="com.tp.admin.data.dto.AdminTerPropertyDTO">
 		UPDATE `admin_ter_property`
 		<trim prefix="set" suffixOverrides=",">
+			<if test="terId != null">
+				`ter_id` = #{terId},
+			</if>
 			<if test="netMethod != null">
 				`net_method` = #{netMethod},
 			</if>
@@ -167,9 +169,6 @@
 			<if test="wideLimit != null">
 				`wide_limit` = #{wideLimit},
 			</if>
-			<if test="startOnline != null">
-				`start_online` = #{startOnline},
-			</if>
 			<if test="adExist != null">
 				`ad_exist` = #{adExist},
 			</if>
@@ -178,6 +177,9 @@
 			</if>
 			<if test="screenHigh != null">
 				`screen_high` = #{screenHigh},
+			</if>
+			<if test="propertyRemark != null">
+				`property_remark` = #{propertyRemark},
 			</if>
 		</trim>
 		WHERE
@@ -205,7 +207,6 @@
 		<result column="ter_remark" property="terRemark" jdbcType="VARCHAR"/>
 		<result column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
 		<result column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
-		<result column="start_online" property="startOnline" jdbcType="INTEGER"/>
 		<result column="ad_exist" property="adExist" jdbcType="BIT"/>
 		<result column="screen_wide" property="screenWide" jdbcType="INTEGER"/>
 		<result column="screen_high" property="screenHigh" jdbcType="INTEGER"/>
@@ -220,9 +221,9 @@
 		<result column="ter_busi_mode" property="terBusiMode" jdbcType="INTEGER"/>
 		<result column="ter_model" property="terModel" jdbcType="VARCHAR"/>
 		<result column="ter_remark" property="terRemark" jdbcType="VARCHAR"/>
+		<result column="property_remark" property="propertyRemark" jdbcType="VARCHAR"/>
 		<result column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
 		<result column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
-		<result column="start_online" property="startOnline" jdbcType="INTEGER"/>
 		<result column="ad_exist" property="adExist" jdbcType="BIT"/>
 		<result column="screen_wide" property="screenWide" jdbcType="INTEGER"/>
 		<result column="screen_high" property="screenHigh" jdbcType="INTEGER"/>

@@ -26,7 +26,7 @@ public interface TerDao {
 
     AdminTerPropertyDTO findTerStartInfo(int terId);
 
-    int updateOnlineFreeStartState(int terId);
+    //int updateOnlineFreeStartState(int terId);
 
     int updateTerProperty(AdminTerPropertyDTO adminTerPropertyDTO);
 

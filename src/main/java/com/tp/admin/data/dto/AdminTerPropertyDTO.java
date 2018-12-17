@@ -26,10 +26,10 @@ public class AdminTerPropertyDTO {
     private String terRemark;
     private Integer highLimit;
     private Integer wideLimit;
-    private Integer startOnline;
     private boolean adExist;
     private Integer screenWide;
     private Integer screenHigh;
+    private String propertyRemark;
     private String netMethodDesc;//联网方式描述
     private String terBusiModeDesc;//网店运营模式描述
     private String startOnlineDesc;//若为单网点有人值守，0表示未启动，1表示启动
@@ -40,9 +40,6 @@ public class AdminTerPropertyDTO {
         }
         if (netMethod != null){
             this.netMethodDesc = AdminNetMethodEnum.getByValue(this.netMethod).getDesc();
-        }
-        if (startOnline != null){
-            this.startOnlineDesc = AdminOnlineFreeStartEnum.getByValue(this.startOnline).getDesc();
         }
     }
 

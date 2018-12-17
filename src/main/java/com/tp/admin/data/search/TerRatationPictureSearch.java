@@ -14,16 +14,22 @@ import java.sql.Timestamp;
 @EqualsAndHashCode(callSuper = false)
 public class TerRatationPictureSearch extends Search{
 
+    @JsonIgnore
     Integer id;
+    @JsonIgnore
     int[] ids;
     Integer deviceId;
     @JsonIgnore
     Timestamp createTime;
+    @JsonIgnore
     Integer type;
+    @JsonIgnore
     boolean enable;
+    @JsonIgnore
     Timestamp enableTime;
     @JsonIgnore
     Timestamp modifyTime;
+    @JsonIgnore
     String picture;
     boolean deleted;
 
