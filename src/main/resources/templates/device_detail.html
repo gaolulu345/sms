@@ -2,7 +2,7 @@
 <html>
 <head>
     <#include "common/meta.html">
-    <!-- <link rel="stylesheet" href="/css/device_log.css"> -->
+    <link rel="stylesheet" href="/css/device_detail.css">
 </head>
 <body>
 <div v-cloak id="app" class="clearfix">
@@ -10,18 +10,66 @@
     <div class="rightSide">
         <#include "common/top.html">
         <div>
-        <el-card class="box-card">
+        <el-card class="box-card first-card">
             <div slot="header" class="clearfix">
                 <span>设备硬件参数</span>
             </div>
             <el-table :data="device" border style="width: 100%">
-                <el-table-column prop="device.id" label="设备ID">
+                <el-table-column prop="id" label="设备ID">
                 </el-table-column>
-                <el-table-column prop="device.highLimit" label="设备限高" width="180">
+                <el-table-column prop="highLimit" label="设备限高(米)">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.highLimit.edit == false">
+                                <span slot="reference" class="name-wrapper">
+                                    <el-tag size="medium">{{ scope.row.highLimit.value }}</el-tag>
+                                </span>
+                                <el-button size="mini" @click="scope.row.highLimit.edit = true">编辑</el-button>
+
+                            </span>
+                            <span v-else>
+                                <span slot="reference" class="name-wrapper">
+                                    <el-input-number v-model="scope.row.highLimit.value" size='mini' :min="1" :max="15" label="设备限高"></el-input-number>
+                                </span>
+                                <el-button size="mini" @click="scope.row.highLimit.edit = false">保存</el-button>
+                                <el-button size="mini" @click="scope.row.highLimit.edit = false">取消</el-button>
+                            </span>
+                        </template>
                 </el-table-column>
-                <el-table-column prop="device.wideLimit" label="设备限宽" width="180">
+                <el-table-column prop="wideLimit" label="设备限宽(米)">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.wideLimit.edit == false">
+                                <span slot="reference" class="name-wrapper">
+                                    <el-tag size="medium">{{ scope.row.highLimit.value }}</el-tag>
+                                </span>
+                                <el-button size="mini" @click="scope.row.wideLimit.edit = true">编辑</el-button>
+
+                            </span>
+                            <span v-else>
+                                <span slot="reference" class="name-wrapper">
+                                    <el-input-number v-model="scope.row.wideLimit.value" size='mini' :min="1" :max="15" label="设备限宽(米)"></el-input-number>
+                                </span>
+                                <el-button size="mini" @click="scope.row.wideLimit.edit = false">保存</el-button>
+                                <el-button size="mini" @click="scope.row.wideLimit.edit = false">取消</el-button>
+                            </span>
+                        </template>
                 </el-table-column>
-                <el-table-column prop="device.bubbleLimit" label="泡沫可用次数">
+                <el-table-column prop="bubbleLimit" label="泡沫可用次数">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.bubbleLimit.edit == false">
+                            <span slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.bubbleLimit.value }}</el-tag>
+                            </span>
+                            <el-button size="mini" @click="scope.row.bubbleLimit.edit = true">编辑</el-button>
+
+                        </span>
+                        <span v-else>
+                            <span slot="reference" class="name-wrapper">
+                                <el-input-number v-model="scope.row.bubbleLimit.value" size='mini' :min="1" :max="1000" label="泡沫可用次数"></el-input-number>
+                            </span>
+                            <el-button size="mini" @click="scope.row.bubbleLimit.edit = false">保存</el-button>
+                            <el-button size="mini" @click="scope.row.bubbleLimit.edit = false">取消</el-button>
+                        </span>
+                    </template>
                 </el-table-column>
             </el-table>
         </el-card>
@@ -30,13 +78,39 @@
                 <span>设备关联网点信息</span>
             </div>
             <el-table :data="device" border style="width: 100%">
-                <el-table-column prop="device.terId" label="网点ID">
+                <el-table-column prop="terId" label="网点ID">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.terId.edit == false">
+                                <span slot="reference" class="name-wrapper">
+                                    <el-tag size="medium">{{ scope.row.terId.value }}</el-tag>
+                                </span>
+                                <el-button size="mini" @click="scope.row.terId.edit = true">编辑</el-button>
+                            </span>
+                            <span v-else>
+                                <span slot="reference" class="name-wrapper">
+
+
+
+
+
+
+
+
+
+                                    
+                                    <el-input-number v-model="scope.row.terId.value" size='mini' :min="1" :max="1000" label="泡沫可用次数"></el-input-number>
+                                    <el-autocomplete v-model="scope.row.terId.value" :fetch-suggestions="querySearchAsync" placeholder="网点ID关联" @select="handleSelect"></el-autocomplete>
+                                </span>
+                                <el-button size="mini" @click="scope.row.terId.edit = false">保存</el-button>
+                                <el-button size="mini" @click="scope.row.terId.edit = false">取消</el-button>
+                            </span>
+                        </template>
                 </el-table-column>
-                <el-table-column prop="device.terModel" label="网点编号" width="180">
+                <el-table-column prop="terModel" label="网点编号">
                 </el-table-column>
-                <el-table-column prop="device.terRemark" label="网点名称" width="180">
+                <el-table-column prop="terRemark" label="网点名称">
                 </el-table-column>
-                <el-table-column prop="device.terBusiModeDesc" label="网点类型">
+                <el-table-column prop="terBusiModeDesc" label="网点类型">
                 </el-table-column>
             </el-table>
         </el-card>
@@ -45,15 +119,15 @@
                 <span>附属设备信息</span>
             </div>
             <el-table :data="device" border style="width: 100%">
-                <el-table-column prop="device.terClientVersion" label="工控程序版本">
+                <el-table-column prop="terClientVersion" label="工控程序版本">
                 </el-table-column>
-                <el-table-column prop="device.screenSize" label="屏幕尺寸">
+                <el-table-column prop="screenSize" label="屏幕尺寸">
                 </el-table-column>
-                <el-table-column prop="device.netMethodDesc" label="网点网络类型">
+                <el-table-column prop="netMethodDesc" label="网点网络类型">
                 </el-table-column>
-                <el-table-column prop="device.videoControl" label="监控服务">
+                <el-table-column prop="videoControl" label="监控服务">
                 </el-table-column>
-                <el-table-column prop="device.adExist" label="是否支持广告">
+                <el-table-column prop="adExist" label="是否支持广告">
                 </el-table-column>
             </el-table>
         </el-card>
