@@ -56,4 +56,15 @@ public class AdminTerPropertyController {
         return adminTerPropertyServiceI.updateTerProperty(request,adminTerPropertyDTO);
     }
 
+    /**
+     * 查询所有网点信息
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/list/info")
+    public ApiResult terAllList(HttpServletRequest request){
+        return adminTerPropertyServiceI.terAllList(request);
+    }
+
 }

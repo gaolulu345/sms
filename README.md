@@ -107,6 +107,7 @@ ALTER TABLE admin_account_login_log ADD INDEX index_name ( `username` )
 
 ##### 发送模板消息-退款通知
 > post: /api/open/template/info/send
+
 > 入参类型 json
 ```json
 {

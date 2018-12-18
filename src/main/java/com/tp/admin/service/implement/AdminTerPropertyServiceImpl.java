@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
@@ -196,6 +197,20 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             log.error("操作日志存储失败 {} " + adminTerOperatingLog.toString());
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
+    }
+
+    @Override
+    public ApiResult terAllList(HttpServletRequest request) {
+        List<Map<String,Object>> list = terDao.findAllTerIdAndTitle();
+        TerPropertySearch terPropertySearch = new TerPropertySearch();
+        if (null != list && list.size() != 0){
+            Integer num  = terDao.findAllTerInfoCount();
+            terPropertySearch.setResult(list);
+            terPropertySearch.setTotalCnt(num);
+        }else {
+            terPropertySearch.setTotalCnt(0);
+        }
+        return ApiResult.ok(terPropertySearch);
     }
 
     private final ApiResult buildApiResult(Object object,String result, TerInfoDTO dto, String img, WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum

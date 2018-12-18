@@ -14,6 +14,8 @@ public interface TerDao {
 
     List<Map<String, Object>> findAllTerIdAndTitle();
 
+    Integer findAllTerInfoCount();
+
     List<Integer> listTerCityId();
 
     List<Integer> findRelatedTerByPartnerId(Integer id);
@@ -25,8 +27,6 @@ public interface TerDao {
     Integer findAllTerPropertyCount();
 
     AdminTerPropertyDTO findTerStartInfo(int terId);
-
-    //int updateOnlineFreeStartState(int terId);
 
     int updateTerProperty(AdminTerPropertyDTO adminTerPropertyDTO);
 
