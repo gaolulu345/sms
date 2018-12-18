@@ -78,24 +78,16 @@ public class WxMiniServiceImpl implements WxMiniServiceI {
     }
 
     @Override
-    public void sendWxTemplate(TemplateSearch templateSearch) {
+    public void sendWxTemplate(TemplateSearch templateSearch,AdminTemplateInfo adminTemplateInfo) {
         if (templateSearch.getFormId() == null || templateSearch.getTouser() == null || templateSearch.getData() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"缺少参数");
         }
         JSONObject requestBody = new JSONObject();
-        String templateId = "";
-        AdminTemplateInfo adminTemplateInfo = new AdminTemplateInfo();
-        if (templateSearch.getTemplateInfo() != null){
-            adminTemplateInfo = templateDao.searchTemplateId(AdminTemplateInfoEnum.getByValue(templateSearch.getTemplateInfo()).getValue());
-            templateId = adminTemplateInfo.getTemplateId();
-            if (templateId.equals("")){
-                throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty templateId");
-            }
-        }
+
         requestBody.put("form_id",templateSearch.getFormId());
         requestBody.put("touser",templateSearch.getTouser());
         requestBody.put("data",templateSearch.getData());
-        requestBody.put("template_id",templateId);
+        requestBody.put("template_id",adminTemplateInfo.getTemplateId());
         if (templateSearch.getPage() != null){
             requestBody.put("page",templateSearch.getPage());
         }

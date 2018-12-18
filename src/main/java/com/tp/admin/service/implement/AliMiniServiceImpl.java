@@ -39,16 +39,15 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
     HttpHelperI httpHelper;
 
     @Override
-    public ApiResult sendAliTemplate(TemplateSearch templateSearch) {
+    public ApiResult sendAliTemplate(TemplateSearch templateSearch,AdminTemplateInfo adminTemplateInfo) {
         if (templateSearch.getTouser() == null || templateSearch.getFormId() == null || templateSearch.getData() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"参数");
         }
         String aliUrl = "https://openapi.alipay.com/gateway.do";
 
-
         AdminServiceSearch adminServiceSearch = new AdminServiceSearch();
         AdminAutoSearch adminAutoSearch = new AdminAutoSearch();
-        adminAutoSearch.setType(3);
+        adminAutoSearch.setType(adminTemplateInfo.getServiceType());
         List<AdminServiceInfo> list = templateDao.searchServiceInfoList(adminAutoSearch);
         for (AdminServiceInfo adminServiceInfo:list) {
             if (adminServiceInfo.getKey().equals("ALiMiniAppID")){
@@ -59,17 +58,6 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
                 adminServiceSearch.setAppPrivateKey(adminServiceInfo.getValue());
             }
         }
-
-
-        String aLiMiniTemplateId = "";
-        if (templateSearch.getTemplateInfo() != null){
-            AdminTemplateInfo adminTemplateInfo = templateDao.searchTemplateId(AdminTemplateInfoEnum.getByValue(templateSearch.getTemplateInfo()).getValue());
-            aLiMiniTemplateId = adminTemplateInfo.getTemplateId();
-            if (aLiMiniTemplateId.equals("")){
-                throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty templateId");
-            }
-        }
-
         if (null == adminServiceSearch.getAppId() || null == adminServiceSearch.getAppPrivateKey() || null == adminServiceSearch.getAppPublicKey() || adminServiceSearch.getAppId().equals("") || adminServiceSearch.getAppPrivateKey().equals("") || adminServiceSearch.getAppPublicKey().equals("")){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
@@ -77,7 +65,7 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("to_user_id",templateSearch.getTouser());
         jsonObject.put("form_id",templateSearch.getFormId());
-        jsonObject.put("user_template_id",aLiMiniTemplateId);
+        jsonObject.put("user_template_id",adminTemplateInfo.getTemplateId());
         jsonObject.put("page",templateSearch.getPage());
         jsonObject.put("data",templateSearch.getData());
 
@@ -90,7 +78,7 @@ public class AliMiniServiceImpl implements AliMiniServiceI {
         try {
             response = alipayClient.execute(request1);
             aliRes = response.getCode();
-        } catch (AlipayApiException e) {
+        } catch (Exception e) {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
         if (StringUtil.isEmpty(aliRes)){

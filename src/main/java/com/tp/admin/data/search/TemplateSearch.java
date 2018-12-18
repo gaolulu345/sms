@@ -20,7 +20,7 @@ public class TemplateSearch extends Search {
     private String page;
     private Integer type;//判断是支付宝还是微信
 
-    private String templateInfo;
+    private Integer templateId;
 
 
     @Override
