@@ -49,7 +49,7 @@ ALTER TABLE admin_account_login_log ADD INDEX index_name ( `username` )
 	"touser":  #模板消息接收人 *必填
 	"formId":  #formId     *必填
 	"page":    #要跳转的页面 *选填
-	"templateInfo":  #要发送的模板的备注信息 *必填
+	"templateId":  #要发送的模板消息Id *必填
 	"data":{
 		"keyword1":{
 			"value":   #模板消息关键字对应的值1 姓名 *必填
@@ -75,7 +75,7 @@ ALTER TABLE admin_account_login_log ADD INDEX index_name ( `username` )
 	"touser":"oDmyu4j1SwZeJkVGehkPg81rAOlc",
 	"formId":"12345678",
 	"page":"pages/index",
-	"templateInfo":"会员卡审核",
+	"templateId":4,
 	"data":{
 		"keyword1":{
 			"value":"北北"
@@ -114,7 +114,7 @@ ALTER TABLE admin_account_login_log ADD INDEX index_name ( `username` )
 	"touser":  #模板消息接收人 *必填
 	"formId":  #formId     *必填
 	"page":    #要跳转的页面 *选填
-	"templateInfo":  #要发送的模板的备注信息 *必填
+	"templateId":  #要发送的模板消息Id *必填
 	"data":{
 		"keyword1":{
 			"value":   #模板消息关键字对应的值1 订单编号  *必填
@@ -137,7 +137,7 @@ ALTER TABLE admin_account_login_log ADD INDEX index_name ( `username` )
 	"touser":"o7A4G0QV_G4ZXQPGQgEPELQsmJag",
 	"formId":"12345678",
 	"page":"pages/index",
-	"templateInfo":"微信退款通知",
+	"templateId":2,
 	"data":{
 		"keyword1":{
 			"value":"NO20161128001"
