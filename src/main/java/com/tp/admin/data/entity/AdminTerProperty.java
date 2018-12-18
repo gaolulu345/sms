@@ -22,4 +22,5 @@ public class AdminTerProperty {
     private boolean adExist;
     private Integer screenWide;
     private Integer screenHigh;
+    private String propertyRemark;
 }

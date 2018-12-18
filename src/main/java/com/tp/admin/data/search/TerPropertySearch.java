@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class TerPropertySearch extends Search {
 
     private Integer id;//网点设备id
-    private Integer startOnline;
 
     private String openId;
 

@@ -196,7 +196,7 @@
 		<result column="status" property="status" jdbcType="SMALLINT" />
 	</resultMap>
 
-	<resultMap id="AdminTerPropertyMap" type="com.tp.admin.data.entity.AdminTerProperty">
+	<!--<resultMap id="AdminTerPropertyMap" type="com.tp.admin.data.entity.AdminTerProperty">
 		<result column="ter_id" property="terId" javaType="INTEGER"/>
 		<result column="net_method" property="netMethod" jdbcType="INTEGER"/>
 		<result column="video_control" property="videoControl" jdbcType="VARCHAR"/>
@@ -210,7 +210,7 @@
 		<result column="ad_exist" property="adExist" jdbcType="BIT"/>
 		<result column="screen_wide" property="screenWide" jdbcType="INTEGER"/>
 		<result column="screen_high" property="screenHigh" jdbcType="INTEGER"/>
-	</resultMap>
+	</resultMap>-->
 
 	<resultMap id="AdminTerPropertyDTOMap" type="com.tp.admin.data.dto.AdminTerPropertyDTO">
 		<id column="ter_id" property="terId" javaType="INTEGER"/>

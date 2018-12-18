@@ -1,7 +1,6 @@
 package com.tp.admin.data.dto;
 
 import com.tp.admin.enums.AdminNetMethodEnum;
-import com.tp.admin.enums.AdminOnlineFreeStartEnum;
 import com.tp.admin.enums.AdminTerBusinessModeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +31,6 @@ public class AdminTerPropertyDTO {
     private String propertyRemark;
     private String netMethodDesc;//联网方式描述
     private String terBusiModeDesc;//网店运营模式描述
-    private String startOnlineDesc;//若为单网点有人值守，0表示未启动，1表示启动
 
     public void build(){
         if (terBusiMode != null){

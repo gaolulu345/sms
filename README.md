@@ -43,6 +43,7 @@ ALTER TABLE admin_account_login_log ADD INDEX index_name ( `username` )
 ##### 发送模板消息-会员认证审核通知
 > post: /api/open/template/info/send
 
+> 入参类型 json
 ```json
 {
 	"touser":  #模板消息接收人 *必填
@@ -95,6 +96,7 @@ ALTER TABLE admin_account_login_log ADD INDEX index_name ( `username` )
 }
 ```
 > 响应示例：
+
 ```json
 {
     "code": "200",
@@ -103,10 +105,9 @@ ALTER TABLE admin_account_login_log ADD INDEX index_name ( `username` )
 }
 ```
 
-#####发送模板消息-退款通知
-> post:/api/open/template/info/send
-
-> 入参类型form-data
+##### 发送模板消息-退款通知
+> post: /api/open/template/info/send
+> 入参类型 json
 ```json
 {
 	"touser":  #模板消息接收人 *必填
