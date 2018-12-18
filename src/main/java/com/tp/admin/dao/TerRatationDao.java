@@ -18,6 +18,8 @@ public interface TerRatationDao {
 
     int startTerRatationPicture(TerRatationPictureSearch terRatationPictureSearch);
 
+    int terRatationPictureCount(TerRatationPictureSearch terRatationPictureSearch);
+
     int deleteTerRatationPicture(TerRatationPictureSearch terRatationPictureSearch);
 
     int addTerRatationLog(TerRatationPictureLog terRatationPictureLog);

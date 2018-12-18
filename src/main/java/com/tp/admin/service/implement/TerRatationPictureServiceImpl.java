@@ -10,6 +10,7 @@ import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.FileUploadLog;
 import com.tp.admin.data.entity.TerRatationPicture;
 import com.tp.admin.data.entity.TerRatationPictureLog;
+import com.tp.admin.data.search.Search;
 import com.tp.admin.data.search.TerRatationPictureSearch;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -86,14 +87,21 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (terRatationPictureSearch.getDeviceId() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty deviceId");
         }
+        terRatationPictureSearch.build();
         List<TerRatationPicture> terRatationPictureList = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
-        if (terRatationPictureList == null || terRatationPictureList.size() == 0){
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"该设备下无图片数据");
+        if (terRatationPictureList == null){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
         for (TerRatationPicture terRatationPicture:terRatationPictureList) {
             terRatationPicture.build();
         }
-        return ApiResult.ok(terRatationPictureList);
+
+        Integer terRatationPictureNum = terRatationDao.terRatationPictureCount(terRatationPictureSearch);
+        if (terRatationPictureNum != null){
+            terRatationPictureSearch.setTotalCnt(terRatationPictureNum);
+        }
+        terRatationPictureSearch.setResult(terRatationPictureList);
+        return ApiResult.ok(terRatationPictureSearch);
     }
 
     @Override

@@ -19,8 +19,8 @@ public class AdminTerProperty {
     private String terRemark;
     private Integer highLimit;
     private Integer wideLimit;
-    private Integer startOnline;
     private boolean adExist;
     private Integer screenWide;
     private Integer screenHigh;
+    private String propertyRemark;
 }

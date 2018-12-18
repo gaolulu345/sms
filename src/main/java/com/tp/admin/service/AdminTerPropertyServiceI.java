@@ -24,4 +24,5 @@ public interface AdminTerPropertyServiceI {
     void buildTerOperateLog(Object object, TerInfoDTO terInfoDTO,WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, String img, Boolean
             sucess);
 
+    ApiResult terAllList(HttpServletRequest request);
 }

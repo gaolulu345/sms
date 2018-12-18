@@ -27,6 +27,4 @@ public class AdminTemplateController {
         //return null;
         return adminTemplateInfoServiceI.sendTemplate(request);
     }
-
-
 }
