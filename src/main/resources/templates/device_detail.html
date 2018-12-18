@@ -15,9 +15,9 @@
                 <span>设备硬件参数</span>
             </div>
             <el-table :data="device" border style="width: 100%">
-                <el-table-column prop="id" label="设备ID">
+                <el-table-column prop="id.value" label="设备ID">
                 </el-table-column>
-                <el-table-column prop="highLimit" label="设备限高(米)">
+                <el-table-column prop="highLimit.value" label="设备限高(米)">
                         <template slot-scope="scope">
                             <span v-if="scope.row.highLimit.edit == false">
                                 <span slot="reference" class="name-wrapper">
@@ -35,11 +35,11 @@
                             </span>
                         </template>
                 </el-table-column>
-                <el-table-column prop="wideLimit" label="设备限宽(米)">
+                <el-table-column prop="wideLimit.value" label="设备限宽(米)">
                         <template slot-scope="scope">
                             <span v-if="scope.row.wideLimit.edit == false">
                                 <span slot="reference" class="name-wrapper">
-                                    <el-tag size="medium">{{ scope.row.highLimit.value }}</el-tag>
+                                    <el-tag size="medium">{{ scope.row.wideLimit.value }}</el-tag>
                                 </span>
                                 <el-button size="mini" @click="scope.row.wideLimit.edit = true">编辑</el-button>
 
@@ -53,7 +53,7 @@
                             </span>
                         </template>
                 </el-table-column>
-                <el-table-column prop="bubbleLimit" label="泡沫可用次数">
+                <el-table-column prop="bubbleLimit.value" label="泡沫可用次数">
                     <template slot-scope="scope">
                         <span v-if="scope.row.bubbleLimit.edit == false">
                             <span slot="reference" class="name-wrapper">
@@ -78,39 +78,39 @@
                 <span>设备关联网点信息</span>
             </div>
             <el-table :data="device" border style="width: 100%">
-                <el-table-column prop="terId" label="网点ID">
+                <el-table-column prop="terId.value" label="网点ID">
                         <template slot-scope="scope">
                             <span v-if="scope.row.terId.edit == false">
                                 <span slot="reference" class="name-wrapper">
                                     <el-tag size="medium">{{ scope.row.terId.value }}</el-tag>
                                 </span>
-                                <el-button size="mini" @click="scope.row.terId.edit = true">编辑</el-button>
+                                <el-button size="mini" @click="terQuerySearch">编辑</el-button>
                             </span>
                             <span v-else>
                                 <span slot="reference" class="name-wrapper">
-                                    <!-- <el-input-number v-model="scope.row.terId.value" size='mini' :min="1" :max="1000" label="泡沫可用次数"></el-input-number> -->
-                                    <el-autocomplete v-model="scope.row.terId.value" :fetch-suggestions="terQuerySearchAsync" placeholder="网点ID关联" @select="handleSelect"></el-autocomplete>
+                                    <el-select v-model="scope.row.terId.value" placeholder="网点ID关联">
+                                        <el-option v-for="item in terOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                    </el-select>
                                 </span>
                                 <el-button size="mini" @click="scope.row.terId.edit = false">保存</el-button>
                                 <el-button size="mini" @click="scope.row.terId.edit = false">取消</el-button>
                             </span>
                         </template>
                 </el-table-column>
-                <el-table-column prop="terModel" label="网点编号">
+                <el-table-column prop="terModel.value" label="网点编号">
                 </el-table-column>
-                <el-table-column prop="terRemark" label="网点名称">
+                <el-table-column prop="terRemark.value" label="网点名称">
                 </el-table-column>
-                <el-table-column prop="terBusiModeDesc" label="网点类型">
+                <el-table-column prop="terBusiModeDesc.value" label="网点类型">
                     <template slot-scope="scope">
                         <span v-if="scope.row.terBusiMode.edit == false">
                             <span slot="reference" class="name-wrapper">
-                                <el-tag size="medium">{{ scope.row.terBusiMode.value }}</el-tag>
+                                <el-tag size="medium">{{ scope.row.terBusiModeDesc.value }}</el-tag>
                             </span>
                             <el-button size="mini" @click="scope.row.terBusiMode.edit = true">编辑</el-button>
                         </span>
                         <span v-else>
                             <span slot="reference" class="name-wrapper">
-                                <!-- <el-input-number v-model="scope.row.terClientVersion.value" size='mini' :min="1" :max="15" label="工控程序版本"></el-input-number> -->
                                 <el-select v-model="scope.row.terBusiMode.value" placeholder="网点类型">
                                     <el-option v-for="item in terBusiModeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                 </el-select>
@@ -175,7 +175,7 @@
                     <template slot-scope="scope">
                         <span v-if="scope.row.netMethod.edit == false">
                             <span slot="reference" class="name-wrapper">
-                                <el-tag size="medium">{{ scope.row.netMethod.value }}</el-tag>
+                                <el-tag size="medium">{{ scope.row.netMethodDesc.value }}</el-tag>
                             </span>
                             <el-button size="mini" @click="scope.row.netMethod.edit = true">编辑</el-button>
 

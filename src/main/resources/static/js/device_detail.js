@@ -12,6 +12,7 @@ var vm = new Vue({
 
         deviceId: null,
         device: null,
+        terOptions: null,
         terClientVersionOptions: [
             {
                 label: 'Java',
@@ -111,8 +112,19 @@ var vm = new Vue({
             console.log(vm.device[0])
         },
 
-        terQuerySearchAsync: function() {
-            
+        terQuerySearch: function(queryString, callback) {
+            vm.device[0].terId.edit = true
+            this.$http.post("/api/private/wash/ter/property/list/info", {
+            }).then(function(res){
+                let result = res.json().data.result
+                if(result) {
+                    result.forEach(function(item, index){
+                        item['label'] = `${item.code}&${item.title}`
+                        item['value'] = item.id.toString()
+                    })
+                    vm.terOptions = result
+                }
+            })
         },
 
         adExistChange: function() {
