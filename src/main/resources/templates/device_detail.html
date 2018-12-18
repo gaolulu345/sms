@@ -88,18 +88,8 @@
                             </span>
                             <span v-else>
                                 <span slot="reference" class="name-wrapper">
-
-
-
-
-
-
-
-
-
-                                    
-                                    <el-input-number v-model="scope.row.terId.value" size='mini' :min="1" :max="1000" label="泡沫可用次数"></el-input-number>
-                                    <el-autocomplete v-model="scope.row.terId.value" :fetch-suggestions="querySearchAsync" placeholder="网点ID关联" @select="handleSelect"></el-autocomplete>
+                                    <!-- <el-input-number v-model="scope.row.terId.value" size='mini' :min="1" :max="1000" label="泡沫可用次数"></el-input-number> -->
+                                    <el-autocomplete v-model="scope.row.terId.value" :fetch-suggestions="terQuerySearchAsync" placeholder="网点ID关联" @select="handleSelect"></el-autocomplete>
                                 </span>
                                 <el-button size="mini" @click="scope.row.terId.edit = false">保存</el-button>
                                 <el-button size="mini" @click="scope.row.terId.edit = false">取消</el-button>
@@ -111,23 +101,124 @@
                 <el-table-column prop="terRemark" label="网点名称">
                 </el-table-column>
                 <el-table-column prop="terBusiModeDesc" label="网点类型">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.terBusiMode.edit == false">
+                            <span slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.terBusiMode.value }}</el-tag>
+                            </span>
+                            <el-button size="mini" @click="scope.row.terBusiMode.edit = true">编辑</el-button>
+                        </span>
+                        <span v-else>
+                            <span slot="reference" class="name-wrapper">
+                                <!-- <el-input-number v-model="scope.row.terClientVersion.value" size='mini' :min="1" :max="15" label="工控程序版本"></el-input-number> -->
+                                <el-select v-model="scope.row.terBusiMode.value" placeholder="网点类型">
+                                    <el-option v-for="item in terBusiModeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                </el-select>
+                            </span>
+                            <el-button size="mini" @click="scope.row.terBusiMode.edit = false">保存</el-button>
+                            <el-button size="mini" @click="scope.row.terBusiMode.edit = false">取消</el-button>
+                        </span>
+                    </template>
                 </el-table-column>
             </el-table>
         </el-card>
         <el-card class="box-card">
             <div slot="header" class="clearfix">
-                <span>附属设备信息</span>
+                <span>其他信息</span>
             </div>
             <el-table :data="device" border style="width: 100%">
                 <el-table-column prop="terClientVersion" label="工控程序版本">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.terClientVersion.edit == false">
+                            <span slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.terClientVersion.value }}</el-tag>
+                            </span>
+                            <el-button size="mini" @click="scope.row.terClientVersion.edit = true">编辑</el-button>
+
+                        </span>
+                        <span v-else>
+                            <span slot="reference" class="name-wrapper">
+                                <!-- <el-input-number v-model="scope.row.terClientVersion.value" size='mini' :min="1" :max="15" label="工控程序版本"></el-input-number> -->
+                                <el-select v-model="scope.row.terClientVersion.value" placeholder="工控程序版本">
+                                    <el-option v-for="item in terClientVersionOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                </el-select>
+                            </span>
+                            <el-button size="mini" @click="scope.row.terClientVersion.edit = false">保存</el-button>
+                            <el-button size="mini" @click="scope.row.terClientVersion.edit = false">取消</el-button>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="screenSize" label="屏幕尺寸">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.screenHigh.edit == false &&  scope.row.screenWide.edit">
+                            <span slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.terClientVersion.value }}</el-tag>
+                            </span>
+                            <el-button size="mini" @click="scope.row.terClientVersion.edit = true">编辑</el-button>
+                        </span>
+                        <span v-else>
+                            <span slot="reference" class="name-wrapper">
+                                <!-- <el-input-number v-model="scope.row.terClientVersion.value" size='mini' :min="1" :max="15" label="工控程序版本"></el-input-number> -->
+                                <!-- <el-select v-model="scope.row.terClientVersion.value" placeholder="工控程序版本">
+                                    <el-option v-for="item in terClientVersionOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                </el-select> -->
+                                <el-input v-model="scope.row.screenHigh.value" placeholder="请输入屏幕高度"></el-input>
+                                *
+                                <el-input v-model="scope.row.screenWide.value" placeholder="请输入屏幕宽度"></el-input>
+                            </span>
+                            <el-button size="mini" @click="scope.row.screenHigh.edit = false">保存</el-button>
+                            <el-button size="mini" @click="scope.row.screenHigh.edit = false">取消</el-button>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="netMethodDesc" label="网点网络类型">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.netMethod.edit == false">
+                            <span slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.netMethod.value }}</el-tag>
+                            </span>
+                            <el-button size="mini" @click="scope.row.netMethod.edit = true">编辑</el-button>
+
+                        </span>
+                        <span v-else>
+                            <span slot="reference" class="name-wrapper">
+                                <!-- <el-input-number v-model="scope.row.terClientVersion.value" size='mini' :min="1" :max="15" label="工控程序版本"></el-input-number> -->
+                                <el-select v-model="scope.row.netMethod.value" placeholder="工控程序版本">
+                                    <el-option v-for="item in netMethodOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                </el-select>
+                            </span>
+                            <el-button size="mini" @click="scope.row.netMethod.edit = false">保存</el-button>
+                            <el-button size="mini" @click="scope.row.netMethod.edit = false">取消</el-button>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="videoControl" label="监控服务">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.videoControl.edit == false">
+                            <span slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.videoControl.value }}</el-tag>
+                            </span>
+                            <el-button size="mini" @click="scope.row.videoControl.edit = true">编辑</el-button>
+
+                        </span>
+                        <span v-else>
+                            <span slot="reference" class="name-wrapper">
+                                <!-- <el-input-number v-model="scope.row.terClientVersion.value" size='mini' :min="1" :max="15" label="工控程序版本"></el-input-number> -->
+                                <el-select v-model="scope.row.videoControl.value" placeholder="监控服务">
+                                    <el-option v-for="item in videoControlOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                </el-select>
+                            </span>
+                            <el-button size="mini" @click="scope.row.videoControl.edit = false">保存</el-button>
+                            <el-button size="mini" @click="scope.row.videoControl.edit = false">取消</el-button>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="adExist" label="是否支持广告">
+                    <template slot-scope="scope">
+                        <span slot="reference" class="name-wrapper">
+                            <el-switch v-model="scope.row.adExist.value" active-text="支持" inactive-text="不支持" @change="adExistChange"></el-switch>
+                        </span>
+                    </template>
                 </el-table-column>
             </el-table>
         </el-card>
@@ -140,7 +231,7 @@
                 <el-button style="float: right; padding: 3px 0" type="text">批量删除</el-button>
             </div>
             <el-table :data="device" border style="width: 100%">
-                <el-table-column prop="terClientVersion" label="工控程序版本">
+                <!-- <el-table-column prop="terClientVersion" label="工控程序版本">
                 </el-table-column>
                 <el-table-column prop="screenSize" label="屏幕尺寸">
                 </el-table-column>
@@ -149,7 +240,7 @@
                 <el-table-column prop="videoControl" label="监控服务">
                 </el-table-column>
                 <el-table-column prop="adExist" label="是否支持广告">
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
         </el-card>
         </div>

@@ -11,7 +11,59 @@ var vm = new Vue({
         qrcodeDialogVisible: false,
 
         deviceId: null,
-        device: null
+        device: null,
+        terClientVersionOptions: [
+            {
+                label: 'Java',
+                value: 'Java'
+            },
+            {
+                label: 'Python',
+                value: 'Python'
+            },
+        ],
+
+        netMethodOptions: [
+            {
+                label: '有线宽带',
+                value: 0
+            },
+            {
+                label: '无线网卡',
+                value: 1
+            },
+        ],
+
+        terBusiModeOptions: [
+            {
+                label: '单网点无人值守',
+                value: 0
+            },
+            {
+                label: '单网点有人值守',
+                value: 1
+            },
+            {
+                label: '代理模式一',
+                value: 2
+            },
+            {
+                label: '代理模式二',
+                value: 3
+            }
+        ],
+
+        videoControlOptions: [
+            {
+                label: '海康威视',
+                value: '海康威视'
+            },
+            {
+                label: '乐橙',
+                value: '乐橙'
+            },
+        ]
+
     }, 
 
     mounted: function() {
@@ -57,13 +109,23 @@ var vm = new Vue({
 
         handleChange: function() {
             console.log(vm.device[0])
+        },
+
+        terQuerySearchAsync: function() {
+            
+        },
+
+        adExistChange: function() {
+
         }
     }
 })
 
 $('.nav-each').removeClass('active');
 $('.'+vm.pageName).addClass('active');
-<el-autocomplete v-model="state4" :fetch-suggestions="querySearchAsync" placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
+
+
+/* <el-autocomplete v-model="state4" :fetch-suggestions="querySearchAsync" placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
 data() {
     return {
       restaurants: [],
@@ -139,7 +201,7 @@ data() {
         return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    
+
     handleSelect(item) {
       console.log(item);
     }
@@ -147,4 +209,4 @@ data() {
   mounted() {
     this.restaurants = this.loadAll();
   }
-};
+}; */
