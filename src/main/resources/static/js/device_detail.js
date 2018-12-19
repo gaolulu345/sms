@@ -12,6 +12,7 @@ var vm = new Vue({
 
         deviceId: null,
         device: null,
+        backupDevice: null,
         terOptions: null,
         terClientVersionOptions: [
             {
@@ -81,6 +82,8 @@ var vm = new Vue({
         this.getDeviceDetail(this.deviceId)
     },
     methods: {
+
+        // 设备详情
         getDeviceDetail: function(decviceId){
             console.log('id',decviceId)
             this.$http.post("/api/private/wash/ter/property/search", {
@@ -90,30 +93,48 @@ var vm = new Vue({
                 if(result) {
                     result.screenSize = `${result.screenHigh}*${result.screenWide}`
                     result.adExistDesc = result.adExist ? '支持':'不支持'
-                    let device = {}
+                    vm.device = [result]
+                    let backupDevice = {}
                     Object.keys(result).forEach(function(item, index){
-                        device[item] = {
+                        backupDevice[item] = {
                             value: result[item],
                             edit: false
                         }
                     })
-                    vm.device = [device]
+                    vm.backupDevice = backupDevice
                 }
-                console.log('vm.device: ', vm.device)
+                console.log('vm.backupDevice: ', vm.backupDevice)
                 
             })
         },
 
-        updateDevice: function() {
-
+        // 保存更改
+        saveDevice: function(paramKey) {
+            let updateDevice = {}
+            let updatefield = {}
+            console.log('保存更改vm.backupDevice: ', vm.backupDevice)
+            if (paramKey == 'screen') {
+                updatefield['highLimit'] = vm.backupDevice.highLimit.value
+                updatefield['wideLimit'] = vm.backupDevice.wideLimit.value
+            }else{
+                updatefield[paramKey] = vm.backupDevice[paramKey].value
+            }
+            Object.keys(updatefield).forEach(function(item, index){
+                updateDevice[item] = vm.backupDevice[item].value
+            })
+            updateDevice['id'] = vm.backupDevice.id.value
+            console.log('待升级字段：', updateDevice, paramKey)
+            this.updateDevice(updateDevice, paramKey)
         },
 
-        handleChange: function() {
-            console.log(vm.device[0])
+        // 取消
+        cancel: function(paramKey) {
+            vm.backupDevice[paramKey].edit = false
         },
 
+        // 获取网点列表
         terQuerySearch: function(queryString, callback) {
-            vm.device[0].terId.edit = true
+            vm.backupDevice.terId.edit = true
             this.$http.post("/api/private/wash/ter/property/list/info", {
             }).then(function(res){
                 let result = res.json().data.result
@@ -127,9 +148,49 @@ var vm = new Vue({
             })
         },
 
+        // 更改广告支持
         adExistChange: function() {
+            let updateDevice = {}
+            updateDevice['adExist'] = vm.backupDevice.adExist.value
+            updateDevice['id'] = vm.backupDevice.id.value
+            this.updateDevice(updateDevice, 'adExist')
+        },
 
-        }
+        // 屏幕编辑
+        editScreen: function() {
+            vm.backupDevice.screenHigh.edit = true
+            vm.backupDevice.screenWide.edit = true
+        },
+
+
+        updateDevice: function(updateDevice, paramKey) {
+            this.$http.post("/api/private/wash/ter/property/info/update", updateDevice).then(
+                function(res){
+                    let result = res.json()
+                    if(result.code == 200) {
+                        this.$message({
+                            message: '保存成功',
+                            type: 'success'
+                        });
+                        vm.getDeviceDetail(vm.deviceId)
+                    } else {
+                        this.$message.error(result.message);
+                        // Object.keys(updatefield).forEach(function(item, index){
+                        //     vm.device[0][item].value = vm.backupDevice[item]
+                        // })
+                        vm.backupDevice[paramKey].edit = false
+                    }
+
+                },
+                function(res){
+                    this.$message.error('保存失败');
+                    // Object.keys(updatefield).forEach(function(item, index){
+                    //     vm.device[0][item].value = vm.backupDevice[item]
+                    // })
+                    vm.backupDevice[paramKey].edit = false
+                }
+            )
+        },
     }
 })
 
