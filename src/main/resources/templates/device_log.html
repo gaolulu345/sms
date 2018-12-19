@@ -29,7 +29,7 @@
                 </el-table-column>
                 <el-table-column prop="handlerResult" label="操作结果" width="200"></el-table-column>
             </el-table>
-            <el-dialog v-if="currentLogByImg" fullscreen modal close-on-press-escape :title="currentLogByImg.createTime + currentLogByImg.intros" :visible.sync="showCurrentImg" width="70%" close-on-press-escape append-to-body>
+            <el-dialog v-if="currentLogByImg" fullscreen modal close-on-press-escape center :title="currentLogByImg.createTime + ' ' + currentLogByImg.intros" :visible.sync="showCurrentImg" width="70%" close-on-press-escape append-to-body>
                 <el-carousel height="4.6875rem">
                     <el-carousel-item v-for="img in currentLogByImg.img" :key="img">
                         <img :src="img" alt="">

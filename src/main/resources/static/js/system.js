@@ -97,10 +97,20 @@ var vm = new Vue({
                 vm.pageResource = result.data;
             })
         },
+        
         getAvillableOperationResource: function() {
+            let opResource = []
             this.$http.post("/api/private/sys/operations/maps", {}).then(function(res){
                 let result = res.json();
-                vm.opResource = result.data;
+                opResource = result.data;
+                console.log('opResource: ', opResource)
+                this.$http.post("/api/private/sys/menu/maps", {}).then(function(res){
+                    let result = res.json();
+                    vm.pageResource = result.data;
+                    console.log('pageResource: ', vm.pageResource)
+                    vm.opResource = opResource.concat(vm.pageResource)
+                    console.log('opResource: ', vm.opResource)
+                })
             })
         },
         

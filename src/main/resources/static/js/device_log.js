@@ -29,7 +29,6 @@ var vm = new Vue({
                 pageIndex: pageIndex,
             }).then(function(res){
                 let data = res.json().data
-                console.log(data)
                 let result = data.result;
                 if(result && result[0]) {
                     result.forEach(function(val) {
