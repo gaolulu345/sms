@@ -6,12 +6,12 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.service.AdminTerPropertyServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(AdminTerPropertyController.ROUTER_INDEX)
@@ -67,4 +67,15 @@ public class AdminTerPropertyController {
         return adminTerPropertyServiceI.terAllList(request);
     }
 
+
+    /**
+     * 导出设备列表
+     * @param request
+     * @param response
+     * @return
+     */
+    @GetMapping(value = "/list/exprot")
+    public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request, HttpServletResponse response) {
+        return adminTerPropertyServiceI.listExport(request,response);
+    }
 }

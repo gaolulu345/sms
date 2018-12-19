@@ -1,5 +1,7 @@
 package com.tp.admin.service.implement;
 
+import com.github.crab2died.ExcelUtils;
+import com.github.crab2died.exceptions.Excel4JException;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.tp.admin.ajax.ApiResult;
@@ -21,17 +23,22 @@ import com.tp.admin.manage.HttpHelperI;
 import com.tp.admin.service.AdminTerPropertyServiceI;
 import com.tp.admin.service.WashSiteServiceI;
 import com.tp.admin.service.WxMiniMerchantManageServiceI;
+import com.tp.admin.utils.ExcelUtil;
 import com.tp.admin.utils.SessionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
@@ -211,6 +218,33 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             terPropertySearch.setTotalCnt(0);
         }
         return ApiResult.ok(terPropertySearch);
+    }
+
+    @Override
+    public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request, HttpServletResponse response) {
+        List<AdminTerPropertyDTO> list = terDao.findAllTerProperty(new TerPropertySearch());
+        if (null != list && !list.isEmpty()){
+            for (AdminTerPropertyDTO adminTerPropertyDTO:list) {
+                adminTerPropertyDTO.build();
+            }
+        }
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String startTime = simpleDateFormat.format(date);
+        String fileName = ExcelUtil.createXlxs(Constant.TER_DEVICE,startTime , Math.random()*100 + "");
+        String path = System.getProperty(Constant.TMP_DIR) + Constant._XLSX_DIR;
+        File pathFile = new File(path);
+        if (!pathFile.exists()) {
+            pathFile.mkdirs();
+        }
+        try {
+            ExcelUtils.getInstance().exportObjects2Excel(list, AdminTerPropertyDTO.class, true, "sheet0", true, path + fileName);
+        } catch (Excel4JException | IOException e) {
+            e.printStackTrace();
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        File file = new File(path + fileName);
+        return ExcelUtil.fileExcel(request,fileName,file);
     }
 
     private final ApiResult buildApiResult(Object object,String result, TerInfoDTO dto, String img, WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum

@@ -111,6 +111,7 @@
 
 	<select id="findAllTerProperty" parameterType="com.tp.admin.data.search.TerPropertySearch" resultMap="AdminTerPropertyDTOMap">
 		SELECT * FROM admin_ter_property
+		WHERE deleted = 0
 		<if test="pageSize != null and pageSize !=0 and offset != null">
 			LIMIT #{offset},#{pageSize}
 		</if>
