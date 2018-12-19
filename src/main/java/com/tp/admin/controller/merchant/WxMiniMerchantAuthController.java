@@ -35,8 +35,8 @@ public class WxMiniMerchantAuthController {
      */
     @PostMapping(value = "/auth")
     public ApiResult auth(HttpServletRequest request){
-        return wxMiniMerchantAuthService.auth(request);
-        //return miniAutoServiceI.miniAuto(request);
+        //return wxMiniMerchantAuthService.auth(request);
+        return miniAutoServiceI.miniWxAuto(request);
     }
 
     /**

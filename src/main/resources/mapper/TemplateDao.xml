@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tp.admin.dao.TemplateDao">
+    <insert id="insertTemplateInfo" parameterType="com.tp.admin.data.entity.AdminTemplateInfo">
+        INSERT INTO admin_template_info(
+		template_id,
+		type,
+		template_desc,
+		service_type)
+		VALUES(
+		#{template_id},
+		#{type},
+		#{template_desc},
+		#{service_type})
+    </insert>
+    
     <select id="searchMasterplateTool" parameterType="com.tp.admin.data.search.AdminAutoSearch" resultType="string">
         SELECT asi.value
         FROM admin_service_info asi
