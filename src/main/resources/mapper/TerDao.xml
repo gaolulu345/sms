@@ -217,6 +217,8 @@
 		<result column="ad_exist" property="adExist" jdbcType="BIT"/>
 		<result column="screen_wide" property="screenWide" jdbcType="INTEGER"/>
 		<result column="screen_high" property="screenHigh" jdbcType="INTEGER"/>
+		<result column="device_type" property="deviceType" jdbcType="INTEGER"/>
+		<result column="video_picture" property="videoPicture" jdbcType="VARCHAR"/>
 	</resultMap>
 
 </mapper>

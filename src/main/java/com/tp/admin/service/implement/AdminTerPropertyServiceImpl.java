@@ -231,7 +231,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String startTime = simpleDateFormat.format(date);
-        String fileName = ExcelUtil.createXlxs(Constant.TER_DEVICE,startTime , Math.random()*100 + "");
+        String fileName = ExcelUtil.createXlxs(Constant.TER_DEVICE,startTime , (int)(Math.random()*100) + "");
         String path = System.getProperty(Constant.TMP_DIR) + Constant._XLSX_DIR;
         File pathFile = new File(path);
         if (!pathFile.exists()) {
@@ -245,6 +245,34 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         }
         File file = new File(path + fileName);
         return ExcelUtil.fileExcel(request,fileName,file);
+    }
+
+    @Override
+    public ApiResult deviceBindTer(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        TerPropertySearch terPropertySearch = new Gson().fromJson(body, TerPropertySearch.class);
+        if (null == terPropertySearch.getId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "设备id为空");
+        }
+        AdminTerPropertyDTO adminTerPropertyDTO = terDao.findTerStartInfo(terPropertySearch.getId());
+        if (adminTerPropertyDTO.getTerId().equals(terPropertySearch.getTerId())){
+            return ApiResult.ok();
+        }
+        WxMiniSearch wxMiniSearch = new WxMiniSearch();
+        wxMiniSearch.setTerId(terPropertySearch.getTerId());
+        List<TerInfoDTO> list = terDao.terInfoSearch(wxMiniSearch);
+        TerInfoDTO terInfoDTO = null;
+        if (null != list && !list.isEmpty()){
+            terInfoDTO = list.get(0);
+        }
+        adminTerPropertyDTO.setTerId(terPropertySearch.getTerId());
+        adminTerPropertyDTO.setTerRemark(terInfoDTO.getTitle());
+        adminTerPropertyDTO.setTerModel(terInfoDTO.getCode());
+        int res = terDao.updateTerProperty(adminTerPropertyDTO);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        return ApiResult.ok();
     }
 
     private final ApiResult buildApiResult(Object object,String result, TerInfoDTO dto, String img, WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum

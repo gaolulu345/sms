@@ -18,6 +18,9 @@ public class TerPropertySearch extends Search {
     @JsonIgnore
     private String openId;
 
+    @JsonIgnore
+    private Integer terId;
+
 
     @Override
     protected void builData() {

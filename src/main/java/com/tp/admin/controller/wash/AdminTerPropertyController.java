@@ -57,6 +57,16 @@ public class AdminTerPropertyController {
     }
 
     /**
+     * 设备绑定网点
+     * @param request
+     * @return
+     */
+    @PostMapping("/device/bind")
+    public ApiResult deviceBindTer(HttpServletRequest request){
+        return adminTerPropertyServiceI.deviceBindTer(request);
+    }
+
+    /**
      * 查询所有网点信息
      *
      * @param request
@@ -68,6 +78,15 @@ public class AdminTerPropertyController {
     }
 
 
+    /**
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/upload/picture")
+    public ApiResult uploadPicture(HttpServletRequest request){
+        return null;
+    }
     /**
      * 导出设备列表
      * @param request

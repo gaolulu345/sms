@@ -30,4 +30,6 @@ public interface AdminTerPropertyServiceI {
     ApiResult terAllList(HttpServletRequest request);
 
     ResponseEntity<FileSystemResource> listExport(HttpServletRequest request, HttpServletResponse response);
+
+    ApiResult deviceBindTer(HttpServletRequest request);
 }
