@@ -158,7 +158,6 @@
                         </span>
                         <span v-else>
                             <span slot="reference" class="name-wrapper">
-                                <!-- <el-input-number v-model="backupDevice.terClientVersion.value" size='mini' :min="1" :max="15" label="工控程序版本"></el-input-number> -->
                                 <el-select style="width:50%" size="mini" v-model="backupDevice.terClientVersion.value" placeholder="工控程序版本">
                                     <el-option v-for="item in terClientVersionOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                 </el-select>
@@ -183,10 +182,6 @@
                         </span>
                         <span v-else>
                             <span slot="reference" class="name-wrapper">
-                                <!-- <el-input-number v-model="backupDevice.terClientVersion.value" size='mini' :min="1" :max="15" label="工控程序版本"></el-input-number> -->
-                                <!-- <el-select v-model="backupDevice.terClientVersion.value" placeholder="工控程序版本">
-                                    <el-option v-for="item in terClientVersionOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                </el-select> -->
                                 <el-input style="width:30%" size="mini" v-model="backupDevice.screenHigh.value" placeholder="请输入屏幕高度"><template slot="prepend">高</template></el-input>
                                 *
                                 <el-input style="width:30%" size="mini" v-model="backupDevice.screenWide.value" placeholder="请输入屏幕宽度"><template slot="prepend">宽</template></el-input>
@@ -211,7 +206,6 @@
                         </span>
                         <span v-else>
                             <span slot="reference" class="name-wrapper">
-                                <!-- <el-input-number v-model="backupDevice.terClientVersion.value" size='mini' :min="1" :max="15" label="工控程序版本"></el-input-number> -->
                                 <el-select style="width:50%" size="mini" v-model="backupDevice.netMethod.value" placeholder="网点网络类型">
                                     <el-option v-for="item in netMethodOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                 </el-select>
@@ -236,11 +230,7 @@
                         </span>
                         <span v-else>
                             <span slot="reference" class="name-wrapper">
-                                <!-- <el-input-number v-model="backupDevice.terClientVersion.value" size='mini' :min="1" :max="15" label="工控程序版本"></el-input-number> -->
-                                <!-- <el-select v-model="backupDevice.videoControl.value" placeholder="监控服务"> -->
-                                    <!-- <el-option v-for="item in videoControlOptions" :key="item.value" :label="item.label" :value="item.value"></el-option> -->
                                 <el-autocomplete style="width:50%" size="mini" class="inline-input" maxlength="10" v-model="backupDevice.videoControl.value" :fetch-suggestions="videoControlQuerySearch" placeholder="请输入监控服务名称"></el-autocomplete>
-                                <!-- </el-select> -->
                             </span>
                             <span class="rightButton">
                                 <el-button type="success" size="mini" @click="saveDevice('videoControl')" :disabled="backupDevice.videoControl.value == scope.row.videoControl">保存</el-button>
@@ -261,22 +251,17 @@
         <el-card class="box-card">
             <div slot="header" class="clearfix">
                 <span>广告图片管理</span>
-                <el-button style="float: lift; padding: 3px 0" type="text">上传</el-button>
-                <el-button style="float: lift; padding: 3px 0" type="text">开启</el-button>
-                <el-button style="float: lift; padding: 3px 0" type="text">展示</el-button>
-                <el-button style="float: right; padding: 3px 0" type="text">批量删除</el-button>
+                <el-button style="float: lift; padding: 3px 0" type="primary" size="mini">上传</el-button>
+                <el-button style="float: lift; padding: 3px 0" type="primary" size="mini">开启</el-button>
+                <el-button style="float: lift; padding: 3px 0" type="primary" size="mini">展示</el-button>
+                <el-button style="float: right; padding: 3px 0" type="primary" size="mini">批量删除</el-button>
             </div>
-            <el-table :data="device" border style="width: 100%">
-                <!-- <el-table-column prop="terClientVersion" label="工控程序版本">
-                </el-table-column>
-                <el-table-column prop="screenSize" label="屏幕尺寸">
-                </el-table-column>
-                <el-table-column prop="netMethodDesc" label="网点网络类型">
-                </el-table-column>
-                <el-table-column prop="videoControl" label="监控服务">
-                </el-table-column>
-                <el-table-column prop="adExist" label="是否支持广告">
-                </el-table-column> -->
+            <el-table :data="deviceCarouselQuery" style="width: 100%">
+                <el-table-column prop="id" label="ID"></el-table-column>
+                <el-table-column prop="typeDesc" label="图片类型"></el-table-column>
+                <el-table-column prop="picture" label="图片地址"></el-table-column>
+                <el-table-column prop="picture" label="缩略图"></el-table-column>
+                <el-table-column prop="enable" label="是否启用"></el-table-column>
             </el-table>
         </el-card>
         </div>
