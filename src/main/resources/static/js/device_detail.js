@@ -31,7 +31,7 @@ var vm = new Vue({
                 value: 0
             },
             {
-                label: '无线网卡',
+                label: '无线宽带',
                 value: 1
             },
         ],
@@ -93,6 +93,7 @@ var vm = new Vue({
                 if(result) {
                     result.screenSize = `${result.screenHigh}*${result.screenWide}`
                     result.adExistDesc = result.adExist ? '支持':'不支持'
+                    result.screen = null
                     vm.device = [result]
                     let backupDevice = {}
                     Object.keys(result).forEach(function(item, index){
@@ -114,11 +115,12 @@ var vm = new Vue({
             let updatefield = {}
             console.log('保存更改vm.backupDevice: ', vm.backupDevice)
             if (paramKey == 'screen') {
-                updatefield['highLimit'] = vm.backupDevice.highLimit.value
-                updatefield['wideLimit'] = vm.backupDevice.wideLimit.value
+                updatefield['screenHigh'] = vm.backupDevice.screenHigh.value
+                updatefield['screenWide'] = vm.backupDevice.screenWide.value
             }else{
                 updatefield[paramKey] = vm.backupDevice[paramKey].value
             }
+            console.log('updatefield：', updatefield, paramKey)
             Object.keys(updatefield).forEach(function(item, index){
                 updateDevice[item] = vm.backupDevice[item].value
             })
@@ -156,13 +158,6 @@ var vm = new Vue({
             this.updateDevice(updateDevice, 'adExist')
         },
 
-        // 屏幕编辑
-        editScreen: function() {
-            vm.backupDevice.screenHigh.edit = true
-            vm.backupDevice.screenWide.edit = true
-        },
-
-
         updateDevice: function(updateDevice, paramKey) {
             this.$http.post("/api/private/wash/ter/property/info/update", updateDevice).then(
                 function(res){
@@ -178,7 +173,7 @@ var vm = new Vue({
                         // Object.keys(updatefield).forEach(function(item, index){
                         //     vm.device[0][item].value = vm.backupDevice[item]
                         // })
-                        vm.backupDevice[paramKey].edit = false
+                        vm.backupDevice[paramKey].edit = falsefalse
                     }
 
                 },
@@ -191,6 +186,11 @@ var vm = new Vue({
                 }
             )
         },
+
+
+        videoControlQuerySearch: function(queryString, cb) {
+            cb(vm.videoControlOptions);
+        }
     }
 })
 
