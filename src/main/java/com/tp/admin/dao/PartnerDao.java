@@ -15,8 +15,7 @@ public interface PartnerDao {
 
     Integer cntBySearch(PartnerSearch partnerSearch);
 
-    List<Integer> partnerWashCardIdSearch(int createPartnerId);
+    List<PartnerWashCardDTO> partnerWashCardIdSearch(int createPartnerId);
 
-    PartnerWashCardDTO findWashCardById(Integer id);
 
 }
