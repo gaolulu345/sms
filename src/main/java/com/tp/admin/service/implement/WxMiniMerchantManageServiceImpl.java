@@ -440,6 +440,11 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
             UserMemberDTO userMemberDTO = it.next();
             if (userMemberDTO.getType() == null || userMemberDTO.getWashCardType() == null){
                 it.remove();
+            }else{
+                PartnerWashCardDTO partnerWashCardDTO = partnerDao.findWashCardById(userMemberDTO.getPartnerCardId());
+                if (partnerWashCardDTO != null){
+                    userMemberDTO.setWashCardName(partnerWashCardDTO.getName());
+                }
             }
         }
         return ApiResult.ok(userIdsOfUserMember);

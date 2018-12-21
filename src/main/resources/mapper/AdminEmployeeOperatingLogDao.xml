@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tp.admin.dao.AdminEmployeeOperatingLogDao">
+	<insert id="insertMaintionEmployeeOperatingLog" parameterType="com.tp.admin.data.entity.AdminEmployeeOperatingLog">
+		INSERT INTO admin_employee_operating_log(
+		maintion_id,
+		employee_name,
+		operate_name,
+		title,
+		intros
+		)
+		VALUES(
+		#{maintionId},
+		#{employeeName},
+		#{operateName},
+		#{title},
+		#{intros})
+	</insert>
+
+	<insert id="insertMerchantEmployeeOperatingLog" parameterType="com.tp.admin.data.entity.AdminEmployeeOperatingLog">
+		INSERT INTO admin_employee_operating_log(
+		merchant_id,
+		employee_name,
+		operate_name,
+		title,
+		intros
+		)
+		VALUES(
+		#{merchantId},
+		#{employeeName},
+		#{operateName},
+		#{title},
+		#{intros})
+	</insert>
+
+	<resultMap id="AdminEmployeeOperatingLogMap" type="com.tp.admin.data.entity.AdminEmployeeOperatingLog">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="maintion_id" property="maintionId" jdbcType="VARCHAR"/>
+		<result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
+		<result column="employee_name" property="employeeName" jdbcType="VARCHAR"/>
+
+		<result column="deleted" property="deleted" jdbcType="BIT" />
+		<result column="success" property="success" jdbcType="BIT" />
+
+	</resultMap>
+</mapper>

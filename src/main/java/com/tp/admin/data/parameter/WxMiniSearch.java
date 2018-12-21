@@ -34,6 +34,8 @@ public class WxMiniSearch extends Search {
 
     Integer washCardType;
 
+    Integer opSource;
+
     @Override
     public void builData() {
         super.build();

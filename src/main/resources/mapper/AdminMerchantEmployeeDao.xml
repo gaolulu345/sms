@@ -92,6 +92,19 @@
 		WHERE id=#{id}
 	</update>
 
+	<select id="findByIdsBach" parameterType="com.tp.admin.data.search.MerchantEmployeeSearch" resultMap="AdminMerchantEmployeeMap">
+		SELECT * FROM admin_merchant_employee
+		WHERE
+		deleted = 0
+		<if test="ids != null">
+			AND
+			id IN
+			<foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+
 	<resultMap id="AdminMerchantEmployeeMap" type="com.tp.admin.data.entity.AdminMerchantEmployee">
 		<id column="id" property="id" jdbcType="INTEGER"/>
 		<result column="mini_wx_id" property="miniWxId" jdbcType="VARCHAR"/>
