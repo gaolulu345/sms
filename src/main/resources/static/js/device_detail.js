@@ -171,7 +171,13 @@ var vm = new Vue({
                 if(result.code == 200) {
                     let resData = result.data.result
                     if(resData) {
-                        vm.deviceCarouselQuery = resData
+                        let enableCarouselQuery = []
+                        resData.forEach(function(item, index) {
+                            if (!item.deleted) {
+                                enableCarouselQuery.push(item)
+                            }
+                        })
+                        vm.deviceCarouselQuery = enableCarouselQuery
                     }
                 }    
             })
