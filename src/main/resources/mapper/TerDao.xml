@@ -109,87 +109,6 @@
 		t.deleted = 0
 	</select>
 
-	<select id="findAllTerProperty" parameterType="com.tp.admin.data.search.TerPropertySearch" resultMap="AdminTerPropertyDTOMap">
-		SELECT * FROM admin_ter_property
-		<if test="pageSize != null and pageSize !=0 and offset != null">
-			LIMIT #{offset},#{pageSize}
-		</if>
-	</select>
-
-	<select id="findAllTerPropertyCount" resultType="java.lang.Integer">
-		SELECT COUNT(atp.id) FROM admin_ter_property AS atp
-	</select>
-
-	<select id="findTerStartInfo" parameterType="java.lang.Integer" resultMap="AdminTerPropertyDTOMap">
-		SELECT  atp.id,
-				atp.ter_id,
-				atp.net_method,
-				atp.video_control,
-				atp.bubble_limit,
-				atp.ter_clientversion,
-				atp.ter_busi_mode,
-				atp.ter_model,
-				atp.ter_remark,
-				atp.high_limit,
-				atp.wide_limit,
-				atp.ad_exist,
-				atp.screen_wide,
-				atp.screen_high
-        FROM admin_ter_property AS atp
-				WHERE atp.id=#{id}
-	</select>
-
-
-	<update id="updateTerProperty" parameterType="com.tp.admin.data.dto.AdminTerPropertyDTO">
-		UPDATE `admin_ter_property`
-		<trim prefix="set" suffixOverrides=",">
-			<if test="terId != null">
-				`ter_id` = #{terId},
-			</if>
-			<if test="netMethod != null">
-				`net_method` = #{netMethod},
-			</if>
-			<if test="videoControl != null">
-				`video_control` = #{videoControl},
-			</if>
-			<if test="bubbleLimit != null">
-				`bubble_limit` = #{bubbleLimit},
-			</if>
-			<if test="terClientVersion  != null">
-				`ter_clientversion` = #{terClientVersion},
-			</if>
-			<if test="terBusiMode  != null">
-				`ter_busi_mode` = #{terBusiMode},
-			</if>
-			<if test="terModel != null">
-				`ter_model` = #{terModel},
-			</if>
-			<if test="terRemark != null">
-				`ter_remark` = #{terRemark},
-			</if>
-			<if test="highLimit != null">
-				`high_limit` = #{highLimit},
-			</if>
-			<if test="wideLimit != null">
-				`wide_limit` = #{wideLimit},
-			</if>
-			<if test="adExist != null">
-				`ad_exist` = #{adExist},
-			</if>
-			<if test="screenWide != null">
-				`screen_wide` = #{screenWide},
-			</if>
-			<if test="screenHigh != null">
-				`screen_high` = #{screenHigh},
-			</if>
-			<if test="propertyRemark != null">
-				`property_remark` = #{propertyRemark},
-			</if>
-		</trim>
-		WHERE
-			id=#{id}
-	</update>
-
     <resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<id column="code" property="code" jdbcType="VARCHAR" />
@@ -198,24 +117,6 @@
 		<id column="title" property="title" jdbcType="VARCHAR" />
 		<result column="online" property="online" jdbcType="BIT" />
 		<result column="status" property="status" jdbcType="SMALLINT" />
-	</resultMap>
-
-
-	<resultMap id="AdminTerPropertyDTOMap" type="com.tp.admin.data.dto.AdminTerPropertyDTO">
-		<id column="ter_id" property="terId" javaType="INTEGER"/>
-		<result column="net_method" property="netMethod" jdbcType="INTEGER"/>
-		<result column="video_control" property="videoControl" jdbcType="VARCHAR"/>
-		<result column="bubble_limit" property="bubbleLimit" jdbcType="INTEGER"/>
-		<result column="ter_clientversion" property="terClientVersion" jdbcType="VARCHAR"/>
-		<result column="ter_busi_mode" property="terBusiMode" jdbcType="INTEGER"/>
-		<result column="ter_model" property="terModel" jdbcType="VARCHAR"/>
-		<result column="ter_remark" property="terRemark" jdbcType="VARCHAR"/>
-		<result column="property_remark" property="propertyRemark" jdbcType="VARCHAR"/>
-		<result column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
-		<result column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
-		<result column="ad_exist" property="adExist" jdbcType="BIT"/>
-		<result column="screen_wide" property="screenWide" jdbcType="INTEGER"/>
-		<result column="screen_high" property="screenHigh" jdbcType="INTEGER"/>
 	</resultMap>
 
 </mapper>

@@ -6,12 +6,13 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.service.AdminTerPropertyServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(AdminTerPropertyController.ROUTER_INDEX)
@@ -57,6 +58,16 @@ public class AdminTerPropertyController {
     }
 
     /**
+     * 设备绑定网点
+     * @param request
+     * @return
+     */
+    @PostMapping("/device/bind")
+    public ApiResult deviceBindTer(HttpServletRequest request){
+        return adminTerPropertyServiceI.deviceBindTer(request);
+    }
+
+    /**
      * 查询所有网点信息
      *
      * @param request
@@ -67,4 +78,24 @@ public class AdminTerPropertyController {
         return adminTerPropertyServiceI.terAllList(request);
     }
 
+
+    /**
+     *上传刻录机的凭证图片
+     * @param request
+     * @return
+     */
+    @PostMapping("/upload/cdr/picture")
+    public ApiResult uploadCdrPicture(HttpServletRequest request, @RequestPart("file") MultipartFile file){
+        return adminTerPropertyServiceI.uploadCdrPicture(request,file);
+    }
+    /**
+     * 导出设备列表
+     * @param request
+     * @param response
+     * @return
+     */
+    @GetMapping(value = "/list/exprot")
+    public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request, HttpServletResponse response) {
+        return adminTerPropertyServiceI.listExport(request,response);
+    }
 }

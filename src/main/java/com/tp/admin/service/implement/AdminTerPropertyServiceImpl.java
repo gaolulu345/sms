@@ -1,14 +1,18 @@
 package com.tp.admin.service.implement;
 
+import com.github.crab2died.ExcelUtils;
+import com.github.crab2died.exceptions.Excel4JException;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.ajax.ResultCode;
 import com.tp.admin.common.Constant;
 import com.tp.admin.config.AdminProperties;
+import com.tp.admin.config.AliyunOssProperties;
 import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.data.dto.TerInfoDTO;
+import com.tp.admin.data.dto.UploadFileDTO;
 import com.tp.admin.data.entity.*;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.TerPropertySearch;
@@ -17,21 +21,29 @@ import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
+import com.tp.admin.manage.AliyunOssManagerI;
 import com.tp.admin.manage.HttpHelperI;
 import com.tp.admin.service.AdminTerPropertyServiceI;
 import com.tp.admin.service.WashSiteServiceI;
 import com.tp.admin.service.WxMiniMerchantManageServiceI;
+import com.tp.admin.utils.ExcelUtil;
 import com.tp.admin.utils.SessionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
@@ -51,9 +63,6 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     AdminMerchantEmployeeDao adminMerchantEmployeeDao;
 
     @Autowired
-    PartnerDao partnerDao;
-
-    @Autowired
     WashSiteServiceI washSiteServiceI;
 
     @Autowired
@@ -65,6 +74,15 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     @Autowired
     AdminProperties adminProperties;
 
+    @Autowired
+    AdminTerPropertyDao adminTerPropertyDao;
+
+    @Autowired
+    AliyunOssProperties aliyunOssProperties;
+
+    @Autowired
+    AliyunOssManagerI aliyunOssManager;
+
     @Override
     public ApiResult allTerPropertyInfoList(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
@@ -73,14 +91,14 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         terPropertySearch.build();
-        List<AdminTerPropertyDTO> list = terDao.findAllTerProperty(terPropertySearch);
+        List<AdminTerPropertyDTO> list = adminTerPropertyDao.findAllTerProperty(terPropertySearch);
         if (list == null) {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
         for (AdminTerPropertyDTO adminTerProperty:list) {
             adminTerProperty.build();
         }
-        Integer num = terDao.findAllTerPropertyCount();
+        Integer num = adminTerPropertyDao.findAllTerPropertyCount();
         if (num == null){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
@@ -98,7 +116,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "设备id为空");
         }
 
-        AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(terPropertySearch.getId());
+        AdminTerPropertyDTO adminTerPropertyDTO =  adminTerPropertyDao.findTerStartInfo(terPropertySearch.getId());
         if (adminTerPropertyDTO == null){
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
@@ -118,7 +136,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         if (ob == null){
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
-        AdminTerPropertyDTO adminTerPropertyDTO =  terDao.findTerStartInfo(terPropertySearch.getId());
+        AdminTerPropertyDTO adminTerPropertyDTO =  adminTerPropertyDao.findTerStartInfo(terPropertySearch.getId());
         if (adminTerPropertyDTO.getTerId() == 0){
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION,"未绑定网点，无法操作");
         }
@@ -137,7 +155,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         if (null == adminTerPropertyDTO.getId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty id");
         }
-        int res = terDao.updateTerProperty(adminTerPropertyDTO);
+        int res = adminTerPropertyDao.updateTerProperty(adminTerPropertyDTO);
         if (res == 0){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
@@ -161,6 +179,26 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             }
         }
         return null;
+    }
+
+    @Override
+    public ApiResult uploadCdrPicture(HttpServletRequest request, MultipartFile file) {
+        Integer deviceId = Integer.parseInt(request.getParameter("id"));
+        if (deviceId == null){
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING);
+        }
+        AdminTerPropertyDTO adminTerPropertyDTO = new AdminTerPropertyDTO();
+        adminTerPropertyDTO.setId(deviceId);
+        UploadFileDTO uploadFileDTO = aliyunOssManager.uploadFileToAliyunOss(file ,aliyunOssProperties.getPath());
+        if (!uploadFileDTO.isSuccess()){
+            throw new BaseException(ExceptionCode.ALI_OSS_UPDATE_ERROR);
+        }
+        adminTerPropertyDTO.setCdrPicture(uploadFileDTO.getUrl());
+        int res =  adminTerPropertyDao.updateTerProperty(adminTerPropertyDTO);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        return ApiResult.ok();
     }
 
     @Override
@@ -211,6 +249,61 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             terPropertySearch.setTotalCnt(0);
         }
         return ApiResult.ok(terPropertySearch);
+    }
+
+    @Override
+    public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request, HttpServletResponse response) {
+        List<AdminTerPropertyDTO> list = adminTerPropertyDao.findAllTerProperty(new TerPropertySearch());
+        if (null != list && !list.isEmpty()){
+            for (AdminTerPropertyDTO adminTerPropertyDTO:list) {
+                adminTerPropertyDTO.build();
+            }
+        }
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String startTime = simpleDateFormat.format(date);
+        String fileName = ExcelUtil.createXlxs(Constant.TER_DEVICE,startTime , (int)(Math.random()*100) + "");
+        String path = System.getProperty(Constant.TMP_DIR) + Constant._XLSX_DIR;
+        File pathFile = new File(path);
+        if (!pathFile.exists()) {
+            pathFile.mkdirs();
+        }
+        try {
+            ExcelUtils.getInstance().exportObjects2Excel(list, AdminTerPropertyDTO.class, true, "sheet0", true, path + fileName);
+        } catch (Excel4JException | IOException e) {
+            e.printStackTrace();
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        File file = new File(path + fileName);
+        return ExcelUtil.fileExcel(request,fileName,file);
+    }
+
+    @Override
+    public ApiResult deviceBindTer(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        TerPropertySearch terPropertySearch = new Gson().fromJson(body, TerPropertySearch.class);
+        if (null == terPropertySearch.getId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "设备id为空");
+        }
+        AdminTerPropertyDTO adminTerPropertyDTO = adminTerPropertyDao.findTerStartInfo(terPropertySearch.getId());
+        if (adminTerPropertyDTO.getTerId().equals(terPropertySearch.getTerId())){
+            return ApiResult.ok();
+        }
+        WxMiniSearch wxMiniSearch = new WxMiniSearch();
+        wxMiniSearch.setTerId(terPropertySearch.getTerId());
+        List<TerInfoDTO> list = terDao.terInfoSearch(wxMiniSearch);
+        TerInfoDTO terInfoDTO = null;
+        if (null != list && !list.isEmpty()){
+            terInfoDTO = list.get(0);
+        }
+        adminTerPropertyDTO.setTerId(terPropertySearch.getTerId());
+        adminTerPropertyDTO.setTerRemark(terInfoDTO.getTitle());
+        adminTerPropertyDTO.setTerModel(terInfoDTO.getCode());
+        int res = adminTerPropertyDao.updateTerProperty(adminTerPropertyDTO);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        return ApiResult.ok();
     }
 
     private final ApiResult buildApiResult(Object object,String result, TerInfoDTO dto, String img, WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum
