@@ -316,7 +316,7 @@
                 <el-table-column prop="enable" label="是否启用">
                     <template slot-scope="scope">
                         <span slot="reference" class="name-wrapper">
-                            <el-switch v-model="backupDevice.adExist.value" active-text="启用" inactive-text="不启用" @change="pictureChangeState()"></el-switch>
+                            <el-switch v-model="scope.row.enable" active-text="启用" inactive-text="不启用" @change="carouselPictureChangeState(scope.row, scope.$index)"></el-switch>
                         </span>
                     </template>
                 </el-table-column>

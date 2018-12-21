@@ -281,27 +281,34 @@ var vm = new Vue({
             )
         },
 
-        // // 编辑备注
-        // editPropertyRemark: function() {
-        //     let inputPlaceholder = vm.device[0].propertyRemark
-        //     this.$prompt('请输入设备备注', '提示', {
-        //         confirmButtonText: '确定',
-        //         cancelButtonText: '取消',
-        //         inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-        //         inputErrorMessage: '邮箱格式不正确',
-        //         inputPlaceholder: inputPlaceholder
-        //       }).then(({ value }) => {
-        //         this.$message({
-        //           type: 'success',
-        //           message: '你的邮箱是: ' + value
-        //         });
-        //       }).catch(() => {
-        //         this.$message({
-        //           type: 'info',
-        //           message: '取消输入'
-        //         });       
-        //       });
-        // }
+        // 轮播图启用
+        carouselPictureChangeState: function(picture, index) {
+            let updatePicture = {
+                id: picture.id,
+                enable: picture.enable
+            }
+            this.$http.post("/api/private/ter/ratation/picture/appoint/star", updatePicture
+            ).then(
+                function(res){
+                    let result = res.json()
+                    if(result.code == 200) {
+                        this.$message({
+                            message: '更改成功',
+                            type: 'success'
+                        });
+                        vm.getDeviceCarouselQuery(vm.deviceId)
+                    } else {
+                        this.$message.error(result.message);
+                        picture.enable = !picture.enable
+                    }
+
+                },
+                function(res){
+                    this.$message.error('更改失败');
+                    picture.enable = !picture.enable
+                }
+            )
+        }
 
     }
 })
