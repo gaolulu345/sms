@@ -102,7 +102,8 @@ var vm = new Vue({
                         Object.keys(result).forEach(function(item, index){
                             backupDevice[item] = {
                                 value: result[item],
-                                edit: false
+                                edit: false,
+                                cdrPictureDialogVisible: false
                             }
                         })
                         console.log('out getDeviceCarouselQuery')

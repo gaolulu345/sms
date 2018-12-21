@@ -166,14 +166,21 @@
                             </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="terRemark" label="刻录机二维码" min-width="280">
+                    <el-table-column prop="cdrPicture" label="刻录机二维码" min-width="280">
                         <template slot-scope="scope">
-                                <span slot="reference" class="name-wrapper">
-                                    <el-tag v-if="" size="medium">{{ scope.row.videoControl }}</el-tag>
+                            <img slot="reference" class="name-wrapper">
+                                <img class="cdr-picture" v-if="scope.row.cdrPicture" :src="scope.row.cdrPicture" @click="backupDevice.cdrPicture.cdrPictureDialogVisible = true"></img>
+                                <span v-else>暂无</span>
+                            </span>
+                            <span class="rightButton cdrPictureRightButton">
+                                <el-button type="primary" size="mini">上传</el-button>
+                            </span>
+                            <el-dialog append-to-body v-if="scope.row.cdrPicture" :title="device.terRemark + ' ' + '刻录机二维码'" :visible.sync="backupDevice.cdrPicture.cdrPictureDialogVisible">
+                                <img v-if="scope.row.cdrPicture" :src="scope.row.cdrPicture" @click=></img>
+                                <span slot="footer" class="dialog-footer">
+                                    <el-button type="primary" @click="backupDevice.cdrPicture.cdrPictureDialogVisible = false">确 定</el-button>
                                 </span>
-                                <span class="rightButton">
-                                    <el-button type="primary" size="mini">上传</el-button>
-                                </span>
+                            </el-dialog>
                         </template>
                     </el-table-column>
                     <el-table-column prop="terBusiModeDesc" label="网点类型" min-width="280">
