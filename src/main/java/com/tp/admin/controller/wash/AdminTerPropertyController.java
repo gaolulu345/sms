@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -79,13 +80,13 @@ public class AdminTerPropertyController {
 
 
     /**
-     *
+     *上传刻录机的凭证图片
      * @param request
      * @return
      */
-    @PostMapping("/upload/picture")
-    public ApiResult uploadPicture(HttpServletRequest request){
-        return null;
+    @PostMapping("/upload/cdr/picture")
+    public ApiResult uploadCdrPicture(HttpServletRequest request, @RequestPart("file") MultipartFile file){
+        return adminTerPropertyServiceI.uploadCdrPicture(request,file);
     }
     /**
      * 导出设备列表

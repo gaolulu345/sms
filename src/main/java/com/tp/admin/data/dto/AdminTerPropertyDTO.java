@@ -37,7 +37,7 @@ public class AdminTerPropertyDTO {
     private Integer screenHigh;
     private String propertyRemark;
     private Integer deviceType;
-    private String videoPicture;
+    private String cdrPicture;
     @ExcelField(title = "联网方式",order = 3)
     private String netMethodDesc;//联网方式描述
     @ExcelField(title = "网点运营模式",order = 7)

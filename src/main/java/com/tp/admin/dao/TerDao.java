@@ -24,12 +24,4 @@ public interface TerDao {
 
     Integer cntTerInfoSearch(WxMiniSearch wxMiniTerSearch);
 
-    Integer findAllTerPropertyCount();
-
-    AdminTerPropertyDTO findTerStartInfo(int terId);
-
-    int updateTerProperty(AdminTerPropertyDTO adminTerPropertyDTO);
-
-    List<AdminTerPropertyDTO> findAllTerProperty(TerPropertySearch terPropertySearch);
-
 }
