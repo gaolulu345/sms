@@ -35,18 +35,19 @@ public class MiniAutoServiceImpl implements MiniAutoServiceI {
 
 
     @Override
-    public ApiResult miniAuto(HttpServletRequest request) {
+    public ApiResult miniWxAuto(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniAuthDTO wxMiniAuthDTO = new Gson().fromJson(body, WxMiniAuthDTO.class);
         if (StringUtils.isBlank(wxMiniAuthDTO.getCode())) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty code");
         }
-        if (wxMiniAuthDTO.getType() == null){
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"缺省参数");
-        }
 
+        int authType = check(request);
+        if (authType == 0){
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
         AdminAutoSearch adminAutoSearch = new AdminAutoSearch();
-        adminAutoSearch.setType(wxMiniAuthDTO.getType());
+        adminAutoSearch.setType(authType);
 
         AdminServiceSearch adminServiceSearch = new AdminServiceSearch();
 
@@ -78,4 +79,20 @@ public class MiniAutoServiceImpl implements MiniAutoServiceI {
         log.info(wxJscodeSessionResult.toString());
         return ApiResult.ok(wxJscodeSessionResult);
     }
+
+    @Override
+    public int check(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        if (null == uri || uri.equals("")){
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        if (uri.indexOf("/api/open/wx/mini/merchant") != -1){
+            return 1;
+        }else if (uri.indexOf("/api/open/wx/mini/maintain") != -1){
+            return 2;
+        }
+        return 0;
+    }
+
+
 }

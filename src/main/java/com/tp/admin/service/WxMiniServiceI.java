@@ -2,6 +2,7 @@ package com.tp.admin.service;
 
 
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.data.entity.AdminTemplateInfo;
 import com.tp.admin.data.search.TemplateSearch;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +13,7 @@ public interface WxMiniServiceI {
 
     void sendTemplateMessage(String accessToken , String requestBody);
 
-    void sendWxTemplate(TemplateSearch templateSearch);
+    void sendWxTemplate(TemplateSearch templateSearch, AdminTemplateInfo adminTemplateInfo);
 
 
 }

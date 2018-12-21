@@ -35,18 +35,14 @@ public class AdminTemplateInfoServiceImpl implements AdminTemplateInfoServiceI {
         String body = httpHelper.jsonBody(request);
         TemplateSearch templateSearch = new Gson().fromJson(body, TemplateSearch.class);
 
-        if (templateSearch.getTemplateInfo() == null || templateSearch.getFormId() == null || templateSearch.getData() == null){
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"缺省参数");
-        }
-
-        AdminTemplateInfo adminTemplateInfo = templateDao.searchTemplateId(AdminTemplateInfoEnum.getByValue(templateSearch.getTemplateInfo()).getValue());
+        AdminTemplateInfo adminTemplateInfo = templateDao.searchTemplateId(templateSearch.getTemplateId());
         if (adminTemplateInfo == null){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
         if (adminTemplateInfo.getType() == 3){
-            wxMiniServiceI.sendWxTemplate(templateSearch);
+            wxMiniServiceI.sendWxTemplate(templateSearch,adminTemplateInfo);
         }else if (adminTemplateInfo.getType() == 4){
-            //aliMiniServiceI.sendAliTemplate(templateSearch);
+            aliMiniServiceI.sendAliTemplate(templateSearch,adminTemplateInfo);
         }
         return ApiResult.ok();
     }

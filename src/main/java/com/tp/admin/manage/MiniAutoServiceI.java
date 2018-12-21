@@ -6,5 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface MiniAutoServiceI {
 
-    ApiResult miniAuto(HttpServletRequest request);
+    ApiResult miniWxAuto(HttpServletRequest request);
+
+    int check(HttpServletRequest request);
 }

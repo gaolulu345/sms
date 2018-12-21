@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface TemplateDao {
 
+    int insertTemplateInfo(AdminTemplateInfo adminTemplateInfo);
+
     String searchMasterplateTool(AdminAutoSearch adminAutoSearch);
 
     List<AdminServiceInfo> searchServiceInfoList(AdminAutoSearch adminAutoSearch);
