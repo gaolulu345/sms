@@ -115,29 +115,6 @@
                 </el-table-column>
                 <el-table-column prop="terRemark" label="网点名称" min-width="280">
                 </el-table-column>
-                <el-table-column prop="terBusiModeDesc" label="网点类型" min-width="280">
-                    <template slot-scope="scope">
-                        <span v-cloak v-if="backupDevice.terBusiMode.edit == false">
-                            <span slot="reference" class="name-wrapper">
-                                <el-tag size="medium">{{ scope.row.terBusiModeDesc }}</el-tag>
-                            </span>
-                            <span class="rightButton">
-                                <el-button size="mini" type="primary" icon="el-icon-edit" @click="backupDevice.terBusiMode.edit = true"></el-button>
-                            </span>
-                        </span>
-                        <span v-else>
-                            <span slot="reference" class="name-wrapper">
-                                <el-select style="width:50%" size="mini" v-model="backupDevice.terBusiMode.value" placeholder="网点类型">
-                                    <el-option v-for="item in terBusiModeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                </el-select>
-                            </span>
-                            <span class="rightButton">
-                                <el-button type="success" size="mini" @click="saveDevice('terBusiMode')" :disabled="backupDevice.terBusiMode.value == scope.row.terBusiMode">保存</el-button>
-                                <el-button size="mini" type="danger" @click="cancel('terBusiMode')">取消</el-button>
-                            </span>
-                        </span>
-                    </template>
-                </el-table-column>
             </el-table>
         </el-card>
         <el-card class="box-card">
@@ -168,14 +145,16 @@
                     </el-table-column>
                     <el-table-column prop="cdrPicture" label="刻录机二维码" min-width="280">
                         <template slot-scope="scope">
-                            <img slot="reference" class="name-wrapper">
-                                <img class="cdr-picture" v-if="scope.row.cdrPicture" :src="scope.row.cdrPicture" @click="backupDevice.cdrPicture.cdrPictureDialogVisible = true"></img>
-                                <span v-else>暂无</span>
+                            <span class="inTableCell">
+                                <span slot="reference" class="name-wrapper leftButton">
+                                    <img class="cdr-picture" v-if="scope.row.cdrPicture" :src="scope.row.cdrPicture" @click="backupDevice.cdrPicture.cdrPictureDialogVisible = true"></img>
+                                    <span v-else>暂无</span>
+                                </span>
+                                <span class="rightButton">
+                                    <el-button type="primary" size="mini">上传</el-button>
+                                </span>
                             </span>
-                            <span class="rightButton cdrPictureRightButton">
-                                <el-button type="primary" size="mini">上传</el-button>
-                            </span>
-                            <el-dialog append-to-body v-if="scope.row.cdrPicture" :title="device.terRemark + ' ' + '刻录机二维码'" :visible.sync="backupDevice.cdrPicture.cdrPictureDialogVisible">
+                            <el-dialog append-to-body v-if="scope.row.cdrPicture" :title="scope.row.terRemark + ' ' + '刻录机二维码'" :visible.sync="backupDevice.cdrPicture.cdrPictureDialogVisible">
                                 <img v-if="scope.row.cdrPicture" :src="scope.row.cdrPicture" @click=></img>
                                 <span slot="footer" class="dialog-footer">
                                     <el-button type="primary" @click="backupDevice.cdrPicture.cdrPictureDialogVisible = false">确 定</el-button>
@@ -204,6 +183,27 @@
                                     <el-button size="mini" type="danger" @click="cancel('terBusiMode')">取消</el-button>
                                 </span>
                             </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="propertyRemark" label="设备备注" min-width="280">
+                        <template slot-scope="scope">
+                            <div v-cloak v-if="backupDevice.propertyRemark.edit == false">
+                                <div slot="reference" class="name-wrapper propertyRemark">
+                                    <span v-if="scope.row.propertyRemark && scope.row.propertyRemark.length > 0">{{ scope.row.propertyRemark }}</span>
+                                    <span v-else>暂无</span>
+                                </div>
+                                <div class="propertyRemarkEdit">
+                                    <el-button size="mini" type="primary" icon="el-icon-edit" @click="backupDevice.propertyRemark.edit = true"></el-button>
+                                </div>
+                            </div>
+                            <el-dialog :title="'设备ID: ' +  scope.row.id + '备注更改 '" :visible.sync="backupDevice.propertyRemark.edit">
+                                <el-input type="textarea" :maxlength="50" :minlength="5" :autosize="{ minRows: 3, maxRows: 6}" placeholder="请输入设备备注" v-model="backupDevice.propertyRemark.value">
+                                </el-input>
+                                <div slot="footer" class="dialog-footer">
+                                    <el-button size="small" type="danger" @click="cancel('propertyRemark')">取 消</el-button>
+                                    <el-button type="success" size="small" @click="saveDevice('propertyRemark')" :disabled="backupDevice.propertyRemark.value == scope.row.videoControl || backupDevice.propertyRemark.value.length == 0">保 存</el-button>
+                                </div>
+                            </el-dialog>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -297,13 +297,12 @@
         <el-card class="box-card">
             <div slot="header" class="clearfix">
                 <span>广告图片管理</span>
-                <el-button style="float: lift; padding: 3px 0" type="primary" size="mini">上传</el-button>
-                <el-button style="float: lift; padding: 3px 0" type="primary" size="mini">开启</el-button>
-                <el-button style="float: lift; padding: 3px 0" type="primary" size="mini">展示</el-button>
-                <el-button style="float: right; padding: 3px 0" type="primary" size="mini">批量删除</el-button>
+                <el-button style="float: lift;" type="success" icon="el-icon-upload" size="mini"></el-button>
+                <el-button style="float: lift;" type="primary" size="mini">展示</el-button>
+                <el-button style="float: right;" type="danger" size="mini" @click="deleteDeviceCarousel">批量删除</el-button>
             </div>
-            <el-table :data="deviceCarouselQuery" style="width: 100%">
-
+            <el-table :data="deviceCarouselQuery" @selection-change="changeDeleteCarousel" border style="width: 100%">
+                <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column prop="id" label="ID">
                 </el-table-column>
                 <el-table-column prop="typeDesc" label="图片类型">
@@ -311,16 +310,13 @@
                 <el-table-column prop="picture" label="图片地址"></el-table-column>
                 <el-table-column prop="picture" label="缩略图">
                     <template slot-scope="scope">
-                        <span slot="reference" class="name-wrapper">
-                            <el-button size="mini" type="danger">{{scope.row.typeDesc}}</el-button>
-                            <img class="briefCarousel" src="scope.row.picture">
-                        </span>
+                        <img class="briefCarousel" :src="scope.row.picture">
                     </template>
                 </el-table-column>
                 <el-table-column prop="enable" label="是否启用">
                     <template slot-scope="scope">
                         <span slot="reference" class="name-wrapper">
-                            <el-switch v-model="backupDevice.adExist.value" active-text="支持" inactive-text="不支持" @change="pictureChangeState()"></el-switch>
+                            <el-switch v-model="scope.row.enable" active-text="启用" inactive-text="不启用" @change="carouselPictureChangeState(scope.row, scope.$index)"></el-switch>
                         </span>
                     </template>
                 </el-table-column>

@@ -15,6 +15,7 @@ var vm = new Vue({
         deviceCarouselQuery: null,
         backupDevice: null,
         terOptions: null,
+        deleteCarousels: null,
         terClientVersionOptions: [
             {
                 label: 'Java',
@@ -204,18 +205,12 @@ var vm = new Vue({
                         vm.getDeviceDetail(vm.deviceId)
                     } else {
                         this.$message.error(result.message);
-                        // Object.keys(updatefield).forEach(function(item, index){
-                        //     vm.device[0][item].value = vm.backupDevice[item]
-                        // })
                         vm.backupDevice[paramKey].edit = falsefalse
                     }
 
                 },
                 function(res){
                     this.$message.error('保存失败');
-                    // Object.keys(updatefield).forEach(function(item, index){
-                    //     vm.device[0][item].value = vm.backupDevice[item]
-                    // })
                     vm.backupDevice[paramKey].edit = false
                 }
             )
@@ -224,6 +219,95 @@ var vm = new Vue({
         // 视频服务提示
         videoControlQuerySearch: function(queryString, cb) {
             cb(vm.videoControlOptions);
+        },
+
+        // 选择待删除轮播图
+        changeDeleteCarousel: function(val) {
+            if (val && val.length > 0) {
+                let deleteCarousels = []
+                val.forEach(function(item, index){
+                    deleteCarousels.push(item.id)
+                })
+                vm.deleteCarousels = deleteCarousels
+            }
+        },
+
+        // 批量删除轮播图
+        deleteDeviceCarousel: function() {
+            let ids = vm.deleteCarousels
+            if (ids && ids.length > 0){
+                let idStr = ids.join(', ')
+                this.$confirm(`此操作将删除ID为[${idStr}]的轮播图, 是否继续?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                    }).then(() => {
+                        vm.sendDeleteDeviceCarousel({
+                            ids: ids,
+                            deleted: true
+                        })
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+            } else {
+                this.$message.error('请选择至少一张轮播图');
+            }
+        },
+
+        // 删除请求
+        sendDeleteDeviceCarousel: function(data) {
+            this.$http.post("/api/private/ter/ratation/picture/appoint/delete", data
+            ).then(
+                function(res){
+                    let result = res.json()
+                    if(result.code == 200) {
+                        this.$message({
+                            message: '批量删除成功',
+                            type: 'success'
+                        });
+                        vm.getDeviceCarouselQuery(vm.deviceId)
+                    } else {
+                        this.$message.error(result.message);
+                    }
+
+                },
+                function(res){
+                    this.$message.error('批量删除失败');
+                }
+            )
+        },
+
+        // 轮播图启用
+        carouselPictureChangeState: function(picture, index) {
+            let updatePicture = {
+                id: picture.id,
+                enable: picture.enable
+            }
+            this.$http.post("/api/private/ter/ratation/picture/appoint/star", updatePicture
+            ).then(
+                function(res){
+                    let result = res.json()
+                    if(result.code == 200) {
+                        this.$message({
+                            message: '更改成功',
+                            type: 'success'
+                        });
+                        vm.getDeviceCarouselQuery(vm.deviceId)
+                    } else {
+                        this.$message.error(result.message);
+                        picture.enable = !picture.enable
+                    }
+
+                },
+                function(res){
+                    this.$message.error('更改失败');
+                    picture.enable = !picture.enable
+                }
+            )
         }
 
     }
