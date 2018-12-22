@@ -91,6 +91,7 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
     }
 
     @Override
+    @Transactional
     public void register(AdminAccount adminAccount, AdminRoles adminRoles) {
         if (null == adminAccount || null == adminRoles) {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
@@ -115,6 +116,7 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
     }
 
     @Override
+    @Transactional
     public void payBack(Refund refund, Order order) {
         if (null == refund || null == order) {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
