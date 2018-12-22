@@ -1,5 +1,6 @@
 package com.tp.admin.dao;
 
+import com.tp.admin.data.dto.PartnerWashCardDTO;
 import com.tp.admin.data.entity.Partner;
 import com.tp.admin.data.search.PartnerSearch;
 import com.tp.admin.data.search.UserSearch;
@@ -14,6 +15,7 @@ public interface PartnerDao {
 
     Integer cntBySearch(PartnerSearch partnerSearch);
 
-    List<Integer> partnerWashCardIdSearch(int createPartnerId);
+    List<PartnerWashCardDTO> partnerWashCardIdSearch(int createPartnerId);
+
 
 }

@@ -54,6 +54,9 @@
 			<if test="terId != null">
 				log.ter_id = #{terId}
 			</if>
+			<if test="opSource != null">
+				AND log.op_source = #{opSource}
+			</if>
 		</where>
 		ORDER BY log.create_time DESC
 		<if test="pageSize != null and pageSize !=0 and offset != null">

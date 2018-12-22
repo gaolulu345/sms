@@ -3,24 +3,26 @@ package com.tp.admin.service.implement;
 import com.google.gson.JsonObject;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
+import com.tp.admin.dao.AdminEmployeeOperatingLogDao;
 import com.tp.admin.dao.AdminMerchantEmployeeDao;
 import com.tp.admin.dao.PartnerDao;
-import com.tp.admin.data.entity.AdminMaintionEmployee;
-import com.tp.admin.data.entity.AdminMerchantEmployee;
-import com.tp.admin.data.entity.Partner;
+import com.tp.admin.data.entity.*;
 import com.tp.admin.data.search.MerchantEmployeeSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.data.wx.WxTemplateData;
 import com.tp.admin.data.wx.WxTemplateMessage;
+import com.tp.admin.enums.AdminEmployeeOperatingLogTypeEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.service.MerchantEmployeeServiceI;
 import com.tp.admin.service.WxMiniServiceI;
+import com.tp.admin.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -34,6 +36,9 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
 
     @Autowired
     WxMiniServiceI wxMiniService;
+
+    @Autowired
+    AdminEmployeeOperatingLogDao adminEmployeeOperatingLogDao;
 
     @Override
     public ApiResult list(HttpServletRequest request, MerchantEmployeeSearch merchantEmployeeSearch) {
@@ -54,10 +59,12 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
         if (null == merchantEmployeeSearch.getIds() || merchantEmployeeSearch.getIds().length == 0 || null == merchantEmployeeSearch.getDeleted()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
+        String employeeName = findOperateEmployeeUsername(merchantEmployeeSearch);
         int res = adminMerchantEmployeeDao.bachUpdateDeleted(merchantEmployeeSearch);
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
+        buildEmployeeOperateLog(request,merchantEmployeeSearch, AdminEmployeeOperatingLogTypeEnum.DISABLE_EMPLOYEE,employeeName);
         return ApiResult.ok();
     }
 
@@ -111,5 +118,35 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
             }
         }
         return ApiResult.ok();
+    }
+
+    public final String findOperateEmployeeUsername(MerchantEmployeeSearch merchantEmployeeSearch) {
+        if (null == merchantEmployeeSearch.getIds() || merchantEmployeeSearch.getIds().length == 0 || null == merchantEmployeeSearch.getDeleted()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        List<AdminMerchantEmployee> list = adminMerchantEmployeeDao.findByIdsBach(merchantEmployeeSearch);
+        if (list == null || list.size() == 0){
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+        }
+        String string = "";
+        for (AdminMerchantEmployee adminMerchantEmployee:list) {
+            string += adminMerchantEmployee.getName() + " ";
+        }
+        return string;
+    }
+
+    public final void buildEmployeeOperateLog(HttpServletRequest request,MerchantEmployeeSearch merchantEmployeeSearch,AdminEmployeeOperatingLogTypeEnum adminEmployeeOperatingLogTypeEnum,String employeeNames) {
+        AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
+        AdminEmployeeOperatingLog adminEmployeeOperatingLog = new AdminEmployeeOperatingLog();
+        adminEmployeeOperatingLog.setMerchantId(Arrays.toString(merchantEmployeeSearch.getIds()));
+        adminEmployeeOperatingLog.setEmployeeName(employeeNames);
+        adminEmployeeOperatingLog.setOperateName(adminAccount.getName());
+        adminEmployeeOperatingLog.setTitle(adminEmployeeOperatingLogTypeEnum.getDesc());
+        String intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + "【" + employeeNames + "】";
+        adminEmployeeOperatingLog.setIntros(intros);
+        int res = adminEmployeeOperatingLogDao.insertMerchantEmployeeOperatingLog(adminEmployeeOperatingLog);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
     }
 }

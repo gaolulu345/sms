@@ -30,11 +30,12 @@
         partner AS p INNER JOIN partner_details AS pd ON p.id = pd.partner_id
     </select>
     
-    <select id="partnerWashCardIdSearch" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT id
+    <select id="partnerWashCardIdSearch" parameterType="java.lang.Integer" resultMap="PartnerWashCardMap">
+        SELECT id,name
         FROM partner_wash_card
         WHERE create_partner_id=#{createPartnerId}
     </select>
+
 
     <resultMap id="PartnerMap" type="com.tp.admin.data.entity.Partner">
         <id column="id" property="id" jdbcType="INTEGER" />
@@ -47,4 +48,9 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
     </resultMap>
+    <resultMap id="PartnerWashCardMap" type="com.tp.admin.data.dto.PartnerWashCardDTO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+
 </mapper>

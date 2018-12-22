@@ -395,7 +395,11 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty openId");
         }
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
-        List<Integer> washCardIds = partnerDao.partnerWashCardIdSearch(adminMerchantEmployee.getPartnerId());
+        List<PartnerWashCardDTO> washCards = partnerDao.partnerWashCardIdSearch(adminMerchantEmployee.getPartnerId());
+        List<Integer> washCardIds = new ArrayList<>();
+        for (PartnerWashCardDTO partnerWashCardDTO:washCards) {
+            washCardIds.add(partnerWashCardDTO.getId());
+        }
         UserSearch userSearch = new UserSearch();
         List<UserMemberDTO> userIdsOfUserMember = new ArrayList<>();
         if (washCardIds != null && washCardIds.size() != 0){
@@ -440,6 +444,12 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
             UserMemberDTO userMemberDTO = it.next();
             if (userMemberDTO.getType() == null || userMemberDTO.getWashCardType() == null){
                 it.remove();
+            }else{
+                for (PartnerWashCardDTO partnerWashCardDTO:washCards) {
+                    if (userMemberDTO.getPartnerCardId().equals(partnerWashCardDTO.getId())){
+                        userMemberDTO.setWashCardName(partnerWashCardDTO.getName());
+                    }
+                }
             }
         }
         return ApiResult.ok(userIdsOfUserMember);
