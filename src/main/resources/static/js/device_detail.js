@@ -17,7 +17,7 @@ var vm = new Vue({
         terOptions: null,
         deleteCarousels: null,
         uploadCarouselDialogVisible: false,
-        uploadCarouselformData: null,
+        uploadCarouselType: 0,
         terClientVersionOptions: [
             {
                 label: 'Java',
@@ -84,6 +84,18 @@ var vm = new Vue({
             this.deviceId = param.id
         }
         this.getDeviceDetail(this.deviceId)
+    },
+
+    computed: {
+        uploadCarouselPlusData: {
+          // getter
+          get: function () {
+            return {
+                type: this.uploadCarouselType,
+                id: this.deviceId
+            }
+          }
+        }
     },
     methods: {
 
@@ -310,7 +322,52 @@ var vm = new Vue({
                     picture.enable = !picture.enable
                 }
             )
-        }
+        },
+
+        // 上传轮播图
+        submitCarouselUpload: function() {
+            console.log('点击上传轮播图')
+            this.$refs.upload.submit();
+        },
+
+        // 添加图片格式检查
+        listenAddCarousel: function(file, fileList) {
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isLt2M) {
+                this.$message.error('上传文件大小不能超过 2M!');
+                index = fileList.indexOf(file)
+                fileList.splice(index, 1)
+            }
+        },
+
+        // 上传回调
+        uploadSuccess: function(res, file, fileList){
+            console.log(res, fileList.length);
+            vm.fileCnt ++;
+            console.log('这是第几个啦? ',vm.fileCnt)
+            if(res.code == 200) {
+                this.$message.success('上传成功');
+                vm.fileCnt == fileList.length ? window.location.reload() : '';
+            } else {
+                if(res.message == 'NoFileFound') {
+                    this.$message.warning('无上传文件或选择了空文件');
+                } else if(res.message == 'FileToUpload') {
+                    this.$message.warning('上传至阿里云失败');
+                } else if(res.message == 'FileSizeOver') {
+                    this.$message.warning('文件超过5M');
+                } else if(res.message == 'NoAdminName') {
+                    this.$message.warning('登录超时，取不到用户名');
+                    window.location.href = '/login';
+                } else {
+                    this.$message.warning('上传至阿里云失败!');
+                }
+                vm.fileCnt == fileList.length ? window.location.reload() : '';
+            }
+        },
+
+        handleExceed: function(files, fileList) {
+            this.$message.warning(`当前限制选择单个个文件，本次选择了 ${files.length} 个文件`);
+        },
 
     }
 })

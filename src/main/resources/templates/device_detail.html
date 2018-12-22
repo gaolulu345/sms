@@ -297,7 +297,7 @@
         <el-card class="box-card">
             <div slot="header" class="clearfix">
                 <span>广告图片管理</span>
-                <el-button style="float: lift;" type="success" icon="el-icon-upload" size="mini"></el-button>
+                <el-button style="float: lift;" type="success" icon="el-icon-upload" size="mini" @click="uploadCarouselDialogVisible = true"></el-button>
                 <el-button style="float: lift;" type="primary" size="mini">展示</el-button>
                 <el-button style="float: right;" type="danger" size="mini" @click="deleteDeviceCarousel">批量删除</el-button>
             </div>
@@ -322,23 +322,27 @@
                 </el-table-column>
             </el-table>
             <el-dialog title="上传轮播图" :visible.sync="uploadCarouselDialogVisible">
-                <el-form :model="uploadCarouselformData">
-                    <el-form-item label="审批人">
-                        <el-input v-model="formInline.user" placeholder="审批人"></el-input>
-                        </el-form-item>
-                        <el-form-item label="活动区域">
-                        <el-select v-model="formInline.region" placeholder="活动区域">
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
-                        </el-form-item>
-                        <el-form-item>
-                        <el-button type="primary" @click="onSubmit">查询</el-button>
-                        </el-form-item>
-                </el-form>
+                <template>
+                    <el-radio v-model="uploadCarouselType" label="0">轮播广告</el-radio>
+                    <el-radio v-model="uploadCarouselType" label="1">banner</el-radio>
+                </template>
+                <el-upload
+                    class="upload-demo"
+                    ref="upload"
+                    :auto-upload="false"
+                    accept="image/jpeg, image/png"
+                    action="/api/private/ter/ratation/picture/appoint/upload"
+                    list-type="picture"
+                    :on-change="listenAddCarousel"
+                    :data="uploadCarouselPlusData"
+                    :on-exceed="handleExceed"
+                    :limit="1">
+                    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                    <el-button style="margin-left: 10px;" size="small" type="success" @click="submitCarouselUpload">上传到服务器</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5M</div>
+                </el-upload>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                    <el-button @click="uploadCarouselDialogVisible = false">取 消</el-button>
                 </div>
             </el-dialog>
         </el-card>
