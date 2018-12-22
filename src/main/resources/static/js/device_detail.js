@@ -16,6 +16,8 @@ var vm = new Vue({
         backupDevice: null,
         terOptions: null,
         deleteCarousels: null,
+        uploadCarouselDialogVisible: false,
+        uploadCarouselformData: null,
         terClientVersionOptions: [
             {
                 label: 'Java',
@@ -287,7 +289,7 @@ var vm = new Vue({
                 id: picture.id,
                 enable: picture.enable
             }
-            this.$http.post("/api/private/ter/ratation/picture/appoint/star", updatePicture
+            this.$http.post("/api/private/ter/ratation/picture/appoint/start", updatePicture
             ).then(
                 function(res){
                     let result = res.json()
