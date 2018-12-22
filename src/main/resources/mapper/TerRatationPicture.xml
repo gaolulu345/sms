@@ -25,7 +25,7 @@
 	</select>
 
 	<select id="terRatationPictureCount" parameterType="com.tp.admin.data.search.TerRatationPictureSearch" resultType="java.lang.Integer">
-		  SELECT COUNT(trp.id) FROM ter_ratation_picture AS trp WHERE trp.device_id=#{deviceId}
+		  SELECT COUNT(trp.id) FROM ter_ratation_picture AS trp WHERE trp.deleted=0 AND trp.device_id=#{deviceId}
 	</select>
 
 	<update id="startTerRatationPicture" parameterType="com.tp.admin.data.search.TerRatationPictureSearch">
