@@ -12,6 +12,7 @@ import com.tp.admin.data.wx.WxTemplateMessage;
 import com.tp.admin.data.search.MaintionEmployeeSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.enums.AdminEmployeeOperatingLogTypeEnum;
+import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.service.MaintionEmployeeServiceI;
@@ -142,7 +143,8 @@ public class MaintionEmployeeServiceImpl implements MaintionEmployeeServiceI {
         adminEmployeeOperatingLog.setTitle(adminEmployeeOperatingLogTypeEnum.getDesc());
         adminEmployeeOperatingLog.setSuccess(success);
         adminEmployeeOperatingLog.setMsg(msg);
-        String intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + "【" + employeeNames + "】";
+        adminEmployeeOperatingLog.setOpDesType(AdminTerOperatingLogSourceEnum.MAINTAUN.getValue());
+        String intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + " " + employeeNames;
         adminEmployeeOperatingLog.setIntros(intros);
         int res = adminEmployeeOperatingLogDao.insertMaintionEmployeeOperatingLog(adminEmployeeOperatingLog);
         if (res == 0){

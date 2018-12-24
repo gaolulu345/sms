@@ -22,5 +22,6 @@ public class AdminEmployeeOperatingLog {
     private Boolean success;
     private String msg;
     private Boolean deleted;
+    private Integer opDesType;
 
 }

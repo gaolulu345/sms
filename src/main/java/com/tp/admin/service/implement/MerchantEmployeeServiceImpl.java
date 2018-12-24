@@ -12,6 +12,7 @@ import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.data.wx.WxTemplateData;
 import com.tp.admin.data.wx.WxTemplateMessage;
 import com.tp.admin.enums.AdminEmployeeOperatingLogTypeEnum;
+import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.service.MerchantEmployeeServiceI;
@@ -151,11 +152,12 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
         adminEmployeeOperatingLog.setTitle(adminEmployeeOperatingLogTypeEnum.getDesc());
         adminEmployeeOperatingLog.setSuccess(success);
         adminEmployeeOperatingLog.setMsg(msg);
+        adminEmployeeOperatingLog.setOpDesType(AdminTerOperatingLogSourceEnum.MERCHANT.getValue());
         String intros = null;
         if (partner == null){
-            intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + "【" + employeeNames + "】";
+            intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + " " + employeeNames;
         }else {
-            intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + "【" + "激活员工：" + employeeNames + "】"+ "【" + "绑定合作伙伴为：" + partner.getTitle() + "】";
+            intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + "[" + "激活员工：" + employeeNames + "]"+ "【" + "绑定合作伙伴为：" + partner.getTitle() + "】";
         }
 
         adminEmployeeOperatingLog.setIntros(intros);
