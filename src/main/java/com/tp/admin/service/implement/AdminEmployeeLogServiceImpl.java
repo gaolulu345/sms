@@ -24,11 +24,13 @@ public class AdminEmployeeLogServiceImpl implements AdminEmployeeLogServiceI {
     @Override
     public ApiResult list(HttpServletRequest request, AdminEmployeeSearch adminEmployeeSearch) {
         adminEmployeeSearch.build();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String endTime = simpleDateFormat.format(new Date());
-        String startTime = TimeUtil.getStartTime(adminEmployeeSearch.getDays());
-        adminEmployeeSearch.setStartTime(startTime);
-        adminEmployeeSearch.setEndTime(endTime);
+        if (adminEmployeeSearch.getDays() != null && adminEmployeeSearch.getDays() != 0){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String endTime = simpleDateFormat.format(new Date());
+            String startTime = TimeUtil.getStartTime(adminEmployeeSearch.getDays());
+            adminEmployeeSearch.setStartTime(startTime);
+            adminEmployeeSearch.setEndTime(endTime);
+        }
         List<AdminEmployeeOperatingLog> list = adminEmployeeOperatingLogDao.list(adminEmployeeSearch);
         if (list != null && list.size() != 0){
             Integer cnt = adminEmployeeOperatingLogDao.cntOfEmployeeLog(adminEmployeeSearch);

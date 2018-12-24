@@ -8,7 +8,8 @@
 		operate_name,
 		title,
 		intros,
-		success
+		success,
+		op_des_type
 		)
 		VALUES(
 		#{maintionId},
@@ -16,7 +17,8 @@
 		#{operateName},
 		#{title},
 		#{intros},
-		#{success})
+		#{success},
+		#{opDesType})
 	</insert>
 
 	<insert id="insertMerchantEmployeeOperatingLog" parameterType="com.tp.admin.data.entity.AdminEmployeeOperatingLog">
@@ -26,7 +28,8 @@
 		operate_name,
 		title,
 		intros,
-		success
+		success,
+		op_des_type
 		)
 		VALUES(
 		#{merchantId},
@@ -34,7 +37,8 @@
 		#{operateName},
 		#{title},
 		#{intros},
-		#{success})
+		#{success},
+		#{opDesType})
 	</insert>
 
 	<select id="list" parameterType="com.tp.admin.data.search.AdminEmployeeSearch" resultMap="AdminEmployeeOperatingLogMap">
