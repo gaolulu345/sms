@@ -8,7 +8,8 @@
 		operate_name,
 		title,
 		intros,
-		success
+		success,
+		op_des_type
 		)
 		VALUES(
 		#{maintionId},
@@ -16,7 +17,8 @@
 		#{operateName},
 		#{title},
 		#{intros},
-		#{success})
+		#{success},
+		#{opDesType})
 	</insert>
 
 	<insert id="insertMerchantEmployeeOperatingLog" parameterType="com.tp.admin.data.entity.AdminEmployeeOperatingLog">
@@ -26,7 +28,8 @@
 		operate_name,
 		title,
 		intros,
-		success
+		success,
+		op_des_type
 		)
 		VALUES(
 		#{merchantId},
@@ -34,8 +37,41 @@
 		#{operateName},
 		#{title},
 		#{intros},
-		#{success})
+		#{success},
+		#{opDesType})
 	</insert>
+
+	<select id="list" parameterType="com.tp.admin.data.search.AdminEmployeeSearch" resultMap="AdminEmployeeOperatingLogMap">
+		SELECT log.*
+		FROM
+		admin_employee_operating_log AS log
+		<where>
+		log.deleted=0
+		<if test="opDesType != null">
+			AND op_des_type = #{opDesType}
+		</if>
+		<if test="startTime != null and endTime != null">
+			AND log.create_time BETWEEN #{startTime} AND #{endTime}
+		</if>
+		</where>
+		ORDER BY log.create_time DESC
+		<if test="pageSize != null and pageSize !=0 and offset != null">
+			LIMIT #{offset},#{pageSize}
+		</if>
+	</select>
+
+	<select id="cntOfEmployeeLog" parameterType="com.tp.admin.data.search.AdminEmployeeSearch" resultType="java.lang.Integer">
+		SELECT COUNT(log.id)
+		FROM
+		admin_employee_operating_log AS log
+		WHERE log.deleted=0
+		<if test="opDesType != null">
+			AND op_des_type = #{opDesType}
+		</if>
+		<if test="startTime != null and endTime != null">
+			AND log.create_time BETWEEN #{startTime} AND #{endTime}
+		</if>
+	</select>
 
 	<resultMap id="AdminEmployeeOperatingLogMap" type="com.tp.admin.data.entity.AdminEmployeeOperatingLog">
 		<id column="id" property="id" jdbcType="INTEGER"/>
@@ -43,7 +79,11 @@
 		<result column="maintion_id" property="maintionId" jdbcType="VARCHAR"/>
 		<result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
 		<result column="employee_name" property="employeeName" jdbcType="VARCHAR"/>
-
+		<result column="operate_name" property="operateName" jdbcType="VARCHAR"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="intros" property="intros" jdbcType="VARCHAR"/>
+		<result column="msg" property="msg" jdbcType="VARCHAR"/>
+		<result column="op_des_type" property="opDesType" jdbcType="INTEGER"/>
 		<result column="deleted" property="deleted" jdbcType="BIT" />
 		<result column="success" property="success" jdbcType="BIT" />
 

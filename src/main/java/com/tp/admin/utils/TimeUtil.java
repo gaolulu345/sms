@@ -2,6 +2,8 @@ package com.tp.admin.utils;
 
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -150,6 +152,28 @@ public class TimeUtil {
                 / (1000 * 60 * 60 * 24);
         int days = new Long(diff).intValue();
         return days;
+    }
+
+    /**
+     * 通过天数获取开始时间
+     * @param day
+     * @return
+     */
+    public static String getStartTime(Integer day){
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String endTime = dateFormat.format(new Date());
+            Date date = dateFormat.parse(endTime);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - day);
+            return dateFormat.format(calendar.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
+
+
     }
 
 }

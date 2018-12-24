@@ -269,9 +269,10 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             }
         }
         Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String startTime = simpleDateFormat.format(date);
         String fileName = ExcelUtil.createXlxs(Constant.TER_DEVICE,startTime , (int)(Math.random()*100) + "");
+
         String path = System.getProperty(Constant.TMP_DIR) + Constant._XLSX_DIR;
         File pathFile = new File(path);
         if (!pathFile.exists()) {
