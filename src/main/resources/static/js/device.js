@@ -41,16 +41,7 @@ var vm = new Vue({
         },
 
         downloadDeviceList: function() {
-            this.$http.get("/api/private/wash/ter/property/list/exprot", {
-            }).then(function(res){
-                let result = res.json()
-                if(result.code == 200) {
-                    this.$message({
-                        message: '保存成功',
-                        type: 'success'
-                    });
-                }
-            })
+            window.location.href = "/api/private/wash/ter/property/list/exprot"
         },
 
         handleSizeChange(val) {

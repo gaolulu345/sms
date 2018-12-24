@@ -74,19 +74,16 @@ var vm = new Vue({
     }, 
 
     mounted: function() {
-        console.log(1)
         let href = window.location.href
         if (href.indexOf('?') != -1) {
             let query = href.split('?')[1].split('&')
             let param = {}
             query.forEach(function(item, index){
-                console.log(2)
                 let itemArrey = item.split('=')
                 param[itemArrey[0]] = itemArrey[1]
             })
             this.deviceId = param.id
         }
-        console.log(3)
         this.getDeviceDetail(this.deviceId)
     },
 
