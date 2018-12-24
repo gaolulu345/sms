@@ -157,7 +157,7 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
         if (partner == null){
             intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + " " + employeeNames;
         }else {
-            intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + "[" + "激活员工：" + employeeNames + "]"+ "【" + "绑定合作伙伴为：" + partner.getTitle() + "】";
+            intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + "[" + "激活员工：" + employeeNames + "]"+ "[" + "绑定合作伙伴为：" + partner.getTitle() + "]";
         }
 
         adminEmployeeOperatingLog.setIntros(intros);
