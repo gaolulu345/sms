@@ -394,6 +394,31 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         if (wxMiniSearch.getOpenId() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty openId");
         }
+        wxMiniSearch.builData();
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        List<PartnerWashCardDTO> washCards = partnerDao.partnerWashCardIdSearch(adminMerchantEmployee.getPartnerId());
+        List<Integer> washCardIds = new ArrayList<>();
+        for (PartnerWashCardDTO partnerWashCardDTO:washCards) {
+            washCardIds.add(partnerWashCardDTO.getId());
+        }
+        wxMiniSearch.setIds(washCardIds);
+        List<PartnerUserWashCardDTO> list = partnerDao.listPartnerUserWashCardDTOBySearch(wxMiniSearch);
+        if (list != null && list.size() != 0){
+            for (PartnerUserWashCardDTO partnerUserWashCardDTO:list) {
+                partnerUserWashCardDTO.build();
+            }
+            Integer cnt = partnerDao.cntPartnerUserWashCardDTOBySearch(wxMiniSearch);
+            wxMiniSearch.setTotalCnt(cnt);
+            wxMiniSearch.setResult(list);
+        }else {
+            wxMiniSearch.setTotalCnt(0);
+        }
+        return ApiResult.ok(wxMiniSearch);
+        /*String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body, WxMiniSearch.class);
+        if (wxMiniSearch.getOpenId() == null){
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty openId");
+        }
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         List<PartnerWashCardDTO> washCards = partnerDao.partnerWashCardIdSearch(adminMerchantEmployee.getPartnerId());
         List<Integer> washCardIds = new ArrayList<>();
@@ -452,7 +477,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
                 }
             }
         }
-        return ApiResult.ok(userIdsOfUserMember);
+        return ApiResult.ok(userIdsOfUserMember);*/
     }
 
     private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMerchantEmployee
