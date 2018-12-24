@@ -29,4 +29,6 @@ public interface AdminMaintionEmployeeDao {
 
     int updateMaintionLoginTime(AdminMaintionEmployee adminMaintionEmployee);
 
+    List<AdminMaintionEmployee> findByIdsBatch(MaintionEmployeeSearch maintionEmployeeSearch);
+
 }

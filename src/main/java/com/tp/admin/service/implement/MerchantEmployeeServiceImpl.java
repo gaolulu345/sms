@@ -61,10 +61,15 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
         }
         String employeeName = findOperateEmployeeUsername(merchantEmployeeSearch);
         int res = adminMerchantEmployeeDao.bachUpdateDeleted(merchantEmployeeSearch);
+        AdminEmployeeOperatingLogTypeEnum adminEmployeeOperatingLogTypeEnum = AdminEmployeeOperatingLogTypeEnum.DISABLE_EMPLOYEE;
+        if (!merchantEmployeeSearch.getDeleted()){
+            adminEmployeeOperatingLogTypeEnum = AdminEmployeeOperatingLogTypeEnum.UNBIND;
+        }
         if (res == 0) {
+            buildEmployeeOperateLog(request,Arrays.toString(merchantEmployeeSearch.getIds()), adminEmployeeOperatingLogTypeEnum,employeeName,null,false,"数据库操作失败");
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
-        buildEmployeeOperateLog(request,merchantEmployeeSearch, AdminEmployeeOperatingLogTypeEnum.DISABLE_EMPLOYEE,employeeName);
+        buildEmployeeOperateLog(request,Arrays.toString(merchantEmployeeSearch.getIds()), adminEmployeeOperatingLogTypeEnum,employeeName,null,true,"");
         return ApiResult.ok();
     }
 
@@ -85,8 +90,10 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
                 merchantEmployeeSearch
                 .getPartnerId());
         if (res == 0) {
+            buildEmployeeOperateLog(request,merchantEmployeeSearch.getId() + "", AdminEmployeeOperatingLogTypeEnum.ENABLE_AND_BIND,adminMerchantEmployee.getName(),partner,false,"数据库操作失败");
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
+        buildEmployeeOperateLog(request,merchantEmployeeSearch.getId() + "", AdminEmployeeOperatingLogTypeEnum.ENABLE_AND_BIND,adminMerchantEmployee.getName(),partner,true,"");
         if(merchantEmployeeSearch.getEnable()){
             String result = wxMiniService.getAccessToken(Constant.WxMiniMerchant.APP_ID,Constant.WxMiniMerchant.APP_SECRET);
             if (null != result) {
@@ -135,14 +142,22 @@ public class MerchantEmployeeServiceImpl implements MerchantEmployeeServiceI {
         return string;
     }
 
-    public final void buildEmployeeOperateLog(HttpServletRequest request,MerchantEmployeeSearch merchantEmployeeSearch,AdminEmployeeOperatingLogTypeEnum adminEmployeeOperatingLogTypeEnum,String employeeNames) {
+    public final void buildEmployeeOperateLog(HttpServletRequest request,String id,AdminEmployeeOperatingLogTypeEnum adminEmployeeOperatingLogTypeEnum,String employeeNames,Partner partner,Boolean success,String msg) {
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
         AdminEmployeeOperatingLog adminEmployeeOperatingLog = new AdminEmployeeOperatingLog();
-        adminEmployeeOperatingLog.setMerchantId(Arrays.toString(merchantEmployeeSearch.getIds()));
+        adminEmployeeOperatingLog.setMerchantId(id);
         adminEmployeeOperatingLog.setEmployeeName(employeeNames);
         adminEmployeeOperatingLog.setOperateName(adminAccount.getName());
         adminEmployeeOperatingLog.setTitle(adminEmployeeOperatingLogTypeEnum.getDesc());
-        String intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + "【" + employeeNames + "】";
+        adminEmployeeOperatingLog.setSuccess(success);
+        adminEmployeeOperatingLog.setMsg(msg);
+        String intros = null;
+        if (partner == null){
+            intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + "【" + employeeNames + "】";
+        }else {
+            intros = adminAccount.getName() + " " + adminEmployeeOperatingLogTypeEnum.getDesc() + "【" + "激活员工：" + employeeNames + "】"+ "【" + "绑定合作伙伴为：" + partner.getTitle() + "】";
+        }
+
         adminEmployeeOperatingLog.setIntros(intros);
         int res = adminEmployeeOperatingLogDao.insertMerchantEmployeeOperatingLog(adminEmployeeOperatingLog);
         if (res == 0){

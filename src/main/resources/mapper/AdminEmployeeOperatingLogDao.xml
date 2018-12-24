@@ -7,14 +7,16 @@
 		employee_name,
 		operate_name,
 		title,
-		intros
+		intros,
+		success
 		)
 		VALUES(
 		#{maintionId},
 		#{employeeName},
 		#{operateName},
 		#{title},
-		#{intros})
+		#{intros},
+		#{success})
 	</insert>
 
 	<insert id="insertMerchantEmployeeOperatingLog" parameterType="com.tp.admin.data.entity.AdminEmployeeOperatingLog">
@@ -23,14 +25,16 @@
 		employee_name,
 		operate_name,
 		title,
-		intros
+		intros,
+		success
 		)
 		VALUES(
 		#{merchantId},
 		#{employeeName},
 		#{operateName},
 		#{title},
-		#{intros})
+		#{intros},
+		#{success})
 	</insert>
 
 	<resultMap id="AdminEmployeeOperatingLogMap" type="com.tp.admin.data.entity.AdminEmployeeOperatingLog">

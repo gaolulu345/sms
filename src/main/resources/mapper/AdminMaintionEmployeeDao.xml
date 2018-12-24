@@ -90,6 +90,18 @@
 		WHERE id=#{id}
     </update>
 
+
+    <select id="findByIdsBatch" parameterType="com.tp.admin.data.search.MaintionEmployeeSearch" resultMap="AdminMaintionEmployeeMap">
+        SELECT * FROM admin_maintion_employee
+        WHERE
+        <if test="ids != null">
+            id IN
+            <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
     <resultMap id="AdminMaintionEmployeeMap" type="com.tp.admin.data.entity.AdminMaintionEmployee">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="mini_wx_id" property="miniWxId" jdbcType="VARCHAR"/>

@@ -83,6 +83,9 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     @Autowired
     AliyunOssManagerI aliyunOssManager;
 
+    @Autowired
+    FileUploadLogDao fileUploadLogDao;
+
     @Override
     public ApiResult allTerPropertyInfoList(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
@@ -195,6 +198,12 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         }
         adminTerPropertyDTO.setCdrPicture(uploadFileDTO.getUrl());
         int res =  adminTerPropertyDao.updateTerProperty(adminTerPropertyDTO);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        String fileName = uploadFileDTO.getKey();
+        AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
+        res = fileUploadLogDao.insert(new FileUploadLog(adminAccount.getName(),fileName));
         if (res == 0){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }

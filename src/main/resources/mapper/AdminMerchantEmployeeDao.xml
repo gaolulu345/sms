@@ -95,9 +95,7 @@
 	<select id="findByIdsBach" parameterType="com.tp.admin.data.search.MerchantEmployeeSearch" resultMap="AdminMerchantEmployeeMap">
 		SELECT * FROM admin_merchant_employee
 		WHERE
-		deleted = 0
 		<if test="ids != null">
-			AND
 			id IN
 			<foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
 				#{item}

@@ -2,7 +2,11 @@ package com.tp.admin.enums;
 
 public enum AdminEmployeeOperatingLogTypeEnum {
     DISABLE_EMPLOYEE(0,"禁用员工"),
-    ENABLE_EMPLOYEE(1,"启用员工");
+    ENABLE_EMPLOYEE(1,"修改员工审批状态"),
+    ENABLE_AND_BIND(2,"激活 绑定合作伙伴"),
+    UNBIND(3,"解禁员工");
+
+
 
     private int value;
     private String desc;
