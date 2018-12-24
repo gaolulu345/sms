@@ -17,17 +17,63 @@ var vm = new Vue({
         currentPageSize: 10,
         currentPageIndex: 1,
         pageSizes: [10, 20, 50],
+
+        currentOpSource: null,
+        OpSourceOptions: [
+            {
+                label: '商户',
+                value: 1
+            },
+            {
+                label: '维保',
+                value: 0
+            }
+        ],
+        currentTerIds: [],
+        terList: [],
+        searchTerOptions: [],
+        searchTerLoading: false,
+        pickerOptions: {
+            disabledDate(time) {
+                return time.getTime() > Date.now();
+            }
+        },
+        dateRange = null,
+        currentStartTime = null,
+        currentEndTime = null
     }, 
 
     mounted: function() {
-        this.getLogList(this.$data.currentPageSize, this.$data.currentPageIndex)
+        let paramData = {
+            pageSize: this.$data.currentPageSize,
+            pageIndex: this.$data.currentPageIndex
+        }
+        this.getLogList(paramData)
+        this.getTerList()
     },
+
+    computed: {
+        computedDateRange: {
+            get: function() {
+                return vm.dateRange
+            },
+            set: function(newValue) {
+                if(!newValue) {  //如果日期选择器中先有选择，后置空，结果为null，会报错
+                    vm.dateRange = ''
+                } else {
+                    vm.dateRange = newValue
+                }
+                vm.currentStartTime = vm.dateRange[0] || '';
+                vm.currentEndTime = vm.dateRange[1] || '';
+            }
+        }
+    },
+    
     methods: {
-        getLogList: function(pageSize, pageIndex){
-            this.$http.post("/api/private/device/operation/log/list", {
-                pageSize: pageSize,
-                pageIndex: pageIndex,
-            }).then(function(res){
+        getLogList: function(paramData){
+            this.$http.post("/api/private/device/operation/log/list", 
+                paramData
+            ).then(function(res){
                 let data = res.json().data
                 let result = data.result;
                 if(result && result[0]) {
@@ -39,6 +85,47 @@ var vm = new Vue({
                 vm.logList = result
                 vm.totalCnt = data.totalCnt
             })
+        },
+
+        getTerList: function() {
+            this.$http.post("/api/private/wash/ter/property/list/info", {
+            }).then(function(res){
+                let result = res.json().data.result
+                if(result) {
+                    result.forEach(function(item, index){
+                        item['label'] = `${item.code}&${item.title}`
+                        item['value'] = item.id.toString()
+                    })
+                    vm.terList = result
+                    VM.searchTerOptions = result
+                }
+            })
+        },
+
+        searchTerByKeyword: function(queryString) {
+            console.log('searchTerByKeyword: ', queryString)
+            if (queryString != '') {
+                let backupTerList = vm.terList
+                vm.searchTerLoading = true
+                vm.searchTerOptions = backupTerList.filter((ter) => {
+                    return ter.label.indexOf(queryString) != -1
+                })
+                vm.searchTerLoading = false
+            } else {
+                vm.searchTerLoading = false
+                vm.searchTerLoading = vm.terList
+            }
+
+        },
+
+        search: function() {
+            //  getTerList
+
+
+
+
+
+            
         },
 
         showMore: function() {
