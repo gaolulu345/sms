@@ -83,7 +83,7 @@
                 </el-table-column>
             </el-table>
         </el-card>
-        <el-card class="box-card">
+        <el-card v-if="device[0].deviceType" class="box-card">
             <div slot="header" class="clearfix">
                 <span>设备关联网点信息</span>
             </div>
@@ -105,7 +105,7 @@
                                     </el-select>
                                 </span>
                                 <span class="rightButton">
-                                    <el-button  type="success" size="mini" @click="saveDevice('terId')" :disabled="backupDevice.terId.value == scope.row.terId">保存</el-button>
+                                    <el-button  type="success" size="mini" @click="bindDeviceByTerid" :disabled="backupDevice.terId.value == scope.row.terId">保存</el-button>
                                     <el-button size="mini" type="danger" @click="cancel('terId')">取消</el-button>
                                 </span>
                             </span>
@@ -151,8 +151,29 @@
                                     <span v-else>暂无</span>
                                 </span>
                                 <span class="rightButton">
-                                    <el-button type="primary" size="mini">上传</el-button>
+                                    <el-button type="primary" size="mini" @click="uploadQrcodeDialogVisible = true">上传</el-button>
                                 </span>
+                                <el-dialog title="上传监控二维码" :visible.sync="uploadQrcodeDialogVisible" width="40%">
+                                    <div class="uploadCarouselButton">
+                                        <el-upload
+                                            class="upload-qrcode"
+                                            accept="image/jpeg, image/png"
+                                            action="/api/private/wash/ter/property/upload/cdr/picture"
+                                            list-type="picture"
+                                            :on-change="listenAddPicture"
+                                            :data="uploadQrcodePlusData"
+                                            :limit="1"
+                                            :on-success="uploadQrcodeSuccess"
+                                            :on-exceed="handleExceed"
+                                            :show-file-list="false">
+                                            <el-button class="inElUpload" slot="trigger" size="mini" type="primary">选取文件</el-button>
+                                            <div slot="tip" class="el-upload__tip"><span class="uploadTip">* 只能上传jpg/png文件，且不超过2M</span></div>
+                                        </el-upload>
+                                        <div slot="footer" class="dialog-footer uploadDialogFooter">
+                                            <el-button size="mini" @click="uploadQrcodeDialogVisible = false">取 消</el-button>
+                                        </div>
+                                    </div>    
+                                </el-dialog>
                             </span>
                             <el-dialog append-to-body v-if="scope.row.cdrPicture" :title="scope.row.terRemark + ' ' + '刻录机二维码'" :visible.sync="backupDevice.cdrPicture.cdrPictureDialogVisible">
                                 <img v-if="scope.row.cdrPicture" :src="scope.row.cdrPicture" @click=></img>
@@ -196,7 +217,7 @@
                                     <el-button size="mini" type="primary" icon="el-icon-edit" @click="backupDevice.propertyRemark.edit = true"></el-button>
                                 </div>
                             </div>
-                            <el-dialog :title="'设备ID: ' +  scope.row.id + '备注更改 '" :visible.sync="backupDevice.propertyRemark.edit">
+                            <el-dialog title="备注更改" :visible.sync="backupDevice.propertyRemark.edit">
                                 <el-input type="textarea" :maxlength="50" :minlength="5" :autosize="{ minRows: 3, maxRows: 6}" placeholder="请输入设备备注" v-model="backupDevice.propertyRemark.value">
                                 </el-input>
                                 <div slot="footer" class="dialog-footer">
@@ -297,8 +318,8 @@
         <el-card class="box-card">
             <div slot="header" class="clearfix">
                 <span>广告图片管理</span>
-                <el-button style="float: lift;" type="success" icon="el-icon-upload" size="mini"></el-button>
-                <el-button style="float: lift;" type="primary" size="mini">展示</el-button>
+                <el-button style="float: lift; margin-left: .078125rem" type="success" icon="el-icon-upload" size="mini" @click="uploadCarouselDialogVisible = true">上传轮播图</el-button>
+                <!-- <el-button style="float: lift;" type="primary" size="mini">展示</el-button> -->
                 <el-button style="float: right;" type="danger" size="mini" @click="deleteDeviceCarousel">批量删除</el-button>
             </div>
             <el-table :data="deviceCarouselQuery" @selection-change="changeDeleteCarousel" border style="width: 100%">
@@ -321,6 +342,37 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-dialog title="上传轮播图" :visible.sync="uploadCarouselDialogVisible" width="40%">
+                <div class="uploadCarouselRadio">
+                    <span>上传图片类型： </span>
+                    <el-radio-group v-model="uploadCarouselType">
+                        <el-radio :label="0">轮播广告</el-radio>
+                        <el-radio :label="1">banner</el-radio>
+                    </el-radio-group>
+                </div>
+                <div class="uploadCarouselButton">
+                    <el-upload
+                        class="upload-demo"
+                        ref="upload"
+                        :auto-upload="false"
+                        accept="image/jpeg, image/png"
+                        action="/api/private/ter/ratation/picture/appoint/upload"
+                        list-type="picture"
+                        :on-change="listenAddPicture"
+                        :data="uploadCarouselPlusData"
+                        :on-exceed="handleExceed"
+                        :limit="1"
+                        :on-success="uploadCarouselSuccess"
+                        :show-file-list="false">
+                        <el-button class="inElUpload" slot="trigger" size="mini" type="primary">选取文件</el-button>
+                        <el-button class="inElUpload" style="margin-left: 10px;" size="mini" type="success" @click="submitCarouselUpload">上传到服务器</el-button>
+                        <div slot="tip" class="el-upload__tip"><span class="uploadTip">* 只能上传jpg/png文件，且不超过2M</span></div>
+                    </el-upload>
+                    <div slot="footer" class="dialog-footer uploadDialogFooter">
+                        <el-button size="mini" @click="uploadCarouselDialogVisible = false">取 消</el-button>
+                    </div>
+                </div>    
+            </el-dialog>
         </el-card>
         </div>
     </div>

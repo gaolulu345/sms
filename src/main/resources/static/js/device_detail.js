@@ -16,6 +16,9 @@ var vm = new Vue({
         backupDevice: null,
         terOptions: null,
         deleteCarousels: null,
+        uploadCarouselDialogVisible: false,
+        uploadCarouselType: 0,
+        uploadQrcodeDialogVisible: false,
         terClientVersionOptions: [
             {
                 label: 'Java',
@@ -83,11 +86,30 @@ var vm = new Vue({
         }
         this.getDeviceDetail(this.deviceId)
     },
+
+    computed: {
+        uploadCarouselPlusData: {
+          get: function () {
+            return {
+                type: this.uploadCarouselType,
+                id: this.deviceId
+            }
+          }
+        },
+
+        uploadQrcodePlusData: {
+          get: function () {
+            return {
+                id: this.deviceId
+            }
+          }
+        }
+    },
+
     methods: {
 
         // 设备详情
         getDeviceDetail: function(decviceId){
-            console.log('id',decviceId)
             this.$http.post("/api/private/wash/ter/property/search", {
                 id: decviceId,
             }).then(function(res){
@@ -107,14 +129,11 @@ var vm = new Vue({
                                 cdrPictureDialogVisible: false
                             }
                         })
-                        console.log('out getDeviceCarouselQuery')
                         vm.backupDevice = backupDevice
                         if (vm.device[0].terBusiMode != null) {
-                            console.log('in getDeviceCarouselQuery')
                             vm.getDeviceCarouselQuery(vm.device[0].id)
                         }
                     }
-                    console.log('vm.backupDevice: ', vm.backupDevice)
                 }
             })
         },
@@ -123,20 +142,44 @@ var vm = new Vue({
         saveDevice: function(paramKey) {
             let updateDevice = {}
             let updatefield = {}
-            console.log('保存更改vm.backupDevice: ', vm.backupDevice)
             if (paramKey == 'screen') {
                 updatefield['screenHigh'] = vm.backupDevice.screenHigh.value
                 updatefield['screenWide'] = vm.backupDevice.screenWide.value
             }else{
                 updatefield[paramKey] = vm.backupDevice[paramKey].value
             }
-            console.log('updatefield：', updatefield, paramKey)
             Object.keys(updatefield).forEach(function(item, index){
                 updateDevice[item] = vm.backupDevice[item].value
             })
             updateDevice['id'] = vm.backupDevice.id.value
-            console.log('待升级字段：', updateDevice, paramKey)
             this.updateDevice(updateDevice, paramKey)
+        },
+
+        // 绑定设备到网点
+        bindDeviceByTerid: function() {
+            let updatefield = {}
+            updatefield.terId = vm.backupDevice.terId.value
+            updatefield.id = vm.deviceId
+            this.$http.post("/api/private/wash/ter/property/device/bind", updatefield
+            ).then(
+                function(res){
+                    let result = res.json()
+                    if(result.code == 200) {
+                        this.$message({
+                            message: '保存成功',
+                            type: 'success'
+                        });
+                        vm.getDeviceDetail(vm.deviceId)
+                    } else {
+                        this.$message.error(result.message);
+                        vm.backupDevice.terId.edit = falsefalse
+                    }
+                },
+                function(res){
+                    this.$message.error('保存失败');
+                    vm.backupDevice.terId.edit = falsefalse
+                }
+            )
         },
 
         // 取消
@@ -162,14 +205,12 @@ var vm = new Vue({
 
         // 获取轮播图列表
         getDeviceCarouselQuery: function(deviceId) {
-            console.log('deviceId getDeviceCarouselQuery ID', deviceId)
             this.$http.post("/api/private/ter/ratation/picture/show", {
                 "deviceId": deviceId,
 	            "pageSize": 10,
                 "pageIndex": 1
             }).then(function(res){
                 let result = res.json()
-                console.log('getDeviceCarouselQuery result: ', result)
                 if(result.code == 200) {
                     let resData = result.data.result
                     if(resData) {
@@ -193,6 +234,7 @@ var vm = new Vue({
             this.updateDevice(updateDevice, 'adExist')
         },
 
+        // 更新设备信息
         updateDevice: function(updateDevice, paramKey) {
             this.$http.post("/api/private/wash/ter/property/info/update", updateDevice).then(
                 function(res){
@@ -287,7 +329,7 @@ var vm = new Vue({
                 id: picture.id,
                 enable: picture.enable
             }
-            this.$http.post("/api/private/ter/ratation/picture/appoint/star", updatePicture
+            this.$http.post("/api/private/ter/ratation/picture/appoint/start", updatePicture
             ).then(
                 function(res){
                     let result = res.json()
@@ -308,7 +350,60 @@ var vm = new Vue({
                     picture.enable = !picture.enable
                 }
             )
-        }
+        },
+
+        // 上传轮播图
+        submitCarouselUpload: function() {
+            this.$refs.upload.submit();
+        },
+
+        // 添加图片格式检查
+        listenAddPicture: function(file, fileList) {
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isLt2M) {
+                this.$message.error('上传文件大小不能超过 2M!');
+                index = fileList.indexOf(file)
+                fileList.splice(index, 1)
+            }
+        },
+
+        // 上传轮播图回调
+        uploadCarouselSuccess: function(res, file, fileList){
+            this.handlerUploadSuccess(res, file, fileList, 'uploadCarouselDialogVisible', this.getDeviceCarouselQuery)
+        },
+
+        // 上传二维码回调
+        uploadQrcodeSuccess: function(res, file, fileList){
+            this.handlerUploadSuccess(res, file, fileList, 'uploadQrcodeDialogVisible', this.getDeviceDetail)
+        },
+
+        // 上传图片调用
+        handlerUploadSuccess: function(res, file, fileList, dialogVisible, refreshFun) {
+            if(res.code == 200) {
+                this.$message.success('上传成功');
+                this.$data[dialogVisible] = false
+                refreshFun(this.$data.deviceId)
+                fileList = []
+            } else {
+                if(res.message == 'NoFileFound') {
+                    this.$message.warning('无上传文件或选择了空文件');
+                } else if(res.message == 'FileToUpload') {
+                    this.$message.warning('上传至阿里云失败');
+                } else if(res.message == 'FileSizeOver') {
+                    this.$message.warning('文件超过5M');
+                } else if(res.message == 'NoAdminName') {
+                    this.$message.warning('登录超时，取不到用户名');
+                    window.location.href = '/login';
+                } else {
+                    this.$message.warning('上传至阿里云失败!');
+                }
+            }
+        },
+
+        // 限制多张上传
+        handleExceed: function(files, fileList) {
+            this.$message.warning('当前限制选择单个文件');
+        },
 
     }
 })
