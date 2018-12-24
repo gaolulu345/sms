@@ -1,7 +1,7 @@
 var vm = new Vue({
     el: '#app',
     data: {
-        pageName: 'deviceDetail',
+        pageName: 'device',
         pageTitle: '设备详情',
         adminId: adminId,
         adminRoleId: adminRoleId,

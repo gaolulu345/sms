@@ -2,7 +2,7 @@ var vm = new Vue({
     el: '#app',
     data: {
         pageName: 'device',
-        pageTitle: '设备管理',
+        pageTitle: '设备列表',
         adminId: adminId,
         adminRoleId: adminRoleId,
         admin: admin,
@@ -40,6 +40,10 @@ var vm = new Vue({
             })
         },
 
+        downloadDeviceList: function() {
+            window.location.href = "/api/private/wash/ter/property/list/exprot"
+        },
+
         handleSizeChange(val) {
             vm.getDeviceList(val, 1);
         },
@@ -51,7 +55,6 @@ var vm = new Vue({
 
         handlerDevice: function(val) {
             vm.currentDevice = val
-            console.log('device val', val)
             this.toDeviceDetail(val.id)
         },
 
