@@ -57,6 +57,9 @@
 			<if test="opSource != null">
 				AND log.op_source = #{opSource}
 			</if>
+			<if test="startTime != null and endTime != null">
+				AND log.create_time BETWEEN #{startTime} AND #{endTime}
+			</if>
 		</where>
 		ORDER BY log.create_time DESC
 		<if test="pageSize != null and pageSize !=0 and offset != null">
@@ -73,6 +76,12 @@
 		<where>
 			<if test="terId != null">
 				log.ter_id = #{terId}
+			</if>
+			<if test="opSource != null">
+				AND log.op_source = #{opSource}
+			</if>
+			<if test="startTime != null and endTime != null">
+				AND log.create_time BETWEEN #{startTime} AND #{endTime}
 			</if>
 		</where>
     </select>
