@@ -32,6 +32,7 @@ public class AdminTerOperatingLogDTO {
     private String imgs;
     private String[] img;
     private boolean success;
+    private String msg;
     private String opSourceDesc;
     private String typeDesc;
 

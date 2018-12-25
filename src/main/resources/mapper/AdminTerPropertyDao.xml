@@ -30,7 +30,8 @@
 				atp.screen_high,
 				atp.property_remark,
 				atp.device_type,
-				atp.cdr_picture
+				atp.cdr_picture,
+				atp.deleted
         FROM admin_ter_property AS atp
 				WHERE atp.id=#{id}
 	</select>
@@ -102,6 +103,7 @@
 		<result column="high_limit" property="highLimit" jdbcType="SMALLINT"/>
 		<result column="wide_limit" property="wideLimit" jdbcType="SMALLINT"/>
 		<result column="ad_exist" property="adExist" jdbcType="BIT"/>
+		<result column="deleted" property="deleted" jdbcType="BIT"/>
 		<result column="screen_wide" property="screenWide" jdbcType="INTEGER"/>
 		<result column="screen_high" property="screenHigh" jdbcType="INTEGER"/>
 		<result column="device_type" property="deviceType" jdbcType="INTEGER"/>

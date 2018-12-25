@@ -5,6 +5,8 @@ package com.tp.admin.controller.wash;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.dto.AdminTerPropertyDTO;
 import com.tp.admin.service.AdminTerPropertyServiceI;
+import com.tp.admin.service.TerRatationPictureServiceI;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,9 @@ public class AdminTerPropertyController {
 
     @Autowired
     AdminTerPropertyServiceI adminTerPropertyServiceI;
+
+    @Autowired
+    TerRatationPictureServiceI terRatationPictureServiceI;
 
     /**
      * 列出所有的设备属性信息
@@ -97,5 +102,27 @@ public class AdminTerPropertyController {
     @GetMapping(value = "/list/exprot")
     public ResponseEntity<FileSystemResource> listExport(HttpServletRequest request, HttpServletResponse response) {
         return adminTerPropertyServiceI.listExport(request,response);
+    }
+
+    /**
+     * 推送轮播位置广告图
+     * @param request
+     *
+     * @return
+     */
+    @PostMapping("/push/ratation/picture")
+    public ApiResult pushRatationPicture(HttpServletRequest request){
+        return terRatationPictureServiceI.pushRatationPicture(request);
+    }
+
+    /**
+     * 推送广告位置的轮播图
+     * @param request
+     * @param body
+     * @return
+     */
+    @PostMapping("/push/ad/picture")
+    public ApiResult pushAdPicture(HttpServletRequest request,@RequestBody String body){
+        return terRatationPictureServiceI.pushAdPicture(request,body);
     }
 }

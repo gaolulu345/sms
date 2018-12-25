@@ -111,7 +111,7 @@ public interface WxMiniMerchantManageServiceI {
     ApiResult merchantRefundSearch(HttpServletRequest request);
 
     void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMerchantEmployee adminMerchantEmployee,
-                              WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, String img ,Boolean sucess);
+                              WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, String img ,Boolean sucess,String msg);
 
     /**
      * 查看我的会员下面的所有用户相关信息

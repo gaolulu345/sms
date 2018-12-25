@@ -14,4 +14,8 @@ public interface TerRatationPictureServiceI {
     ApiResult startAppointTerRatationPicture(HttpServletRequest request);
 
     ApiResult deleteAppointTerRatationPicture(HttpServletRequest request);
+
+    ApiResult pushRatationPicture(HttpServletRequest request);
+
+    ApiResult pushAdPicture(HttpServletRequest request,String body);
 }

@@ -13,7 +13,8 @@
 			`type`,
 			`op_source`,
 			`imgs`,
-			`success`
+			`success`,
+			`msg`
 		) VALUES (
 			#{terId},
 			#{maintionId},
@@ -24,7 +25,8 @@
 			#{type},
 			#{opSource},
 			#{imgs},
-			#{success}
+			#{success},
+			#{msg}
 		)
     </insert>
 
@@ -44,7 +46,8 @@
 		log.type ,
 		log.op_source ,
 		log.imgs ,
-		log.success
+		log.success,
+		log.msg
 		FROM
 		`admin_ter_operating_log` AS log
 		INNER JOIN `ter_info` AS ti ON log.ter_id = ti.ter_id
@@ -103,6 +106,7 @@
 		<result column="op_source" property="opSource" jdbcType="INTEGER"/>
 		<result column="imgs" property="imgs" jdbcType="INTEGER"/>
 		<result column="success" property="success" jdbcType="BIT"/>
+		<result column="msg" property="msg" jdbcType="VARCHAR"/>
 	</resultMap>
 
 </mapper>

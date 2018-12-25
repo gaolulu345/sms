@@ -23,6 +23,7 @@ public class PartnerUserWashCardDTO {
     private Integer cnt;//剩余次数
     private Integer partnerCardId;//洗车卡id
     private String washCardName;
+    private Integer userWashCardId;
 
     private String typeDesc;
     private String washCardTypeDesc;
