@@ -47,57 +47,7 @@
             LIMIT #{offset},#{pageSize}
         </if>
     </select>
-    
 
-    <select id="listUserInfoOfWashCard" parameterType="com.tp.admin.data.search.UserSearch" resultMap="UserMemberDTOMap">
-        SELECT `user`.id,`user`.phone,`user`.type,user_info.avatar,user_info.city,user_info.nickname
-        FROM user_info
-        INNER JOIN `user`
-        ON `user`.id=user_info.user_id
-        WHERE `user`.deleted=0
-        <if test="userType != null">
-            AND `user`.type = #{userType}
-        </if>
-        <if test="ids != null and ids.size != 0">
-            AND
-            `user`.id IN
-            <foreach collection="ids" item="userId" index="index"
-                     open="(" close=")" separator=",">
-                #{userId}
-            </foreach>
-        </if>
-        <if test="pageSize != null and pageSize !=0 and offset != null">
-            LIMIT #{offset},#{pageSize}
-        </if>
-    </select>
-    <select id="userIdOfWashCard" parameterType="com.tp.admin.data.search.UserSearch" resultMap="UserMemberDTOMap">
-        SELECT DISTINCT puwc.user_id AS id,puwc.type AS wash_card_type,puwc.cnt,puwc.partner_card_id
-        FROM partner_user_wash_card puwc
-        WHERE
-          puwc.deleted = 0
-        <if test="washCardType != null">
-            AND puwc.type = #{washCardType}
-        </if>
-        <if test="ids != null and ids.size != 0">
-            AND puwc.partner_card_id IN
-            <foreach collection="ids" item="createPartnerId" index="index"
-                     open="(" close=")" separator=",">
-                #{createPartnerId}
-            </foreach>
-        </if>
-    </select>
-
-    <resultMap id="UserMemberDTOMap" type="com.tp.admin.data.dto.UserMemberDTO">
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="phone" property="phone" jdbcType="VARCHAR" />
-        <result column="avatar" property="avatar" jdbcType="VARCHAR" />
-        <result column="city" property="city" jdbcType="VARCHAR" />
-        <result column="nickname" property="nickname" jdbcType="VARCHAR" />
-        <result column="type" property="type" jdbcType="TINYINT" />
-        <result column="wash_card_type" property="washCardType" jdbcType="TINYINT" />
-        <result column="cnt" property="cnt" jdbcType="INTEGER" />
-        <result column="partner_card_id" property="partnerCardId" jdbcType="INTEGER" />
-    </resultMap>
     <resultMap id="UserDTOMap" type="com.tp.admin.data.dto.UserDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="phone" property="phone" jdbcType="VARCHAR" />
