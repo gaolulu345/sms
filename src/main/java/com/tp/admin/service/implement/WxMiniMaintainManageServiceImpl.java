@@ -242,7 +242,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     public void buildTerOperationLog(TerInfoDTO terInfoDTO,
                                      AdminMaintionEmployee adminMaintionEmployee,
                                      WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum,
-                                     String imgs ,Boolean success
+                                     String imgs ,Boolean success ,String msg
     ) {
         String intros = adminMaintionEmployee.getName() + " 操作 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum
                 .getDesc();
@@ -257,6 +257,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MAINTAUN.getValue());
         adminTerOperatingLog.setImgs(imgs);
         adminTerOperatingLog.setSuccess(success);
+        adminTerOperatingLog.setMsg(msg);
         int res = adminTerOperatingLogDao.insert(adminTerOperatingLog);
         if (res == 0) {
             log.error("维保人员操作日志存储失败 {} " + adminTerOperatingLog.toString());
@@ -274,9 +275,9 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
                 throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
             }
             if (apiResult.getCode().equals(ResultCode.SUCCESS.getCode())) {
-                buildTerOperationLog(dto, adminMaintionEmployee, washTerOperatingLogTypeEnum, imgs,true);
+                buildTerOperationLog(dto, adminMaintionEmployee, washTerOperatingLogTypeEnum, imgs,true,apiResult.getMessage());
             } else {
-                buildTerOperationLog(dto, adminMaintionEmployee, washTerOperatingLogTypeEnum, imgs,false);
+                buildTerOperationLog(dto, adminMaintionEmployee, washTerOperatingLogTypeEnum, imgs,false,apiResult.getMessage());
             }
         } catch (JsonSyntaxException ex) {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);

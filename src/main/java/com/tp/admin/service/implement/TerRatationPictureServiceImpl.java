@@ -154,7 +154,6 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
-        //String info = adminAccount.getName() + "批量删除id为" + Arrays.toString(terRatationPictureSearch.getIds()) + "轮播图";
         String info = adminAccount.getName() + "批量删除id为" + Arrays.toString(terRatationPictureSearch.getIds().toArray()) + "轮播图";
         res = terRatationDao.addTerRatationLog(new TerRatationPictureLog(Arrays.toString(terRatationPictureSearch.getIds().toArray()),adminAccount.getName(),info));
         if (res == 0){

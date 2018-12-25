@@ -366,7 +366,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
     @Override
     public void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMerchantEmployee adminMerchantEmployee,
                                      WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, String img, Boolean
-                                             sucess) {
+                                             sucess,String msg) {
         String intros = adminMerchantEmployee.getName() + " 操作 " + terInfoDTO.getTitle() + washTerOperatingLogTypeEnum
                 .getDesc();
         AdminTerOperatingLog adminTerOperatingLog = new
@@ -380,6 +380,7 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         adminTerOperatingLog.setOpSource(AdminTerOperatingLogSourceEnum.MERCHANT.getValue());
         adminTerOperatingLog.setImgs("");
         adminTerOperatingLog.setSuccess(sucess);
+        adminTerOperatingLog.setMsg(msg);
         int res = adminTerOperatingLogDao.insert(adminTerOperatingLog);
         if (res == 0) {
             log.error("维保人员操作日志存储失败 {} " + adminTerOperatingLog.toString());
@@ -426,9 +427,9 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
                 throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
             }
             if (apiResult.getCode().equals(ResultCode.SUCCESS.getCode())) {
-                buildTerOperationLog(dto, adminMerchantEmployee, washTerOperatingLogTypeEnum, img, true);
+                buildTerOperationLog(dto, adminMerchantEmployee, washTerOperatingLogTypeEnum, img, true,"");
             } else {
-                buildTerOperationLog(dto, adminMerchantEmployee, washTerOperatingLogTypeEnum, img, false);
+                buildTerOperationLog(dto, adminMerchantEmployee, washTerOperatingLogTypeEnum, img, false,apiResult.getMessage());
             }
         } catch (JsonSyntaxException ex) {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
