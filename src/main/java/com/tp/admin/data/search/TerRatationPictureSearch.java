@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,7 +18,7 @@ public class TerRatationPictureSearch extends Search{
     @JsonIgnore
     Integer id;
     @JsonIgnore
-    int[] ids;
+    List<Integer> ids;
     Integer deviceId;
     @JsonIgnore
     Timestamp createTime;

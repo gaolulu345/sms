@@ -30,6 +30,10 @@ public enum ExceptionCode {
 
     NOT_PARTNER("5000","查无此合作伙伴"),
 
+    NOT_ALLOW_PUSH_AD("6000","该设备不允许推送广告"),
+    NOT_RELATION_TER("6001","该设备未关联网点，无法推送广告"),
+    PICTURE_NOT_ENABLE_OR_TYPE_NOT_ACCESS("6002","图片未启用或者上传类型不匹配"),
+
     ALI_OSS_REMOTE_ERROR("9001","尝试访问阿里云服务时的异常,请重新尝试"),
     ALI_OSS_UPDATE_ERROR("9002","上传文件失败,请重新尝试"),
     ALI_OSS_FILE_SAVE_ERROR("9003","上传文件保存失败,请重新尝试"),

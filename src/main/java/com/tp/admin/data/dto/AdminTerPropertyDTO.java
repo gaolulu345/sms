@@ -42,6 +42,7 @@ public class AdminTerPropertyDTO {
     private String netMethodDesc;//联网方式描述
     @ExcelField(title = "网点运营模式",order = 7)
     private String terBusiModeDesc;//网店运营模式描述
+    private boolean deleted;
 
     public void build(){
         if (terBusiMode != null){

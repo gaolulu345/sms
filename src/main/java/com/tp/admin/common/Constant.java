@@ -35,6 +35,7 @@ public interface Constant {
         String SITE_ONLINE = "/api/open/site/online";
         String SITE_OFFLINE = "/api/open/site/offline";
         String SITE_ONLINE_START = "/api/open/site/online/start";
+        String RATATION_PICTURE_PUSH = "/info/push/carousel/image";
     }
 
     interface Page {

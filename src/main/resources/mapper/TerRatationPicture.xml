@@ -13,12 +13,26 @@
 	</insert>
 
 	<select id="terRatationPictureShow" parameterType="com.tp.admin.data.search.TerRatationPictureSearch" resultMap="TerRatationPictureMap">
-		SELECT id,device_id,deleted,picture,enable,ter_ratation_picture.type
-			FROM ter_ratation_picture
+		SELECT
+			id,
+			device_id,
+			deleted,
+			picture,
+			enable,
+			ter_ratation_picture.type
+			FROM
+			ter_ratation_picture
 			WHERE
 			deleted = 0
 			AND
 			device_id = #{deviceId}
+		<if test="ids != null and ids.size != 0">
+				AND
+				ter_ratation_picture.id IN
+		  		<foreach collection="ids" item="item" index="index" open="(" close=")" separator=",">
+					  #{item}
+				</foreach>
+		</if>
 		<if test="pageSize != null and pageSize !=0 and offset != null">
 			LIMIT #{offset},#{pageSize}
 		</if>
@@ -66,6 +80,7 @@
 			#{terRatationPictureId}
 			)
 	</insert>
+
 
 	<resultMap id="TerRatationPictureMap" type="com.tp.admin.data.entity.TerRatationPicture">
 		<id column="id" property="id" javaType="INTEGER"/>

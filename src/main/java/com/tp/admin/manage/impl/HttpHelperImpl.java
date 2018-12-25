@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tp.admin.common.Constant;
 import com.tp.admin.config.AdminProperties;
+import com.tp.admin.data.wash.TerDeviceRequest;
 import com.tp.admin.data.wash.WashSiteRequest;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
@@ -21,6 +22,8 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class HttpHelperImpl implements HttpHelperI {
@@ -98,6 +101,42 @@ public class HttpHelperImpl implements HttpHelperI {
         washSiteRequest.setTime(timestamp);
         washSiteRequest.setSign(sign);
         return washSiteRequest;
+    }
+
+    @Override
+    public TerDeviceRequest signTerInfo(Integer deviceId, List<String> pictures, String msg, Integer terId) {
+        JsonObject jsonObject = new JsonObject();
+        String key = adminProperties.getWashManageKey();
+        Long timestamp = System.currentTimeMillis();
+        jsonObject.addProperty("deviceId", deviceId);
+        jsonObject.addProperty("terId",terId);
+        if (pictures == null){
+            jsonObject.addProperty("picture", "");
+        }else {
+            jsonObject.addProperty("picture", Arrays.toString(pictures.toArray()));
+        }
+        jsonObject.addProperty("msg",msg);
+        jsonObject.addProperty("key", key);
+        jsonObject.addProperty("time", timestamp);
+        String sign = "";
+        try {
+            RSAPublicKey publicKey = SecurityUtil.RsaUtil.getPublicKey(Constant.RemoteTer.PUBLIC_KEY);
+            sign = SecurityUtil.RsaUtil.encrypt(jsonObject.toString(), publicKey);
+        } catch (Exception e) {
+            throw new BaseException(ExceptionCode.SIGN_FAILURE_FOR_REMOTE_TER);
+        }
+        if (StringUtils.isEmpty(sign) || sign.length() < 2) {
+            throw new BaseException(ExceptionCode.SIGN_ERROR_FOR_REMOTE_TER);
+        }
+        TerDeviceRequest terDeviceRequest = new TerDeviceRequest();
+        terDeviceRequest.setDeviceId(deviceId);
+        terDeviceRequest.setPictures(pictures);
+        terDeviceRequest.setTerId(terId);
+        terDeviceRequest.setMsg(msg);
+        terDeviceRequest.setKey(key);
+        terDeviceRequest.setTime(timestamp);
+        terDeviceRequest.setSign(sign);
+        return terDeviceRequest;
     }
 
     private boolean validate(String jsonStr) {
