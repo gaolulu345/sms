@@ -145,6 +145,12 @@ var vm = new Vue({
             vm.currentPageIndex = val
             vm.search();
 
+        },
+
+        showResetImg: function(val) {
+            vm.showCurrentImg = true
+            vm.currentLogByImg = val
+            console.log('in showResetImg: ', vm.currentLogByImg)
         }
     }
 })
