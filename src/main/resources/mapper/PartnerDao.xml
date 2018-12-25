@@ -48,7 +48,8 @@
         wash_card.name,
         wash_card.cnt,
         wash_card.id AS partner_card_id,
-        wash_card.type AS wash_card_type
+        wash_card.type AS wash_card_type,
+        card_order.id AS user_wash_card_id
         FROM
         `partner_wash_card_order` AS card_order
         INNER JOIN `user` AS u ON u.id = card_order.user_id
@@ -121,6 +122,7 @@
         <result column="cnt" property="cnt" jdbcType="INTEGER"/>
         <result column="partner_card_id" property="partnerCardId" jdbcType="INTEGER"/>
         <result column="wash_card_type" property="washCardType" jdbcType="INTEGER"/>
+        <result column="user_wash_card_id" property="userWashCardId" jdbcType="INTEGER"/>
         <result column="name" property="washCardName" jdbcType="VARCHAR"/>
     </resultMap>
 
