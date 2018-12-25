@@ -22,8 +22,8 @@
                     </el-select>
     
                     <!-- 网点筛选 -->
-                    <el-select multiple filterable remote :remote-method="searchTerByKeyword"
-                        :loading="searchTerLoading" v-model="currentTerIds[0]" size="mini" clearable placeholder="请选择网点">
+                    <el-select filterable remote :remote-method="searchTerByKeyword"
+                        :loading="searchTerLoading" v-model="currentTerId" size="mini" clearable placeholder="请选择网点">
                         <el-option
                             v-for="item in searchTerOptions" :key="item.id" :label="item.title" :value="item.id">
                         </el-option>
