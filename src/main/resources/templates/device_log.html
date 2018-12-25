@@ -13,6 +13,29 @@
     <div class="rightSide">
         <#include "common/top.html">
         <div class="content" style="width: 100%">
+                <div class="searchBox">                    
+                    <!-- 操作来源 -->
+                    <el-select v-model="currentOpSource" size="mini" clearable placeholder="请选择操作来源">
+                        <el-option
+                            v-for="item in OpSourceOptions" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+    
+                    <!-- 网点筛选 -->
+                    <el-select multiple filterable remote :remote-method="searchTerByKeyword"
+                        :loading="searchTerLoading" v-model="currentTerIds[0]" size="mini" clearable placeholder="请选择网点">
+                        <el-option
+                            v-for="item in searchTerOptions" :key="item.id" :label="item.title" :value="item.id">
+                        </el-option>
+                    </el-select>
+                    
+                    <!-- 日期筛选 -->
+                    <el-date-picker clearable v-model="computedDateRange" size="mini" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+                    </el-date-picker>
+    
+                    <!-- 搜索按钮 -->
+                    <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
+                </div>
             <el-table :data="logList" style="width: 100%">
                 <el-table-column prop="id" label="日志" width="100"></el-table-column>
                 <el-table-column prop="terId" label="网点ID" width="100"></el-table-column>
