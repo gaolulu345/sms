@@ -18,7 +18,7 @@ var vm = new Vue({
         currentPageIndex: 1,
         pageSizes: [10, 20, 50],
 
-        currentOpSource: null,
+        currentOpSource: '',
         OpSourceOptions: [
             {
                 label: '商户',
@@ -29,7 +29,7 @@ var vm = new Vue({
                 value: 0
             }
         ],
-        currentTerIds: [],
+        currentTerId: '',
         terList: [],
         searchTerOptions: [],
         searchTerLoading: false,
@@ -38,9 +38,9 @@ var vm = new Vue({
                 return time.getTime() > Date.now();
             }
         },
-        dateRange = null,
-        currentStartTime = null,
-        currentEndTime = null
+        dateRange: [],
+        currentStartTime: '',
+        currentEndTime: ''
     }, 
 
     mounted: function() {
@@ -55,16 +55,16 @@ var vm = new Vue({
     computed: {
         computedDateRange: {
             get: function() {
-                return vm.dateRange
+                return this.dateRange
             },
             set: function(newValue) {
-                if(!newValue) {  //如果日期选择器中先有选择，后置空，结果为null，会报错
-                    vm.dateRange = ''
+                if(newValue != null && newValue.length > 0) {
+                    this.dateRange = newValue
                 } else {
-                    vm.dateRange = newValue
+                    this.dateRange = ''
                 }
-                vm.currentStartTime = vm.dateRange[0] || '';
-                vm.currentEndTime = vm.dateRange[1] || '';
+                this.currentStartTime = vm.dateRange[0] || '';
+                this.currentEndTime = vm.dateRange[1] || '';
             }
         }
     },
@@ -75,6 +75,7 @@ var vm = new Vue({
                 paramData
             ).then(function(res){
                 let data = res.json().data
+                console.log('getLogList res: ',data)
                 let result = data.result;
                 if(result && result[0]) {
                     result.forEach(function(val) {
@@ -97,13 +98,12 @@ var vm = new Vue({
                         item['value'] = item.id.toString()
                     })
                     vm.terList = result
-                    VM.searchTerOptions = result
+                    vm.searchTerOptions = result
                 }
             })
         },
 
         searchTerByKeyword: function(queryString) {
-            console.log('searchTerByKeyword: ', queryString)
             if (queryString != '') {
                 let backupTerList = vm.terList
                 vm.searchTerLoading = true
@@ -113,32 +113,37 @@ var vm = new Vue({
                 vm.searchTerLoading = false
             } else {
                 vm.searchTerLoading = false
-                vm.searchTerLoading = vm.terList
+                vm.searchTerOptions = vm.terList
             }
 
         },
 
         search: function() {
-            //  getTerList
-
-
-
-
-
-            
-        },
-
-        showMore: function() {
-            vm.more = true
-            this.getLogList(true)
+            let paramData = {
+                pageSize: vm.currentPageSize,
+                pageIndex: vm.currentPageIndex
+            }
+            if(vm.currentOpSource != '') {
+                paramData.opSource = vm.currentOpSource
+            }
+            if(vm.currentTerId != '') {
+                paramData.terId = vm.currentTerId
+            }
+            if(vm.currentStartTime != '' & vm.currentEndTime != '') {
+                paramData.startTime = vm.currentStartTime
+                paramData.endTime = vm.currentEndTime
+            }
+            vm.getLogList(paramData)
         },
 
         handleSizeChange(val) {
-            vm.getLogList(val, 1);
+            vm.currentPageSize = val
+            vm.search();
         },
 
         handleCurrentChange(val) {
-            vm.getLogList(vm.currentPageSize, val);
+            vm.currentPageIndex = val
+            vm.search();
 
         },
 

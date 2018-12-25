@@ -119,6 +119,7 @@ var vm = new Vue({
                     if(result) {
                         result.screenSize = `${result.screenHigh}*${result.screenWide}`
                         result.adExistDesc = result.adExist ? '支持':'不支持'
+                        result.propertyRemark = result.propertyRemark ? result.propertyRemark:''
                         result.screen = null
                         vm.device = [result]
                         let backupDevice = {}
