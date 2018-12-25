@@ -394,65 +394,26 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         if (wxMiniSearch.getOpenId() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty openId");
         }
+        wxMiniSearch.builData();
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         List<PartnerWashCardDTO> washCards = partnerDao.partnerWashCardIdSearch(adminMerchantEmployee.getPartnerId());
         List<Integer> washCardIds = new ArrayList<>();
         for (PartnerWashCardDTO partnerWashCardDTO:washCards) {
             washCardIds.add(partnerWashCardDTO.getId());
         }
-        UserSearch userSearch = new UserSearch();
-        List<UserMemberDTO> userIdsOfUserMember = new ArrayList<>();
-        if (washCardIds != null && washCardIds.size() != 0){
-            userSearch.setIds(washCardIds);
-            if (wxMiniSearch.getWashCardType() != null){
-                userSearch.setWashCardType(wxMiniSearch.getWashCardType());
+        wxMiniSearch.setIds(washCardIds);
+        List<PartnerUserWashCardDTO> list = partnerDao.listPartnerUserWashCardDTOBySearch(wxMiniSearch);
+        if (list != null && list.size() != 0){
+            for (PartnerUserWashCardDTO partnerUserWashCardDTO:list) {
+                partnerUserWashCardDTO.build();
             }
-            //查找会员id以及信息
-            userIdsOfUserMember = userDao.userIdOfWashCard(userSearch);
-            if (userIdsOfUserMember != null && userIdsOfUserMember.size() != 0){
-                List<Integer> userIds = new ArrayList<>();
-                for (UserMemberDTO userId:userIdsOfUserMember) {
-                    userIds.add(userId.getId());
-                }
-                if (userIds != null && userIds.size() != 0){
-                    userSearch.setIds(userIds);
-                }
-                if (wxMiniSearch.getUserType() != null){
-                    userSearch.setUserType(wxMiniSearch.getUserType());
-                }
-                List<UserMemberDTO> list = userDao.listUserInfoOfWashCard(userSearch);
-                if (list != null && list.size() != 0){
-                    for (UserMemberDTO userMemberDTO:userIdsOfUserMember) {
-                        for (UserMemberDTO userMemberDTOC:list) {
-                            if (userMemberDTOC.getId().equals(userMemberDTO.getId())){
-                                userMemberDTO.setAvatar(userMemberDTOC.getAvatar());
-                                userMemberDTO.setCity(userMemberDTOC.getCity());
-                                userMemberDTO.setNickname(userMemberDTOC.getNickname());
-                                userMemberDTO.setPhone(userMemberDTOC.getPhone());
-                                userMemberDTO.setType(userMemberDTOC.getType());
-                                userMemberDTO.build();
-                                continue;
-                            }
-
-                        }
-                    }
-                }
-            }
+            Integer cnt = partnerDao.cntPartnerUserWashCardDTOBySearch(wxMiniSearch);
+            wxMiniSearch.setTotalCnt(cnt);
+            wxMiniSearch.setResult(list);
+        }else {
+            wxMiniSearch.setTotalCnt(0);
         }
-        Iterator<UserMemberDTO> it = userIdsOfUserMember.iterator();
-        while (it.hasNext()){
-            UserMemberDTO userMemberDTO = it.next();
-            if (userMemberDTO.getType() == null || userMemberDTO.getWashCardType() == null){
-                it.remove();
-            }else{
-                for (PartnerWashCardDTO partnerWashCardDTO:washCards) {
-                    if (userMemberDTO.getPartnerCardId().equals(partnerWashCardDTO.getId())){
-                        userMemberDTO.setWashCardName(partnerWashCardDTO.getName());
-                    }
-                }
-            }
-        }
-        return ApiResult.ok(userIdsOfUserMember);
+        return ApiResult.ok(wxMiniSearch);
     }
 
     private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMerchantEmployee

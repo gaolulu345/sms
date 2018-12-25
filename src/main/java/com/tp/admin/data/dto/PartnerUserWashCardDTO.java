@@ -1,19 +1,22 @@
 package com.tp.admin.data.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tp.admin.enums.CardTypeEnum;
 import com.tp.admin.enums.UserChanneEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserMemberDTO {
+public class PartnerUserWashCardDTO {
     private Integer id;
     private String avatar;
     private String city;
-    private String nickname;
+    private String nickName;
     private String phone;
     private Integer type;
     private Integer washCardType;
