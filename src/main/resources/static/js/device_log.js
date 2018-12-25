@@ -75,7 +75,7 @@ var vm = new Vue({
                 paramData
             ).then(function(res){
                 let data = res.json().data
-                console.log('getLogList res: ',data)
+                // console.log('getLogList res: ',data)
                 let result = data.result;
                 if(result && result[0]) {
                     result.forEach(function(val) {
@@ -123,13 +123,13 @@ var vm = new Vue({
                 pageSize: vm.currentPageSize,
                 pageIndex: vm.currentPageIndex
             }
-            if(vm.currentOpSource != '') {
+            if(vm.currentOpSource !== '') {
                 paramData.opSource = vm.currentOpSource
             }
-            if(vm.currentTerId != '') {
+            if(vm.currentTerId !== '') {
                 paramData.terId = vm.currentTerId
             }
-            if(vm.currentStartTime != '' & vm.currentEndTime != '') {
+            if(vm.currentStartTime !== '' & vm.currentEndTime !== '') {
                 paramData.startTime = vm.currentStartTime
                 paramData.endTime = vm.currentEndTime
             }
