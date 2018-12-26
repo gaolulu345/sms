@@ -37,20 +37,30 @@
                     <el-button type="primary" icon="el-icon-search" size="mini" @click="search">筛选</el-button>
                 </div>
             <el-table :data="logList" style="width: 100%">
-                <el-table-column prop="id" label="日志" width="100"></el-table-column>
-                <el-table-column prop="terId" label="网点ID" width="100"></el-table-column>
-                <el-table-column prop="terTitle" label="网点名称" width="300"></el-table-column>
-                <el-table-column prop="createTime" label="时间" width="200"></el-table-column>
-                <el-table-column prop="opSourceDesc" label="操作来源" width="200"></el-table-column>
-                <el-table-column prop="username" label="操作人" width="200"></el-table-column>
-                <el-table-column prop="title" label="操作描述" width="200"></el-table-column>
-                <el-table-column label="现场图片" width="200">
+                <el-table-column prop="id" label="日志"></el-table-column>
+                <el-table-column prop="terId" label="网点ID"></el-table-column>
+                <el-table-column prop="terTitle" label="网点名称"></el-table-column>
+                <el-table-column prop="createTime" label="时间"></el-table-column>
+                <el-table-column prop="opSourceDesc" label="操作来源"></el-table-column>
+                <el-table-column prop="username" label="操作人"></el-table-column>
+                <el-table-column prop="title" label="操作描述"></el-table-column>
+                <el-table-column label="现场图片">
                     <template slot-scope="scope">
                         <el-button plain type="primary" size="mini" v-if="scope.row.img" @click="showResetImg(scope.row)">查看</el-button>
                         <span v-else>暂无图片</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="handlerResult" label="操作结果" width="200"></el-table-column>
+                <el-table-column prop="handlerResult" label="操作结果">
+                    <template slot-scope="scope">
+                        <el-tag :type="scope.row.success ? 'success':'danger'">{{scope.row.handlerResult}}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="msg" label="操作失败原因">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.success || !scope.row.msg || scope.row.msg.length <= 0">暂无</span>
+                        <span v-else>{{scope.row.msg}}</span>
+                    </template>
+                </el-table-column>
             </el-table>
             <el-dialog v-if="currentLogByImg" fullscreen modal close-on-press-escape center :title="currentLogByImg.createTime + ' ' + currentLogByImg.intros" :visible.sync="showCurrentImg" width="70%" close-on-press-escape append-to-body>
                 <el-carousel height="4.6875rem">
