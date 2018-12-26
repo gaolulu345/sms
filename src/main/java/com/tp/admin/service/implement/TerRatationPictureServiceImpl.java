@@ -27,6 +27,8 @@ import com.tp.admin.manage.AliyunOssManagerI;
 import com.tp.admin.manage.HttpHelperI;
 import com.tp.admin.service.TerRatationPictureServiceI;
 import com.tp.admin.utils.SessionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +41,8 @@ import java.util.List;
 
 @Service
 public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI {
+    private Logger log = LoggerFactory.getLogger(getClass());
+
     @Autowired
     HttpHelperI httpHelper;
 
@@ -134,9 +138,10 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         }
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
         String info = adminAccount.getName() + "启用了id为" + terRatationPictureSearch.getId() + "轮播图";
-        res = terRatationDao.addTerRatationLog(new TerRatationPictureLog(terRatationPictureSearch.getId().toString(),adminAccount.getName(),info));
+        TerRatationPictureLog terRatationPictureLog = new TerRatationPictureLog(terRatationPictureSearch.getId().toString(),adminAccount.getName(),info);
+        res = terRatationDao.addTerRatationLog(terRatationPictureLog);
         if (res == 0){
-            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+            log.error("add start taration picture log failed {}" + terRatationPictureLog.toString());
         }
         return ApiResult.ok();
     }
@@ -155,9 +160,10 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         }
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
         String info = adminAccount.getName() + "批量删除id为" + Arrays.toString(terRatationPictureSearch.getIds().toArray()) + "轮播图";
-        res = terRatationDao.addTerRatationLog(new TerRatationPictureLog(Arrays.toString(terRatationPictureSearch.getIds().toArray()),adminAccount.getName(),info));
+        TerRatationPictureLog terRatationPictureLog = new TerRatationPictureLog(Arrays.toString(terRatationPictureSearch.getIds().toArray()),adminAccount.getName(),info);
+        res = terRatationDao.addTerRatationLog(terRatationPictureLog);
         if (res == 0){
-            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+            log.error("add batch delete taration picture failed {}" + terRatationPictureLog.toString());
         }
         return ApiResult.ok();
     }
@@ -174,9 +180,9 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (!adminTerPropertyDTO.isAdExist() || adminTerPropertyDTO.isDeleted()){
             throw new BaseException(ExceptionCode.NOT_ALLOW_PUSH_AD);
         }
-        if (adminTerPropertyDTO.getTerId() == null || adminTerPropertyDTO.getTerId() == 0){
+        /*if (adminTerPropertyDTO.getTerId() == null || adminTerPropertyDTO.getTerId() == 0){
             throw new BaseException(ExceptionCode.NOT_RELATION_TER);
-        }
+        }*/
         List<String> imageList = new ArrayList<>();
         List<TerRatationPicture> list = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
         if (list == null || list.size() == 0){
@@ -188,7 +194,8 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
             }
             imageList.add(terRatationPicture.getPicture());
         }
-        TerDeviceRequest terDeviceRequest = httpHelper.signTerInfo(terRatationPictureSearch.getDeviceId(),null,"",adminTerPropertyDTO.getTerId());
+        //TerDeviceRequest terDeviceRequest = httpHelper.signTerInfo(terRatationPictureSearch.getDeviceId(),null,"",adminTerPropertyDTO.getTerId());
+        TerDeviceRequest terDeviceRequest = httpHelper.signTerInfo(adminTerPropertyDTO.getFrpIp(),null,"",adminTerPropertyDTO.getFrpPort());
         terDeviceRequest.setPictures(imageList);
         String jsonBody = new Gson().toJson(terDeviceRequest);
         String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
@@ -210,9 +217,9 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (adminTerPropertyDTO.getTerId() == null || adminTerPropertyDTO.getTerId() == 0){
             throw new BaseException(ExceptionCode.NOT_RELATION_TER);
         }
-        if (terRatationPictureSearch.getIds().size() != 1){
+        /*if (terRatationPictureSearch.getIds().size() != 1){
             throw new BaseException(ExceptionCode.PICTURE_NOT_ENABLE_OR_TYPE_NOT_ACCESS);
-        }
+        }*/
         List<String> imageList = new ArrayList<>();
         List<TerRatationPicture> list = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
         if (list == null || list.size() == 0 || list.size() != 1){
@@ -224,7 +231,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
             }
             imageList.add(terRatationPicture.getPicture());
         }
-        TerDeviceRequest terDeviceRequest = httpHelper.signTerInfo(terRatationPictureSearch.getDeviceId(),null,"",adminTerPropertyDTO.getTerId());
+        TerDeviceRequest terDeviceRequest = httpHelper.signTerInfo(adminTerPropertyDTO.getFrpIp(),null,"",adminTerPropertyDTO.getFrpPort());
         terDeviceRequest.setPictures(imageList);
         String jsonBody = new Gson().toJson(terDeviceRequest);
         String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer

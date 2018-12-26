@@ -17,6 +17,6 @@ public interface HttpHelperI {
 
     WashSiteRequest signInfo(Integer deviceId, String orderId, String msg);
 
-    TerDeviceRequest signTerInfo(Integer deviceId, List<String> pictures, String msg, Integer terId);
+    TerDeviceRequest signTerInfo(String frpIp, List<String> pictures, String msg, String frpPort);
 
 }

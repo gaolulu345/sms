@@ -36,5 +36,9 @@ public interface AdminTerPropertyServiceI {
 
     ApiResult uploadCdrPicture(HttpServletRequest request, MultipartFile file);
 
+    ApiResult insertTerproperty(HttpServletRequest request,AdminTerPropertyDTO adminTerPropertyDTO);
+
+    ApiResult updateDeleteTerProperty(HttpServletRequest request,AdminTerPropertyDTO adminTerPropertyDTO);
+
 
 }

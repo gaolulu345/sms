@@ -125,4 +125,26 @@ public class AdminTerPropertyController {
     public ApiResult pushAdPicture(HttpServletRequest request,@RequestBody String body){
         return terRatationPictureServiceI.pushAdPicture(request,body);
     }
+
+    /**
+     * 添加设备信息
+     * @param request
+     * @param adminTerPropertyDTO
+     * @return
+     */
+    @PostMapping("/insert")
+    public ApiResult insertTerproperty(HttpServletRequest request,@RequestBody AdminTerPropertyDTO adminTerPropertyDTO){
+        return adminTerPropertyServiceI.insertTerproperty(request,adminTerPropertyDTO);
+    }
+
+    /**
+     * 删除某个设备的属性信息
+     * @param request
+     * @param adminTerPropertyDTO
+     * @return
+     */
+    @PostMapping("/update/deleted")
+    public ApiResult updateDeleteTerproperty(HttpServletRequest request,@RequestBody AdminTerPropertyDTO adminTerPropertyDTO){
+        return  adminTerPropertyServiceI.updateDeleteTerProperty(request,adminTerPropertyDTO);
+    }
 }

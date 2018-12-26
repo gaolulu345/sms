@@ -31,7 +31,9 @@
 				atp.property_remark,
 				atp.device_type,
 				atp.cdr_picture,
-				atp.deleted
+				atp.deleted,
+				atp.frp_ip,
+				atp.frp_port
         FROM admin_ter_property AS atp
 				WHERE atp.id=#{id}
 	</select>
@@ -83,12 +85,45 @@
 				`property_remark` = #{propertyRemark},
 			</if>
 			<if test="cdrPicture != null">
-				`cdr_picture` = #{cdrPicture}
+				`cdr_picture` = #{cdrPicture},
+			</if>
+			<if test="frpIp != null">
+				`frp_ip` = #{frpIp},
+			</if>
+			<if test="frpPort != null">
+				`frp_port` = #{frpPort}
 			</if>
 		</trim>
 		WHERE
 			id=#{id}
 	</update>
+	
+	<insert id="insertTerProperty" parameterType="com.tp.admin.data.dto.AdminTerPropertyDTO">
+		INSERT INTO
+			admin_ter_property(
+			ter_id,
+			ter_model,
+			ter_remark,
+			video_control,
+			bubble_limit,
+			high_limit,
+			wide_limit,
+			property_remark,
+			device_type
+			)
+			VALUES
+			(
+			#{terId},
+			#{terModel},
+			#{terRemark},
+			#{videoControl},
+			#{bubbleLimit},
+			#{highLimit},
+			#{wideLimit},
+			#{propertyRemark},
+			#{deviceType}
+			)
+	</insert>
 
 	<resultMap id="AdminTerPropertyDTOMap" type="com.tp.admin.data.dto.AdminTerPropertyDTO">
 		<id column="ter_id" property="terId" javaType="INTEGER"/>
@@ -108,6 +143,8 @@
 		<result column="screen_high" property="screenHigh" jdbcType="INTEGER"/>
 		<result column="device_type" property="deviceType" jdbcType="INTEGER"/>
 		<result column="cdr_picture" property="cdrPicture" jdbcType="VARCHAR"/>
+		<result column="frp_ip" property="frpIp" jdbcType="VARCHAR"/>
+		<result column="frp_port" property="frpPort" jdbcType="VARCHAR"/>
 	</resultMap>
 
 </mapper>
