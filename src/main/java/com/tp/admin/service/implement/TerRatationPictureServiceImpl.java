@@ -174,7 +174,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (!adminTerPropertyDTO.isAdExist() || adminTerPropertyDTO.isDeleted()){
             throw new BaseException(ExceptionCode.NOT_ALLOW_PUSH_AD);
         }
-        if (adminTerPropertyDTO.getTerId() == null){
+        if (adminTerPropertyDTO.getTerId() == null || adminTerPropertyDTO.getTerId() == 0){
             throw new BaseException(ExceptionCode.NOT_RELATION_TER);
         }
         List<String> imageList = new ArrayList<>();
@@ -207,7 +207,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (!adminTerPropertyDTO.isAdExist() || adminTerPropertyDTO.isDeleted()){
             throw new BaseException(ExceptionCode.NOT_ALLOW_PUSH_AD);
         }
-        if (adminTerPropertyDTO.getTerId() == null){
+        if (adminTerPropertyDTO.getTerId() == null || adminTerPropertyDTO.getTerId() == 0){
             throw new BaseException(ExceptionCode.NOT_RELATION_TER);
         }
         if (terRatationPictureSearch.getIds().size() != 1){
