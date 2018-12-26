@@ -95,11 +95,15 @@ public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
         if (res == 0){
             log.error("update adminMerchantEmployee last login time failed");
         }
+        Integer level = partnerDao.findPartnerLevelById(adminMerchantEmployee.getPartnerId());
         AdminMerchantEmployeeInfoDTO adminMerchantEmployeeInfoDTO = new AdminMerchantEmployeeInfoDTO();
         adminMerchantEmployeeInfoDTO.setId(adminMerchantEmployee.getId());
         adminMerchantEmployeeInfoDTO.setOpenId(adminMerchantEmployee.getMiniWxId());
         adminMerchantEmployeeInfoDTO.setPartnerTitle(partner.getTitle());
         adminMerchantEmployeeInfoDTO.setUsername(adminMerchantEmployee.getName());
+        if (null != level) {
+            adminMerchantEmployeeInfoDTO.setLevel(level);
+        }
         return ApiResult.ok(adminMerchantEmployeeInfoDTO);
     }
 

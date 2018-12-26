@@ -13,4 +13,5 @@ public class AdminMerchantEmployeeInfoDTO {
     private String openId;
     private String partnerTitle;
     private String username;
+    private Integer level;
 }
