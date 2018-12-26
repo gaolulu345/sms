@@ -13,6 +13,8 @@ public interface PartnerDao {
 
     Partner findById(Integer id);
 
+    Integer findPartnerLevelById(Integer id);
+
     List<Partner> listBySearch(PartnerSearch partnerSearch);
 
     Integer cntBySearch(PartnerSearch partnerSearch);

@@ -94,6 +94,14 @@
         </where>
     </select>
 
+    <select id="findPartnerLevelById" resultType="java.lang.Integer">
+      SELECT
+      pd.partner_level
+      FROM
+      `partner` AS p INNER JOIN `partner_details` AS pd ON p.id = pd.partner_id
+      WHERE
+      p.id = #{id}
+    </select>
 
     <resultMap id="PartnerMap" type="com.tp.admin.data.entity.Partner">
         <id column="id" property="id" jdbcType="INTEGER" />
