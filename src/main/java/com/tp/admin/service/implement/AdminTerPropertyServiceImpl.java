@@ -211,6 +211,43 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     }
 
     @Override
+    public ApiResult insertTerproperty(HttpServletRequest request, AdminTerPropertyDTO adminTerPropertyDTO) {
+        if(null == adminTerPropertyDTO.getTerId() || adminTerPropertyDTO.getTerId() == 0){
+            adminTerPropertyDTO.setTerId(0);
+        }else {
+            WxMiniSearch wxMiniSearch = new WxMiniSearch();
+            wxMiniSearch.setTerId(adminTerPropertyDTO.getTerId());
+            List<TerInfoDTO> list = terDao.terInfoSearch(wxMiniSearch);
+            if (list == null || list.size() == 0){
+                throw new BaseException(ExceptionCode.NOT_TER);
+            }else {
+                adminTerPropertyDTO.setTerModel(list.get(0).getCode());
+                adminTerPropertyDTO.setTerRemark(list.get(0).getTitle());
+            }
+        }
+        if (adminTerPropertyDTO.getBubbleLimit() == null || adminTerPropertyDTO.getDeviceType() == null || adminTerPropertyDTO.getHighLimit() == null || adminTerPropertyDTO.getWideLimit() == null){
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING);
+        }
+        int res = adminTerPropertyDao.insertTerProperty(adminTerPropertyDTO);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        return ApiResult.ok();
+    }
+
+    @Override
+    public ApiResult updateDeleteTerProperty(HttpServletRequest request, AdminTerPropertyDTO adminTerPropertyDTO) {
+        if (adminTerPropertyDTO.getId() == null || adminTerPropertyDTO.getId() == 0){
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING);
+        }
+        int res = adminTerPropertyDao.updateTerProperty(adminTerPropertyDTO);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        return ApiResult.ok();
+    }
+
+    @Override
     public void buildTerOperateLog(Object object, TerInfoDTO terInfoDTO,WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum, String img, Boolean
             sucess) {
         AdminTerOperatingLog adminTerOperatingLog = new AdminTerOperatingLog();

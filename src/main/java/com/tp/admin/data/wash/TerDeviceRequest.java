@@ -10,9 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TerDeviceRequest {
-    int deviceId;
+    String frpIp;
     List<String> pictures;
-    int terId;
+    String frpPort;
     String msg;
     String key;
     Long time;

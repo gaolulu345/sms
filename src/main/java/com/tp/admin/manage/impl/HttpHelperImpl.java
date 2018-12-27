@@ -104,12 +104,12 @@ public class HttpHelperImpl implements HttpHelperI {
     }
 
     @Override
-    public TerDeviceRequest signTerInfo(Integer deviceId, List<String> pictures, String msg, Integer terId) {
+    public TerDeviceRequest signTerInfo(String frpIp, List<String> pictures, String msg, String frpPort) {
         JsonObject jsonObject = new JsonObject();
         String key = adminProperties.getWashManageKey();
         Long timestamp = System.currentTimeMillis();
-        jsonObject.addProperty("deviceId", deviceId);
-        jsonObject.addProperty("terId",terId);
+        jsonObject.addProperty("frpIp", frpIp);
+        jsonObject.addProperty("frpPort",frpPort);
         if (pictures == null){
             jsonObject.addProperty("picture", "");
         }else {
@@ -129,9 +129,9 @@ public class HttpHelperImpl implements HttpHelperI {
             throw new BaseException(ExceptionCode.SIGN_ERROR_FOR_REMOTE_TER);
         }
         TerDeviceRequest terDeviceRequest = new TerDeviceRequest();
-        terDeviceRequest.setDeviceId(deviceId);
+        terDeviceRequest.setFrpIp(frpIp);
         terDeviceRequest.setPictures(pictures);
-        terDeviceRequest.setTerId(terId);
+        terDeviceRequest.setFrpPort(frpPort);
         terDeviceRequest.setMsg(msg);
         terDeviceRequest.setKey(key);
         terDeviceRequest.setTime(timestamp);

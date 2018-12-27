@@ -91,7 +91,10 @@ public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
         }
         //更改商户的登陆时间
         adminMerchantEmployee.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
-        adminMerchantEmployeeDao.updateMerchantLoginTime(adminMerchantEmployee);
+        int res = adminMerchantEmployeeDao.updateMerchantLoginTime(adminMerchantEmployee);
+        if (res == 0){
+            log.error("update adminMerchantEmployee last login time failed");
+        }
         Integer level = partnerDao.findPartnerLevelById(adminMerchantEmployee.getPartnerId());
         AdminMerchantEmployeeInfoDTO adminMerchantEmployeeInfoDTO = new AdminMerchantEmployeeInfoDTO();
         adminMerchantEmployeeInfoDTO.setId(adminMerchantEmployee.getId());

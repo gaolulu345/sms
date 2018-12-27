@@ -51,7 +51,10 @@ public class WxMiniMaintainAuthServiceImpl implements WxMiniAuthServiceI {
             throw new BaseException(ExceptionCode.USER_DELETE_REGISTERED);
         }
         adminMaintionEmployee.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
-        adminMaintionEmployeeDao.updateMaintionLoginTime(adminMaintionEmployee);
+        int res = adminMaintionEmployeeDao.updateMaintionLoginTime(adminMaintionEmployee);
+        if (res == 0){
+            log.error("update adminMaintionEmployee last login time failed");
+        }
         return ApiResult.ok(adminMaintionEmployee);
     }
 
