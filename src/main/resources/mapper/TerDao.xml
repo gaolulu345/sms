@@ -14,11 +14,11 @@
 
 
 	<select id="findAllTerInfoCount" resultType="java.lang.Integer">
-		SELECT COUNT(tt.id)
- 		FROM
-		(SELECT t.id , ti.title,t.`code`FROM ter AS t INNER JOIN ter_info AS ti ON t.id = ter_id
-		WHERE
-		t.deleted = 0) tt
+		SELECT COUNT(t.id)
+		FROM ter AS t
+		INNER JOIN ter_info AS ti
+		ON t.id = ti.ter_id
+		WHERE t.deleted = 0
 	</select>
 
     <select id="listTerCityId" resultType="java.lang.Integer">
