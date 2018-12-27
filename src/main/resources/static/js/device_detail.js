@@ -19,6 +19,8 @@ var vm = new Vue({
         uploadCarouselDialogVisible: false,
         uploadCarouselType: 0,
         uploadQrcodeDialogVisible: false,
+        prependFrp: 'http://',
+        rightfulFrpUrl: true,
         terClientVersionOptions: [
             {
                 label: 'Java',
@@ -120,6 +122,7 @@ var vm = new Vue({
                         result.screenSize = `${result.screenHigh}*${result.screenWide}`
                         result.adExistDesc = result.adExist ? '支持':'不支持'
                         result.propertyRemark = result.propertyRemark ? result.propertyRemark:''
+                        result.frp = result.frpIp && result.frpPort ? result.frpPort + result.frpPort:'暂无'
                         result.screen = null
                         vm.device = [result]
                         let backupDevice = {}
@@ -146,7 +149,10 @@ var vm = new Vue({
             if (paramKey == 'screen') {
                 updatefield['screenHigh'] = vm.backupDevice.screenHigh.value
                 updatefield['screenWide'] = vm.backupDevice.screenWide.value
-            }else{
+            } else if (paramKey == 'frp') {
+                updatefield['frpIp'] = vm.backupDevice.frpIp.value
+                updatefield['frpPort'] = vm.backupDevice.frpPort.value
+            } else {
                 updatefield[paramKey] = vm.backupDevice[paramKey].value
             }
             Object.keys(updatefield).forEach(function(item, index){
@@ -404,6 +410,14 @@ var vm = new Vue({
         // 限制多张上传
         handleExceed: function(files, fileList) {
             this.$message.warning('当前限制选择单个文件');
+        },
+
+        // 验证frp ip 输入结束
+        listenFrpIpChange: function() {
+            vm.backupDevice.frpIp.value = vm.prependFrp + vm.backupDevice.frpIp.value
+            if (!isUrl(vm.backupDevice.frpIp.value)) {
+                vm.rightfulFrpUrl = false
+            }
         },
 
     }
