@@ -35,8 +35,8 @@ public class WxMiniMaintainAuthController {
      */
     @PostMapping(value = "/auth")
     public ApiResult auth(HttpServletRequest request){
-        //return wxMiniMaintainAuthService.auth(request );
-        return miniAutoService.miniWxAuto(request);
+        return wxMiniMaintainAuthService.auth(request );
+        //return miniAutoService.miniWxAuto(request);
     }
 
     /**
