@@ -18,7 +18,7 @@ var vm = new Vue({
     },
     methods: {
         getLogList: function(more){
-            this.$http.post("/api/private/device/operation/log/list", {
+            this.$http.post("/api/private/admin/login/log", {
                 more: more
             }).then(function(res){
                 let data = res.json().data
