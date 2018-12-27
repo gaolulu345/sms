@@ -54,5 +54,6 @@
         <result column="key" property="key" jdbcType="VARCHAR" />
         <result column="value" property="value" jdbcType="VARCHAR" />
         <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="detail" property="detail" jdbcType="VARCHAR"/>
     </resultMap>
 </mapper>

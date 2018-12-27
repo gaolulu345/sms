@@ -18,11 +18,11 @@ public class WxMiniAuthDTO {
 
     Integer type;//要授权的类型
 
-    String typeDesc;
+    //String typeDesc;
 
-    public void build(){
-        this.typeDesc = MiniAutoTypeEnum.getByCode(this.type).getDesc();
-    }
+    //public void build(){
+        //this.typeDesc = MiniAutoTypeEnum.getByCode(this.type).getDesc();
+    //}
 
 
 }

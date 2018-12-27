@@ -8,5 +8,4 @@ public interface MiniAutoServiceI {
 
     ApiResult miniWxAuto(HttpServletRequest request);
 
-    int check(HttpServletRequest request);
 }
