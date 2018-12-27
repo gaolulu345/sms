@@ -19,4 +19,6 @@ public interface AdminTerPropertyDao {
 
     List<AdminTerPropertyDTO> findAllTerProperty(TerPropertySearch terPropertySearch);
 
+    int insertTerProperty(AdminTerPropertyDTO adminTerPropertyDTO);
+
 }

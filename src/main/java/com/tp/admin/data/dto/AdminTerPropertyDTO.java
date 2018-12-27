@@ -1,5 +1,6 @@
 package com.tp.admin.data.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.crab2died.annotation.ExcelField;
 import com.tp.admin.enums.AdminNetMethodEnum;
 import com.tp.admin.enums.AdminTerBusinessModeEnum;
@@ -43,6 +44,12 @@ public class AdminTerPropertyDTO {
     @ExcelField(title = "网点运营模式",order = 7)
     private String terBusiModeDesc;//网店运营模式描述
     private boolean deleted;
+    @ExcelField(title = "FRPip地址",order = 12)
+    private String frpIp;
+    @ExcelField(title = "FRP端口号",order = 13)
+    private String frpPort;
+
+
 
     public void build(){
         if (terBusiMode != null){
