@@ -33,6 +33,7 @@ var vm = new Vue({
                     result.forEach(function(val) {
                         val.screenSize = `${val.screenHigh}*${val.screenWide}`
                         val.adExistDesc = val.adExist ? '支持':'不支持'
+                        val.frp = val.frpIp && val.frpPort ? val.frpPort + val.frpPort:'暂无'
                     })
                 }
                 vm.deviceList = result
