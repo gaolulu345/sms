@@ -27,17 +27,20 @@ var vm = new Vue({
                 pageIndex: pageIndex,
             }).then(function(res){
                 let data = res.json().data
-                console.log('res: ', data)
+                // console.log('res: ', data)
                 let result = data.result;
                 if(result && result[0]) {
                     result.forEach(function(val) {
                         val.screenSize = `${val.screenHigh}*${val.screenWide}`
                         val.adExistDesc = val.adExist ? '支持':'不支持'
-                        val.frp = val.frpIp && val.frpPort ? val.frpPort + val.frpPort:'暂无'
+                        val.frpIp = val.frpIp === null ? '':val.frpIp
+                        val.frpPort = val.frpPort === null ? '':val.frpPort
+                        val.frp = val.frpIp || val.frpPort ? val.frpIp + ":" + val.frpPort:null
                     })
                 }
                 vm.deviceList = result
                 vm.totalCnt = data.totalCnt
+                console.log('vm.deviceList: ', vm.deviceList)
             })
         },
 

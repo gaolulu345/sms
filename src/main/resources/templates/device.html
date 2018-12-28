@@ -30,7 +30,26 @@
                     <el-table-column prop="adExistDesc" label="广告支持"></el-table-column>
                     <el-table-column prop="screenSize" label="屏幕尺寸"></el-table-column>
                     <el-table-column prop="videoControl" label="监控服务提供商"></el-table-column>
-                    <el-table-column prop="frp" label="frp地址"></el-table-column>
+                    <el-table-column prop="frp" label="frp地址">
+                        <template slot-scope="scope">
+                            <span v-cloak v-if="scope.row.frp">
+                                <el-popover
+                                    placement="top-start"
+                                    title=""
+                                    width="200"
+                                    trigger="hover"
+                                    :content="scope.row.frp">
+                                    <!-- <el-button type="warning" size="mini" slot="reference">查看</el-button> -->
+                                    <el-button plain type="primary" size="mini" slot="reference">查看</el-button>
+                                </el-popover>
+                            </span>
+                            <span v-else>
+                                <span slot="reference" class="name-wrapper">
+                                    暂无
+                                </span>
+                            </span>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="设备操作">
                         <template slot-scope="scope">
                             <el-button plain type="primary" size="mini" @click="handlerDevice(scope.row)">管理</el-button>
