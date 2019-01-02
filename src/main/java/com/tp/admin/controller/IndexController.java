@@ -171,5 +171,4 @@ public class IndexController {
     public String deviceAdvertising(HttpServletRequest request,Model model){
         return "device_advertising";
     };
-
 }

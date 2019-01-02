@@ -398,6 +398,11 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
         wxMiniSearch.builData();
         AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
         List<PartnerWashCardDTO> washCards = partnerDao.partnerWashCardIdSearch(adminMerchantEmployee.getPartnerId());
+        if (washCards == null || washCards.size() == 0){
+            wxMiniSearch.setTotalCnt(0);
+            wxMiniSearch.setResult(washCards);
+            return ApiResult.ok(wxMiniSearch);
+        }
         List<Integer> washCardIds = new ArrayList<>();
         for (PartnerWashCardDTO partnerWashCardDTO:washCards) {
             washCardIds.add(partnerWashCardDTO.getId());

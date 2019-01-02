@@ -215,6 +215,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         if (adminTerPropertyDTO.getBubbleLimit() == null || adminTerPropertyDTO.getDeviceType() == null || adminTerPropertyDTO.getHighLimit() == null || adminTerPropertyDTO.getWideLimit() == null){
             throw new BaseException(ExceptionCode.PARAMETER_MISSING);
         }
+        adminTerPropertyDTO.setTerBusiMode(adminTerPropertyDTO.getDeviceType());
         int res = adminTerPropertyDao.insertTerProperty(adminTerPropertyDTO);
         if (res == 0){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
