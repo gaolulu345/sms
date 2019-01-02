@@ -194,7 +194,6 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
             }
             imageList.add(terRatationPicture.getPicture());
         }
-        //TerDeviceRequest terDeviceRequest = httpHelper.signTerInfo(terRatationPictureSearch.getDeviceId(),null,"",adminTerPropertyDTO.getTerId());
         TerDeviceRequest terDeviceRequest = httpHelper.signTerInfo(adminTerPropertyDTO.getFrpIp(),null,"",adminTerPropertyDTO.getFrpPort());
         terDeviceRequest.setPictures(imageList);
         String jsonBody = new Gson().toJson(terDeviceRequest);

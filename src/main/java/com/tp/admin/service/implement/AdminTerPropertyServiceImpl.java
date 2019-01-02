@@ -212,19 +212,6 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
 
     @Override
     public ApiResult insertTerproperty(HttpServletRequest request, AdminTerPropertyDTO adminTerPropertyDTO) {
-        if(null == adminTerPropertyDTO.getTerId() || adminTerPropertyDTO.getTerId() == 0){
-            adminTerPropertyDTO.setTerId(0);
-        }else {
-            WxMiniSearch wxMiniSearch = new WxMiniSearch();
-            wxMiniSearch.setTerId(adminTerPropertyDTO.getTerId());
-            List<TerInfoDTO> list = terDao.terInfoSearch(wxMiniSearch);
-            if (list == null || list.size() == 0){
-                throw new BaseException(ExceptionCode.NOT_TER);
-            }else {
-                adminTerPropertyDTO.setTerModel(list.get(0).getCode());
-                adminTerPropertyDTO.setTerRemark(list.get(0).getTitle());
-            }
-        }
         if (adminTerPropertyDTO.getBubbleLimit() == null || adminTerPropertyDTO.getDeviceType() == null || adminTerPropertyDTO.getHighLimit() == null || adminTerPropertyDTO.getWideLimit() == null){
             throw new BaseException(ExceptionCode.PARAMETER_MISSING);
         }

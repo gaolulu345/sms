@@ -24,8 +24,8 @@
     </select>
 
     <select id="listBySearch" parameterType="com.tp.admin.data.search.UserSearch" resultMap="UserDTOMap">
-        SELECT u.* , uinfo.avatar , uinfo.city , uinfo.nickname , uinfo.gender  FROM
-        `user` AS u LEFT JOIN `user_info` AS uinfo ON u.id = uinfo.user_id
+        SELECT u.id , u.phone , u.create_time , u.last_login_time , u.access , u.type , u.deleted , u.pw , u.wxid , u.mini_wxid , u.wx_unionid , u.ali_id , uinfo.avatar , uinfo.city , uinfo.nickname , uinfo.gender  FROM
+        `user` AS u INNER JOIN `user_info` AS uinfo ON u.id = uinfo.user_id
         WHERE
         u.deleted = 0
         AND
@@ -36,11 +36,8 @@
         <if test="id != null and id != 0">
             AND u.id = #{id}
         </if>
-        <if test="startTime != null">
-            AND u.create_time &gt; #{startTime}
-        </if>
-        <if test="endTime != null">
-            AND u.create_time &lt; #{endTime}
+        <if test="startTime != null and endTime != null ">
+            AND u.create_time BETWEEN #{startTime} AND #{endTime}
         </if>
         ORDER BY id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">

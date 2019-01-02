@@ -87,6 +87,9 @@
 			<if test="cdrPicture != null">
 				`cdr_picture` = #{cdrPicture},
 			</if>
+			<if test="deleted != null">
+				`deleted` = #{deleted},
+			</if>
 			<if test="frpIp != null">
 				`frp_ip` = #{frpIp},
 			</if>
@@ -101,10 +104,6 @@
 	<insert id="insertTerProperty" parameterType="com.tp.admin.data.dto.AdminTerPropertyDTO">
 		INSERT INTO
 			admin_ter_property(
-			ter_id,
-			ter_model,
-			ter_remark,
-			video_control,
 			bubble_limit,
 			high_limit,
 			wide_limit,
@@ -113,10 +112,6 @@
 			)
 			VALUES
 			(
-			#{terId},
-			#{terModel},
-			#{terRemark},
-			#{videoControl},
 			#{bubbleLimit},
 			#{highLimit},
 			#{wideLimit},

@@ -42,24 +42,10 @@ public class MiniAutoServiceImpl implements MiniAutoServiceI {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG , "empty code");
         }
 
-        int authType = check(request);
-        if (authType == 0){
-            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
-        }
         AdminAutoSearch adminAutoSearch = new AdminAutoSearch();
-        adminAutoSearch.setType(authType);
+        adminAutoSearch.setType(wxMiniAuthDTO.getType());
 
-        AdminServiceSearch adminServiceSearch = new AdminServiceSearch();
-
-        List<AdminServiceInfo> list = templateDao.searchServiceInfoList(adminAutoSearch);
-        for (AdminServiceInfo adminServiceInfo:list) {
-            if (adminServiceInfo.getKey().equals("WX_APP_ID")){
-                adminServiceSearch.setAppId(adminServiceInfo.getValue());
-            }
-            if (adminServiceInfo.getKey().equals("WX_APP_SECRET")){
-                adminServiceSearch.setAppSecret(adminServiceInfo.getValue());
-            }
-        }
+        AdminServiceSearch adminServiceSearch = findAppRelate(adminAutoSearch);
 
         String query =    "?appid=" + adminServiceSearch.getAppId()
                 + "&secret=" + adminServiceSearch.getAppSecret()
@@ -80,18 +66,19 @@ public class MiniAutoServiceImpl implements MiniAutoServiceI {
         return ApiResult.ok(wxJscodeSessionResult);
     }
 
-    @Override
-    public int check(HttpServletRequest request) {
-        String uri = request.getRequestURI();
-        if (null == uri || uri.equals("")){
-            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+
+    private final AdminServiceSearch findAppRelate(AdminAutoSearch adminAutoSearch){
+        AdminServiceSearch adminServiceSearch = new AdminServiceSearch();
+        List<AdminServiceInfo> list = templateDao.searchServiceInfoList(adminAutoSearch);
+        for (AdminServiceInfo adminServiceInfo:list) {
+            if (adminServiceInfo.getKey().equals("WX_APP_ID")){
+                adminServiceSearch.setAppId(adminServiceInfo.getValue());
+            }
+            if (adminServiceInfo.getKey().equals("WX_APP_SECRET")){
+                adminServiceSearch.setAppSecret(adminServiceInfo.getValue());
+            }
         }
-        if (uri.indexOf("/api/open/wx/mini/merchant") != -1){
-            return 1;
-        }else if (uri.indexOf("/api/open/wx/mini/maintain") != -1){
-            return 2;
-        }
-        return 0;
+        return adminServiceSearch;
     }
 
 
