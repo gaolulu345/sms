@@ -14,6 +14,7 @@
         <div class="content" style="width: 100%">
             <div class="handleButtons">
                 <el-button size="mini" type="primary" @click="downloadDeviceList">下载设备列表</el-button>
+                <el-button size="mini" type="success" @click="dialogDeviceFormVisible = true">创建设备</el-button>
             </div>
             <div>
                 <el-table :data="deviceList" style="width: 100%">
@@ -53,9 +54,34 @@
                         <template slot-scope="scope">
                             <el-button plain type="primary" size="mini" @click="handlerDevice(scope.row)">管理</el-button>
                         </template>
+                        <template slot-scope="scope">
+                            <el-button plain type="primary" size="mini" @click="deleteDevice(scope.row)">删除</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </div>
+            <el-dialog title="创建设备" :visible.sync="dialogDeviceFormVisible">
+                <el-form :model="deviceForm" :rules="deviceFormRules" ref="deviceForm" label-width="100px" class="deviceForm">
+                    <el-form-item label="设备类型" prop="deviceType">
+                        <el-select v-model="deviceForm.deviceType" placeholder="请选择设备类型">
+                            <el-option v-for="item in deviceBusiModeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="设备限高(厘米)" prop="highLimit">
+                        <el-input-number v-model="deviceForm.highLimit" :step="5" :min="1" :max="1500" label="设备限高(厘米)"></el-input-number>
+                    </el-form-item>
+                    <el-form-item label="设备限宽(厘米)" prop="wideLimit">
+                        <el-input-number v-model="deviceForm.wideLimit" :step="5" :min="1" :max="1500" label="设备限宽(厘米)"></el-input-number>
+                    </el-form-item>
+                    <el-form-item label="泡沫可用次数" prop="bubbleLimit">
+                        <el-input-number v-model="deviceForm.bubbleLimit" :min="1" :max="1000" label="泡沫可用次数"></el-input-number>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitDeviceForm('deviceForm')">立即创建</el-button>
+                        <el-button @click="resetDeviceForm('deviceForm')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
             <#include "common/pages2.html">
         </div>
     </div>
