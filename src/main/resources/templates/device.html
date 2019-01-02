@@ -19,18 +19,18 @@
             <div>
                 <el-table :data="deviceList" style="width: 100%">
                     <el-table-column prop="id" label="设备ID"></el-table-column>
-                    <el-table-column prop="terId" label="网点ID" ></el-table-column>
-                    <el-table-column prop="terRemark" label="网点名称"></el-table-column>
-                    <el-table-column prop="terBusiModeDesc" label="网点类型"></el-table-column>
-                    <el-table-column prop="terModel" label="网点编号"></el-table-column>
+                    <el-table-column prop="terIdDesc" label="网点ID" ></el-table-column>
+                    <el-table-column prop="terRemarkDesc" label="网点名称"></el-table-column>
+                    <el-table-column prop="terModelDesc" label="网点编号"></el-table-column>
+                    <el-table-column prop="terBusiModeDesc" label="设备类型"></el-table-column>
                     <el-table-column prop="terClientVersion" label="程序版本"></el-table-column>
                     <el-table-column prop="highLimit" label="设备限高(厘米)"></el-table-column>
                     <el-table-column prop="wideLimit" label="设备限宽(厘米)"></el-table-column>
                     <el-table-column prop="bubbleLimit" label="泡沫可用次数"></el-table-column>
                     <el-table-column prop="netMethodDesc" label="网络类型"></el-table-column>
                     <el-table-column prop="adExistDesc" label="广告支持"></el-table-column>
-                    <el-table-column prop="screenSize" label="屏幕尺寸"></el-table-column>
-                    <el-table-column prop="videoControl" label="监控服务提供商"></el-table-column>
+                    <el-table-column prop="screenSizeDesc" label="屏幕尺寸"></el-table-column>
+                    <el-table-column prop="videoControlDesc" label="监控服务提供商"></el-table-column>
                     <el-table-column prop="frp" label="frp地址">
                         <template slot-scope="scope">
                             <span v-cloak v-if="scope.row.frp">
@@ -50,18 +50,16 @@
                             </span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="设备操作">
+                    <el-table-column label="设备操作" width="150">
                         <template slot-scope="scope">
                             <el-button plain type="primary" size="mini" @click="handlerDevice(scope.row)">管理</el-button>
-                        </template>
-                        <template slot-scope="scope">
-                            <el-button plain type="primary" size="mini" @click="deleteDevice(scope.row)">删除</el-button>
+                            <el-button plain type="danger" size="mini" @click="deleteDevice(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </div>
-            <el-dialog title="创建设备" :visible.sync="dialogDeviceFormVisible">
-                <el-form :model="deviceForm" :rules="deviceFormRules" ref="deviceForm" label-width="100px" class="deviceForm">
+            <el-dialog title="创建设备" :visible.sync="dialogDeviceFormVisible" center>
+                <el-form label-position="right" label-width="1.171875rem" :model="deviceForm" :rules="deviceFormRules" ref="deviceForm" label-width="100px" class="deviceForm">
                     <el-form-item label="设备类型" prop="deviceType">
                         <el-select v-model="deviceForm.deviceType" placeholder="请选择设备类型">
                             <el-option v-for="item in deviceBusiModeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -76,11 +74,12 @@
                     <el-form-item label="泡沫可用次数" prop="bubbleLimit">
                         <el-input-number v-model="deviceForm.bubbleLimit" :min="1" :max="1000" label="泡沫可用次数"></el-input-number>
                     </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="submitDeviceForm('deviceForm')">立即创建</el-button>
-                        <el-button @click="resetDeviceForm('deviceForm')">重置</el-button>
-                    </el-form-item>
                 </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="success" @click="submitDeviceForm('deviceForm')">立即创建</el-button>
+                    <el-button @click="resetDeviceForm('deviceForm')">重置</el-button>
+                    <el-button type="info" plain @click="dialogDeviceFormVisible = false">取 消</el-button>
+                </span>
             </el-dialog>
             <#include "common/pages2.html">
         </div>

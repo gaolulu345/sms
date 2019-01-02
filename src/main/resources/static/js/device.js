@@ -72,7 +72,11 @@ var vm = new Vue({
                 let result = data.result;
                 if(result && result[0]) {
                     result.forEach(function(val) {
-                        val.screenSize = `${val.screenHigh}*${val.screenWide}`
+                        val.screenSizeDesc = val.screenHigh && val.screenWide ? `${val.screenHigh}*${val.screenWide}`:'暂无'
+                        val.terIdDesc = val.terId ? val.terId:'未关联网点'
+                        val.terRemarkDesc = val.terRemark ? val.terRemark:'未关联网点'
+                        val.terModelDesc = val.terModel ? val.terModel:'未关联网点'
+                        val.videoControlDesc = val.videoControl ? val.videoControl:'暂无'
                         val.adExistDesc = val.adExist ? '支持':'不支持'
                         val.frpIp = val.frpIp === null ? '':val.frpIp
                         val.frpPort = val.frpPort === null ? '':val.frpPort
