@@ -15,7 +15,7 @@ public class AdminTemplateController {
     public static final String ROUTER_INDEX = "/api/open/template";
 
     @Autowired
-    AdminTemplateInfoServiceI adminTemplateInfoServiceI;
+    AdminTemplateInfoServiceI adminTemplateInfoService;
 
     /**
      * 发送模板消息
@@ -25,6 +25,6 @@ public class AdminTemplateController {
     @PostMapping(value = "/info/send")
     public ApiResult sendTemplateInfo(HttpServletRequest request){
         //return null;
-        return adminTemplateInfoServiceI.sendTemplate(request);
+        return adminTemplateInfoService.sendTemplate(request);
     }
 }

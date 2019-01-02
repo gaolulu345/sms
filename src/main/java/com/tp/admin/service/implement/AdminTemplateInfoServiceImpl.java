@@ -19,10 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public class AdminTemplateInfoServiceImpl implements AdminTemplateInfoServiceI {
     @Autowired
-    WxMiniServiceI wxMiniServiceI;
+    WxMiniServiceI wxMiniService;
 
     @Autowired
-    AliMiniServiceI aliMiniServiceI;
+    AliMiniServiceI aliMiniService;
 
     @Autowired
     HttpHelperI httpHelper;
@@ -40,9 +40,11 @@ public class AdminTemplateInfoServiceImpl implements AdminTemplateInfoServiceI {
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
         if (adminTemplateInfo.getType() == 3){
-            wxMiniServiceI.sendWxTemplate(templateSearch,adminTemplateInfo);
+            wxMiniService.sendWxTemplate(templateSearch,adminTemplateInfo);
         }else if (adminTemplateInfo.getType() == 4){
-            aliMiniServiceI.sendAliTemplate(templateSearch,adminTemplateInfo);
+            aliMiniService.sendAliTemplate(templateSearch,adminTemplateInfo);
+        } else {
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
         return ApiResult.ok();
     }

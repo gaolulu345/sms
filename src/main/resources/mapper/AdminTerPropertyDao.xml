@@ -10,32 +10,13 @@
 	</select>
 
 	<select id="findAllTerPropertyCount" resultType="java.lang.Integer">
-		SELECT COUNT(atp.id) FROM admin_ter_property AS atp
+		SELECT COUNT(id) FROM admin_ter_property
 	</select>
 
 	<select id="findTerStartInfo" parameterType="java.lang.Integer" resultMap="AdminTerPropertyDTOMap">
-		SELECT  atp.id,
-				atp.ter_id,
-				atp.net_method,
-				atp.video_control,
-				atp.bubble_limit,
-				atp.ter_clientversion,
-				atp.ter_busi_mode,
-				atp.ter_model,
-				atp.ter_remark,
-				atp.high_limit,
-				atp.wide_limit,
-				atp.ad_exist,
-				atp.screen_wide,
-				atp.screen_high,
-				atp.property_remark,
-				atp.device_type,
-				atp.cdr_picture,
-				atp.deleted,
-				atp.frp_ip,
-				atp.frp_port
-        FROM admin_ter_property AS atp
-				WHERE atp.id=#{id}
+		SELECT *
+        FROM admin_ter_property
+				WHERE id = #{id}
 	</select>
 
 
@@ -98,7 +79,7 @@
 			</if>
 		</trim>
 		WHERE
-			id=#{id}
+			id = #{id}
 	</update>
 	
 	<insert id="insertTerProperty" parameterType="com.tp.admin.data.dto.AdminTerPropertyDTO">

@@ -63,10 +63,10 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
     AdminMerchantEmployeeDao adminMerchantEmployeeDao;
 
     @Autowired
-    WashSiteServiceI washSiteServiceI;
+    WashSiteServiceI washSiteService;
 
     @Autowired
-    WxMiniMerchantManageServiceI wxMiniMerchantManageServiceI;
+    WxMiniMerchantManageServiceI wxMiniMerchantManageService;
 
     @Autowired
     AdminTerOperatingLogDao adminTerOperatingLogDao;
@@ -145,7 +145,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         }
         WxMiniSearch wxMiniSearch = new WxMiniSearch();
         wxMiniSearch.setTerId(adminTerPropertyDTO.getTerId());
-        TerInfoDTO terInfoDTO = washSiteServiceI.terCheck(wxMiniSearch);
+        TerInfoDTO terInfoDTO = washSiteService.terCheck(wxMiniSearch);
         WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), "", "");
         String jsonBody = new Gson().toJson(washSiteRequest);
         String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
