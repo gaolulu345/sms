@@ -172,7 +172,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     public ApiResult pushRatationPicture(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body,TerRatationPictureSearch.class);
-        if (terRatationPictureSearch.getDeviceId() == null){
+        if (terRatationPictureSearch.getDeviceId() == null || terRatationPictureSearch.getIds() == null || terRatationPictureSearch.getIds().size() == 0){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         //查询设备是否可推送广告
@@ -205,7 +205,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     @Override
     public ApiResult pushAdPicture(HttpServletRequest request, String body) {
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body,TerRatationPictureSearch.class);
-        if (terRatationPictureSearch.getDeviceId() == null){
+        if (terRatationPictureSearch.getDeviceId() == null || terRatationPictureSearch.getIds() == null || terRatationPictureSearch.getIds().size() != 1){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         //查询设备是否可推送广告
@@ -213,12 +213,12 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (!adminTerPropertyDTO.isAdExist() || adminTerPropertyDTO.isDeleted()){
             throw new BaseException(ExceptionCode.NOT_ALLOW_PUSH_AD);
         }
-        if (adminTerPropertyDTO.getTerId() == null || adminTerPropertyDTO.getTerId() == 0){
-            throw new BaseException(ExceptionCode.NOT_RELATION_TER);
-        }
-        /*if (terRatationPictureSearch.getIds().size() != 1){
-            throw new BaseException(ExceptionCode.PICTURE_NOT_ENABLE_OR_TYPE_NOT_ACCESS);
-        }*/
+//        if (adminTerPropertyDTO.getTerId() == null || adminTerPropertyDTO.getTerId() == 0){
+//            throw new BaseException(ExceptionCode.NOT_RELATION_TER);
+//        }
+//        if (terRatationPictureSearch.getIds().size() != 1){
+//            throw new BaseException(ExceptionCode.PICTURE_NOT_ENABLE_OR_TYPE_NOT_ACCESS);
+//        }
         List<String> imageList = new ArrayList<>();
         List<TerRatationPicture> list = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
         if (list == null || list.size() == 0 || list.size() != 1){
