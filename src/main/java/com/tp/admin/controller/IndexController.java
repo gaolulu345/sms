@@ -172,4 +172,14 @@ public class IndexController {
         return "device_advertising";
     };
 
+    /**
+     * 设备添加
+     * @param request
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/pages/device/add")
+    public String deviceAdd(HttpServletRequest request,Model model){
+        return "device_add";
+    }
 }
