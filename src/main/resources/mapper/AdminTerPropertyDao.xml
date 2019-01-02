@@ -108,7 +108,7 @@
 			high_limit,
 			wide_limit,
 			property_remark,
-			device_type
+			ter_busi_mode
 			)
 			VALUES
 			(
@@ -116,7 +116,7 @@
 			#{highLimit},
 			#{wideLimit},
 			#{propertyRemark},
-			#{deviceType}
+			#{terBusiMode}
 			)
 	</insert>
 
