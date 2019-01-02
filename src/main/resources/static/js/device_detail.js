@@ -19,7 +19,6 @@ var vm = new Vue({
         uploadCarouselDialogVisible: false,
         uploadCarouselType: 0,
         uploadQrcodeDialogVisible: false,
-        prependFrp: 'http://',
         rightfulFrpUrl: true,
         terClientVersionOptions: [
             {
@@ -122,7 +121,9 @@ var vm = new Vue({
                         result.screenSize = `${result.screenHigh}*${result.screenWide}`
                         result.adExistDesc = result.adExist ? '支持':'不支持'
                         result.propertyRemark = result.propertyRemark ? result.propertyRemark:''
-                        result.frp = result.frpIp && result.frpPort ? result.frpPort + result.frpPort:'暂无'
+                        result.frpIp = result.frpIp === null ? '':result.frpIp
+                        result.frpPort = result.frpPort === null ? '':result.frpPort
+                        result.frp = result.frpIp || result.frpPort ? result.frpIp + ":" + result.frpPort:'暂无'
                         result.screen = null
                         vm.device = [result]
                         let backupDevice = {}
@@ -414,9 +415,11 @@ var vm = new Vue({
 
         // 验证frp ip 输入结束
         listenFrpIpChange: function() {
-            vm.backupDevice.frpIp.value = vm.prependFrp + vm.backupDevice.frpIp.value
+            // let frp = vm.backupDevice.frpIp.value + vm.backupDevice.frpPort.value
             if (!isUrl(vm.backupDevice.frpIp.value)) {
                 vm.rightfulFrpUrl = false
+            } else {
+                vm.rightfulFrpUrl = true
             }
         },
 

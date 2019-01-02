@@ -81,49 +81,9 @@
                         </span>
                     </template>
                 </el-table-column>
-
-
-                <el-table-column prop="frp" label="frp地址" min-width="120">
-                    <template slot-scope="scope">
-                        <span v-cloak v-if="backupDevice.frp.edit == false">
-                            <span slot="reference" class="name-wrapper">
-                                <el-tag size="medium">{{ scope.row.frp }}</el-tag>
-                            </span>
-                            <div class="rightButton">
-                                <el-button size="mini" type="primary" icon="el-icon-edit" @click="backupDevice.frp.edit = true"></el-button>
-                            </div>
-                        </span>
-                        <el-dialog title="frp地址更改" :visible.sync="backupDevice.frp.edit" width="40%">
-                            <div class="inlineInput frpIpInput">
-                                <el-input placeholder="frp地址" @blur="listenFrpIpChange" v-model="backupDevice.frpIp.value">
-                                    <template slot="prepend">
-                                        <el-select v-model="prependFrp" slot="prepend" placeholder="请选择">
-                                            <el-option label="http://" value="http://"></el-option>
-                                            <el-option label="https://" value="https://"></el-option>
-                                        </el-select>
-                                    </template>
-                                </el-input>
-                            </div>    
-                            <span class="frpSlice">:</span>
-                            <div class="inlineInput frpPortInput">
-                                <el-input placeholder="端口号" v-model="backupDevice.frpPort.value">
-                                <el-input-number v-model="backupDevice.frpPort.value" controls-position="right" :min="80" :max="49151"></el-input-number>
-                            </div>
-                            </el-input>
-                            <div slot="footer" class="dialog-footer">
-                                <el-button size="small" type="danger" @click="saveDevice('frp')">取 消</el-button>
-                                <el-button type="success" size="small" @click="cancel('frp')" :disabled="backupDevice.frpIp.value == scope.row.frpIp && backupDevice.frpPort.value == scope.row.frpPort && rightfulFrpUrl == true">保 存</el-button>
-                            </div>
-                            <div v-if="!rightfulFrpUrl" class="urlHint">
-                                <span>请正确填写url格式的frp地址, 例如：hza1.taipuauto.cn</span>
-                            </div>
-                        </el-dialog>
-                    </template>
-                </el-table-column>
-
-
             </el-table>
         </el-card>
+
         <el-card v-if="device && device[0].deviceType" class="box-card">
             <div slot="header" class="clearfix">
                 <span>设备关联网点信息</span>
@@ -269,10 +229,10 @@
                         </template>
                     </el-table-column>
                 </el-table>
-            </el-card>
+        </el-card>
         <el-card class="box-card">
             <div slot="header" class="clearfix">
-                <span>其他信息</span>
+                <span>程序版本与frp</span>
             </div>
             <el-table :data="device" border style="width: 100%">
                 <el-table-column prop="terClientVersion" label="工控程序版本" min-width="280">
@@ -284,7 +244,6 @@
                             <span class="rightButton">
                                 <el-button size="mini" type="primary" icon="el-icon-edit" @click="backupDevice.terClientVersion.edit = true"></el-button>
                             </span>
-
                         </span>
                         <span v-else>
                             <span slot="reference" class="name-wrapper">
@@ -294,11 +253,48 @@
                             </span>
                             <span class="rightButton">
                                 <el-button type="success" size="mini" @click="saveDevice('terClientVersion')" :disabled="backupDevice.terClientVersion.value == scope.row.terClientVersion">保存</el-button>
-                                <el-button size="mini" type="danger" @click="cancel('terClientVersion')">取消</el-button>
+                                <el-button size="small" type="danger" @click="saveDevice('terClientVersion')">取 消</el-button>
                             </span>
                         </span>
                     </template>
                 </el-table-column>
+                <el-table-column prop="frp" label="frp地址" min-width="280">
+                    <template slot-scope="scope">
+                        <span v-cloak v-if="backupDevice.frp.edit == false">
+                            <span slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.frp }}</el-tag>
+                            </span>
+                            <div class="rightButton">
+                                <el-button size="mini" type="primary" icon="el-icon-edit" @click="backupDevice.frp.edit = true"></el-button>
+                            </div>
+                        </span>
+                        <el-dialog title="frp地址更改" :visible.sync="backupDevice.frp.edit" width="50%">
+                            <div class="inlineInput frpIpInput">
+                                <el-input placeholder="frp地址" @change="listenFrpIpChange" v-model="backupDevice.frpIp.value">
+                                </el-input>
+                            </div>    
+                            <span class="frpSlice">:</span>
+                            <div class="inlineInput frpPortInput">
+                                <el-input-number v-model="backupDevice.frpPort.value" controls-position="right" :min="80" :max="49151" v-model="backupDevice.frpPort.value"></el-input-number>
+                            </div>
+                            </el-input>
+                            <div slot="footer" class="dialog-footer">
+                                <el-button size="small" type="danger"  @click="cancel('frp')">取 消</el-button>
+                                <el-button type="success" size="small" @click="saveDevice('frp')" :disabled="(backupDevice.frpIp.value == scope.row.frpIp && backupDevice.frpPort.value == scope.row.frpPort) || rightfulFrpUrl == false">保 存</el-button>
+                            </div>
+                            <div v-if="!rightfulFrpUrl" class="urlHint">
+                                <span>请正确填写url格式的frp地址, 例如：http://hza1.taipuauto.cn</span>
+                            </div>
+                        </el-dialog>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-card>
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span>屏幕与广告</span>
+            </div>
+            <el-table :data="device" border style="width: 100%">
                 <el-table-column prop="screenSize" label="屏幕尺寸" width="450">
                     <template slot-scope="scope">
                         <span v-cloak v-if="backupDevice.screen.edit == false">
