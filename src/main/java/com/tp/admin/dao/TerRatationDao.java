@@ -23,4 +23,6 @@ public interface TerRatationDao {
     int deleteTerRatationPicture(TerRatationPictureSearch terRatationPictureSearch);
 
     int addTerRatationLog(TerRatationPictureLog terRatationPictureLog);
+
+    int updateAdPicture(TerRatationPictureSearch terRatationPictureSearch);
 }

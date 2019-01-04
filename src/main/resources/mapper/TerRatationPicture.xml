@@ -26,6 +26,12 @@
 			deleted = 0
 			AND
 			device_id = #{deviceId}
+		<if test="enable != null">
+			 AND enable = #{enable}
+		</if>
+		<if test="type != null">
+			 AND type = #{type}
+		</if>
 		<if test="ids != null and ids.size != 0">
 				AND
 				ter_ratation_picture.id IN
@@ -51,6 +57,20 @@
 			</if>
 			<if test="enableTime != null">
 				enable_time = #{enableTime},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateAdPicture" parameterType="com.tp.admin.data.search.TerRatationPictureSearch">
+		UPDATE
+		ter_ratation_picture
+		<trim prefix="set" suffixOverrides=",">
+			<if test="picture != null">
+				picture=#{picture},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime},
 			</if>
 		</trim>
 		WHERE id = #{id}

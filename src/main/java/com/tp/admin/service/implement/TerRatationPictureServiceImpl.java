@@ -78,6 +78,11 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty type");
         }
         terRatationPictureSearch.setType(type);
+        List<TerRatationPicture> terRatationPictures = new ArrayList<>();
+        if (type == 1){
+            terRatationPictures = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
+
+        }
         if (file == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
@@ -87,7 +92,15 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         }
         terRatationPictureSearch.setCreateTime(new Timestamp(System.currentTimeMillis()));
         terRatationPictureSearch.setPicture(uploadFileDTO.getUrl());
-        int res = terRatationDao.uploadTerRatationPicture(terRatationPictureSearch);
+        int res = 0;
+        if (type == 1 && terRatationPictures.size() == 1){
+            terRatationPictureSearch.setId(terRatationPictures.get(0).getId());
+            terRatationPictureSearch.setModifyTime(new Timestamp(System.currentTimeMillis()));
+            res = terRatationDao.updateAdPicture(terRatationPictureSearch);
+        } else {
+            res = terRatationDao.uploadTerRatationPicture(terRatationPictureSearch);
+        }
+
         if (res == 0){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
@@ -172,7 +185,10 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     public ApiResult pushRatationPicture(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body,TerRatationPictureSearch.class);
-        if (terRatationPictureSearch.getDeviceId() == null || terRatationPictureSearch.getIds() == null || terRatationPictureSearch.getIds().size() == 0){
+        terRatationPictureSearch.setDeleted(false);
+        terRatationPictureSearch.setEnable(true);
+        terRatationPictureSearch.setType(0);
+        if (terRatationPictureSearch.getDeviceId() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         //查询设备是否可推送广告
@@ -180,9 +196,6 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (!adminTerPropertyDTO.isAdExist() || adminTerPropertyDTO.isDeleted()){
             throw new BaseException(ExceptionCode.NOT_ALLOW_PUSH_AD);
         }
-        /*if (adminTerPropertyDTO.getTerId() == null || adminTerPropertyDTO.getTerId() == 0){
-            throw new BaseException(ExceptionCode.NOT_RELATION_TER);
-        }*/
         List<String> imageList = new ArrayList<>();
         List<TerRatationPicture> list = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
         if (list == null || list.size() == 0){
@@ -205,7 +218,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     @Override
     public ApiResult pushAdPicture(HttpServletRequest request, String body) {
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body,TerRatationPictureSearch.class);
-        if (terRatationPictureSearch.getDeviceId() == null || terRatationPictureSearch.getIds() == null || terRatationPictureSearch.getIds().size() != 1){
+        if (terRatationPictureSearch.getDeviceId() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         //查询设备是否可推送广告
@@ -213,13 +226,8 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (!adminTerPropertyDTO.isAdExist() || adminTerPropertyDTO.isDeleted()){
             throw new BaseException(ExceptionCode.NOT_ALLOW_PUSH_AD);
         }
-//        if (adminTerPropertyDTO.getTerId() == null || adminTerPropertyDTO.getTerId() == 0){
-//            throw new BaseException(ExceptionCode.NOT_RELATION_TER);
-//        }
-//        if (terRatationPictureSearch.getIds().size() != 1){
-//            throw new BaseException(ExceptionCode.PICTURE_NOT_ENABLE_OR_TYPE_NOT_ACCESS);
-//        }
         List<String> imageList = new ArrayList<>();
+        terRatationPictureSearch.setType(1);
         List<TerRatationPicture> list = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
         if (list == null || list.size() == 0 || list.size() != 1){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
