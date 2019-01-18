@@ -79,7 +79,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         }
         terRatationPictureSearch.setType(type);
         List<TerRatationPicture> terRatationPictures = new ArrayList<>();
-        if (type == 1){
+        if (type == TerRatationPictureTypeEnum.SECOND_AD_POSITION.getValue()){
             terRatationPictures = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
 
         }
@@ -92,8 +92,10 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         }
         terRatationPictureSearch.setCreateTime(new Timestamp(System.currentTimeMillis()));
         terRatationPictureSearch.setPicture(uploadFileDTO.getUrl());
+        terRatationPictureSearch.setEnable(true);
+        terRatationPictureSearch.setEnableTime(new Timestamp(System.currentTimeMillis()));
         int res = 0;
-        if (type == 1 && terRatationPictures.size() == 1){
+        if (type == TerRatationPictureTypeEnum.SECOND_AD_POSITION.getValue() && terRatationPictures.size() == 1){
             terRatationPictureSearch.setId(terRatationPictures.get(0).getId());
             terRatationPictureSearch.setModifyTime(new Timestamp(System.currentTimeMillis()));
             res = terRatationDao.updateAdPicture(terRatationPictureSearch);
@@ -120,6 +122,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (terRatationPictureSearch.getDeviceId() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty deviceId");
         }
+        terRatationPictureSearch.setEnable(true);
         terRatationPictureSearch.build();
         List<TerRatationPicture> terRatationPictureList = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
         if (terRatationPictureList == null){
@@ -210,6 +213,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         TerDeviceRequest terDeviceRequest = httpHelper.signTerInfo(adminTerPropertyDTO.getFrpIp(),null,"",adminTerPropertyDTO.getFrpPort());
         terDeviceRequest.setPictures(imageList);
         String jsonBody = new Gson().toJson(terDeviceRequest);
+        System.out.println(jsonBody);
         String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                 .RATATION_PICTURE_PUSH, jsonBody);
         return buildApiResult(result,request,terRatationPictureSearch);
