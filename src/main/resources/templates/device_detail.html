@@ -358,7 +358,7 @@
                 <span>广告图片管理</span>
                 <el-button style="float: lift; margin-left: .078125rem" type="success" icon="el-icon-upload" size="mini" @click="uploadCarouselDialogVisible = true">上传轮播图</el-button>
                 <!-- <el-button style="float: lift;" type="primary" size="mini">展示</el-button> -->
-                <el-button style="float: lift; margin-left: .039063rem" type="primary" size="mini">推送轮播图</el-button>
+                <el-button :disabled="deviceCarouselQuery.length <= 0" style="float: lift; margin-left: .039063rem" type="primary" size="mini" @click="pushDeviceCarousel">推送轮播图</el-button>
             </div>
             <el-card class="box-card">
                 <div slot="header" class="clearfix">
@@ -366,7 +366,7 @@
                     <el-tag>banner图</el-tag>
                     <!-- <el-button style="float: right;" type="danger" size="mini" @click="deleteDeviceCarousel()">删除</el-button> -->
                 </div>
-                <el-table :data="deviceCarouselQuery" @selection-change="changeDeleteCarousel" border style="width: 100%">
+                <el-table :data="deviceBannerQuery" border style="width: 100%">
                     <!-- <el-table-column type="selection" width="55"></el-table-column> -->
                     <el-table-column prop="id" label="ID">
                     </el-table-column>
