@@ -158,7 +158,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         }
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
         String info = adminAccount.getName() + "启用了id为" + terRatationPictureSearch.getId() + "轮播图";
-        TerRatationPictureLog terRatationPictureLog = new TerRatationPictureLog(terRatationPictureSearch.getId().toString(),adminAccount.getName(),info);
+        TerRatationPictureLog terRatationPictureLog = new TerRatationPictureLog(adminAccount.getName(),info);
         res = terRatationDao.addTerRatationLog(terRatationPictureLog);
         if (res == 0){
             log.error("add start taration picture log failed {}" + terRatationPictureLog.toString());
@@ -180,7 +180,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         }
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
         String info = adminAccount.getName() + "批量删除id为" + Arrays.toString(terRatationPictureSearch.getIds().toArray()) + "轮播图";
-        TerRatationPictureLog terRatationPictureLog = new TerRatationPictureLog(Arrays.toString(terRatationPictureSearch.getIds().toArray()),adminAccount.getName(),info);
+        TerRatationPictureLog terRatationPictureLog = new TerRatationPictureLog(adminAccount.getName(),info);
         res = terRatationDao.addTerRatationLog(terRatationPictureLog);
         if (res == 0){
             log.error("add batch delete taration picture failed {}" + terRatationPictureLog.toString());
@@ -194,7 +194,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body,TerRatationPictureSearch.class);
         terRatationPictureSearch.setDeleted(false);
         terRatationPictureSearch.setEnable(true);
-        terRatationPictureSearch.setType(0);
+        terRatationPictureSearch.setType(TerRatationPictureTypeEnum.GLOD_AD_POSITION.getValue());
         if (terRatationPictureSearch.getDeviceId() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
@@ -263,8 +263,8 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
             }
             int res = 0;
             AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
-            String info = adminAccount.getName() + " 推送id为 " + Arrays.toString(terRatationPictureSearch.getIds().toArray()) + "轮播图";
-            res = terRatationDao.addTerRatationLog(new TerRatationPictureLog(Arrays.toString(terRatationPictureSearch.getIds().toArray()),adminAccount.getName(),info));
+            String info = adminAccount.getName() + " 推送设备id为 " + terRatationPictureSearch.getDeviceId() + " 的广告图";
+            res = terRatationDao.addTerRatationLog(new TerRatationPictureLog(adminAccount.getName(),info));
             if (res == 0){
                 throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
             }

@@ -11,13 +11,11 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class TerRatationPictureLog {
     private Integer id;
-    private String terRatationPictureId;
     private String adminName;
     private String info;
     private Timestamp createTime;
 
-    public TerRatationPictureLog(String terRatationPictureId,String adminName,String info){
-        this.terRatationPictureId = terRatationPictureId;
+    public TerRatationPictureLog(String adminName,String info){
         this.adminName = adminName;
         this.info = info;
     }
