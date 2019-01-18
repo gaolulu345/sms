@@ -93,12 +93,10 @@
 		INSERT INTO
 			ter_ratation_picture_log(
 			admin_name,
-			info,
-			ter_ratation_picture_id)
+			info)
 			VALUES(
 			#{adminName},
-			#{info},
-			#{terRatationPictureId}
+			#{info}
 			)
 	</insert>
 
