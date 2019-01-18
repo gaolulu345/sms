@@ -217,7 +217,6 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         TerDeviceRequest terDeviceRequest = httpHelper.signTerInfo(adminTerPropertyDTO.getFrpIp(),null,"",adminTerPropertyDTO.getFrpPort());
         terDeviceRequest.setPictures(imageList);
         String jsonBody = new Gson().toJson(terDeviceRequest);
-        System.out.println(jsonBody);
         String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                 .RATATION_PICTURE_PUSH, jsonBody);
         return buildApiResult(result,request,terRatationPictureSearch);
