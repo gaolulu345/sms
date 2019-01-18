@@ -4,11 +4,12 @@
 
 	<insert id="uploadTerRatationPicture" parameterType="com.tp.admin.data.search.TerRatationPictureSearch">
 		INSERT INTO
-			ter_ratation_picture(device_id,create_time,picture,type)
+			ter_ratation_picture(device_id,create_time,picture,enable_time,type)
 		VALUES(
 			#{deviceId},
 			#{createTime},
 			#{picture},
+			#{enableTime},
 			#{type})
 	</insert>
 
