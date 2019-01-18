@@ -15,7 +15,7 @@ var vm = new Vue({
         deviceCarouselQuery: null,
         backupDevice: null,
         terOptions: null,
-        deleteCarousels: null,
+        deleteCarousels: [],
         uploadCarouselDialogVisible: false,
         uploadCarouselType: 0,
         uploadQrcodeDialogVisible: false,
@@ -283,11 +283,11 @@ var vm = new Vue({
         },
 
         // 批量删除轮播图
-        deleteDeviceCarousel: function() {
-            let ids = vm.deleteCarousels
+        deleteDeviceCarousel: function(ids, imgType) {
+            console.log('ids: ', ids)
             if (ids && ids.length > 0){
                 let idStr = ids.join(', ')
-                this.$confirm(`此操作将删除ID为[${idStr}]的轮播图, 是否继续?`, '提示', {
+                this.$confirm(`此操作将删除ID为[${idStr}]的${imgType}, 是否继续?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
@@ -304,7 +304,7 @@ var vm = new Vue({
                         });
                     });
             } else {
-                this.$message.error('请选择至少一张轮播图');
+                this.$message.error(`请选择至少一张${imgType}`);
             }
         },
 
@@ -316,9 +316,10 @@ var vm = new Vue({
                     let result = res.json()
                     if(result.code == 200) {
                         this.$message({
-                            message: '批量删除成功',
+                            message: '删除成功',
                             type: 'success'
                         });
+                        vm.deleteCarousels = []
                         vm.getDeviceCarouselQuery(vm.deviceId)
                     } else {
                         this.$message.error(result.message);
@@ -326,7 +327,7 @@ var vm = new Vue({
 
                 },
                 function(res){
-                    this.$message.error('批量删除失败');
+                    this.$message.error('删除失败');
                 }
             )
         },
