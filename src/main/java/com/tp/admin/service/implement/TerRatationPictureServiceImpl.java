@@ -82,11 +82,11 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         List<TerRatationPicture> terRatationPictures = new ArrayList<>();
         if (type == TerRatationPictureTypeEnum.SECOND_AD_POSITION.getValue()){
             terRatationPictures = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
+            if (terRatationPictures.size() > 1){
+                throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+            }
+        }
 
-        }
-        if (terRatationPictures.size() > 1){
-            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
-        }
         if (file == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
