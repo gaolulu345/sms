@@ -236,7 +236,8 @@ var vm = new Vue({
                                 enableBannerQuery.push(item)
                             }
                         })
-                        // enableCarouselQuery.sort(vm.carouselQuerySort)
+                        enableCarouselQuery.sort(vm.carouselQuerySort)
+                        enableBannerQuery.sort(vm.carouselQuerySort)
                         vm.deviceCarouselQuery = enableCarouselQuery
                         vm.deviceBannerQuery = enableBannerQuery
                     }
