@@ -389,7 +389,7 @@ var vm = new Vue({
         // 推送轮播图
         pushDeviceCarousel: function() {
             let queryData = {
-                deviceId: vm.decviceId
+                deviceId: vm.deviceId
             }
             this.$confirm(`是否确定推送轮播图吗?`, '提示', {
                 confirmButtonText: '确定',
