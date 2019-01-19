@@ -90,7 +90,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         if (file == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
-        UploadFileDTO uploadFileDTO = aliyunOssManager.uploadFileToAliyunOss(file ,aliyunOssProperties.getPath());
+        UploadFileDTO uploadFileDTO = aliyunOssManager.uploadFileToAliyunOss(file ,aliyunOssProperties.getOtherPath() + "/device_" + terRatationPictureSearch.getDeviceId());
         if (!uploadFileDTO.isSuccess()){
             throw new BaseException(ExceptionCode.ALI_OSS_UPDATE_ERROR);
         }
@@ -120,15 +120,14 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     }
 
     @Override
-    public ApiResult terRatationPictureShow(HttpServletRequest request) {
+    public ApiResult terRatationPictureSearch(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body, TerRatationPictureSearch.class);
         if (terRatationPictureSearch.getDeviceId() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty deviceId");
         }
-        terRatationPictureSearch.setEnable(true);
         terRatationPictureSearch.build();
-        List<TerRatationPicture> terRatationPictureList = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
+        List<TerRatationPicture> terRatationPictureList = terRatationDao.terRatationPictureSearch(terRatationPictureSearch);
         if (terRatationPictureList == null){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }

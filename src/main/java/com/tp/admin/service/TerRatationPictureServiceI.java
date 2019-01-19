@@ -9,7 +9,7 @@ public interface TerRatationPictureServiceI {
 
     ApiResult uploadAppointTerRatationPicture(HttpServletRequest request, MultipartFile file);
 
-    ApiResult terRatationPictureShow(HttpServletRequest request);
+    ApiResult terRatationPictureSearch(HttpServletRequest request);
 
     ApiResult startAppointTerRatationPicture(HttpServletRequest request);
 
