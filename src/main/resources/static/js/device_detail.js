@@ -12,10 +12,11 @@ var vm = new Vue({
 
         deviceId: null,
         device: null,
-        deviceCarouselQuery: null,
+        deviceCarouselQuery: [],
+        deviceBannerQuery: [],
         backupDevice: null,
         terOptions: null,
-        deleteCarousels: null,
+        deleteCarousels: [],
         uploadCarouselDialogVisible: false,
         uploadCarouselType: 0,
         uploadQrcodeDialogVisible: false,
@@ -215,7 +216,7 @@ var vm = new Vue({
         getDeviceCarouselQuery: function(deviceId) {
             this.$http.post("/api/private/ter/ratation/picture/show", {
                 "deviceId": deviceId,
-	            "pageSize": 10,
+	            "pageSize": 20,
                 "pageIndex": 1
             }).then(function(res){
                 let result = res.json()
@@ -223,15 +224,32 @@ var vm = new Vue({
                     let resData = result.data.result
                     if(resData) {
                         let enableCarouselQuery = []
+                        let enableBannerQuery = []
                         resData.forEach(function(item, index) {
-                            if (!item.deleted) {
+                            if (!item.deleted && item.type == 0) {
                                 enableCarouselQuery.push(item)
                             }
+                            if (!item.deleted && item.type == 1) {
+                                enableBannerQuery.push(item)
+                            }
                         })
+                        // enableCarouselQuery.sort(vm.carouselQuerySort)
                         vm.deviceCarouselQuery = enableCarouselQuery
+                        vm.deviceBannerQuery = enableBannerQuery
                     }
                 }    
             })
+        },
+
+        // 排序轮播图
+        carouselQuerySort: function(a, b) {
+            if(a.enable && b.enable || !a.enable && !b.enable) {
+                return a.id - b.id
+            }else if(a.enable && !b.enable) {
+                return -1
+            }else if(!a.enable && b.enable) {
+                return 1
+            }
         },
 
         // 更改广告支持
@@ -279,15 +297,17 @@ var vm = new Vue({
                     deleteCarousels.push(item.id)
                 })
                 vm.deleteCarousels = deleteCarousels
+            } else {
+                vm.deleteCarousels = []
             }
         },
 
         // 批量删除轮播图
-        deleteDeviceCarousel: function() {
-            let ids = vm.deleteCarousels
+        deleteDeviceCarousel: function(ids, imgType) {
+            console.log('ids: ', ids)
             if (ids && ids.length > 0){
                 let idStr = ids.join(', ')
-                this.$confirm(`此操作将删除ID为[${idStr}]的轮播图, 是否继续?`, '提示', {
+                this.$confirm(`此操作将删除ID为[${idStr}]的${imgType}, 是否继续?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
@@ -304,7 +324,7 @@ var vm = new Vue({
                         });
                     });
             } else {
-                this.$message.error('请选择至少一张轮播图');
+                this.$message.error(`请选择至少一张${imgType}`);
             }
         },
 
@@ -316,9 +336,10 @@ var vm = new Vue({
                     let result = res.json()
                     if(result.code == 200) {
                         this.$message({
-                            message: '批量删除成功',
+                            message: '删除成功',
                             type: 'success'
                         });
+                        vm.deleteCarousels = []
                         vm.getDeviceCarouselQuery(vm.deviceId)
                     } else {
                         this.$message.error(result.message);
@@ -326,7 +347,7 @@ var vm = new Vue({
 
                 },
                 function(res){
-                    this.$message.error('批量删除失败');
+                    this.$message.error('删除失败');
                 }
             )
         },
@@ -363,6 +384,42 @@ var vm = new Vue({
         // 上传轮播图
         submitCarouselUpload: function() {
             this.$refs.upload.submit();
+        },
+
+        // 推送轮播图
+        pushDeviceCarousel: function() {
+            let queryData = {
+                deviceId: vm.deviceId
+            }
+            this.$confirm(`是否确定推送轮播图吗?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                center: true
+                }).then(() => {
+                    this.$http.post("/api/private/wash/ter/property/push/ratation/picture", queryData
+                    ).then(
+                        function(res){
+                            let result = res.json()
+                            if(result.code == 200) {
+                                this.$message({
+                                    message: '推送成功',
+                                    type: 'success'
+                                });
+                            } else {
+                                this.$message.error(result.message);
+                            }
+                        },
+                        function(res){
+                            this.$message.error('推送失败');
+                        }
+                    )
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
         },
 
         // 添加图片格式检查
