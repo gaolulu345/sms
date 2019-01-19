@@ -11,6 +11,7 @@
 
 	<select id="findAllTerPropertyCount" resultType="java.lang.Integer">
 		SELECT COUNT(id) FROM admin_ter_property
+		WHERE deleted = 0
 	</select>
 
 	<select id="findTerStartInfo" parameterType="java.lang.Integer" resultMap="AdminTerPropertyDTOMap">
