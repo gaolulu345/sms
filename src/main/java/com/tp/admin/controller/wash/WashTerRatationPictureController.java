@@ -38,7 +38,7 @@ public class WashTerRatationPictureController {
      */
     @PostMapping(value = "/show")
     public ApiResult terRatationPictureShow(HttpServletRequest request){
-        return terRatationPictureServiceI.terRatationPictureShow(request);
+        return terRatationPictureServiceI.terRatationPictureSearch(request);
     }
 
     /**

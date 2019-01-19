@@ -16,6 +16,8 @@ public interface TerRatationDao {
 
     List<TerRatationPicture> terRatationPictureShow(TerRatationPictureSearch terRatationPictureSearch);
 
+    List<TerRatationPicture> terRatationPictureSearch(TerRatationPictureSearch terRatationPictureSearch);
+
     int startTerRatationPicture(TerRatationPictureSearch terRatationPictureSearch);
 
     int terRatationPictureCount(TerRatationPictureSearch terRatationPictureSearch);

@@ -82,15 +82,15 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         List<TerRatationPicture> terRatationPictures = new ArrayList<>();
         if (type == TerRatationPictureTypeEnum.SECOND_AD_POSITION.getValue()){
             terRatationPictures = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
+            if (terRatationPictures.size() > 1){
+                throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+            }
+        }
 
-        }
-        if (terRatationPictures.size() > 1){
-            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
-        }
         if (file == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
-        UploadFileDTO uploadFileDTO = aliyunOssManager.uploadFileToAliyunOss(file ,aliyunOssProperties.getPath());
+        UploadFileDTO uploadFileDTO = aliyunOssManager.uploadFileToAliyunOss(file ,aliyunOssProperties.getOtherPath() + "/device_" + terRatationPictureSearch.getDeviceId());
         if (!uploadFileDTO.isSuccess()){
             throw new BaseException(ExceptionCode.ALI_OSS_UPDATE_ERROR);
         }
@@ -120,15 +120,14 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
     }
 
     @Override
-    public ApiResult terRatationPictureShow(HttpServletRequest request) {
+    public ApiResult terRatationPictureSearch(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         TerRatationPictureSearch terRatationPictureSearch = new Gson().fromJson(body, TerRatationPictureSearch.class);
         if (terRatationPictureSearch.getDeviceId() == null){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG,"empty deviceId");
         }
-        terRatationPictureSearch.setEnable(true);
         terRatationPictureSearch.build();
-        List<TerRatationPicture> terRatationPictureList = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
+        List<TerRatationPicture> terRatationPictureList = terRatationDao.terRatationPictureSearch(terRatationPictureSearch);
         if (terRatationPictureList == null){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
@@ -217,7 +216,6 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         TerDeviceRequest terDeviceRequest = httpHelper.signTerInfo(adminTerPropertyDTO.getFrpIp(),null,"",adminTerPropertyDTO.getFrpPort());
         terDeviceRequest.setPictures(imageList);
         String jsonBody = new Gson().toJson(terDeviceRequest);
-        System.out.println(jsonBody);
         String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                 .RATATION_PICTURE_PUSH, jsonBody);
         return buildApiResult(result,request,terRatationPictureSearch);

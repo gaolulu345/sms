@@ -16,6 +16,7 @@ public class AliyunOssProperties {
     private String accessKeySecret;
     private String bucketName;
     private String path;
+    private String otherPath;
     private String serverUrl;
 
 }

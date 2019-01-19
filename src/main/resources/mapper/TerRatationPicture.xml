@@ -45,6 +45,22 @@
 		</if>
 	</select>
 
+	<select id="terRatationPictureSearch" parameterType="com.tp.admin.data.search.TerRatationPictureSearch" resultMap="TerRatationPictureMap">
+		SELECT
+		id,
+		device_id,
+		deleted,
+		picture,
+		enable,
+		ter_ratation_picture.type
+		FROM
+		ter_ratation_picture
+		WHERE
+		deleted = 0
+		AND
+		device_id = #{deviceId}
+	</select>
+
 	<select id="terRatationPictureCount" parameterType="com.tp.admin.data.search.TerRatationPictureSearch" resultType="java.lang.Integer">
 		  SELECT COUNT(trp.id) FROM ter_ratation_picture AS trp WHERE trp.deleted=0 AND trp.device_id=#{deviceId}
 	</select>
