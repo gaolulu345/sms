@@ -91,31 +91,32 @@
             </div>
             <el-table :data="device" border style="width: 100%">
                 <el-table-column prop="terId" label="网点ID" min-width="280">
-                        <template slot-scope="scope">
-                            <span v-cloak v-if="backupDevice.terId.edit == false">
-                                <span slot="reference" class="name-wrapper">
-                                    <el-tag size="medium">{{ scope.row.terId }}</el-tag>
-                                </span>
-                                <span class="rightButton">
-                                    <el-button size="mini" type="primary" icon="el-icon-edit" @click="terQuerySearch"></el-button>
-                                </span>
-                            </span>
-                            <span v-else>
-                                <span slot="reference" class="name-wrapper">
-                                    <el-select style="width:50%" size="mini" v-model="backupDevice.terId.value" placeholder="网点ID关联">
-                                        <el-option v-for="item in terOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                    </el-select>
-                                </span>
-                                <span class="rightButton">
-                                    <el-button  type="success" size="mini" @click="bindDeviceByTerid" :disabled="backupDevice.terId.value == scope.row.terId">保存</el-button>
-                                    <el-button size="mini" type="danger" @click="cancel('terId')">取消</el-button>
-                                </span>
-                            </span>
-                        </template>
                 </el-table-column>
                 <el-table-column prop="terModel" label="网点编号" min-width="280">
                 </el-table-column>
                 <el-table-column prop="terRemark" label="网点名称" min-width="280">
+                    <template slot-scope="scope">
+                        <span v-cloak v-if="backupDevice.terRemark.edit == false">
+                            <span slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.terRemark }}</el-tag>
+                            </span>
+                            <span class="rightButton">
+                                <el-button size="mini" type="primary" icon="el-icon-edit" @click="terQuerySearch"></el-button>
+                            </span>
+                        </span>
+                        <span v-else>
+                            <span slot="reference" class="name-wrapper">
+                                <el-select style="width:50%" size="mini" v-model="backupDevice.terId.value" placeholder="网点关联">
+                                    <el-option v-for="item in terOptions" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled">
+                                    </el-option>
+                                </el-select>
+                            </span>
+                            <span class="rightButton">
+                                <el-button type="success" size="mini" @click="bindDeviceByTer" :disabled="backupDevice.terId.value == scope.row.terId">保存</el-button>
+                                <el-button size="mini" type="danger" @click="cancel('terRemark')">取消</el-button>
+                            </span>
+                        </span>
+                    </template>
                 </el-table-column>
             </el-table>
         </el-card>

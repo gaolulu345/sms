@@ -165,7 +165,7 @@ var vm = new Vue({
         },
 
         // 绑定设备到网点
-        bindDeviceByTerid: function() {
+        bindDeviceByTer: function() {
             let updatefield = {}
             updatefield.terId = vm.backupDevice.terId.value
             updatefield.id = vm.deviceId
@@ -198,14 +198,17 @@ var vm = new Vue({
 
         // 获取网点列表
         terQuerySearch: function(queryString, callback) {
-            vm.backupDevice.terId.edit = true
+            vm.backupDevice.terRemark.edit = true
             this.$http.post("/api/private/wash/ter/property/list/info", {
             }).then(function(res){
                 let result = res.json().data.result
                 if(result) {
                     result.forEach(function(item, index){
-                        item['label'] = `${item.code}&${item.title}`
-                        item['value'] = item.id.toString()
+                        if (item.id === vm.device[0].terId) {
+                            item['disabled'] = true
+                        }
+                        item['label'] = item.title
+                        item['value'] = item.id
                     })
                     vm.terOptions = result
                 }
