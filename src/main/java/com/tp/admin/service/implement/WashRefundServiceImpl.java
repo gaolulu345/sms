@@ -78,7 +78,9 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
             String et = refundSearch.getEndTime();
             Date startTime = StringUtil.toSearchDate(st);
             Date endTime = StringUtil.toSearchDate(et);
+            endTime = StringUtil.addOneDay(endTime);
             days = TimeUtil.getDiffDays(startTime,endTime);
+            refundSearch.setEndTime(StringUtil.getDateTime(endTime));
             logger.info("导出数据天数间隔 {}",days);
         }catch (Exception e){
             logger.error("筛选时间请求参数异常{}" , e.getMessage());
@@ -93,7 +95,7 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                 o.build();
             }
         }
-        String fileName = ExcelUtil.createXlxs(Constant.WASH_REFUND, refundSearch.getStartTime(), refundSearch.getEndTime());
+        String fileName = ExcelUtil.createXlxs(Constant.WASH_REFUND, refundSearch.getStartTime(), StringUtil.downOneDay(refundSearch.getEndTime()));
         String path = System.getProperty(Constant.TMP_DIR) + Constant._XLSX_DIR;
         File pathFile = new File(path);
         if (!pathFile.exists()) {

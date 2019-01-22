@@ -115,6 +115,16 @@ public class StringUtil {
     }
 
     /**
+     * 将日期转化为时间
+     * @param date
+     * @return
+     */
+    public static String getDateTime(Date date) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return df.format(date);
+    }
+
+    /**
      * 字符串转整数
      *
      * @param str
@@ -323,6 +333,28 @@ public class StringUtil {
     
     public static Date toSearchDate(String timeString) {
         return toDate(timeString, dateFormater2.get());
+    }
+
+    /**
+     * 日期增加一天
+     * @param date
+     * @return
+     */
+    public static Date addOneDay(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE,1);
+        date = cal.getTime();
+        return date;
+    }
+
+    public static String downOneDay(String time){
+        Date date = toSearchDate(time);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE,-1);
+        date = cal.getTime();
+        return getDateTime(date);
     }
 
     public static Date toDate(String sdate, SimpleDateFormat dateFormater) {
