@@ -204,7 +204,7 @@ public class TerRatationPictureServiceImpl implements TerRatationPictureServiceI
         }
         List<String> imageList = new ArrayList<>();
         List<TerRatationPicture> list = terRatationDao.terRatationPictureShow(terRatationPictureSearch);
-        if (list == null || list.size() == 0){
+        if (null == list || list.size() == 0){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         for (TerRatationPicture terRatationPicture:list) {
