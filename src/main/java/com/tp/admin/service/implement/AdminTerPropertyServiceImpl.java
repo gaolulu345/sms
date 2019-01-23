@@ -321,7 +321,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "设备id为空");
         }
         AdminTerPropertyDTO adminTerPropertyDTO = adminTerPropertyDao.findTerStartInfo(terPropertySearch.getId());
-        if (adminTerPropertyDTO.getTerId().equals(terPropertySearch.getTerId())){
+        if ((terPropertySearch.getTerId()).equals(adminTerPropertyDTO.getTerId())){
             return ApiResult.ok();
         }
         WxMiniSearch wxMiniSearch = new WxMiniSearch();
