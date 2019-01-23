@@ -2,10 +2,14 @@ package com.tp.admin.service.implement;
 
 import com.github.crab2died.ExcelUtils;
 import com.github.crab2died.exceptions.Excel4JException;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
 import com.tp.admin.dao.OrderDao;
+import com.tp.admin.dao.PartnerUserWashCardDao;
 import com.tp.admin.dao.RefundDao;
+import com.tp.admin.data.dto.PartnerUserWashCardDTO;
+import com.tp.admin.data.dto.PartnerUserWashCardDetailDTO;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.data.entity.Order;
 import com.tp.admin.data.entity.Refund;
@@ -52,6 +56,9 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
 
     @Autowired
     TransactionalServiceI transactionalService;
+
+    @Autowired
+    PartnerUserWashCardDao partnerUserWashCardDao;
 
     @Override
     public ApiResult list(HttpServletRequest request, RefundSearch refundSearch) {
@@ -154,14 +161,56 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
         }
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
         int orderType = order.getType();
+        partnerUserWashCardDao.updateCardInvalid(new Timestamp(System.currentTimeMillis()));
+        partnerUserWashCardDao.updateCardInvalidByCnt();
         // 如果是免费的，不退款。
         if (orderType == OrderTypeEnum.FREE.ordinal()) {
             // 免费的什么都不做.直接更新数据库。
         }else if (orderType == OrderTypeEnum.ALIPAY.ordinal()) {
-            miniOrderPayManager.aliPayBack(order);
+            if (order.getCardId() != 0){
+                //使用了洗车卡，查找订单中的洗车卡
+                PartnerUserWashCardDetailDTO partnerUserWashCardDetailDTO = partnerUserWashCardDao.findById(order.getCardId());
+                if (null == partnerUserWashCardDetailDTO){
+                    throw new BaseException(ExceptionCode.NO_THIS_CARD);
+                }
+                //判断是否是无次数限制使用的
+                if (!partnerUserWashCardDetailDTO.getCntLess()){
+                    if (partnerUserWashCardDetailDTO.getInvalid() != true){
+                        //洗车卡未失效，更新洗车卡次数加1
+                        partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                    } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 && (new Timestamp(System.currentTimeMillis()).getTime()) < partnerUserWashCardDetailDTO.getValidTimeMillis()){
+                        //洗车卡失效，查看是否是因为这次洗车而失效的
+                        partnerUserWashCardDao.recoveryCardInvalid(partnerUserWashCardDetailDTO.getId());
+                        partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                    }
+                }
+            } else {
+                miniOrderPayManager.aliPayBack(order);
+            }
+
             //miniOrderPayManager.aliPayBackCredence(order);
         }else if (orderType == OrderTypeEnum.WXPAY.ordinal() || orderType == OrderTypeEnum.TEST.ordinal()) {
-            miniOrderPayManager.wxinPayBack(order);
+            if (order.getCardId() != 0){
+                //使用了洗车卡，查找订单中的洗车卡
+                PartnerUserWashCardDetailDTO partnerUserWashCardDetailDTO = partnerUserWashCardDao.findById(order.getCardId());
+                if (null == partnerUserWashCardDetailDTO){
+                    throw new BaseException(ExceptionCode.NO_THIS_CARD);
+                }
+                //判断是否是无次数限制使用的
+                if (!partnerUserWashCardDetailDTO.getCntLess()){
+                    if (partnerUserWashCardDetailDTO.getInvalid() != true){
+                        //洗车卡未失效，更新洗车卡次数加1
+                        partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                    } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 && (new Timestamp(System.currentTimeMillis()).getTime()) < partnerUserWashCardDetailDTO.getValidTimeMillis()){
+                        //洗车卡失效，查看是否是因为这次洗车而失效的
+                        partnerUserWashCardDao.recoveryCardInvalid(partnerUserWashCardDetailDTO.getId());
+                        partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                    }
+                }
+            } else {
+                miniOrderPayManager.wxinPayBack(order);
+            }
+
             //miniOrderPayManager.wxinPayBackCredence(order);
         }else {
             // 如果订单状态不正确则拒绝退款。
