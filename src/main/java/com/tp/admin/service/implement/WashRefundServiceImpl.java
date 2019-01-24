@@ -218,7 +218,7 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                         miniOrderPayManager.wxinPayBack(order);
                     }
                 } else {
-                    miniOrderPayManager.aliPayBack(order);
+                    miniOrderPayManager.wxinPayBack(order);
                 }
             } else {
                 miniOrderPayManager.wxinPayBack(order);
