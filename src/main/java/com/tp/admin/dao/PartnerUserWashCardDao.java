@@ -1,13 +1,9 @@
 package com.tp.admin.dao;
 
 
-import com.tp.admin.data.dto.PartnerUserWashCardDTO;
 import com.tp.admin.data.dto.PartnerUserWashCardDetailDTO;
-import com.tp.admin.data.entity.PartnerUserWashCard;
 import org.apache.ibatis.annotations.Param;
-
 import java.sql.Timestamp;
-import java.util.List;
 
 public interface PartnerUserWashCardDao {
 
