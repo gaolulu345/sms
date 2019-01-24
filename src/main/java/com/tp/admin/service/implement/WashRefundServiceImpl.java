@@ -187,7 +187,10 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                         transactionalService.recoveryWashCard(partnerUserWashCardDetailDTO);
                         miniOrderPayManager.aliPayBack(order);
                     }
+                } else {
+                    miniOrderPayManager.aliPayBack(order);
                 }
+
             } else {
                 miniOrderPayManager.aliPayBack(order);
             }
@@ -214,6 +217,8 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                         transactionalService.recoveryWashCard(partnerUserWashCardDetailDTO);
                         miniOrderPayManager.wxinPayBack(order);
                     }
+                } else {
+                    miniOrderPayManager.aliPayBack(order);
                 }
             } else {
                 miniOrderPayManager.wxinPayBack(order);
