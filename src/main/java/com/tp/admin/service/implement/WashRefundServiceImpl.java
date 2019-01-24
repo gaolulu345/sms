@@ -178,10 +178,11 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                     if (partnerUserWashCardDetailDTO.getInvalid() != true){
                         //洗车卡未失效，更新洗车卡次数加1
                         partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                        miniOrderPayManager.wxinPayBack(order);
                     } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 && (new Timestamp(System.currentTimeMillis()).getTime()) < partnerUserWashCardDetailDTO.getValidTimeMillis()){
                         //洗车卡失效，查看是否是因为这次洗车而失效的
-                        partnerUserWashCardDao.recoveryCardInvalid(partnerUserWashCardDetailDTO.getId());
-                        partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                        transactionalService.recoveryWashCard(partnerUserWashCardDetailDTO);
+                        miniOrderPayManager.wxinPayBack(order);
                     }
                 }
             } else {
@@ -201,10 +202,11 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                     if (partnerUserWashCardDetailDTO.getInvalid() != true){
                         //洗车卡未失效，更新洗车卡次数加1
                         partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                        miniOrderPayManager.wxinPayBack(order);
                     } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 && (new Timestamp(System.currentTimeMillis()).getTime()) < partnerUserWashCardDetailDTO.getValidTimeMillis()){
                         //洗车卡失效，查看是否是因为这次洗车而失效的
-                        partnerUserWashCardDao.recoveryCardInvalid(partnerUserWashCardDetailDTO.getId());
-                        partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                        transactionalService.recoveryWashCard(partnerUserWashCardDetailDTO);
+                        miniOrderPayManager.wxinPayBack(order);
                     }
                 }
             } else {

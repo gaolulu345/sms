@@ -2,6 +2,7 @@ package com.tp.admin.manage.impl;
 
 import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.AdminAccountDTO;
+import com.tp.admin.data.dto.PartnerUserWashCardDetailDTO;
 import com.tp.admin.data.entity.*;
 import com.tp.admin.enums.OrderStatusEnum;
 import com.tp.admin.exception.BaseException;
@@ -34,6 +35,9 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
 
     @Autowired
     OrderDao orderDao;
+
+    @Autowired
+    PartnerUserWashCardDao partnerUserWashCardDao;
 
 
     @Override
@@ -131,6 +135,28 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
                 throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
             }
         }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+    }
+
+
+    @Override
+    @Transactional
+    public void recoveryWashCard(PartnerUserWashCardDetailDTO partnerUserWashCardDetailDTO) {
+        if (null == partnerUserWashCardDetailDTO) {
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING);
+        }
+        try {
+            int res = partnerUserWashCardDao.recoveryCardInvalid(partnerUserWashCardDetailDTO.getId());
+            if (res == 0) {
+                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+            }
+            res = partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+            if (res == 0) {
+                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+            }
+        }catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }

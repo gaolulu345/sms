@@ -1,5 +1,6 @@
 package com.tp.admin.manage;
 
+import com.tp.admin.data.dto.PartnerUserWashCardDetailDTO;
 import com.tp.admin.data.entity.*;
 
 import java.util.List;
@@ -34,5 +35,12 @@ public interface TransactionalServiceI {
      * @param order  订单信息
      */
     void payBack(Refund refund , Order order);
+
+    /**
+     * 回复洗车卡的使用
+     * 次数添加1次
+     * @param partnerUserWashCardDetailDTO
+     */
+    void recoveryWashCard(PartnerUserWashCardDetailDTO partnerUserWashCardDetailDTO);
 
 }
