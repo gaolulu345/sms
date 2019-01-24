@@ -152,6 +152,8 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
         if (null == refund) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
+        refund.build();
+        long refundApplyTimeStamp =  refund.getCreateTimeMillis();
         if (refund.getStatus() != RefundStatusEnum.APPROVED.getValue()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
@@ -173,13 +175,14 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                 if (null == partnerUserWashCardDetailDTO){
                     throw new BaseException(ExceptionCode.NO_THIS_CARD);
                 }
+                partnerUserWashCardDetailDTO.build();
                 //判断是否是无次数限制使用的
                 if (!partnerUserWashCardDetailDTO.getCntLess()){
                     if (partnerUserWashCardDetailDTO.getInvalid() != true){
                         //洗车卡未失效，更新洗车卡次数加1
                         partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
                         miniOrderPayManager.wxinPayBack(order);
-                    } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 && (new Timestamp(System.currentTimeMillis()).getTime()) < partnerUserWashCardDetailDTO.getValidTimeMillis()){
+                    } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 && refundApplyTimeStamp < partnerUserWashCardDetailDTO.getValidTimeMillis()){
                         //洗车卡失效，查看是否是因为这次洗车而失效的
                         transactionalService.recoveryWashCard(partnerUserWashCardDetailDTO);
                         miniOrderPayManager.wxinPayBack(order);
@@ -197,13 +200,16 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                 if (null == partnerUserWashCardDetailDTO){
                     throw new BaseException(ExceptionCode.NO_THIS_CARD);
                 }
+                partnerUserWashCardDetailDTO.build();
                 //判断是否是无次数限制使用的
+
                 if (!partnerUserWashCardDetailDTO.getCntLess()){
+
                     if (partnerUserWashCardDetailDTO.getInvalid() != true){
                         //洗车卡未失效，更新洗车卡次数加1
                         partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
                         miniOrderPayManager.wxinPayBack(order);
-                    } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 && ((new Timestamp(System.currentTimeMillis()).getTime()) < partnerUserWashCardDetailDTO.getValidTimeMillis())){
+                    } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 &&  refundApplyTimeStamp < partnerUserWashCardDetailDTO.getValidTimeMillis()){
                         //洗车卡失效，查看是否是因为这次洗车而失效的
                         transactionalService.recoveryWashCard(partnerUserWashCardDetailDTO);
                         miniOrderPayManager.wxinPayBack(order);
@@ -224,6 +230,5 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
         transactionalService.payBack(refund,order);
         return ApiResult.ok();
     }
-
 
 }

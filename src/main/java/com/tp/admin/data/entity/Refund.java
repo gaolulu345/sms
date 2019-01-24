@@ -42,6 +42,7 @@ public class Refund {
     String reasonDesc; // 原因描述
     @ExcelField(title = "退款进度", order = 5)
     String statusDesc; // 进度描述
+    long createTimeMillis;
 
     // 退款人Id
     int userId;
@@ -49,6 +50,9 @@ public class Refund {
     public void build() {
         this.reasonDesc = RefundTypeEnum.getByValue(this.reason).getDesc();
         this.statusDesc = RefundStatusEnum.getByValue(this.status).getDesc();
+        if (null != createTime) {
+            createTimeMillis = createTime.getTime();
+        }
     }
 
 }
