@@ -2,35 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tp.admin.dao.PartnerUserWashCardDao">
 
-    <insert id="insert" parameterType="com.tp.entity.PartnerUserWashCard" keyProperty="id" keyColumn="id"
-            useGeneratedKeys="true">
-        INSERT INTO `partner_user_wash_card`(
-          `user_id`,
-          `cntless`,
-          `cnt`,
-          `type`,
-          `final_price`,
-          `discount`,
-          `invalid`,
-          `partner_id`,
-          `partner_card_id`,
-          `create_time`,
-          `valid_time`
-        )VALUES(
-            #{userId},
-            #{cntLess},
-            #{cnt},
-            #{type},
-            #{finalPrice},
-            #{discount},
-            #{invalid},
-            #{partnerId},
-            #{partnerCardId},
-            #{createTime},
-            #{validTime}
-        )
-    </insert>
-
     <update id="updateCardInvalid">
       UPDATE `partner_user_wash_card`
       SET invalid = 1
@@ -75,106 +46,6 @@
           cntless = 0
     </update>
 
-    <select id="listPartnerUserWashCardDTOByUserId" resultMap="PartnerUserWashCardDetailDTOMap">
-      SELECT
-      user_wash_card.* ,
-      wash_card.name ,
-      wash_card_logo.id AS logo_id ,
-      wash_card_logo.logo ,
-      wash_card_logo.font_color ,
-      p.title AS create_partner_name
-      FROM
-      `partner_user_wash_card` AS user_wash_card
-      INNER JOIN `partner_wash_card` AS wash_card ON wash_card.id = partner_card_id
-      INNER JOIN `partner_wash_card_logo` AS wash_card_logo ON wash_card_logo.id = wash_card.logo_id
-      INNER JOIN `partner` AS p ON p.id = user_wash_card.partner_id
-      WHERE
-      user_wash_card.user_id = #{userId}
-      AND
-      user_wash_card.invalid = 0
-    </select>
-
-    <select id="cntPartnerUserWashCardDTOByUserId" resultType="java.lang.Integer">
-      SELECT
-      COUNT(user_wash_card.id)
-      FROM
-      `partner_user_wash_card` AS user_wash_card
-      INNER JOIN `partner` AS p ON p.id = user_wash_card.partner_id
-      WHERE
-      user_wash_card.user_id = #{userId}
-      AND
-      user_wash_card.create_time = 0
-    </select>
-
-    <select id="findPartnerUserWashCardDTOByUserCardId" resultMap="PartnerUserWashCardDetailDTOMap">
-      SELECT
-          user_wash_card.* ,
-          wash_card.name ,
-          wash_card_logo.id AS logo_id ,
-          wash_card_logo.logo ,
-          wash_card_logo.font_color ,
-          p.title AS create_partner_name
-      FROM
-          `partner_user_wash_card` AS user_wash_card
-          INNER JOIN `partner_wash_card` AS wash_card ON wash_card.id = partner_card_id
-          INNER JOIN `partner_wash_card_logo` AS wash_card_logo ON wash_card_logo.id = wash_card.logo_id
-          INNER JOIN `partner` AS p ON p.id = user_wash_card.partner_id
-      WHERE
-        user_wash_card.id = #{id}
-      AND
-        user_wash_card.invalid = 0
-    </select>
-
-    <select id="listPartnerUserWashCardDTOByUserIdAndTerId" resultMap="PartnerUserWashCardDetailDTOMap">
-      SELECT
-          user_wash_card.* ,
-          wash_card.name ,
-          wash_card_logo.id AS logo_id ,
-          wash_card_logo.logo ,
-          wash_card_logo.font_color ,
-          p.title AS create_partner_name
-      FROM
-          `partner_user_wash_card` AS user_wash_card
-          INNER JOIN `partner_wash_card` AS wash_card ON wash_card.id = partner_card_id
-          INNER JOIN `partner_wash_card_logo` AS wash_card_logo ON wash_card_logo.id = wash_card.logo_id
-          INNER JOIN `partner_wash_card_pk_ter` AS wash_card_pk_ter ON wash_card_pk_ter.wash_card_id = wash_card.id
-          INNER JOIN `partner` AS p ON p.id = user_wash_card.partner_id
-      WHERE
-          user_wash_card.user_id = #{userId}
-          AND
-          wash_card_pk_ter.ter_id = #{terId}
-          AND
-          wash_card_pk_ter.enable = 1
-          AND
-          wash_card_pk_ter.deleted = 0
-          AND
-          user_wash_card.invalid = 0
-    </select>
-
-    <!--<select id="findById" resultMap="PartnerUserWashCardDetailDTOMap">
-      SELECT
-          user_wash_card.* ,
-          wash_card.name ,
-          wash_card_logo.id AS logo_id ,
-          wash_card_logo.logo ,
-          wash_card_logo.font_color ,
-          p.title AS create_partner_name
-      FROM
-          `partner_user_wash_card` AS user_wash_card
-          INNER JOIN `partner_wash_card` AS wash_card ON wash_card.id = user_wash_card.partner_card_id
-          INNER JOIN `partner_wash_card_logo` AS wash_card_logo ON wash_card_logo.id = wash_card.logo_id
-          INNER JOIN `partner_wash_card_pk_ter` AS wash_card_pk_ter ON wash_card_pk_ter.wash_card_id = wash_card.id
-          INNER JOIN `partner` AS p ON p.id = user_wash_card.partner_id
-      WHERE
-          user_wash_card.id = #{id}
-          AND
-          wash_card_pk_ter.enable = 1
-          AND
-          wash_card_pk_ter.deleted = 0
-          AND
-          user_wash_card.invalid = 0
-          GROUP BY user_wash_card.id
-    </select>-->
     <select id="findById" resultMap="PartnerUserWashCardDetailDTOMap">
       SELECT
           user_wash_card.* ,
@@ -197,29 +68,6 @@
           wash_card_pk_ter.deleted = 0
           GROUP BY user_wash_card.id
     </select>
-
-    <select id="findPartnerUserWashCardDTOByCardIdAndUserId" resultMap="PartnerUserWashCardDetailDTOMap">
-      SELECT
-          user_wash_card.* ,
-          wash_card.name ,
-          wash_card_logo.id AS logo_id ,
-          wash_card_logo.logo ,
-          wash_card_logo.font_color ,
-          p.title AS create_partner_name
-      FROM
-          `partner_user_wash_card` AS user_wash_card
-          INNER JOIN `partner_wash_card` AS wash_card ON wash_card.id = user_wash_card.partner_card_id
-          INNER JOIN `partner_wash_card_logo` AS wash_card_logo ON wash_card_logo.id = wash_card.logo_id
-          INNER JOIN `partner` AS p ON p.id = user_wash_card.partner_id
-      WHERE
-          user_wash_card.partner_card_id = #{id}
-          AND
-          user_wash_card.user_id = #{userId}
-          AND
-          user_wash_card.invalid = 0
-          GROUP BY user_wash_card.id
-    </select>
-
 
     <resultMap id="PartnerUserWashCardDetailDTOMap" type="com.tp.admin.data.dto.PartnerUserWashCardDetailDTO">
         <id column="id" property="id" jdbcType="INTEGER"/>
