@@ -180,12 +180,12 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                 if (!partnerUserWashCardDetailDTO.getCntLess()){
                     if (partnerUserWashCardDetailDTO.getInvalid() != true){
                         //洗车卡未失效，更新洗车卡次数加1
-                        partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
                         miniOrderPayManager.aliPayBack(order);
+                        partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
                     } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 && refundApplyTimeStamp < partnerUserWashCardDetailDTO.getValidTimeMillis()){
                         //洗车卡失效，查看是否是因为这次洗车而失效的
-                        transactionalService.recoveryWashCard(partnerUserWashCardDetailDTO);
                         miniOrderPayManager.aliPayBack(order);
+                        transactionalService.recoveryWashCard(partnerUserWashCardDetailDTO);
                     }
                 } else {
                     miniOrderPayManager.aliPayBack(order);
@@ -210,12 +210,12 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
 
                     if (partnerUserWashCardDetailDTO.getInvalid() != true){
                         //洗车卡未失效，更新洗车卡次数加1
+                        miniOrderPayManager.wxinPayBack(order);
                         partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
-                        miniOrderPayManager.wxinPayBack(order);
                     } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 &&  refundApplyTimeStamp < partnerUserWashCardDetailDTO.getValidTimeMillis()){
-                        //洗车卡失效，查看是否是因为这次洗车而失效的
-                        transactionalService.recoveryWashCard(partnerUserWashCardDetailDTO);
+                        //洗车卡失效，查看是否是因为这次洗车而失效的，必须先执行退款，退款成功次数才能恢复
                         miniOrderPayManager.wxinPayBack(order);
+                        transactionalService.recoveryWashCard(partnerUserWashCardDetailDTO);
                     }
                 } else {
                     miniOrderPayManager.wxinPayBack(order);
