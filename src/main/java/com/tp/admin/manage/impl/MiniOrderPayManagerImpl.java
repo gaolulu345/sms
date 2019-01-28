@@ -48,7 +48,7 @@ public class MiniOrderPayManagerImpl implements MiniOrderPayManagerI {
         String privateKey = MiniConstant.ALiMiniAppPrivateKey;
         String praviteKey = MiniConstant.ALiMiniAppPublicKey;
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("out_trade_no", order.getAlipayStr());
+        jsonObject.put("trade_no", order.getAlipayStr());
         String refund_amount =BigDecimal.valueOf(Long.valueOf(order.getAmount()))
                 .divide(new BigDecimal(100.00)).toString();
         jsonObject.put("refund_amount",refund_amount );
