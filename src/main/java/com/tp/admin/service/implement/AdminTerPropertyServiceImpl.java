@@ -327,7 +327,8 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         WxMiniSearch wxMiniSearch = new WxMiniSearch();
         wxMiniSearch.setTerId(terPropertySearch.getTerId());
         List<TerInfoDTO> list = terDao.terInfoSearch(wxMiniSearch);
-        TerInfoDTO terInfoDTO = null;
+        //修改紧急bug
+        TerInfoDTO terInfoDTO = new TerInfoDTO();
         if (null != list && !list.isEmpty()){
             terInfoDTO = list.get(0);
         }

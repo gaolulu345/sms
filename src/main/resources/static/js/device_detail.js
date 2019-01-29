@@ -181,12 +181,12 @@ var vm = new Vue({
                         vm.getDeviceDetail(vm.deviceId)
                     } else {
                         this.$message.error(result.message);
-                        vm.backupDevice.terId.edit = falsefalse
+                        vm.backupDevice.terId.edit = false
                     }
                 },
                 function(res){
                     this.$message.error('保存失败');
-                    vm.backupDevice.terId.edit = falsefalse
+                    vm.backupDevice.terId.edit = false
                 }
             )
         },
@@ -277,7 +277,7 @@ var vm = new Vue({
                         vm.getDeviceDetail(vm.deviceId)
                     } else {
                         this.$message.error(result.message);
-                        vm.backupDevice[paramKey].edit = falsefalse
+                        vm.backupDevice[paramKey].edit = false
                     }
 
                 },
