@@ -181,7 +181,10 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                     if (partnerUserWashCardDetailDTO.getInvalid() != true){
                         //洗车卡未失效，更新洗车卡次数加1
                         miniOrderPayManager.aliPayBack(order);
-                        partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                        int res = partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                        if (res == 0) {
+                            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+                        }
                     } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 && refundApplyTimeStamp < partnerUserWashCardDetailDTO.getValidTimeMillis()){
                         //洗车卡失效，查看是否是因为这次洗车而失效的
                         miniOrderPayManager.aliPayBack(order);
@@ -211,7 +214,10 @@ public class WashRefundServiceImpl implements WashRefundServiceI {
                     if (partnerUserWashCardDetailDTO.getInvalid() != true){
                         //洗车卡未失效，更新洗车卡次数加1
                         miniOrderPayManager.wxinPayBack(order);
-                        partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                        int res = partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
+                        if (res == 0) {
+                            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+                        }
                     } else if (partnerUserWashCardDetailDTO.getInvalid() == true && partnerUserWashCardDetailDTO.getCnt() == 0 &&  refundApplyTimeStamp < partnerUserWashCardDetailDTO.getValidTimeMillis()){
                         //洗车卡失效，查看是否是因为这次洗车而失效的，必须先执行退款，退款成功次数才能恢复
                         miniOrderPayManager.wxinPayBack(order);
