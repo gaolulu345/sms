@@ -12,6 +12,8 @@ public class TerInfoDTO {
 
     private int id;
     private String statusDesc;
+    //若该网点为故障时，将具体的故障信息保存自该变量
+    private String faultDesc;
     private int status;
     private String title;
     private String code;

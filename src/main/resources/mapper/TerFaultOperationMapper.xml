@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tp.admin.dao.TerFaultOperationDao">
+
+	<insert id="insert" parameterType="com.tp.admin.data.entity.TerFaultInfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ter_fault_info (
+			`ter_id`,
+			`fault_type`,
+			`fault_describe`,
+			`create_time`,
+			`info`,
+			`fault_describe_code`,
+			`state`
+		) VALUES (
+			#{terId},
+			#{faultType},
+			#{faultDescribe},
+			#{createTime},
+			#{info},
+			#{faultDescribeCode},
+			#{state}
+		)
+	</insert>
+
+	<select id="selectLastByCode" resultMap="terFaultInfoMap">
+		SELECT ter_fault_info.*,ter_info.title,ter.id AS ter_id
+		FROM ter_fault_info
+		INNER JOIN ter
+		ON ter.id=ter_fault_info.ter_id
+		INNER JOIN ter_info
+		ON ter_info.ter_id=ter.id
+		WHERE
+		<if test="code != null">
+			ter.`code`=#{code}
+		</if>
+		<if test="startTime != null and endTime != null">
+			AND ter_fault_info.create_time BETWEEN #{startTime} AND #{endTime}
+		</if>
+		ORDER BY create_time DESC
+		LIMIT 1
+	</select>
+
+
+
+    <resultMap id="terFaultInfoMap" type="com.tp.admin.data.entity.TerFaultInfo" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="ter_id" property="terId" jdbcType="INTEGER" />
+		<result column="title" property="terTitle" jdbcType="VARCHAR"/>
+	    <result column="fault_type" property="faultType" jdbcType="VARCHAR"/>
+		<result column="fault_describe" property="faultDescribe" jdbcType="VARCHAR"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="info" property="info" jdbcType="VARCHAR"/>
+		<result column="fault_describe_code" property="faultDescribeCode" jdbcType="VARCHAR"/>
+		<result column="state" property="state" jdbcType="INTEGER"/>
+  	</resultMap>
+</mapper>

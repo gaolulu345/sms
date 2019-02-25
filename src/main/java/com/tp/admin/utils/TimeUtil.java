@@ -176,4 +176,16 @@ public class TimeUtil {
 
     }
 
+    /**
+     * 获取当前系统时间的前几秒之前的数据
+     * @return
+     */
+    public static String getFrontSeconds(int seconds) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, -seconds);
+        Date date1 = calendar.getTime();
+        String beforeSecond = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date1);
+        return beforeSecond;
+    }
+
 }
