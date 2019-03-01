@@ -70,7 +70,7 @@ public class WashSiteServiceImpl implements WashSiteServiceI {
                 String startTime = TimeUtil.getFrontSeconds(Constant.FAULT_INTERRUPT);
                 String endTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
                 TerFaultInfo terFaultInfo = terFaultOperationDao.selectLastByCode(dto.getCode(), startTime, endTime);
-                if (terFaultInfo != null) {
+                if (null != terFaultInfo) {
                     dto.setFaultDesc(terFaultInfo.getFaultDescribe());
                 }else {
                     dto.setFaultDesc(dto.getStatusDesc());
