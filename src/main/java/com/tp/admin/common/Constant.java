@@ -24,7 +24,7 @@ public interface Constant {
 
     String PAGES_INDEX = "/pages/index";
 
-    Integer FAULT_INTERRUPT = 60 * 3;
+    Integer FAULT_INTERRUPT = 60 * 60;
 
     interface RemoteTer {
         String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDOJTv3KQPDER0xcMA08ZAqapcWf+m4vn4zidpVuAnkIek2MqdEqpGaP6eXqfjNWjEtCczvRNNjgcxBvlepvRZHOhE9itJI3kr6LeD+BNRmHUnF8rzj6JBHGzPeRq9yvoEgQ8b+7HP19cYSYEeZF3tX+tMKMmMp0yJB9DaDfI87EQIDAQAB";

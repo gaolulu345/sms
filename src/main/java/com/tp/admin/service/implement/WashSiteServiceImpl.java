@@ -73,6 +73,7 @@ public class WashSiteServiceImpl implements WashSiteServiceI {
                 if (terFaultInfo != null) {
                     dto.setFaultDesc(terFaultInfo.getFaultDescribe());
                 }else {
+                    dto.setFaultDesc(dto.getStatusDesc());
                     logger.error("故障信息还未写入到数据库中，查询失败！");
                 }
             }
