@@ -25,6 +25,8 @@ public class AdminMaintionEmployee {
     private Timestamp modifyTime;
     private String formId;
     private boolean enable;
+    //该维保人员是否允许接受故障短信通知
+    private boolean enableSm;
     private boolean deleted;
     private Timestamp lastLoginTime;
 

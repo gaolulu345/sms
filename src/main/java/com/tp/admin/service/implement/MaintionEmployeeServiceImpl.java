@@ -119,6 +119,27 @@ public class MaintionEmployeeServiceImpl implements MaintionEmployeeServiceI {
         return ApiResult.ok();
     }
 
+    @Override
+    public ApiResult updateEnableSm(HttpServletRequest request, MaintionEmployeeSearch maintionEmployeeSearch) {
+        if (null == maintionEmployeeSearch.getId() || null == maintionEmployeeSearch.getEnableSm()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        AdminMaintionEmployee adminMaintionEmployee = adminMaintionEmployeeDao.findById(maintionEmployeeSearch.getId());
+        if (null == adminMaintionEmployee) {
+            throw new BaseException(ExceptionCode.NO_THIS_USER);
+        }
+
+        //不管维保人员是否被删除或者禁用，都可以修改启用故障短信发送的功能
+        int ret = adminMaintionEmployeeDao.updateEnableSm(maintionEmployeeSearch);
+        if (ret == 0) {
+            buildEmployeeOperateLog(request, maintionEmployeeSearch.getId() + "", AdminEmployeeOperatingLogTypeEnum.ENABLESM, adminMaintionEmployee.getName(), false, "数据库操作失败");
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        buildEmployeeOperateLog(request, maintionEmployeeSearch.getId() + "", AdminEmployeeOperatingLogTypeEnum.ENABLESM, adminMaintionEmployee.getName(), true, "");
+
+        return ApiResult.ok();
+    }
+
     public final String findOperateEmployeeUsername(MaintionEmployeeSearch maintionEmployeeSearch) {
         if (null == maintionEmployeeSearch.getIds() || maintionEmployeeSearch.getIds().length == 0 || null == maintionEmployeeSearch.getDeleted()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);

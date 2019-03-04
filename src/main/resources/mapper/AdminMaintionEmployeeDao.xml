@@ -84,6 +84,15 @@
         id = #{id}
     </update>
 
+    <update id="updateEnableSm" parameterType="com.tp.admin.data.search.MaintionEmployeeSearch">
+        UPDATE
+        admin_maintion_employee
+        SET
+        enable_sm = #{enableSm}
+        WHERE
+        id = #{id}
+    </update>
+
     <update id="updateMaintionLoginTime" parameterType="com.tp.admin.data.entity.AdminMaintionEmployee">
         UPDATE admin_maintion_employee
 		SET last_login_time=#{lastLoginTime}
@@ -111,6 +120,7 @@
         <result column="form_id" property="formId" jdbcType="VARCHAR"/>
         <result column="deleted" property="deleted" jdbcType="BIT" />
         <result column="enable" property="enable" jdbcType="BIT" />
+        <result column="enable_sm" property="enableSm" jdbcType="BIT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
         <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />

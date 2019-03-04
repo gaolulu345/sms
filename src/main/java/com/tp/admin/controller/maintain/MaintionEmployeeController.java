@@ -38,4 +38,9 @@ public class MaintionEmployeeController {
         return maintionEmployeeService.updateEnable(request, maintionEmployeeSearch);
     }
 
+    @PostMapping(value = "/update/enable/sm")
+    public ApiResult updateEnableSm(HttpServletRequest request, @RequestBody MaintionEmployeeSearch maintionEmployeeSearch) {
+        return maintionEmployeeService.updateEnableSm(request, maintionEmployeeSearch);
+    }
+
 }

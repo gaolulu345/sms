@@ -27,6 +27,13 @@ public interface AdminMaintionEmployeeDao {
 
     int updateEnable(MaintionEmployeeSearch maintionEmployeeSearch);
 
+    /**
+     * 更改维保人员是否可接受故障短信
+     * @param maintionEmployeeSearch
+     * @return
+     */
+    int updateEnableSm(MaintionEmployeeSearch maintionEmployeeSearch);
+
     int updateMaintionLoginTime(AdminMaintionEmployee adminMaintionEmployee);
 
     List<AdminMaintionEmployee> findByIdsBatch(MaintionEmployeeSearch maintionEmployeeSearch);

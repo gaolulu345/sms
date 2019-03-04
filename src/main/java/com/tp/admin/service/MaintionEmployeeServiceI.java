@@ -14,4 +14,7 @@ public interface MaintionEmployeeServiceI {
 
     ApiResult updateEnable(HttpServletRequest request , MaintionEmployeeSearch maintionEmployeeSearch);
 
+    //更新维保人员是否允许接收短信通知
+    ApiResult updateEnableSm(HttpServletRequest request, MaintionEmployeeSearch maintionEmployeeSearch);
+
 }
