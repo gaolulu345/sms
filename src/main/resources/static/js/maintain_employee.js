@@ -99,6 +99,28 @@ var vm = new Vue({
         },
         handleCurrentChange(val) {
             this.getMaintainList(vm.currentPageSize, val)
+        },
+
+        changeSmEnable: function(employee) {
+            vm.$http.post("/api/private/maintion/employee/update/enable/sm", {
+                id: employee.id,
+                enableSm: employee.enableSm
+            }).then(
+                function(res){
+                    let result = res.json();
+                    if(result.code == 200){
+                        vm.$message.success('已更改');
+                        vm.getMaintainList(vm.currentPageSize, vm.currentPageIndex);
+                    }else {
+                        vm.$message.error(result.message)
+                        employee.enableSm = !employee.enableSm
+                    }
+                },
+                function(res) {
+                    vm.$message.error('更改失败')
+                    employee.enableSm = !employee.enableSm
+                }
+            )
         }
   
     }    
