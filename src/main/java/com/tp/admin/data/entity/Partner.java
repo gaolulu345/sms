@@ -26,4 +26,6 @@ public class Partner {
     private String title;
     private boolean deleted;
 
+    private boolean subjection;
+
 }

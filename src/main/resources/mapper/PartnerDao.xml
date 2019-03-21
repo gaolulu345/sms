@@ -113,6 +113,7 @@
         <result column="deleted" property="deleted" jdbcType="BIT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+        <result column="subjection" property="subjection" jdbcType="BIT"/>
     </resultMap>
     <resultMap id="PartnerWashCardMap" type="com.tp.admin.data.dto.PartnerWashCardDTO">
         <id column="id" property="id" jdbcType="INTEGER" />

@@ -101,6 +101,7 @@ public class WxMiniMerchantAuthServiceImpl implements WxMiniAuthServiceI {
         adminMerchantEmployeeInfoDTO.setOpenId(adminMerchantEmployee.getMiniWxId());
         adminMerchantEmployeeInfoDTO.setPartnerTitle(partner.getTitle());
         adminMerchantEmployeeInfoDTO.setUsername(adminMerchantEmployee.getName());
+        adminMerchantEmployeeInfoDTO.setSubjection(partner.isSubjection());
         if (null != level) {
             adminMerchantEmployeeInfoDTO.setLevel(level);
         }

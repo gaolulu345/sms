@@ -14,4 +14,5 @@ public class AdminMerchantEmployeeInfoDTO {
     private String partnerTitle;
     private String username;
     private Integer level;
+    private Boolean subjection;
 }
