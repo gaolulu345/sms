@@ -5,10 +5,18 @@ import com.github.crab2died.exceptions.Excel4JException;
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.common.Constant;
 import com.tp.admin.dao.OrderDao;
+import com.tp.admin.dao.SabisDao;
 import com.tp.admin.dao.TerDao;
 import com.tp.admin.data.dto.OrderDTO;
+import com.tp.admin.data.entity.Order;
+import com.tp.admin.data.entity.Sabis;
+import com.tp.admin.data.entity.TerInfo;
 import com.tp.admin.data.search.OrderSearch;
 import com.tp.admin.data.table.ResultTable;
+import com.tp.admin.enums.OrderChannelEnum;
+import com.tp.admin.enums.OrderStatusEnum;
+import com.tp.admin.enums.OrderTypeEnum;
+import com.tp.admin.enums.WashTerStateEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.service.WashOrderServiceI;
@@ -26,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +48,9 @@ public class WashOrderServiceImpl implements WashOrderServiceI {
 
     @Autowired
     TerDao terDao;
+
+    @Autowired
+    SabisDao sabisDao;
 
     @Override
     public ApiResult list(HttpServletRequest request, OrderSearch orderSearch) {
@@ -116,5 +128,36 @@ public class WashOrderServiceImpl implements WashOrderServiceI {
     @Override
     public ApiResult orderTerSelection(HttpServletRequest request) {
         return ApiResult.ok(terDao.findAllTerIdAndTitle());
+    }
+
+    @Override
+    public Order buildOrder(Integer terId, OrderChannelEnum orderChannelEnum, OrderTypeEnum orderTypeEnum) {
+        Order order = new Order();
+        TerInfo terInfo = terDao.findTerInfoById(terId);
+        if (!terInfo.isOnline()){
+            throw new BaseException(ExceptionCode.TER_OFFLINE);
+        }
+        if (terInfo.getStatus() == WashTerStateEnum.ERROR.getValue() || terInfo.getStatus() == WashTerStateEnum.PAUSED.getValue()) {
+            throw new BaseException(ExceptionCode.INVALID_TER_STATE);
+        }
+        Sabis sabis = sabisDao.findByTerId(terId);
+        if (null == sabis) {
+            throw new BaseException(ExceptionCode.NO_THIS_SABIS_TER);
+        }
+
+        order.setTerId(terInfo.getTerId());
+        order.setSabisId(sabis.getId());
+        //生成的虚拟订单的用户id为太仆白手机的用户Id
+        order.setUserId(127);
+        order.setStatus(OrderStatusEnum.ASK_CHECK.getValue());
+        order.setPayTime(new Timestamp(System.currentTimeMillis()));
+        order.setChannel(orderChannelEnum.getValue());
+        order.setType(orderTypeEnum.getValue());
+        order.setNoticed(true);
+        int res = orderDao.create(order);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        return order;
     }
 }

@@ -3,6 +3,14 @@
 <mapper namespace="com.tp.admin.dao.OrderDao">
 
 
+    <insert id="create" parameterType="com.tp.admin.data.entity.Order"  useGeneratedKeys="true" keyProperty="id">
+	    INSERT INTO
+	    	`order`
+	    (`ter_id`,`user_id`,`amount`,`sabis_id`,`sabis_trim_id`,`ticket_id`,`card_id`,`type`,`channel`,`alipay_str`,`wxpay_str`,`status`,`pay_time`,`noticed`)
+	    VALUES
+	    (#{terId},#{userId},#{amount},#{sabisId},#{sabisTrimId},#{ticketId},#{cardId},#{type},#{channel},#{alipayStr},#{wxpayStr},#{status},#{payTime},#{noticed})
+	</insert>
+
     <select id="cntBySearch" parameterType="com.tp.admin.data.search.OrderSearch" resultType="java.lang.Integer">
         SELECT
         COUNT(o.id)

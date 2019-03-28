@@ -109,6 +109,15 @@
 		t.deleted = 0
 	</select>
 
+	<select id="findTerInfoById"  parameterType="java.lang.Integer"  resultMap="terInfoMap" useCache="false">
+		SELECT DISTINCT * FROM
+			`ter_info`
+		WHERE
+			deleted = 0
+		AND
+			ter_id = #{terId}
+	</select>
+
     <resultMap id="TerInfoDTOMap" type="com.tp.admin.data.dto.TerInfoDTO" >
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<id column="code" property="code" jdbcType="VARCHAR" />
@@ -117,6 +126,24 @@
 		<id column="title" property="title" jdbcType="VARCHAR" />
 		<result column="online" property="online" jdbcType="BIT" />
 		<result column="status" property="status" jdbcType="SMALLINT" />
+	</resultMap>
+
+	<resultMap id="terInfoMap" type="com.tp.admin.data.entity.TerInfo" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="ter_id" property="terId" jdbcType="INTEGER" />
+		<result column="online" property="online" jdbcType="BIT" />
+		<result column="deleted" property="deleted" jdbcType="BIT" />
+		<result column="status" property="status" jdbcType="SMALLINT" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="geo_code" property="geoCode" jdbcType="VARCHAR" />
+		<result column="subjection" property="subjection" jdbcType="BIT"/>
+		<result column="cover" property="cover" jdbcType="VARCHAR" />
+		<result column="guide_cover" property="guideCover" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="offline_desc" property="offlineDesc" jdbcType="VARCHAR" />
+		<result column="enable_ticket" property="enableTicket" jdbcType="BIT" />
+		<result column="enable_card" property="enableCard" jdbcType="BIT" />
 	</resultMap>
 
 </mapper>

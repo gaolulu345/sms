@@ -6,7 +6,9 @@ public enum OrderChannelEnum {
     ANDROID_APP(2,"android_app"),
     WX_MINI_APP(3,"微信小程序"),
     ALI_MINI_APP(4,"支付宝小程序"),
-    WEB(5,"网页");
+    WEB(5,"网页"),
+    MERCHANT(6,"商户小程序"),
+    MAINTAIM(7,"维保小程序");
  
     private int value;
     private String desc;

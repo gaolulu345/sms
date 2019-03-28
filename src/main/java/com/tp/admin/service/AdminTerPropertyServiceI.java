@@ -19,7 +19,7 @@ public interface AdminTerPropertyServiceI {
 
     ApiResult terPropertySearch(HttpServletRequest request);
 
-    ApiResult onlineFreeStart(HttpServletRequest request);
+    //ApiResult onlineFreeStart(HttpServletRequest request);
 
     ApiResult updateTerProperty(HttpServletRequest request,AdminTerPropertyDTO adminTerPropertyDTO);
 

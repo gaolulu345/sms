@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface OrderDao {
 
+    int create(Order order);
+
     int cntBySearch(OrderSearch orderSearch);
 
     List<OrderDTO> listBySearch(OrderSearch orderSearch);
