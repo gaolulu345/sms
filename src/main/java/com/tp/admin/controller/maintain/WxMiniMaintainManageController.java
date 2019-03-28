@@ -123,7 +123,7 @@ public class WxMiniMaintainManageController {
      * @param request
      * @return
      */
-    @PostMapping("/site/online/start")
+    @PostMapping("/site/start")
     public ApiResult onlineFreeStart(HttpServletRequest request){
         return wxMiniMaintainManageService.siteStart(request);
     }

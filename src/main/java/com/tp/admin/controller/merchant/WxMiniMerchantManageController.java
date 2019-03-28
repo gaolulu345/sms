@@ -171,10 +171,9 @@ public class WxMiniMerchantManageController {
      * @param request
      * @return
      */
-    @PostMapping("/site/online/start")
+    @PostMapping("/site/start")
     public ApiResult onlineFreeStart(HttpServletRequest request){
-        return null;
-        //return adminTerPropertyServiceI.onlineFreeStart(request);
+        return wxMiniMerchantManageService.siteStart(request);
     }
 
 }

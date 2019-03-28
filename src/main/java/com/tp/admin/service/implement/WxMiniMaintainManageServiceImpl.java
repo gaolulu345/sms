@@ -185,7 +185,7 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
     public ApiResult siteStart(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         WxMiniSearch wxMiniSearch = new Gson().fromJson(body,WxMiniSearch.class);
-        if (null == wxMiniSearch.getTerId()) {
+        if (null == wxMiniSearch.getTerId() || null == wxMiniSearch.getOpenId()) {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
         }
         AdminMaintionEmployee adminMaintionEmployee = check(wxMiniSearch.getOpenId());
