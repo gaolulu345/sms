@@ -6,7 +6,8 @@ public enum OrderTypeEnum {
     TEST(2, "测试"),
     FREE(3, "免费"),
     MERCHANT(4,"商户一键启动"),
-    MAINTAIM(5,"维保一键启动");
+    MAINTAIM(5,"维保一键启动"),
+    Machine(8,"线下支付");
  
     private int value;
     private String desc;

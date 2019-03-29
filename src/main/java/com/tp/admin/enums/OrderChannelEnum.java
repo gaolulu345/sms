@@ -8,7 +8,9 @@ public enum OrderChannelEnum {
     ALI_MINI_APP(4,"支付宝小程序"),
     WEB(5,"网页"),
     MERCHANT(6,"商户小程序"),
-    MAINTAIM(7,"维保小程序");
+    MAINTAIM(7,"维保小程序"),
+    Machine(8,"机器按钮");
+
  
     private int value;
     private String desc;
