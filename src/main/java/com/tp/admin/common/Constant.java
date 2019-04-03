@@ -36,7 +36,7 @@ public interface Constant {
         String SITE_STOP = "/api/open/site/stop";
         String SITE_ONLINE = "/api/open/site/online";
         String SITE_OFFLINE = "/api/open/site/offline";
-        String SITE_ONLINE_START = "/api/open/site/online/start";
+        String SITE_ONLINE_START = "/api/open/site/start";
         String RATATION_PICTURE_PUSH = "/api/open/device/push/ratation/picture";
     }
 

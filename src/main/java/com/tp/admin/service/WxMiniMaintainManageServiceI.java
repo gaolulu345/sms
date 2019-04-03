@@ -94,4 +94,5 @@ public interface WxMiniMaintainManageServiceI {
     void buildTerOperationLog(TerInfoDTO terInfoDTO, AdminMaintionEmployee adminMaintionEmployee,
                   WashTerOperatingLogTypeEnum washTerOperatingLogTypeEnum , String imgs ,Boolean sucess ,String msg);
 
+    ApiResult siteStart(HttpServletRequest request);
 }

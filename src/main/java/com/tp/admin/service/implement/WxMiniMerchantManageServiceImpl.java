@@ -8,23 +8,19 @@ import com.tp.admin.common.Constant;
 import com.tp.admin.config.AdminProperties;
 import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.*;
-import com.tp.admin.data.entity.AdminMerchantEmployee;
-import com.tp.admin.data.entity.AdminTerOperatingLog;
-import com.tp.admin.data.entity.Partner;
-import com.tp.admin.data.entity.Refund;
+import com.tp.admin.data.entity.*;
 import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.search.OrderSearch;
 import com.tp.admin.data.search.RefundSearch;
 import com.tp.admin.data.search.UserSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.data.wash.WashSiteRequest;
-import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
-import com.tp.admin.enums.OrderStatusEnum;
-import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
+import com.tp.admin.enums.*;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.AliyunOssManagerI;
 import com.tp.admin.manage.HttpHelperI;
+import com.tp.admin.service.WashOrderServiceI;
 import com.tp.admin.service.WashSiteServiceI;
 import com.tp.admin.service.WxMiniMerchantManageServiceI;
 import com.tp.admin.utils.TimeUtil;
@@ -79,6 +75,9 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    WashOrderServiceI washOrderService;
 
     @Override
     public ApiResult moneyTotal(HttpServletRequest request) {
@@ -420,6 +419,26 @@ public class WxMiniMerchantManageServiceImpl implements WxMiniMerchantManageServ
             wxMiniSearch.setTotalCnt(0);
         }
         return ApiResult.ok(wxMiniSearch);
+    }
+
+    @Override
+    public ApiResult siteStart(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body,WxMiniSearch.class);
+        if (null == wxMiniSearch.getTerId() || null == wxMiniSearch.getOpenId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
+        }
+        AdminMerchantEmployee adminMerchantEmployee = check(wxMiniSearch.getOpenId());
+        TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
+
+        //构建虚拟订单
+        Order order = washOrderService.buildOrder(dto.getId(), OrderChannelEnum.MERCHANT, OrderTypeEnum.MERCHANT);
+
+        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), order.getId() + "", "");
+        String jsonBody = new Gson().toJson(washSiteRequest);
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
+                .SITE_ONLINE_START, jsonBody);
+        return buildApiResult(result,dto,adminMerchantEmployee,"".toString(),WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED);
     }
 
     private final ApiResult buildApiResult(String result, TerInfoDTO dto, AdminMerchantEmployee

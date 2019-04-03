@@ -15,11 +15,14 @@ import com.tp.admin.data.parameter.WxMiniSearch;
 import com.tp.admin.data.table.ResultTable;
 import com.tp.admin.data.wash.WashSiteRequest;
 import com.tp.admin.enums.AdminTerOperatingLogSourceEnum;
+import com.tp.admin.enums.OrderChannelEnum;
+import com.tp.admin.enums.OrderTypeEnum;
 import com.tp.admin.enums.WashTerOperatingLogTypeEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.AliyunOssManagerI;
 import com.tp.admin.manage.HttpHelperI;
+import com.tp.admin.service.WashOrderServiceI;
 import com.tp.admin.service.WashSiteServiceI;
 import com.tp.admin.service.WxMiniAuthServiceI;
 import com.tp.admin.service.WxMiniMaintainManageServiceI;
@@ -65,6 +68,9 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
 
     @Autowired
     AliyunOssManagerI aliyunOssManager;
+
+    @Autowired
+    WashOrderServiceI washOrderService;
 
     @Override
     public ApiResult region(HttpServletRequest request) {
@@ -173,6 +179,26 @@ public class WxMiniMaintainManageServiceImpl implements WxMiniMaintainManageServ
         String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
                 .SITE_RESET, jsonBody);
         return buildApiResult(result,dto,adminMaintionEmployee,imgs.toString(),WashTerOperatingLogTypeEnum.TER_RESET);
+    }
+
+    @Override
+    public ApiResult siteStart(HttpServletRequest request) {
+        String body = httpHelper.jsonBody(request);
+        WxMiniSearch wxMiniSearch = new Gson().fromJson(body,WxMiniSearch.class);
+        if (null == wxMiniSearch.getTerId() || null == wxMiniSearch.getOpenId()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "empty terId");
+        }
+        AdminMaintionEmployee adminMaintionEmployee = check(wxMiniSearch.getOpenId());
+        TerInfoDTO dto = washSiteService.terCheck(wxMiniSearch);
+
+        //构建虚拟订单
+        Order order = washOrderService.buildOrder(dto.getId(), OrderChannelEnum.MAINTAIM, OrderTypeEnum.MAINTAIM);
+
+        WashSiteRequest washSiteRequest = httpHelper.signInfo(wxMiniSearch.getTerId(), order.getId() + "", "");
+        String jsonBody = new Gson().toJson(washSiteRequest);
+        String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
+                .SITE_ONLINE_START, jsonBody);
+        return buildApiResult(result,dto,adminMaintionEmployee,"".toString(),WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED);
     }
 
     @Override

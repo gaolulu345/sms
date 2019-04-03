@@ -119,4 +119,11 @@ public interface WxMiniMerchantManageServiceI {
      * @return
      */
     ApiResult merchantWashCardUserInfo(HttpServletRequest request);
+
+    /**
+     * 商家小程序一键启动
+     * @param request
+     * @return
+     */
+    ApiResult siteStart(HttpServletRequest request);
 }

@@ -22,6 +22,9 @@ public enum ExceptionCode {
     USER_DELETE_REGISTERED("2006", "该账号权限已经被禁止使用"),
     ALI_OSS_OPEN_STORAGE_SERVICE_ERROR("9000","当访问对象存储服务 Open Storage Service 失败时抛出该异常类实例，请重新尝试"),
 
+
+    TER_OFFLINE("3004","设备未上线"),
+    INVALID_TER_STATE("3005","网点状态异常"),
     SIGN_FAILURE_FOR_REMOTE_TER("3006","加签失败"),
     SIGN_ERROR_FOR_REMOTE_TER("3007","加签错误"),
     SIGN_ERROR_FOR_REMOTE_OP("3008","操作失败,操作请求失败"),
@@ -35,6 +38,7 @@ public enum ExceptionCode {
     PICTURE_NOT_ENABLE_OR_TYPE_NOT_ACCESS("6002","图片未启用或者上传类型不匹配"),
 
     NO_THIS_CARD("7000","没有该洗车卡"),
+    NO_THIS_SABIS_TER("7001","该网点没有对应的外观清洗"),
 
     ALI_OSS_REMOTE_ERROR("9001","尝试访问阿里云服务时的异常,请重新尝试"),
     ALI_OSS_UPDATE_ERROR("9002","上传文件失败,请重新尝试"),

@@ -4,7 +4,10 @@ public enum OrderTypeEnum {
     ALIPAY(0, "支付宝"),
     WXPAY(1, "微信钱包"),
     TEST(2, "测试"),
-    FREE(3, "免费");
+    FREE(3, "免费"),
+    MERCHANT(4,"商户一键启动"),
+    MAINTAIM(5,"维保一键启动"),
+    MACHINE(6,"线下支付");
  
     private int value;
     private String desc;

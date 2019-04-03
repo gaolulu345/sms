@@ -7,5 +7,6 @@ public class MyTest {
     @Test
     public void test01() {
         System.out.println(TimeUtil.getFrontSeconds(60 * 3));
+        System.out.println(Math.random());
     }
 }

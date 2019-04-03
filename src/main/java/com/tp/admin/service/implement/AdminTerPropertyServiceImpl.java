@@ -127,7 +127,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         return ApiResult.ok(adminTerPropertyDTO);
     }
 
-    @Override
+    /*@Override
     public ApiResult onlineFreeStart(HttpServletRequest request) {
         String body = httpHelper.jsonBody(request);
         TerPropertySearch terPropertySearch = new Gson().fromJson(body, TerPropertySearch.class);
@@ -151,7 +151,7 @@ public class AdminTerPropertyServiceImpl implements AdminTerPropertyServiceI {
         String result = httpHelper.sendPostByJsonData(adminProperties.getWashManageServer() + Constant.RemoteTer
               .SITE_ONLINE_START, jsonBody);
         return buildApiResult(ob,result,terInfoDTO,"",WashTerOperatingLogTypeEnum.ONLINE_FREE_STARTED);
-    }
+    }*/
 
     @Override
     public ApiResult updateTerProperty(HttpServletRequest request,AdminTerPropertyDTO adminTerPropertyDTO) {
