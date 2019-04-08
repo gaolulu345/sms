@@ -45,7 +45,11 @@ public enum ExceptionCode {
     ALI_OSS_FILE_SAVE_ERROR("9003","上传文件保存失败,请重新尝试"),
 
     API_NOT_PERMISSION_ERROR("10000","数据未授权。"),
-    PAGES_NOT_PERMISSION_ERROR("10001","页面未授权。");
+    PAGES_NOT_PERMISSION_ERROR("10001","页面未授权。"),
+
+    MACHINE_HAVE_START("20001","洗车机当前正在处于运行状态");
+
+
 
     private String code;
     private String msg;
