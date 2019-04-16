@@ -1,10 +1,7 @@
 package com.tp.admin.manage.impl;
 
 import com.tp.admin.dao.*;
-import com.tp.admin.data.dto.AdminAccountDTO;
-import com.tp.admin.data.dto.PartnerUserWashCardDetailDTO;
 import com.tp.admin.data.entity.*;
-import com.tp.admin.enums.OrderStatusEnum;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.TransactionalServiceI;
@@ -31,13 +28,8 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
     AdminPkAccountRolesDao adminPkAccountRolesDao;
 
     @Autowired
-    RefundDao refundDao;
+    AdminAccountInfoDao adminAccountInfoDao;
 
-    @Autowired
-    OrderDao orderDao;
-
-    @Autowired
-    PartnerUserWashCardDao partnerUserWashCardDao;
 
 
     @Override
@@ -104,6 +96,12 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
             int res = adminAccountDao.insert(adminAccount);
             if (0 == res) {
                 throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+            } else {
+                adminAccount.setAdminId(res);
+            }
+            res = adminAccountInfoDao.insert(adminAccount);
+            if (0 == res) {
+                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
             }
             AdminPkAccountRoles adminPkAccountRoles = new AdminPkAccountRoles();
             adminPkAccountRoles.setAdminId(adminAccount.getId());
@@ -119,46 +117,4 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
         }
     }
 
-    @Override
-    @Transactional
-    public void payBack(Refund refund, Order order) {
-        if (null == refund || null == order) {
-            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
-        }
-        try {
-            int res = refundDao.update(refund);
-            if (0 == res) {
-                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-            }
-            res = orderDao.updateOrderStatus(order.getId(),OrderStatusEnum.CANCEL.getValue());
-            if (0 == res) {
-                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-            }
-        }catch (Exception e){
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-        }
-    }
-
-
-    @Override
-    @Transactional
-    public void recoveryWashCard(PartnerUserWashCardDetailDTO partnerUserWashCardDetailDTO) {
-        if (null == partnerUserWashCardDetailDTO) {
-            throw new BaseException(ExceptionCode.PARAMETER_MISSING);
-        }
-        try {
-            int res = partnerUserWashCardDao.recoveryCardInvalid(partnerUserWashCardDetailDTO.getId());
-            if (res == 0) {
-                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-            }
-            res = partnerUserWashCardDao.addUpdateCnt(partnerUserWashCardDetailDTO.getId());
-            if (res == 0) {
-                throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-            }
-        }catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
-        }
-    }
 }

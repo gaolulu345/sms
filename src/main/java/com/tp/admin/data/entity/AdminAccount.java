@@ -18,8 +18,10 @@ public class AdminAccount implements UserDetails {
     private int id;
     private String username;
     private String password;
+    private String usercode;
     private String intros;
     private String name;
+    private int adminId;
     private Timestamp createTime;
     private Timestamp modifyTime;
     private boolean enable;
@@ -32,6 +34,7 @@ public class AdminAccount implements UserDetails {
         this.username = adminAccountDTO.getUsername();
         this.name = adminAccountDTO.getName();
         this.intros = adminAccountDTO.getIntros();
+        this.usercode = adminAccountDTO.getUsercode();
     }
 
     @Override

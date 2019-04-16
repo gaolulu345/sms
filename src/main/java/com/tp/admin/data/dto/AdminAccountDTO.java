@@ -28,4 +28,18 @@ public class AdminAccountDTO {
     private boolean deleted;
     @ExcelField(title = "最后登录时间", order = 8)
     private Timestamp lastLoginTime;
+
+    //用户编码
+    private String usercode;
+
+    private int gender;
+
+    private String bornDate;
+
+    private String telephone;
+
+    private String address;
+
+
+
 }

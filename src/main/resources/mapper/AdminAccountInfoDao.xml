@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tp.admin.dao.AdminAccountDao">
+<mapper namespace="com.tp.admin.dao.AdminAccountInfoDao">
 
     <insert id="insert" parameterType="com.tp.admin.data.entity.AdminAccount" useGeneratedKeys="true" keyProperty="id"
             keyColumn="id">
-        INSERT INTO `admin_account` (
-			`user_code`,
-			`username`,
-			`password`
+        INSERT INTO `admin_account_info` (
+			`intros`,
+			`name`,
+			`admin_id`
 		) VALUES (
-			#{usercode},
-			#{username},
-			#{password}
+			#{intros},
+			#{name},
+			#{adminId}
 		)
     </insert>
 
