@@ -13,8 +13,6 @@ public class AdminProperties {
 
     public static final String PREFIX = "admin-setting";
 
-    public static String signKey = Constant.RemoteTer.PUBLIC_KEY;
-
     public static final String PRO_ORDER_PREFIX = "";
 
     public static final String PRE_ORDER_PREFIX = "T_";
