@@ -1,10 +1,7 @@
 package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
-import com.tp.admin.dao.AdminAccountDao;
-import com.tp.admin.dao.AdminAccountLoginLogDao;
-import com.tp.admin.dao.AdminPkAccountRolesDao;
-import com.tp.admin.dao.AdminRolesDao;
+import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.AdminAccountDTO;
 import com.tp.admin.data.dto.ChangePasswordDTO;
 import com.tp.admin.data.entity.AdminAccount;
@@ -45,9 +42,13 @@ public class AdminServiceImpl implements AdminServiceI {
     @Autowired
     TransactionalServiceI transactionalService;
 
+    @Autowired
+    AdminAccountInfoDao adminAccountInfoDao;
+
     @Override
     public ApiResult register(HttpServletRequest request, AdminAccountDTO adminAccountDTO) {
-        if(StringUtil.isEmpty(adminAccountDTO.getName()) ||
+        if(StringUtil.isEmpty(adminAccountDTO.getUsercode()) ||
+        StringUtil.isEmpty(adminAccountDTO.getName()) ||
         StringUtil.isEmpty(adminAccountDTO.getUsername()) ||
         StringUtil.isEmpty(adminAccountDTO.getIntros()) ||
         adminAccountDTO.getRolesId() < 0 ){
@@ -67,6 +68,10 @@ public class AdminServiceImpl implements AdminServiceI {
     public ApiResult update(HttpServletRequest request, AdminAccountDTO adminAccountDTO) {
         if(StringUtil.isEmpty(adminAccountDTO.getName()) ||
                 StringUtil.isEmpty(adminAccountDTO.getIntros()) ||
+                null == adminAccountDTO.getBornDate() ||
+                StringUtil.isEmpty(adminAccountDTO.getTelephone()) ||
+                StringUtil.isEmpty(adminAccountDTO.getAddress()) ||
+                adminAccountDTO.getGender() < 0 ||
                 adminAccountDTO.getRolesId() < 0 ){
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
@@ -82,7 +87,11 @@ public class AdminServiceImpl implements AdminServiceI {
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
-        res = adminAccountDao.update(adminAccount);
+        /*res = adminAccountDao.update(adminAccount);
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+        }*/
+        res = adminAccountInfoDao.update(adminAccount);
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }

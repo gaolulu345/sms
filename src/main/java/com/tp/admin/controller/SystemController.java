@@ -232,7 +232,7 @@ public class SystemController {
     }
 
     /**
-     * 获取账号所有权限
+     * 获取账号所有权限  已用
      * @return
      */
     @PostMapping(value = "/all/permission")

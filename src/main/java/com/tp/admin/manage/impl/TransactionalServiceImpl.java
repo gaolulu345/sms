@@ -97,14 +97,14 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
             if (0 == res) {
                 throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
             } else {
-                adminAccount.setAdminId(res);
+                adminAccount.setAdminId(adminAccount.getId());
             }
             res = adminAccountInfoDao.insert(adminAccount);
             if (0 == res) {
                 throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
             }
             AdminPkAccountRoles adminPkAccountRoles = new AdminPkAccountRoles();
-            adminPkAccountRoles.setAdminId(adminAccount.getId());
+            adminPkAccountRoles.setAdminId(adminAccount.getAdminId());
             adminPkAccountRoles.setRolesId(adminRoles.getId());
             adminPkAccountRoles.setEnable(true);
             res = adminPkAccountRolesDao.insert(adminPkAccountRoles);

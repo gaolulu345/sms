@@ -43,10 +43,7 @@ public class AccountServiceImpl implements AccountServiceI {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Override
-    public AdminAccount findByUsername(String username) {
-        return adminAccountDao.findByUsername(username);
-    }
+
 
     @Override
     public int updateLastLoginTime(int id) {
@@ -58,7 +55,7 @@ public class AccountServiceImpl implements AccountServiceI {
         if (StringUtil.isEmpty(loginDTO.getUsername()) || StringUtil.isEmpty(loginDTO.getPassword())) {
             throw new BaseException(ExceptionCode.PARAMETER_MISSING, "neither name nor password should be empty when partner login");
         }
-        AdminAccount user = findByUsername(loginDTO.getUsername());
+        AdminAccountDTO user = adminAccountDao.findDtoByUsername(loginDTO.getUsername());
         if (user == null) {
             throw new BaseException(ExceptionCode.PARAMETER_MISSING, "no user found math username:" + loginDTO.getUsername());
         }
@@ -90,10 +87,7 @@ public class AccountServiceImpl implements AccountServiceI {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             HttpSession session = request.getSession();
             session.setAttribute(Constant.SECURITY_CONTEXT, SecurityContextHolder.getContext()); // 这个非常重要，否则验证后将无法登陆
-            AdminAccountDTO adminAccountDTO = new AdminAccountDTO();
-            adminAccountDTO.setId(user.getId());
-            adminAccountDTO.setName(user.getName());
-            return ApiResult.ok(adminAccountDTO);
+            return ApiResult.ok(user);
         }
         loginlog(ip,user,false);
         return ApiResult.error(ExceptionCode.INVALID_ACCESS_EXCEPTION);
@@ -116,13 +110,13 @@ public class AccountServiceImpl implements AccountServiceI {
         return ApiResult.ok();
     }
 
-    private void loginlog(String ip , AdminAccount adminAccount , boolean ok){
+    private void loginlog(String ip , AdminAccountDTO adminAccountDTO , boolean ok){
 
         AdminAccountLoginLog adminAccountLoginLog = new AdminAccountLoginLog();
         if (ok) {
-            adminAccountLoginLog.sucess(adminAccount.getUsername(),"登陆成功" , ip);
+            adminAccountLoginLog.sucess(adminAccountDTO.getUsername(),"登陆成功" , ip);
         }else {
-            adminAccountLoginLog.failed(adminAccount.getUsername(),"登陆失败" , ip);
+            adminAccountLoginLog.failed(adminAccountDTO.getUsername(),"登陆失败" , ip);
         }
         int res = adminAccountLoginLogDao.insert(adminAccountLoginLog);
         if (0 == res) {

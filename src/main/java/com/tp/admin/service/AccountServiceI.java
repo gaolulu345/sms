@@ -15,8 +15,6 @@ public interface AccountServiceI {
 
     ApiResult logout(HttpServletRequest request , HttpServletResponse response);
 
-    AdminAccount findByUsername(String username);
-
     int updateLastLoginTime(int id);
 
 }

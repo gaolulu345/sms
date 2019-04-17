@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface AdminAccountDao {
 
+    AdminAccountDTO findDtoByUsername(String username);
+
     AdminAccount findByUsername(String username);
 
     AdminAccount findById(int id);

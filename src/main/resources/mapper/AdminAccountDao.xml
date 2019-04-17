@@ -25,16 +25,24 @@
             <if test="password != null">
                 password = #{password},
             </if>
-            <if test="name != null">
-                name = #{name},
-            </if>
-            <if test="intros != null">
-                intros = #{intros},
-            </if>
         </trim>
         WHERE
         id = #{id}
     </update>
+
+    <select id="findDtoByUsername" resultMap="AdminAccountDTOMap">
+      SELECT DISTINCT admin.id, admin.password, admin.username, admin.user_code, admin_info.name FROM
+		`admin_account` AS admin
+	    INNER JOIN `admin_account_info` AS admin_info
+	    ON admin.id = admin_info.admin_id
+		WHERE
+		username = #{username}
+		AND
+		deleted = 0
+		AND
+		enable = 1
+		LIMIT 0 , 1
+    </select>
 
     <select id="findByUsername" resultMap="AdminAccountMap">
       SELECT DISTINCT * FROM
@@ -64,18 +72,24 @@
     <select id="listBySearch" parameterType="com.tp.admin.data.search.AdminSearch" resultMap="AdminAccountDTOMap">
         SELECT
         aa.*,
+        aai.name,
+        aai.intros,
+        aai.gender,
+        aai.born_date,
+        aai.address,
         ar.id AS roles_id ,
         ar.roles_name
         FROM
         `admin_account` AS aa
-        INNER JOIN `admin_pk_account_roles` AS apar ON aa.id = apar.admin_id
+        LEFT JOIN `admin_account_info` AS aai ON aa.id = aai.admin_id
+        INNER JOIN `admin_pk_account_roles` AS apar ON aai.admin_id = apar.admin_id
         INNER JOIN `admin_roles` AS ar ON ar.id = apar.roles_id
         <where>
             <if test="null != deleted">
                 aa.deleted = #{deleted}
             </if>
         </where>
-        ORDER BY id DESC
+        ORDER BY deleted ASC,id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">
             LIMIT #{offset},#{pageSize}
         </if>
@@ -116,6 +130,7 @@
 
     <resultMap id="AdminAccountMap" type="com.tp.admin.data.entity.AdminAccount">
         <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="user_code" property="usercode" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="password" property="password" jdbcType="VARCHAR" />
         <result column="intros" property="intros" jdbcType="VARCHAR" />
@@ -129,11 +144,17 @@
 
     <resultMap id="AdminAccountDTOMap" type="com.tp.admin.data.dto.AdminAccountDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="user_code" property="usercode" jdbcType="VARCHAR" />
         <result column="roles_id" property="rolesId" jdbcType="VARCHAR" />
         <result column="roles_name" property="rolesName" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
         <result column="intros" property="intros" jdbcType="VARCHAR" />
         <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="INTEGER" />
+        <result column="born_date" property="bornDate" jdbcType="TIMESTAMP" />
+        <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
         <result column="deleted" property="deleted" jdbcType="BIT" />
         <result column="enable" property="enable" jdbcType="BIT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />

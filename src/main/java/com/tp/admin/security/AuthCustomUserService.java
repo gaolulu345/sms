@@ -1,5 +1,6 @@
 package com.tp.admin.security;
 
+import com.tp.admin.dao.AdminAccountDao;
 import com.tp.admin.data.entity.AdminAccount;
 import com.tp.admin.service.AccountServiceI;
 import com.tp.admin.service.SystemServiceI;
@@ -18,7 +19,7 @@ import java.util.Set;
 public class AuthCustomUserService implements UserDetailsService {
 
     @Autowired
-    AccountServiceI accountService;
+    AdminAccountDao adminAccountDao;
 
     @Autowired
     SystemServiceI systemService;
@@ -26,7 +27,7 @@ public class AuthCustomUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String exceptionMsg = "";
-        AdminAccount adminAccount = accountService.findByUsername(username);
+        AdminAccount adminAccount = adminAccountDao.findByUsername(username);
         if (adminAccount == null) {
             exceptionMsg = "no user found math name:" + username;
             throw new UsernameNotFoundException(exceptionMsg);

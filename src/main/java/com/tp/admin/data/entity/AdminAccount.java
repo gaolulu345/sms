@@ -21,6 +21,10 @@ public class AdminAccount implements UserDetails {
     private String usercode;
     private String intros;
     private String name;
+    private int gender;
+    private Timestamp bornDate;
+    private String telephone;
+    private String address;
     private int adminId;
     private Timestamp createTime;
     private Timestamp modifyTime;
@@ -35,6 +39,10 @@ public class AdminAccount implements UserDetails {
         this.name = adminAccountDTO.getName();
         this.intros = adminAccountDTO.getIntros();
         this.usercode = adminAccountDTO.getUsercode();
+        this.gender = adminAccountDTO.getGender();
+        this.bornDate = adminAccountDTO.getBornDate();
+        this.telephone = adminAccountDTO.getTelephone();
+        this.address = adminAccountDTO.getAddress();
     }
 
     @Override
@@ -71,6 +79,8 @@ public class AdminAccount implements UserDetails {
     public boolean isEnabled() {
         return this.enable;
     }
+
+
 
     @Override
     public String toString() {

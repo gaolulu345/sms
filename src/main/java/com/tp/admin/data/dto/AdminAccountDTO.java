@@ -1,6 +1,7 @@
 package com.tp.admin.data.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.crab2died.annotation.ExcelField;
 import lombok.Data;
 
@@ -15,6 +16,10 @@ public class AdminAccountDTO {
     private String rolesName;
     @ExcelField(title = "登录账号", order = 2)
     private String username;
+
+    @JsonIgnore
+    private String password;
+
     @ExcelField(title = "昵称", order = 3)
     private String name;
     @ExcelField(title = "简介", order = 4)
@@ -34,7 +39,7 @@ public class AdminAccountDTO {
 
     private int gender;
 
-    private String bornDate;
+    private Timestamp bornDate;
 
     private String telephone;
 

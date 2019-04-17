@@ -2,9 +2,11 @@ package com.tp.admin.service.implement;
 
 import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.config.AliyunOssProperties;
+import com.tp.admin.dao.AdminAccountInfoDao;
 import com.tp.admin.dao.FileUploadLogDao;
 import com.tp.admin.data.dto.UploadFileDTO;
 import com.tp.admin.data.entity.AdminAccount;
+import com.tp.admin.data.entity.AdminAccountInfo;
 import com.tp.admin.data.entity.FileUploadLog;
 import com.tp.admin.data.search.FileSearch;
 import com.tp.admin.data.table.ResultTable;
@@ -32,6 +34,9 @@ public class FileServiceImplmpl implements FileServiceI {
     @Autowired
     AliyunOssManagerI aliyunOssManager;
 
+    @Autowired
+    AdminAccountInfoDao adminAccountInfoDao;
+
     @Override
     public ApiResult uploadImges(HttpServletRequest request, MultipartFile file) {
         UploadFileDTO uploadFileDTO = aliyunOssManager.uploadFileToAliyunOss(file ,aliyunOssProperties.getPath());
@@ -40,7 +45,11 @@ public class FileServiceImplmpl implements FileServiceI {
         }
         String fileName = uploadFileDTO.getKey();
         AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(request);
-        int res = fileUploadLogDao.insert(new FileUploadLog(adminAccount.getName(),fileName));
+        AdminAccountInfo adminAccountInfo = adminAccountInfoDao.findByAdminId(adminAccount.getId());
+        if (null == adminAccountInfo){
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+        int res = fileUploadLogDao.insert(new FileUploadLog(adminAccountInfo.getName(),fileName));
         if (res == 0) {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
