@@ -1,14 +1,10 @@
 package com.tp.admin.manage.impl;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.tp.admin.common.Constant;
-import com.tp.admin.config.AdminProperties;
 import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.HttpHelperI;
-import com.tp.admin.utils.SecurityUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +15,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.security.interfaces.RSAPublicKey;
-import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class HttpHelperImpl implements HttpHelperI {
