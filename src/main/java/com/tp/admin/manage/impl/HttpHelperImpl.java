@@ -21,9 +21,6 @@ public class HttpHelperImpl implements HttpHelperI {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    AdminProperties adminProperties;
-
     @Override
     public String jsonBody(HttpServletRequest request) {
         String body = null;
