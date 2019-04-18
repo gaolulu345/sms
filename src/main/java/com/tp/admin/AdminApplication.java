@@ -1,5 +1,6 @@
 package com.tp.admin;
 
+import com.tp.admin.security.CrosFilter;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -26,17 +27,34 @@ public class AdminApplication {
 		SpringApplication.run(AdminApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	public FilterRegistrationBean filterRegistrationBean() {
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
 		characterEncodingFilter.setForceEncoding(true);
 		characterEncodingFilter.setEncoding("UTF-8");
 		registrationBean.setFilter(characterEncodingFilter);
+		registrationBean.setOrder(1);
 		return registrationBean;
-	}
+	}*/
 
 	@Bean
+	public CrosFilter creatF(){
+		return new CrosFilter();
+	}
+	@Bean
+	public FilterRegistrationBean registerFilter()
+	{
+		FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
+		filterRegistrationBean.setFilter(creatF());
+		filterRegistrationBean.addUrlPatterns("/*");
+		filterRegistrationBean.setName("crosFilter");
+		return filterRegistrationBean;
+	}
+
+
+
+	/*@Bean
 	public FilterRegistrationBean corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
@@ -48,7 +66,7 @@ public class AdminApplication {
 		FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
 		bean.setOrder(0);
 		return bean;
-	}
+	}*/
 
 	/**
 	 * http重定向到https
