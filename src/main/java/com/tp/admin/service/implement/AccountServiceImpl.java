@@ -65,7 +65,7 @@ public class AccountServiceImpl implements AccountServiceI {
         }
         if (!loginDTO.getPassword().equals(user.getPassword())) {
             loginlog(ip,user,false);
-            throw new BaseException(ExceptionCode.PARAMETER_MISSING, loginDTO.getUsername() + "用户不存在");
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING, loginDTO.getUsername() + "用户，密码错误");
         }
         // TODO 这里需要改进,超级管理员账号可以配置。这样避免吧自己也删除了。
         if (!Constant.SUPER_ADMIN.equals(user.getUsername())) {
