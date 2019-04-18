@@ -40,7 +40,14 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException, AuthenticationException {
-        String url = request.getRequestURI();
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Max-Age", "3628800");
+        System.out.println("我在这里添加了跨域解决问题");
+        chain.doFilter(request,response);
+        /*String url = request.getRequestURI();
         String method = request.getMethod();
         HttpSession session = request.getSession();
         if (session == null) {
@@ -74,7 +81,7 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
                 success(request,response,chain);
             }
             response.sendRedirect(Constant.PAGES_INDEX);
-        }
+        }*/
     }
 
     private void success(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException{
