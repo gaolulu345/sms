@@ -53,11 +53,11 @@ public class AccountServiceImpl implements AccountServiceI {
     @Override
     public ApiResult login(HttpServletRequest request, LoginDTO loginDTO) {
         if (StringUtil.isEmpty(loginDTO.getUsername()) || StringUtil.isEmpty(loginDTO.getPassword())) {
-            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "neither name nor password should be empty when partner login");
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "用户名或者密码不能为空");
         }
         AdminAccountDTO user = adminAccountDao.findDtoByUsername(loginDTO.getUsername());
         if (user == null) {
-            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "no user found math username:" + loginDTO.getUsername());
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING, loginDTO.getUsername() + "用户不存在");
         }
         String ip = loginDTO.getCip();
         if (null == loginDTO.getCip() || StringUtils.isEmpty(loginDTO.getCip())) {
@@ -65,13 +65,12 @@ public class AccountServiceImpl implements AccountServiceI {
         }
         if (!loginDTO.getPassword().equals(user.getPassword())) {
             loginlog(ip,user,false);
-            throw new BaseException(ExceptionCode.PARAMETER_MISSING, "no user found math username:" + loginDTO
-                    .getUsername());
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING, loginDTO.getUsername() + "用户不存在");
         }
         // TODO 这里需要改进,超级管理员账号可以配置。这样避免吧自己也删除了。
         if (!Constant.SUPER_ADMIN.equals(user.getUsername())) {
             if (user.isDeleted()) {
-                throw new BaseException(ExceptionCode.PARAMETER_MISSING, "user deleted:" + loginDTO.getUsername());
+                throw new BaseException(ExceptionCode.PARAMETER_MISSING, loginDTO.getUsername() + "用户已注销");
             }
         }
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), user.getPassword());

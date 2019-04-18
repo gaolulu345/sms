@@ -27,7 +27,7 @@ public class AdminApplication {
 		SpringApplication.run(AdminApplication.class, args);
 	}
 
-	/*@Bean
+	@Bean
 	public FilterRegistrationBean filterRegistrationBean() {
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
@@ -36,19 +36,16 @@ public class AdminApplication {
 		registrationBean.setFilter(characterEncodingFilter);
 		registrationBean.setOrder(1);
 		return registrationBean;
-	}*/
-
-	@Bean
-	public CrosFilter creatF(){
-		return new CrosFilter();
 	}
+
 	@Bean
 	public FilterRegistrationBean registerFilter()
 	{
 		FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
-		filterRegistrationBean.setFilter(creatF());
+		filterRegistrationBean.setFilter(new CrosFilter());
 		filterRegistrationBean.addUrlPatterns("/*");
 		filterRegistrationBean.setName("crosFilter");
+		filterRegistrationBean.setOrder(2);
 		return filterRegistrationBean;
 	}
 
