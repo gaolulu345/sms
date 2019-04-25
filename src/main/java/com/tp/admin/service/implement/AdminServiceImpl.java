@@ -1,6 +1,9 @@
 package com.tp.admin.service.implement;
 
+import com.github.crab2died.ExcelUtils;
+import com.github.crab2died.exceptions.Excel4JException;
 import com.tp.admin.ajax.ApiResult;
+import com.tp.admin.common.Constant;
 import com.tp.admin.dao.*;
 import com.tp.admin.data.dto.AdminAccountDTO;
 import com.tp.admin.data.dto.ChangePasswordDTO;
@@ -14,15 +17,22 @@ import com.tp.admin.exception.BaseException;
 import com.tp.admin.exception.ExceptionCode;
 import com.tp.admin.manage.TransactionalServiceI;
 import com.tp.admin.service.AdminServiceI;
+import com.tp.admin.utils.ExcelUtil;
 import com.tp.admin.utils.PasswordUtils;
 import com.tp.admin.utils.SessionUtils;
 import com.tp.admin.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class AdminServiceImpl implements AdminServiceI {
@@ -180,6 +190,31 @@ public class AdminServiceImpl implements AdminServiceI {
             throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
         return ApiResult.ok();
+    }
+
+    @Override
+    public ResponseEntity<FileSystemResource> adminExport(HttpServletRequest request, HttpServletResponse response, AdminSearch adminSearch) {
+        List<AdminAccountDTO> list = adminAccountDao.listBySearch(adminSearch);
+        if (null != list && !list.isEmpty()) {
+            for (AdminAccountDTO temp:list) {
+                temp.build();
+            }
+        }
+
+        String fileName = ExcelUtil.createXlxs(Constant.ADMIN_LIST, Math.random() * 10 + "",Math.random() * 10 + "");
+        String path = System.getProperty(Constant.TMP_DIR) + Constant._XLSX_DIR;
+        File pathFile = new File(path);
+        if (!pathFile.exists()){
+            pathFile.mkdirs();
+        }
+        try {
+            ExcelUtils.getInstance().exportObjects2Excel(list,AdminAccountDTO.class,true,"sheet0", true,path + fileName);
+        } catch (Excel4JException | IOException e) {
+            e.printStackTrace();
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        File file = new File(path + fileName);
+        return ExcelUtil.fileExcel(request,fileName,file);
     }
 
 

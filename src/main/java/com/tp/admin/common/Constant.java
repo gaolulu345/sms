@@ -10,6 +10,8 @@ public interface Constant {
 
     String USER = "WASH_USER_LIST_";
 
+    String ADMIN_LIST = "ADMIN_LIST_";
+
     String _XLSX = ".xlsx";
 
     String TMP_DIR = "java.io.tmpdir";

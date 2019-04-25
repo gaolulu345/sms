@@ -5,8 +5,11 @@ import com.tp.admin.ajax.ApiResult;
 import com.tp.admin.data.dto.AdminAccountDTO;
 import com.tp.admin.data.dto.ChangePasswordDTO;
 import com.tp.admin.data.search.AdminSearch;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public interface AdminServiceI {
 
@@ -23,6 +26,8 @@ public interface AdminServiceI {
     ApiResult loginLog(HttpServletRequest request , AdminSearch adminSearch);
 
     ApiResult updatePassword(HttpServletRequest request, ChangePasswordDTO changePasswordDTO);
+
+    ResponseEntity<FileSystemResource> adminExport(HttpServletRequest request, HttpServletResponse response, AdminSearch adminSearch);
 
 
 

@@ -7,12 +7,12 @@ import com.tp.admin.data.dto.ChangePasswordDTO;
 import com.tp.admin.data.search.AdminSearch;
 import com.tp.admin.service.AdminServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(AdminController.ROUTER_INDEX)
@@ -56,6 +56,13 @@ public class AdminController {
     @PostMapping(value = "/login/log")
     public ApiResult loginLog(HttpServletRequest request ,@RequestBody AdminSearch adminSearch){
         return adminService.loginLog(request,adminSearch);
+    }
+
+    @GetMapping(value = "/export")
+    public ResponseEntity<FileSystemResource> export(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "deleted") Boolean deleted){
+        AdminSearch adminSearch = new AdminSearch();
+        adminSearch.setDeleted(deleted);
+        return adminService.adminExport(request, response, adminSearch);
     }
 
 
