@@ -14,15 +14,19 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class OrderSearch extends Search {
 
+    private Integer id;
+
+    private String goodName;
+
+    private Integer supplyId;
+
     private Integer status;
-    private Integer orderId;
-    private Integer type;
-    private List<Integer> terIds = new ArrayList<>();
+
 
     @Override
     public void builData() {
         super.build();
-        if (status != null && status < 0 ) {
+        if (null != status && status < 0 ) {
             status = null;
         }
     }

@@ -6,7 +6,7 @@ public interface Constant {
 
     String ADMIN = "COM_EMP_";
 
-    String ORDER = "WASH_ORDER_LIST_";
+    String ORDER_LIST = "ORDER_LIST_";
 
     String USER = "WASH_USER_LIST_";
 

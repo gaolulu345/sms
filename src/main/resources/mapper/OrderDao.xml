@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sms.admin.dao.OrderDao">
+    <select id="cntBySearch" parameterType="com.sms.admin.data.search.OrderSearch" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `order` AS o
+        INNER JOIN order_detail AS od
+        ON o.id = od.order_id
+        INNER JOIN supply AS s
+        ON o.supply_id = s.id
+        WHERE
+        o.deleted = 0
+        <if test="goodName != null">
+            AND od.good_name LIKE CONCAT('%',#{goodName},'%')
+        </if>
+        <if test="supplyId != null">
+            AND o.supply_id = #{supplyId}
+        </if>
+        <if test="status != null">
+            AND o.status = #{status}
+        </if>
+        <if test="id != null and id != 0">
+            AND o.id = #{id}
+        </if>
+        <if test="startTime != null and endTime != null ">
+            AND o.create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+    </select>
+
+    <select id="listBySearch" parameterType="com.sms.admin.data.search.OrderSearch" resultMap="OrderDTOMap">
+        SELECT
+          o.id,
+          o.order_code,
+          o.status,
+          o.create_time,
+          o.supply_id,
+          s.supply_name,
+          od.good_name,
+          od.good_company,
+          od.good_number,
+          od.amount
+        FROM `order` AS o
+        INNER JOIN order_detail AS od
+        ON o.id = od.order_id
+        INNER JOIN supply AS s
+        ON o.supply_id = s.id
+        WHERE
+        o.deleted = 0
+        <if test="goodName != null">
+            AND od.good_name LIKE CONCAT('%',#{goodName},'%')
+        </if>
+        <if test="supplyId != null">
+            AND o.supply_id = #{supplyId}
+        </if>
+        <if test="status != null">
+            AND o.status = #{status}
+        </if>
+        <if test="id != null and id != 0">
+            AND o.id = #{id}
+        </if>
+        <if test="startTime != null and endTime != null ">
+            AND o.create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        ORDER BY o.id DESC
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <update id="updateSupply" parameterType="com.sms.admin.data.search.SupplySearch">
+        UPDATE
+          supply
+        <trim prefix="set" suffixOverrides=",">
+            <if test="supplyName != null">
+                supply_name = #{supplyName},
+            </if>
+            <if test="contactName != null">
+                contact_name = #{contactName},
+            </if>
+            <if test="contactPhone != null">
+                contact_phone = #{contactPhone},
+            </if>
+            <if test="contactAddress != null">
+                contact_address = #{contactAddress},
+            </if>
+            <if test="fax != null">
+                fax = #{fax},
+            </if>
+            <if test="intros != null">
+                intros = #{intros},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted}
+            </if>
+        </trim>
+        WHERE
+          id = #{id}
+    </update>
+
+    <insert id="addSupply" parameterType="com.sms.admin.data.search.SupplySearch" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO
+          supply(
+            supply_code,
+            supply_name,
+            contact_name,
+            contact_phone,
+            contact_address,
+            fax,
+            intros
+          ) VALUES (
+            #{supplyCode},
+            #{supplyName},
+            #{contactName},
+            #{contactPhone},
+            #{contactAddress},
+            #{fax},
+            #{intros}
+          )
+
+    </insert>
+
+    <resultMap id="OrderDTOMap" type="com.sms.admin.data.dto.OrderDTO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="supply_name" property="supplyName" jdbcType="VARCHAR" />
+        <result column="supply_id" property="supplyId" jdbcType="INTEGER" />
+        <result column="good_name" property="goodName" jdbcType="VARCHAR" />
+        <result column="good_company" property="goodCompany" jdbcType="VARCHAR" />
+        <result column="good_number" property="goodNumber" jdbcType="INTEGER" />
+        <result column="amount" property="amount" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+</mapper>
