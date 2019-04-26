@@ -22,7 +22,7 @@ public class RangeSearch extends Search {
     String startTime;
     String endTime;
     // default
-    int status = OrderStatusEnum.ASK_CHECK.getValue();
+    //int status = OrderStatusEnum.ASK_CHECK.getValue();
 
     List ids;
 
