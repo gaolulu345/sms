@@ -68,7 +68,8 @@ public class AdminServiceImpl implements AdminServiceI {
             throw new BaseException(ExceptionCode.PARAMETER_WRONG);
         }
         AdminAccount adminAccount = new AdminAccount(adminAccountDTO);
-        adminAccount.setPassword(PasswordUtils.defaultPassword());
+        //这里改成不加密的密码
+        adminAccount.setPassword("123456");
         transactionalService.register(adminAccount ,roles);
         return ApiResult.ok();
     }
