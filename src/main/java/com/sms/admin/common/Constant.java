@@ -12,6 +12,8 @@ public interface Constant {
 
     String ADMIN_LIST = "ADMIN_LIST_";
 
+    String SUPPLY_LIST = "SUPPLY_LIST_";
+
     String _XLSX = ".xlsx";
 
     String TMP_DIR = "java.io.tmpdir";

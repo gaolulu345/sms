@@ -1,16 +1,27 @@
 package com.sms.admin.service.implement;
 
+import com.github.crab2died.ExcelUtils;
+import com.github.crab2died.exceptions.Excel4JException;
 import com.sms.admin.ajax.ApiResult;
+import com.sms.admin.common.Constant;
+import com.sms.admin.data.dto.AdminAccountDTO;
 import com.sms.admin.data.search.SupplySearch;
 import com.sms.admin.dao.SupplyDao;
 import com.sms.admin.data.dto.SupplyDTO;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
 import com.sms.admin.service.SupplyServiceI;
+import com.sms.admin.utils.ExcelUtil;
+import com.sms.admin.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -86,10 +97,33 @@ public class SupplyServiceImpl implements SupplyServiceI {
                 null == supplySearch.getIntros()) {
             throw new BaseException(ExceptionCode.PARAMETER_MISSING);
         }
+        if (!StringUtil.isMobileNO(supplySearch.getContactPhone())) {
+            throw new BaseException(ExceptionCode.PHONE_INVALID);
+        }
         int res = supplyDao.addSupply(supplySearch);
         if (res == 0){
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }
         return ApiResult.ok();
+    }
+
+    @Override
+    public ResponseEntity<FileSystemResource> supplyExport(HttpServletRequest request, HttpServletResponse response, SupplySearch supplySearch) {
+        List<SupplyDTO> list = supplyDao.listBySearch(supplySearch);
+
+        String fileName = ExcelUtil.createXlxs(Constant.SUPPLY_LIST, Math.random() * 10 + "",Math.random() * 10 + "");
+        String path = System.getProperty(Constant.TMP_DIR) + Constant._XLSX_DIR;
+        File pathFile = new File(path);
+        if (!pathFile.exists()){
+            pathFile.mkdirs();
+        }
+        try {
+            ExcelUtils.getInstance().exportObjects2Excel(list,SupplyDTO.class,true,"sheet0", true,path + fileName);
+        } catch (Excel4JException | IOException e) {
+            e.printStackTrace();
+            throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
+        }
+        File file = new File(path + fileName);
+        return ExcelUtil.fileExcel(request,fileName,file);
     }
 }

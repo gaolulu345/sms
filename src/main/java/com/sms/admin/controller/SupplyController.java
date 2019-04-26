@@ -4,12 +4,12 @@ import com.sms.admin.ajax.ApiResult;
 import com.sms.admin.data.search.SupplySearch;
 import com.sms.admin.service.SupplyServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(SupplyController.ROUTE_INDEX)
@@ -43,6 +43,37 @@ public class SupplyController {
     @PostMapping(value = "/add")
     public ApiResult addSupply(HttpServletRequest request, @RequestBody SupplySearch supplySearch){
         return supplyService.addSupply(request, supplySearch);
+    }
+
+    @GetMapping(value = "/export")
+    public ResponseEntity<FileSystemResource> export(HttpServletRequest request, HttpServletResponse response,
+                                                     @RequestParam(value = "supplyCode", required = false) String supplyCode,
+                                                     @RequestParam(value = "supplyName", required = false) String supplyName,
+                                                     @RequestParam(value = "contactPhone", required = false) String contactPhone,
+                                                     @RequestParam(value = "fax", required = false) String fax,
+                                                     @RequestParam(value = "startTime", required = false) String startTime,
+                                                     @RequestParam(value = "endTime", required = false) String endTime
+                                                     ){
+        SupplySearch supplySearch = new SupplySearch();
+        if (null != supplyCode){
+            supplySearch.setSupplyCode(supplyCode);
+        }
+        if (null != supplyName){
+            supplySearch.setSupplyName(supplyName);
+        }
+        if (null != contactPhone){
+            supplySearch.setContactPhone(contactPhone);
+        }
+        if (null != fax){
+            supplySearch.setFax(fax);
+        }
+        if (null != startTime){
+            supplySearch.setStartTime(startTime);
+        }
+        if (null != endTime) {
+            supplySearch.setEndTime(endTime);
+        }
+        return supplyService.supplyExport(request, response, supplySearch);
     }
 
 }
