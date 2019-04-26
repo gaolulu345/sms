@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tp.admin.dao.FileUploadLogDao">
+<mapper namespace="com.sms.admin.dao.FileUploadLogDao">
 
-    <insert id="insert" parameterType="com.tp.admin.data.entity.FileUploadLog" useGeneratedKeys="true" keyProperty="id"
+    <insert id="insert" parameterType="com.sms.admin.data.entity.FileUploadLog" useGeneratedKeys="true" keyProperty="id"
             keyColumn="id">
         INSERT INTO `file_upload_log_admin` (
 			`admin_name`,
@@ -23,7 +23,7 @@
     </delete>
 
 
-    <select id="cntBySearch" parameterType="com.tp.admin.data.search.FileSearch" resultType="java.lang.Integer">
+    <select id="cntBySearch" parameterType="com.sms.admin.data.search.FileSearch" resultType="java.lang.Integer">
         SELECT
         COUNT(id)
         FROM
@@ -46,7 +46,7 @@
     </select>
 
 
-    <select id="listBySearch" parameterType="com.tp.admin.data.search.FileSearch" resultMap="FileUploadLogMap">
+    <select id="listBySearch" parameterType="com.sms.admin.data.search.FileSearch" resultMap="FileUploadLogMap">
         SELECT *
         FROM
         `file_upload_log_admin`
@@ -70,7 +70,7 @@
         </if>
     </select>
 
-    <resultMap id="FileUploadLogMap" type="com.tp.admin.data.entity.FileUploadLog">
+    <resultMap id="FileUploadLogMap" type="com.sms.admin.data.entity.FileUploadLog">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="admin_name" property="adminName" jdbcType="VARCHAR"/>
         <result column="bucket_name" property="bucketName" jdbcType="VARCHAR"/>

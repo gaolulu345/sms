@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tp.admin.dao.AdminOperationsDao">
+<mapper namespace="com.sms.admin.dao.AdminOperationsDao">
 
 
-    <insert id="insert" parameterType="com.tp.admin.data.entity.AdminOperations" useGeneratedKeys="true"
+    <insert id="insert" parameterType="com.sms.admin.data.entity.AdminOperations" useGeneratedKeys="true"
             keyProperty="id"
             keyColumn="id">
         INSERT INTO `admin_operations` (
@@ -19,7 +19,7 @@
 		)
     </insert>
 
-    <update id="update" parameterType="com.tp.admin.data.entity.AdminOperations">
+    <update id="update" parameterType="com.sms.admin.data.entity.AdminOperations">
         UPDATE
         `admin_operations`
         <trim prefix="set" suffixOverrides=",">
@@ -40,7 +40,7 @@
         id = #{id}
     </update>
 
-    <select id="listBySearch" parameterType="com.tp.admin.data.search.SystemSearch"
+    <select id="listBySearch" parameterType="com.sms.admin.data.search.SystemSearch"
             resultMap="AdminOperationsMap">
         SELECT
         *
@@ -142,7 +142,7 @@
       id = #{id}
     </select>
 
-    <update id="bachUpdateEnable" parameterType="com.tp.admin.data.search.SystemSearch">
+    <update id="bachUpdateEnable" parameterType="com.sms.admin.data.search.SystemSearch">
         UPDATE
         `admin_operations`
         SET
@@ -154,7 +154,7 @@
         </foreach>
     </update>
 
-    <update id="bachUpdateDeleted" parameterType="com.tp.admin.data.search.SystemSearch">
+    <update id="bachUpdateDeleted" parameterType="com.sms.admin.data.search.SystemSearch">
         UPDATE
         `admin_operations`
         SET
@@ -166,7 +166,7 @@
         </foreach>
     </update>
 
-    <resultMap id="AdminOperationsMap" type="com.tp.admin.data.entity.AdminOperations">
+    <resultMap id="AdminOperationsMap" type="com.sms.admin.data.entity.AdminOperations">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>

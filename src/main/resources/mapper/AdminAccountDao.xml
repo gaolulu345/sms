@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tp.admin.dao.AdminAccountDao">
+<mapper namespace="com.sms.admin.dao.AdminAccountDao">
 
-    <insert id="insert" parameterType="com.tp.admin.data.entity.AdminAccount" useGeneratedKeys="true" keyProperty="id"
+    <insert id="insert" parameterType="com.sms.admin.data.entity.AdminAccount" useGeneratedKeys="true" keyProperty="id"
             keyColumn="id">
         INSERT INTO `admin_account` (
 			`user_code`,
@@ -15,7 +15,7 @@
 		)
     </insert>
 
-    <update id="update" parameterType="com.tp.admin.data.entity.AdminAccount">
+    <update id="update" parameterType="com.sms.admin.data.entity.AdminAccount">
         UPDATE
         `admin_account`
         <trim prefix="set" suffixOverrides=",">
@@ -56,7 +56,7 @@
 		LIMIT 0 , 1
     </select>
 
-    <select id="cntBySearch" parameterType="com.tp.admin.data.search.AdminSearch" resultType="java.lang.Integer">
+    <select id="cntBySearch" parameterType="com.sms.admin.data.search.AdminSearch" resultType="java.lang.Integer">
         SELECT
         COUNT(id)
         FROM
@@ -69,7 +69,7 @@
         ORDER BY id DESC
     </select>
 
-    <select id="listBySearch" parameterType="com.tp.admin.data.search.AdminSearch" resultMap="AdminAccountDTOMap">
+    <select id="listBySearch" parameterType="com.sms.admin.data.search.AdminSearch" resultMap="AdminAccountDTOMap">
         SELECT
         aa.*,
         aai.name,
@@ -116,7 +116,7 @@
 		id = #{id}
     </update>
 
-    <update id="bachUpdateDeleted" parameterType="com.tp.admin.data.search.AdminSearch">
+    <update id="bachUpdateDeleted" parameterType="com.sms.admin.data.search.AdminSearch">
         UPDATE
         `admin_account`
         SET
@@ -128,7 +128,7 @@
         </foreach>
     </update>
 
-    <resultMap id="AdminAccountMap" type="com.tp.admin.data.entity.AdminAccount">
+    <resultMap id="AdminAccountMap" type="com.sms.admin.data.entity.AdminAccount">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="user_code" property="usercode" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
@@ -142,7 +142,7 @@
         <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
     </resultMap>
 
-    <resultMap id="AdminAccountDTOMap" type="com.tp.admin.data.dto.AdminAccountDTO">
+    <resultMap id="AdminAccountDTOMap" type="com.sms.admin.data.dto.AdminAccountDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="user_code" property="usercode" jdbcType="VARCHAR" />
         <result column="roles_id" property="rolesId" jdbcType="VARCHAR" />

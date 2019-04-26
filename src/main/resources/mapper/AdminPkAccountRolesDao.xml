@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tp.admin.dao.AdminPkAccountRolesDao">
+<mapper namespace="com.sms.admin.dao.AdminPkAccountRolesDao">
 
-    <insert id="insert" parameterType="com.tp.admin.data.entity.AdminPkAccountRoles" useGeneratedKeys="true"
+    <insert id="insert" parameterType="com.sms.admin.data.entity.AdminPkAccountRoles" useGeneratedKeys="true"
             keyProperty="id" keyColumn="id">
         INSERT INTO `admin_pk_account_roles` (
 			`admin_id`,
@@ -15,7 +15,7 @@
 		)
     </insert>
 
-    <update id="update" parameterType="com.tp.admin.data.entity.AdminPkAccountRoles">
+    <update id="update" parameterType="com.sms.admin.data.entity.AdminPkAccountRoles">
       UPDATE `admin_pk_account_roles`
       <trim prefix="set" suffixOverrides=",">
         <if test="null != adminId and 0 != adminId">
@@ -49,7 +49,7 @@
         LIMIT 0 , 1
     </select>
 
-    <resultMap id="AdminPkRolesMap" type="com.tp.admin.data.entity.AdminPkAccountRoles">
+    <resultMap id="AdminPkRolesMap" type="com.sms.admin.data.entity.AdminPkAccountRoles">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />

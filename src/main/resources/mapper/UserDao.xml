@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tp.admin.dao.UserDao">
-    <select id="cntBySearch" parameterType="com.tp.admin.data.search.UserSearch"  resultType="java.lang.Integer">
+<mapper namespace="com.sms.admin.dao.UserDao">
+    <select id="cntBySearch" parameterType="com.sms.admin.data.search.UserSearch" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM
         `user`
         WHERE
@@ -23,7 +23,7 @@
         ORDER BY id DESC
     </select>
 
-    <select id="listBySearch" parameterType="com.tp.admin.data.search.UserSearch" resultMap="UserDTOMap">
+    <select id="listBySearch" parameterType="com.sms.admin.data.search.UserSearch" resultMap="UserDTOMap">
         SELECT u.id , u.phone , u.create_time , u.last_login_time , u.access , u.type , u.deleted , u.pw , u.wxid , u.mini_wxid , u.wx_unionid , u.ali_id , uinfo.avatar , uinfo.city , uinfo.nickname , uinfo.gender  FROM
         `user` AS u INNER JOIN `user_info` AS uinfo ON u.id = uinfo.user_id
         WHERE
@@ -45,7 +45,7 @@
         </if>
     </select>
 
-    <resultMap id="UserDTOMap" type="com.tp.admin.data.dto.UserDTO">
+    <resultMap id="UserDTOMap" type="com.sms.admin.data.dto.UserDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="phone" property="phone" jdbcType="VARCHAR" />
         <result column="avatar" property="avatar" jdbcType="VARCHAR" />

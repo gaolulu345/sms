@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tp.admin.dao.SupplyDao">
-    <select id="cntBySearch" parameterType="com.tp.admin.data.search.UserSearch"  resultType="java.lang.Integer">
+<mapper namespace="com.sms.admin.dao.SupplyDao">
+    <select id="cntBySearch" parameterType="com.sms.admin.data.search.UserSearch" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM
         `supply`
         WHERE
@@ -26,7 +26,7 @@
         </if>
     </select>
 
-    <select id="listBySearch" parameterType="com.tp.admin.data.search.SupplySearch" resultMap="SupplyDTOMap">
+    <select id="listBySearch" parameterType="com.sms.admin.data.search.SupplySearch" resultMap="SupplyDTOMap">
         SELECT *
         FROM supply
         WHERE
@@ -55,7 +55,7 @@
         </if>
     </select>
 
-    <update id="updateSupply" parameterType="com.tp.admin.data.search.SupplySearch">
+    <update id="updateSupply" parameterType="com.sms.admin.data.search.SupplySearch">
         UPDATE
           supply
         <trim prefix="set" suffixOverrides=",">
@@ -85,7 +85,7 @@
           id = #{id}
     </update>
 
-    <insert id="addSupply" parameterType="com.tp.admin.data.search.SupplySearch" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <insert id="addSupply" parameterType="com.sms.admin.data.search.SupplySearch" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO
           supply(
             supply_code,
@@ -107,7 +107,7 @@
 
     </insert>
 
-    <resultMap id="SupplyDTOMap" type="com.tp.admin.data.dto.SupplyDTO">
+    <resultMap id="SupplyDTOMap" type="com.sms.admin.data.dto.SupplyDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="supply_code" property="supplyCode" jdbcType="VARCHAR" />
         <result column="supply_name" property="supplyName" jdbcType="VARCHAR" />
