@@ -23,7 +23,7 @@ public class AdminApplication {
 		SpringApplication.run(AdminApplication.class, args);
 	}
 
-	/*@Bean
+	@Bean
 	public FilterRegistrationBean filterRegistrationBean() {
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
@@ -32,7 +32,7 @@ public class AdminApplication {
 		registrationBean.setFilter(characterEncodingFilter);
 		registrationBean.setOrder(2);
 		return registrationBean;
-	}*/
+	}
 
 	@Bean
 	public FilterRegistrationBean registerFilter()
