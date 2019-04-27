@@ -7,13 +7,10 @@ import com.sms.admin.data.entity.AdminRoles;
 import com.sms.admin.data.search.SystemSearch;
 import com.sms.admin.service.SystemServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-
+@CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.GET,RequestMethod.POST})
 @RestController
 @RequestMapping(SystemController.ROUTER_INDEX)
 public class SystemController {
