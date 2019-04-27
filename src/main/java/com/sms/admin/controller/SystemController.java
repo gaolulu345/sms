@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-@CrossOrigin
+
 @RestController
 @RequestMapping(SystemController.ROUTER_INDEX)
 public class SystemController {
