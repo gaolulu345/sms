@@ -26,7 +26,7 @@ public class OrderDTO {
     private String supplyName;
     @ExcelField(title = "商品数量", order = 6)
     private Integer goodNumber;
-    @ExcelField(title = "金额（元）", order = 7)
+    @ExcelField(title = "金额（分）", order = 7)
     private Integer amount;
 
     private Integer status;

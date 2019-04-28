@@ -4,6 +4,7 @@ import com.sms.admin.data.entity.AdminAccount;
 import com.sms.admin.data.entity.AdminPkRolesMenu;
 import com.sms.admin.data.entity.AdminPkRolesOperations;
 import com.sms.admin.data.entity.AdminRoles;
+import com.sms.admin.data.search.OrderSearch;
 
 import java.util.List;
 
@@ -31,4 +32,7 @@ public interface TransactionalServiceI {
     void register(AdminAccount adminAccount , AdminRoles adminRoles);
 
 
+    void updateOrder(OrderSearch orderSearch);
+
+    void insertOrder(OrderSearch orderSearch);
 }

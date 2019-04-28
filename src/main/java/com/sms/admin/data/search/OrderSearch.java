@@ -16,11 +16,21 @@ public class OrderSearch extends Search {
 
     private Integer id;
 
+    private String orderCode;
+
     private String goodName;
+
+    private String goodCompany;
+
+    private Integer goodNumber;
+
+    private Integer amount;
 
     private Integer supplyId;
 
     private Integer status;
+
+    private Boolean deleted;
 
 
     @Override

@@ -2,6 +2,7 @@ package com.sms.admin.manage.impl;
 
 import com.sms.admin.dao.*;
 import com.sms.admin.data.entity.*;
+import com.sms.admin.data.search.OrderSearch;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
 import com.sms.admin.manage.TransactionalServiceI;
@@ -29,6 +30,9 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
 
     @Autowired
     AdminAccountInfoDao adminAccountInfoDao;
+
+    @Autowired
+    OrderDao orderDao;
 
 
 
@@ -112,6 +116,61 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
                 throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
             }
         }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+    }
+
+    @Override
+    public void updateOrder(OrderSearch orderSearch) {
+        if (null == orderSearch ||
+                null == orderSearch.getGoodName() ||
+                null == orderSearch.getGoodCompany() ||
+                null == orderSearch.getGoodNumber() ||
+                null == orderSearch.getAmount() ||
+                null == orderSearch.getSupplyId() ||
+                null == orderSearch.getStatus()) {
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING);
+        }
+        try {
+            int res = orderDao.updateOrder(orderSearch);
+            if (0 == res) {
+                throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+            }
+            res = orderDao.updateOrderDetail(orderSearch);
+            if (0 == res) {
+                throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+            }
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+    }
+
+    @Override
+    public void insertOrder(OrderSearch orderSearch) {
+        if (null == orderSearch ||
+                null == orderSearch.getOrderCode() ||
+                null == orderSearch.getGoodName() ||
+                null == orderSearch.getGoodCompany() ||
+                null == orderSearch.getGoodNumber() ||
+                null == orderSearch.getAmount() ||
+                null == orderSearch.getSupplyId() ||
+                null == orderSearch.getStatus()) {
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING);
+        }
+
+        try {
+            int res = orderDao.addOrder(orderSearch);
+            if (0 == res){
+                throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+            }
+            orderSearch.setId(res);
+            res = orderDao.addOrderDetail(orderSearch);
+            if (0 == res) {
+                throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+            }
+        } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
         }

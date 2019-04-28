@@ -107,6 +107,14 @@
 
     </insert>
 
+    <select id="listAllSupply" resultMap="SupplyDTOMap">
+        SELECT *
+        FROM supply
+        WHERE
+        deleted = 0
+        ORDER BY id DESC
+    </select>
+
     <resultMap id="SupplyDTOMap" type="com.sms.admin.data.dto.SupplyDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="supply_code" property="supplyCode" jdbcType="VARCHAR" />

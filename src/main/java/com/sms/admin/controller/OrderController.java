@@ -19,10 +19,34 @@ public class OrderController {
     @Autowired
     OrderServiceI orderService;
 
+    @PostMapping(value = "/add")
+    public ApiResult orderAdd(HttpServletRequest request, @RequestBody OrderSearch orderSearch) {
+        return orderService.addOrder(request, orderSearch);
+    }
+
     @PostMapping("/list")
     public ApiResult orderList(HttpServletRequest request, @RequestBody OrderSearch orderSearch){
-
         return orderService.orderList(request, orderSearch);
+    }
+
+    @PostMapping(value = "/detail")
+    public ApiResult orderDetail(HttpServletRequest request, @RequestBody OrderSearch orderSearch) {
+        return orderService.orderDetail(request, orderSearch);
+    }
+
+    @PostMapping(value = "/update")
+    public ApiResult updateOrder(HttpServletRequest request, @RequestBody OrderSearch orderSearch) {
+        return orderService.updateOrder(request, orderSearch);
+    }
+
+    @PostMapping(value = "/update/deleted")
+    public ApiResult updateDeleted(HttpServletRequest request, @RequestBody OrderSearch orderSearch) {
+        return orderService.updateDeleted(request, orderSearch);
+    }
+
+    @PostMapping(value = "/list/all/supply")
+    public ApiResult listAllSupply(HttpServletRequest request){
+        return orderService.listAllSupply(request);
     }
 
     @GetMapping(value = "/export")
@@ -51,4 +75,6 @@ public class OrderController {
         }
         return orderService.orderExport(request, response, orderSearch);
     }
+
+
 }

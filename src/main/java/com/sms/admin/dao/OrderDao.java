@@ -10,4 +10,12 @@ public interface OrderDao {
     int cntBySearch(OrderSearch orderSearch);
 
     List<OrderDTO> listBySearch(OrderSearch orderSearch);
+
+    int updateOrder(OrderSearch orderSearch);
+
+    int updateOrderDetail(OrderSearch orderSearch);
+
+    int addOrder(OrderSearch orderSearch);
+
+    int addOrderDetail(OrderSearch orderSearch);
 }

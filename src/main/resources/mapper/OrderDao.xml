@@ -67,27 +67,15 @@
         </if>
     </select>
 
-    <update id="updateSupply" parameterType="com.sms.admin.data.search.SupplySearch">
+    <update id="updateOrder" parameterType="com.sms.admin.data.search.OrderSearch">
         UPDATE
-          supply
+        `order`
         <trim prefix="set" suffixOverrides=",">
-            <if test="supplyName != null">
-                supply_name = #{supplyName},
+            <if test="supplyId != null">
+                supply_id = #{supplyId},
             </if>
-            <if test="contactName != null">
-                contact_name = #{contactName},
-            </if>
-            <if test="contactPhone != null">
-                contact_phone = #{contactPhone},
-            </if>
-            <if test="contactAddress != null">
-                contact_address = #{contactAddress},
-            </if>
-            <if test="fax != null">
-                fax = #{fax},
-            </if>
-            <if test="intros != null">
-                intros = #{intros},
+            <if test="status != null">
+                status = #{status},
             </if>
             <if test="deleted != null">
                 deleted = #{deleted}
@@ -97,24 +85,55 @@
           id = #{id}
     </update>
 
-    <insert id="addSupply" parameterType="com.sms.admin.data.search.SupplySearch" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <update id="updateOrderDetail" parameterType="com.sms.admin.data.search.OrderSearch">
+        UPDATE
+        `order_detail`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="goodName != null">
+                good_name = #{goodName},
+            </if>
+            <if test="goodCompany != null">
+                good_company = #{goodCompany},
+            </if>
+            <if test="goodNumber != null">
+                good_number = #{goodNumber},
+            </if>
+            <if test="amount != null">
+                amount = #{amount}
+            </if>
+        </trim>
+        WHERE
+        order_id = #{id}
+    </update>
+
+    <insert id="addOrder" parameterType="com.sms.admin.data.search.OrderSearch" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO
-          supply(
-            supply_code,
-            supply_name,
-            contact_name,
-            contact_phone,
-            contact_address,
-            fax,
-            intros
+          `order`(
+            order_code,
+            supply_id,
+            status
           ) VALUES (
-            #{supplyCode},
-            #{supplyName},
-            #{contactName},
-            #{contactPhone},
-            #{contactAddress},
-            #{fax},
-            #{intros}
+            #{orderCode},
+            #{supplyId},
+            #{status}
+          )
+
+    </insert>
+
+    <insert id="addOrderDetail" parameterType="com.sms.admin.data.search.OrderSearch" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO
+          `order_detail`(
+            order_id,
+            good_name,
+            good_company,
+            good_number,
+            amount
+          ) VALUES (
+            #{id},
+            #{goodName},
+            #{goodCompany},
+            #{goodNumber},
+            #{amount}
           )
 
     </insert>
