@@ -30,11 +30,11 @@ public class AdminApplication {
 		characterEncodingFilter.setForceEncoding(true);
 		characterEncodingFilter.setEncoding("UTF-8");
 		registrationBean.setFilter(characterEncodingFilter);
-		//registrationBean.setOrder(2);
+		registrationBean.setOrder(2);
 		return registrationBean;
 	}
 
-	/*@Bean
+	@Bean
 	public FilterRegistrationBean registerFilter()
 	{
 		FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
@@ -43,7 +43,7 @@ public class AdminApplication {
 		filterRegistrationBean.setName("crosFilter");
 		filterRegistrationBean.setOrder(1);
 		return filterRegistrationBean;
-	}*/
+	}
 
 
 	/**
