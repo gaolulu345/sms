@@ -1,6 +1,7 @@
 package com.sms.admin.security;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -19,7 +20,9 @@ public class CrosFilter implements Filter {
 
         //System.err.println("CROS……");
         HttpServletResponse response=(HttpServletResponse)servletResponse;
-        response.setHeader("Access-Control-Allow-Origin","*");//支持跨域的域名  *任意
+        HttpServletRequest request = (HttpServletRequest)servletRequest;
+        response.setHeader("Access-Control-Allow-Credentials","true");
+        response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));//支持跨域的域名  *任意
         response.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,DELETE,REQUEST");//请求方式
         response.setHeader("Access-Control-Allow-Headers","*");//消息头 x-request-with
         response.setHeader("Access-Control-Max-Age","1800");//时间 单位秒
