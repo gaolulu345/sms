@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -92,13 +93,13 @@ public class AccountServiceImpl implements AccountServiceI {
         if (null != authentication) {
             loginlog(ip,user,true);
             updateLastLoginTime(user.getId());
-            redisUtil.set("username",user.getUsername(),(long)60 * 15);
+            //redisUtil.set("username",user.getUsername(),(long)60 * 15);
             userToken.setUser(user);
             userToken.setRandomnum(new Random().nextInt());
             userToken.setTime(System.currentTimeMillis());
             String json = new Gson().toJson(userToken);
             String token = PasswordUtils.base64En(json);
-            redisUtil.hset("tokens","token",new Gson().toJson(user));
+            redisUtil.hset("tokens",token,new Gson().toJson(user));
             Cookie cookie = new Cookie("sms_user",token);
             response.addCookie(cookie);
             //SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -135,10 +136,16 @@ public class AccountServiceImpl implements AccountServiceI {
                 }
             }
         }
-        redisUtil.hdel(token);
-        Cookie cookie = new Cookie("sms_user", token);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        Map<String, String> map = redisUtil.hmget("tokens");
+        for (Map.Entry<String, String> entry:map.entrySet()) {
+            if (entry.getKey().equals(token)) {
+                redisUtil.hdel("tokens",token);
+                Cookie cookie = new Cookie("sms_user", token);
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+        }
+
         /*boolean isExist = redisUtil.exists("username");
         if (!isExist) {
             return ApiResult.error(ExceptionCode.INVALID_ACCESS_EXCEPTION);
