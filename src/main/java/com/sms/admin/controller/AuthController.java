@@ -23,8 +23,8 @@ public class AuthController {
     AccountServiceI accountService;
 
     @PostMapping(value = "/login")
-    public ApiResult login(HttpServletRequest request, @RequestBody LoginDTO loginDTO) {
-        return accountService.login(request,loginDTO);
+    public ApiResult login(HttpServletRequest request,HttpServletResponse response, @RequestBody LoginDTO loginDTO) {
+        return accountService.login(request,response,loginDTO);
     }
 
     @PostMapping(value = "/logout")

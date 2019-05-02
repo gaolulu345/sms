@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface AccountServiceI {
 
-    ApiResult login(HttpServletRequest request, LoginDTO loginDTO);
+    ApiResult login(HttpServletRequest request,HttpServletResponse response, LoginDTO loginDTO);
 
     ApiResult logout(HttpServletRequest request , HttpServletResponse response);
 

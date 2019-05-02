@@ -2,6 +2,7 @@ package com.sms.admin.utils;
 
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
+import org.apache.shiro.codec.Base64;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -34,6 +35,14 @@ public class PasswordUtils {
             throw new BaseException(ExceptionCode.UNKNOWN_EXCEPTION);
         }
         return result;
+    }
+
+    public static String base64En(String value) {
+        return Base64.encode(value.getBytes()).toString();
+    }
+
+    public static String base64DE(String value) {
+        return Base64.decode(value).toString();
     }
 
 }

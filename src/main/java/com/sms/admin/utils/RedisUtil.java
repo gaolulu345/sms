@@ -6,6 +6,7 @@ import com.sms.admin.data.entity.AdminAccount;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Map;
@@ -127,6 +128,38 @@ public class RedisUtil {
             e.printStackTrace();
         }
         return result;
+    }
+    public  boolean hset(String key, String field, String value) {
+        boolean result = false;
+        try {
+            redisTemplate.opsForHash().put(key, field, value);
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public  boolean hdel(String key, String... fields) {
+        boolean result = false;
+        try {
+            redisTemplate.opsForHash().delete(key, fields);
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public  String hget(String key, String field) {
+        Object result = null;
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        HashOperations<Serializable, Object, Object> operations = redisTemplate.opsForHash();
+        result = operations.get(key,field);
+        if(result==null){
+            return null;
+        }
+        return result.toString();
     }
 
     public Map<String,String> hmget(String key) {

@@ -1,5 +1,7 @@
 package com.sms.admin.service.implement;
 
+import com.google.gson.Gson;
+import com.sms.admin.data.dto.UserToken;
 import com.sms.admin.data.entity.AdminAccountLoginLog;
 import com.sms.admin.ajax.ApiResult;
 import com.sms.admin.common.Constant;
@@ -10,6 +12,7 @@ import com.sms.admin.data.dto.LoginDTO;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
 import com.sms.admin.service.AccountServiceI;
+import com.sms.admin.utils.PasswordUtils;
 import com.sms.admin.utils.RedisUtil;
 import com.sms.admin.utils.StringUtil;
 import org.apache.commons.lang.StringUtils;
@@ -24,10 +27,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
+import java.util.Random;
 
 @Service
 public class AccountServiceImpl implements AccountServiceI {
@@ -54,7 +59,7 @@ public class AccountServiceImpl implements AccountServiceI {
     }
 
     @Override
-    public ApiResult login(HttpServletRequest request, LoginDTO loginDTO) {
+    public ApiResult login(HttpServletRequest request,HttpServletResponse response, LoginDTO loginDTO) {
         if (StringUtil.isEmpty(loginDTO.getUsername()) || StringUtil.isEmpty(loginDTO.getPassword())) {
             throw new BaseException(ExceptionCode.PARAMETER_MISSING, "用户名或者密码不能为空");
         }
@@ -83,11 +88,19 @@ public class AccountServiceImpl implements AccountServiceI {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        UserToken userToken = new UserToken();
         if (null != authentication) {
             loginlog(ip,user,true);
             updateLastLoginTime(user.getId());
             redisUtil.set("username",user.getUsername(),(long)60 * 15);
-
+            userToken.setUser(user);
+            userToken.setRandomnum(new Random().nextInt());
+            userToken.setTime(System.currentTimeMillis());
+            String json = new Gson().toJson(userToken);
+            String token = PasswordUtils.base64En(json);
+            redisUtil.hset("tokens","token",new Gson().toJson(user));
+            Cookie cookie = new Cookie("sms_user",token);
+            response.addCookie(cookie);
             //SecurityContextHolder.getContext().setAuthentication(authentication);
             //HttpSession session = request.getSession();
             //session.setAttribute(Constant.SECURITY_CONTEXT, SecurityContextHolder.getContext()); // 这个非常重要，否则验证后将无法登陆
@@ -112,12 +125,26 @@ public class AccountServiceImpl implements AccountServiceI {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return ApiResult.ok();*/
-        boolean isExist = redisUtil.exists("username");
+        Cookie[] arrCks = request.getCookies();
+        String token = "";
+        if (null != arrCks) {
+            for (Cookie cookie : arrCks) {
+                if (cookie.getName().equals("sms_user")) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        redisUtil.hdel(token);
+        Cookie cookie = new Cookie("sms_user", token);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        /*boolean isExist = redisUtil.exists("username");
         if (!isExist) {
             return ApiResult.error(ExceptionCode.INVALID_ACCESS_EXCEPTION);
         } else {
             redisUtil.remove("username");
-        }
+        }*/
         return ApiResult.ok();
     }
 
