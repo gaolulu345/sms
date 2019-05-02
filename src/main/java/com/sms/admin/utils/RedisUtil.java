@@ -1,7 +1,9 @@
 package com.sms.admin.utils;
 
+import com.google.gson.Gson;
 import com.sms.admin.ajax.ApiResult;
 import com.sms.admin.dao.AdminAccountDao;
+import com.sms.admin.data.dto.UserToken;
 import com.sms.admin.data.entity.AdminAccount;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
@@ -17,6 +19,9 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class RedisUtil {
@@ -172,16 +177,39 @@ public class RedisUtil {
         return result;
     }
 
-    public AdminAccount findRedisAdminAccount() {
-        boolean isExist =  this.exists("username");
+    public AdminAccount findRedisAdminAccount(HttpServletRequest request) {
+        /*boolean isExist =  this.exists("username");
         if (!isExist) {
             throw new BaseException(ExceptionCode.NO_PERMIT);
         }
-        String username = this.get("username");
-        AdminAccount adminAccount = adminAccountDao.findByUsername(username);
-        if (null == adminAccount) {
+        String username = this.get("username");*/
+        Cookie[] arrCks = request.getCookies();
+        String token = "";
+        if (null != arrCks) {
+            for (Cookie cookie : arrCks) {
+                if (cookie.getName().equals("sms_user")) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if (token.equals("")) {
             throw new BaseException(ExceptionCode.NO_PERMIT);
         }
-        return adminAccount;
+
+        AdminAccount adminAccount = null;
+        String tokens = "";
+        Map<String, String> map = this.hmget("tokens");
+        for (Map.Entry<String, String> entry:map.entrySet()) {
+            if (entry.getKey().equals(token)) {
+                tokens = entry.getValue();
+            }
+        }
+        UserToken userToken = new Gson().fromJson(token, UserToken.class);
+        adminAccount = new Gson().fromJson(tokens,AdminAccount.class);
+        if (adminAccount.getUsername().equals(((AdminAccount)userToken.getUser()).getUsername())) {
+            return adminAccount;
+        }
+        throw new BaseException(ExceptionCode.NO_PERMIT);
     }
 }

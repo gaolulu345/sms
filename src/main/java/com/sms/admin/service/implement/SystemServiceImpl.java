@@ -25,6 +25,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -464,9 +465,10 @@ public class SystemServiceImpl implements SystemServiceI {
     }
 
     @Override
-    public ApiResult adminAllPermission(HttpServletRequest httpServletRequest) {
+    public ApiResult adminAllPermission(HttpServletRequest request) {
         // 返回菜单权限和页面操作权限
-        AdminAccount adminAccount = redisUtil.findRedisAdminAccount();
+
+        AdminAccount adminAccount = redisUtil.findRedisAdminAccount(request);
         //AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(httpServletRequest);
         Set<AutoResource> autoResources = findAdminAutoResource(adminAccount);
         UserAutoResourceDTO dto = new UserAutoResourceDTO();

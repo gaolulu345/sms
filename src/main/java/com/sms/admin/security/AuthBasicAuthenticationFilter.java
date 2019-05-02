@@ -1,7 +1,10 @@
 package com.sms.admin.security;
 
+import com.google.gson.Gson;
 import com.sms.admin.common.Constant;
+import com.sms.admin.data.dto.UserToken;
 import com.sms.admin.data.entity.AdminAccount;
+import com.sms.admin.data.entity.User;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
 import com.sms.admin.utils.RedisUtil;
@@ -18,10 +21,12 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Map;
 
 public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
 
@@ -58,12 +63,42 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
         }
         Authentication authentication = sctx.getAuthentication();
         AdminAccount adminAccount = (AdminAccount) authentication.getPrincipal();*/
-        /*AdminAccount adminAccount = redisUtil.findRedisAdminAccount();
-        // 如果是超级管理员放行。
-        if (adminAccount.getUsername().equals(Constant.SUPER_ADMIN)) {
+        Cookie[] arrCks = request.getCookies();
+        String token = "";
+        if (null != arrCks) {
+            for (Cookie cookie : arrCks) {
+                if (cookie.getName().equals("sms_user")) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        AdminAccount adminAccount = null;
+        String tokens = "";
+        Map<String, String> map = redisUtil.hmget("tokens");
+        for (Map.Entry<String, String> entry:map.entrySet()) {
+            if (entry.getKey().equals(token)) {
+                tokens = entry.getValue();
+            }
+        }
+        if (tokens.equals("")) {
+            response.sendRedirect("/login");
+            return;
+        }
+
+        UserToken userToken = new Gson().fromJson(token, UserToken.class);
+        adminAccount = new Gson().fromJson(tokens,AdminAccount.class);
+        if (adminAccount.getUsername().equals(((AdminAccount)userToken.getUser()).getUsername())) {
             success(request,response,chain);
             return;
         }
+        //AdminAccount adminAccount = redisUtil.findRedisAdminAccount();
+        // 如果是超级管理员放行。
+        /*if (adminAccount.getUsername().equals(Constant.SUPER_ADMIN)) {
+            success(request,response,chain);
+            return;
+        }*/
         if (url.indexOf("/api/private", 0) == 0) {
             if (invokeApi(adminAccount, url)) {
                 success(request,response,chain);
@@ -79,7 +114,7 @@ public class AuthBasicAuthenticationFilter extends BasicAuthenticationFilter {
                 success(request,response,chain);
             }
             response.sendRedirect(Constant.PAGES_INDEX);
-        }*/
+        }
     }
 
     private void success(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException{
