@@ -46,6 +46,8 @@ public class AdminApplication {
 	}
 
 
+
+
 	/**
 	 * http重定向到https
 	 * @return

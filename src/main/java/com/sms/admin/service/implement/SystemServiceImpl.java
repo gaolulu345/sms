@@ -15,6 +15,7 @@ import com.sms.admin.manage.TransactionalServiceI;
 import com.sms.admin.security.AuthResourceTypeEnum;
 import com.sms.admin.security.AutoResource;
 import com.sms.admin.service.SystemServiceI;
+import com.sms.admin.utils.RedisUtil;
 import com.sms.admin.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,8 @@ public class SystemServiceImpl implements SystemServiceI {
     @Autowired
     TransactionalServiceI transactionalService;
 
+    @Autowired
+    RedisUtil redisUtil;
     @Override
     public ApiResult findOperationsMaps(HttpServletRequest request) {
         WebApplicationContext wc = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
@@ -463,7 +466,8 @@ public class SystemServiceImpl implements SystemServiceI {
     @Override
     public ApiResult adminAllPermission(HttpServletRequest httpServletRequest) {
         // 返回菜单权限和页面操作权限
-        AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(httpServletRequest);
+        AdminAccount adminAccount = redisUtil.findRedisAdminAccount();
+        //AdminAccount adminAccount = SessionUtils.findSessionAdminAccount(httpServletRequest);
         Set<AutoResource> autoResources = findAdminAutoResource(adminAccount);
         UserAutoResourceDTO dto = new UserAutoResourceDTO();
         if (null != autoResources && !autoResources.isEmpty()) {

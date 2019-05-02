@@ -117,8 +117,12 @@
 			<version>4.12</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

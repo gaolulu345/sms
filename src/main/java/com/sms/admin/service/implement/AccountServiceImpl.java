@@ -10,6 +10,7 @@ import com.sms.admin.data.dto.LoginDTO;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
 import com.sms.admin.service.AccountServiceI;
+import com.sms.admin.utils.RedisUtil;
 import com.sms.admin.utils.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -41,6 +42,9 @@ public class AccountServiceImpl implements AccountServiceI {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    RedisUtil redisUtil;
 
 
 
@@ -82,9 +86,11 @@ public class AccountServiceImpl implements AccountServiceI {
         if (null != authentication) {
             loginlog(ip,user,true);
             updateLastLoginTime(user.getId());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            HttpSession session = request.getSession();
-            session.setAttribute(Constant.SECURITY_CONTEXT, SecurityContextHolder.getContext()); // 这个非常重要，否则验证后将无法登陆
+            redisUtil.set("username",user.getUsername(),(long)60 * 15);
+
+            //SecurityContextHolder.getContext().setAuthentication(authentication);
+            //HttpSession session = request.getSession();
+            //session.setAttribute(Constant.SECURITY_CONTEXT, SecurityContextHolder.getContext()); // 这个非常重要，否则验证后将无法登陆
             return ApiResult.ok(user);
         }
         loginlog(ip,user,false);
@@ -93,7 +99,7 @@ public class AccountServiceImpl implements AccountServiceI {
 
     @Override
     public ApiResult logout(HttpServletRequest request , HttpServletResponse response) {
-        HttpSession session = request.getSession();
+        /*HttpSession session = request.getSession();
         if (session == null) {
             return ApiResult.error(ExceptionCode.INVALID_ACCESS_EXCEPTION);
         }
@@ -104,6 +110,13 @@ public class AccountServiceImpl implements AccountServiceI {
         Authentication auth = sctx.getAuthentication();
         if (null != auth) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return ApiResult.ok();*/
+        boolean isExist = redisUtil.exists("username");
+        if (!isExist) {
+            return ApiResult.error(ExceptionCode.INVALID_ACCESS_EXCEPTION);
+        } else {
+            redisUtil.remove("username");
         }
         return ApiResult.ok();
     }
