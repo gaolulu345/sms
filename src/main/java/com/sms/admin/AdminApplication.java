@@ -2,9 +2,14 @@ package com.sms.admin;
 
 import com.sms.admin.security.CrosFilter;
 import com.sms.admin.utils.SpringContextUtil;
+import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -60,7 +65,7 @@ public class AdminApplication {
 	 * http重定向到https
 	 * @return
 	 */
-	/*@Bean
+	@Bean
 	public TomcatServletWebServerFactory servletWebServerFactory() {
 		TomcatServletWebServerFactory tomcatServletWebServerFactory = new TomcatServletWebServerFactory() {
 			@Override
@@ -87,5 +92,5 @@ public class AdminApplication {
 		//监听到http的端口号后转向到的https的端口号
 		connector.setRedirectPort(7070);
 		return connector;
-	}*/
+	}
 }
