@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/cxr3duUAE2.txt", "/fuoLd9OtR7.txt" ,"/js/**", "/css/**", "/images/**",
                 "/fonts/**", "favicon.ico");
-        web.ignoring().antMatchers("/login",  "/error", "/api/user/login","/api/private/**" , "/api/user/logout");
+        web.ignoring().antMatchers("/login",  "/error", "/api/user/login", "/api/private/**" , "/api/user/logout");
         //可以仿照上面一句忽略静态资源
     }
 

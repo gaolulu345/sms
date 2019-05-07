@@ -2,10 +2,11 @@ package com.sms.admin.utils;
 
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
-import org.apache.shiro.codec.Base64;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class PasswordUtils {
 
@@ -37,12 +38,41 @@ public class PasswordUtils {
         return result;
     }
 
-    public static String base64En(String value) {
-        return Base64.encode(value.getBytes()).toString();
+    /*public static String base64En(String value) {
+        byte[] str = new byte[256];
+        try {
+            str = value.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return Base64.encode(str).toString();
     }
 
     public static String base64DE(String value) {
         return Base64.decode(value).toString();
+    }*/
+
+    //下面两个方法是使用Java8中java.util中提供的Base64
+    public static String base64En(String value) {
+        Base64.Encoder encoder = Base64.getEncoder();
+        byte[] str = new byte[256];
+        try {
+            str = value.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return encoder.encodeToString(str);
+    }
+
+    public static String base64DE(String value) {
+        Base64.Decoder decoder = Base64.getDecoder();
+        String res = null;
+        try {
+            res = new String(decoder.decode(value), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 
 }

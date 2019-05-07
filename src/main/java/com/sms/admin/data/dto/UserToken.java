@@ -8,7 +8,7 @@ public class UserToken {
 
     long time;
 
-    Object user;
+    AdminAccountDTO user;
 
     int randomnum;
 }

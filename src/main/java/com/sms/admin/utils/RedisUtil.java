@@ -3,10 +3,12 @@ package com.sms.admin.utils;
 import com.google.gson.Gson;
 import com.sms.admin.ajax.ApiResult;
 import com.sms.admin.dao.AdminAccountDao;
+import com.sms.admin.data.dto.AdminAccountDTO;
 import com.sms.admin.data.dto.UserToken;
 import com.sms.admin.data.entity.AdminAccount;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -138,6 +140,7 @@ public class RedisUtil {
         boolean result = false;
         try {
             redisTemplate.opsForHash().put(key, field, value);
+            redisTemplate.expire(field,15, TimeUnit.MINUTES);
             result = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,11 +181,26 @@ public class RedisUtil {
     }
 
     public AdminAccount findRedisAdminAccount(HttpServletRequest request) {
-        /*boolean isExist =  this.exists("username");
-        if (!isExist) {
+        String token = findCurrentCookie(request);
+        AdminAccount adminAccount = null;
+        String tokens = findRedisAdminAccountDto(token);
+
+
+        if (null == tokens || StringUtils.isEmpty(tokens)) {
             throw new BaseException(ExceptionCode.NO_PERMIT);
         }
-        String username = this.get("username");*/
+
+        String json = PasswordUtils.base64DE(token);
+        UserToken userToken = new Gson().fromJson(json, UserToken.class);
+        adminAccount = new Gson().fromJson(tokens,AdminAccount.class);
+        if (adminAccount.getUsername().equals((userToken.getUser()).getUsername())) {
+            return adminAccount;
+        }
+        throw new BaseException(ExceptionCode.NO_PERMIT);
+    }
+
+    //获取当前浏览器中已经登陆的Cookie
+    public String findCurrentCookie(HttpServletRequest request) {
         Cookie[] arrCks = request.getCookies();
         String token = "";
         if (null != arrCks) {
@@ -196,8 +214,11 @@ public class RedisUtil {
         if (token.equals("")) {
             throw new BaseException(ExceptionCode.NO_PERMIT);
         }
+        return token;
+    }
 
-        AdminAccount adminAccount = null;
+    //获取redis中对应的登陆信息
+    public String findRedisAdminAccountDto(String token) {
         String tokens = "";
         Map<String, String> map = this.hmget("tokens");
         for (Map.Entry<String, String> entry:map.entrySet()) {
@@ -205,11 +226,6 @@ public class RedisUtil {
                 tokens = entry.getValue();
             }
         }
-        UserToken userToken = new Gson().fromJson(token, UserToken.class);
-        adminAccount = new Gson().fromJson(tokens,AdminAccount.class);
-        if (adminAccount.getUsername().equals(((AdminAccount)userToken.getUser()).getUsername())) {
-            return adminAccount;
-        }
-        throw new BaseException(ExceptionCode.NO_PERMIT);
+        return tokens;
     }
 }

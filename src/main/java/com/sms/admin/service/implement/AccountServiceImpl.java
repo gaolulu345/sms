@@ -101,7 +101,10 @@ public class AccountServiceImpl implements AccountServiceI {
             String token = PasswordUtils.base64En(json);
             redisUtil.hset("tokens",token,new Gson().toJson(user));
             Cookie cookie = new Cookie("sms_user",token);
+            cookie.setPath("/");
+            cookie.setMaxAge(15 * 60);
             response.addCookie(cookie);
+
             //SecurityContextHolder.getContext().setAuthentication(authentication);
             //HttpSession session = request.getSession();
             //session.setAttribute(Constant.SECURITY_CONTEXT, SecurityContextHolder.getContext()); // 这个非常重要，否则验证后将无法登陆
