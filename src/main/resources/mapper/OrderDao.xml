@@ -106,8 +106,9 @@
         order_id = #{id}
     </update>
 
-    <insert id="addOrder" parameterType="com.sms.admin.data.search.OrderSearch" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO
+    <insert id="addOrder" parameterType="com.sms.admin.data.search.OrderSearch" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+            INSERT INTO
           `order`(
             order_code,
             supply_id,

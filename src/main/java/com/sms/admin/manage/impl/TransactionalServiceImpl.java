@@ -165,7 +165,7 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
             if (0 == res){
                 throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
             }
-            orderSearch.setId(res);
+            //orderSearch.setId(res);
             res = orderDao.addOrderDetail(orderSearch);
             if (0 == res) {
                 throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);

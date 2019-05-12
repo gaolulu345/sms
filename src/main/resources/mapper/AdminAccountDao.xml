@@ -75,6 +75,7 @@
         aai.name,
         aai.intros,
         aai.gender,
+        aai.telephone,
         aai.born_date,
         aai.address,
         ar.id AS roles_id ,
