@@ -17,4 +17,6 @@ public interface SupplyDao {
     int addSupply(SupplySearch supplySearch);
 
     List<SupplyDTO> listAllSupply();
+
+    List<Integer> findSupplyIds();
 }

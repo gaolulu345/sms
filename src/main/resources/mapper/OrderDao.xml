@@ -139,6 +139,37 @@
 
     </insert>
 
+    <select id="orderTatal" resultType="java.lang.Long">
+        SELECT
+        COUNT(id)
+        FROM `order`
+        WHERE
+        status = 1
+        AND create_time BETWEEN #{startTime} AND #{endTime}
+    </select>
+
+    <select id="findNumTotal" resultType="java.util.Map">
+        SELECT
+        s.id,
+        s.supply_name,
+        SUM(od.good_number) AS num
+        FROM `order` AS o
+        INNER JOIN order_detail AS od
+        ON o.id=od.order_id
+        INNER JOIN supply AS s
+        ON o.supply_id=s.id
+        WHERE
+		o.`status` = 1
+		AND
+        o.create_time BETWEEN #{startTime} AND #{endTime}
+        AND
+        o.supply_id IN
+        <foreach collection="supplyIds" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        GROUP BY s.id
+    </select>
+
     <resultMap id="OrderDTOMap" type="com.sms.admin.data.dto.OrderDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="order_code" property="orderCode" jdbcType="VARCHAR" />

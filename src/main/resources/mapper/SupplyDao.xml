@@ -55,6 +55,16 @@
         </if>
     </select>
 
+    <select id="findSupplyIds" resultType="Integer">
+        SELECT id
+		FROM
+		supply
+		WHERE
+		deleted = 0
+		AND
+		enable = 1
+    </select>
+
     <update id="updateSupply" parameterType="com.sms.admin.data.search.SupplySearch">
         UPDATE
           supply

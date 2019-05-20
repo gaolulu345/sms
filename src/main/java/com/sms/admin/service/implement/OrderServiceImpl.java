@@ -9,11 +9,13 @@ import com.sms.admin.dao.SupplyDao;
 import com.sms.admin.data.dto.OrderDTO;
 import com.sms.admin.data.dto.SupplyDTO;
 import com.sms.admin.data.search.OrderSearch;
+import com.sms.admin.data.search.RangeSearch;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
 import com.sms.admin.manage.TransactionalServiceI;
 import com.sms.admin.service.OrderServiceI;
 import com.sms.admin.utils.ExcelUtil;
+import com.sms.admin.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderServiceI {
@@ -140,5 +143,45 @@ public class OrderServiceImpl implements OrderServiceI {
         }
         File file = new File(path + fileName);
         return ExcelUtil.fileExcel(request,fileName,file);
+    }
+
+    @Override
+    public ApiResult orderRangeSumTotal(HttpServletRequest request, RangeSearch rangeSearch) {
+        Date dayEnd = TimeUtil.getDayEnd();
+        // 七天前的时间
+        Date sevenDays = TimeUtil.getFrontDay(dayEnd, 6);
+        Map<String, Object> data = new LinkedHashMap<>();
+        Map<String, Object> ojb = new LinkedHashMap<>();
+        Date tempDate = null;
+        long orderTatal = 0;
+        for (int i = 6; i >= 0; i--) {
+            tempDate = TimeUtil.getFrontDay(dayEnd, i);
+            // 某日完成订单金额总和
+            String startTime = TimeUtil.getDayStartTime(tempDate).toString();
+            String endTime = TimeUtil.getDayEndTime(tempDate).toString();
+            orderTatal = orderDao.orderTatal(startTime, endTime);
+            ojb.put(new SimpleDateFormat("MM-dd").format(tempDate), orderTatal);
+        }
+        data.put("order", ojb);
+        data.put("startTime", new SimpleDateFormat("MM-dd").format(TimeUtil.getDayStartTime(sevenDays)));
+        data.put("endTime", new SimpleDateFormat("MM-dd").format(dayEnd));
+        return ApiResult.ok(data);
+    }
+
+    @Override
+    public ApiResult orderNumTotal(HttpServletRequest request, RangeSearch rangeSearch) {
+        List<Integer> supplyIds = new ArrayList<>();
+        supplyIds = supplyDao.findSupplyIds();
+        if (null == supplyIds || supplyIds.isEmpty()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "获取到的供应商为空");
+        }
+        // 当天结束时间
+        Date endDay = TimeUtil.getDayEnd();
+        // 开始时间
+        Date beginDayOfMonth = TimeUtil.getFrontDay(endDay, 29);
+        String startTime = TimeUtil.getDayStartTime(beginDayOfMonth).toString();
+        String endTime = endDay.toString();
+        List<Map<String, Long>> map = orderDao.findNumTotal(startTime, endTime, supplyIds);
+        return ApiResult.ok(map);
     }
 }

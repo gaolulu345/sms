@@ -2,6 +2,7 @@ package com.sms.admin.controller;
 
 import com.sms.admin.ajax.ApiResult;
 import com.sms.admin.data.search.OrderSearch;
+import com.sms.admin.data.search.RangeSearch;
 import com.sms.admin.service.OrderServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -75,6 +76,31 @@ public class OrderController {
         }
         return orderService.orderExport(request, response, orderSearch);
     }
+
+    /**
+     * 最近七天的总的订单数
+     * @param request
+     * @param rangeSearch
+     * @return
+     */
+    @PostMapping(value = "/range/sum/total")
+    public ApiResult orderRangeSumTotal(HttpServletRequest request, @RequestBody RangeSearch rangeSearch) {
+        return orderService.orderRangeSumTotal(request, rangeSearch);
+    }
+
+    /**
+     * 最近30天的每个供应商的商品数量
+     * @param request
+     * @param rangeSearch
+     * @return
+     */
+    @PostMapping(value = "/range/num/total")
+    public ApiResult orderNumTotal(HttpServletRequest request, @RequestBody RangeSearch rangeSearch) {
+        return orderService.orderNumTotal(request, rangeSearch);
+    }
+
+    /*@PostMapping(value = "/")
+    public ApiResult*/
 
 
 }

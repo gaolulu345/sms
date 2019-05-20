@@ -2,6 +2,7 @@ package com.sms.admin.service;
 
 import com.sms.admin.ajax.ApiResult;
 import com.sms.admin.data.search.OrderSearch;
+import com.sms.admin.data.search.RangeSearch;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
 
@@ -23,4 +24,8 @@ public interface OrderServiceI {
     ApiResult updateDeleted(HttpServletRequest request, OrderSearch orderSearch);
 
     ResponseEntity<FileSystemResource> orderExport(HttpServletRequest request, HttpServletResponse response, OrderSearch orderSearch);
+
+    ApiResult orderRangeSumTotal(HttpServletRequest request, RangeSearch rangeSearch);
+
+    ApiResult orderNumTotal(HttpServletRequest request, RangeSearch rangeSearch);
 }
