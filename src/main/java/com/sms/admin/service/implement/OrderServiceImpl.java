@@ -6,6 +6,7 @@ import com.sms.admin.ajax.ApiResult;
 import com.sms.admin.common.Constant;
 import com.sms.admin.dao.OrderDao;
 import com.sms.admin.dao.SupplyDao;
+import com.sms.admin.data.dto.DataTotalDTO;
 import com.sms.admin.data.dto.OrderDTO;
 import com.sms.admin.data.dto.SupplyDTO;
 import com.sms.admin.data.search.OrderSearch;
@@ -147,6 +148,11 @@ public class OrderServiceImpl implements OrderServiceI {
 
     @Override
     public ApiResult orderRangeSumTotal(HttpServletRequest request, RangeSearch rangeSearch) {
+        List<Integer> supplyIds = new ArrayList<>();
+        supplyIds = supplyDao.findSupplyIds();
+        if (null == supplyIds || supplyIds.isEmpty()) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "未获取到供应商");
+        }
         Date dayEnd = TimeUtil.getDayEnd();
         // 七天前的时间
         Date sevenDays = TimeUtil.getFrontDay(dayEnd, 6);
@@ -159,7 +165,7 @@ public class OrderServiceImpl implements OrderServiceI {
             // 某日完成订单金额总和
             String startTime = TimeUtil.getDayStartTime(tempDate).toString();
             String endTime = TimeUtil.getDayEndTime(tempDate).toString();
-            orderTatal = orderDao.orderTatal(startTime, endTime);
+            orderTatal = orderDao.orderTatal(startTime, endTime, supplyIds);
             ojb.put(new SimpleDateFormat("MM-dd").format(tempDate), orderTatal);
         }
         data.put("order", ojb);
@@ -173,7 +179,7 @@ public class OrderServiceImpl implements OrderServiceI {
         List<Integer> supplyIds = new ArrayList<>();
         supplyIds = supplyDao.findSupplyIds();
         if (null == supplyIds || supplyIds.isEmpty()) {
-            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "获取到的供应商为空");
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG, "未获取到供应商");
         }
         // 当天结束时间
         Date endDay = TimeUtil.getDayEnd();
@@ -183,5 +189,39 @@ public class OrderServiceImpl implements OrderServiceI {
         String endTime = endDay.toString();
         List<Map<String, Long>> map = orderDao.findNumTotal(startTime, endTime, supplyIds);
         return ApiResult.ok(map);
+    }
+
+    @Override
+    public ApiResult dataTotal(HttpServletRequest request, RangeSearch rangeSearch) {
+        List<Integer> supplyIds = new ArrayList<>();
+        supplyIds = supplyDao.findSupplyIds();
+        DataTotalDTO dataTotalDTO = new DataTotalDTO();
+        if (null == supplyIds || supplyIds.isEmpty()) {
+            return ApiResult.ok(dataTotalDTO);
+        }
+        Long orderTotal = 0L;
+        Long sevenDaymoneyTotal = 0L;
+        Long oneDayMoneyTotal = 0L;
+        // 当天开始时间
+        Date beginDay = TimeUtil.getDayBegin();
+        // 当天结束时间
+        Date endDay = TimeUtil.getDayEnd();
+        // 30天前的时间。
+        Date begin30Day = TimeUtil.getFrontDay(endDay, 29);
+        // 七天前的时间
+        Date sevenDays = TimeUtil.getFrontDay(endDay, 6);
+        // 近30天订单数
+        orderTotal = orderDao.orderTatal(TimeUtil.getDayStartTime(begin30Day).toString()
+                , endDay.toString(), supplyIds);
+        //七天完成的订单金额总和
+        sevenDaymoneyTotal = orderDao.moneyTotal(TimeUtil.getDayStartTime(sevenDays).toString(), endDay.toString(), supplyIds);
+
+        //今天完成订单金额总和
+        oneDayMoneyTotal = orderDao.moneyTotal(beginDay.toString(), endDay.toString()
+                , supplyIds);
+        dataTotalDTO.setOrderTotal(orderTotal);
+        dataTotalDTO.setSevenDayMoneyTotal(sevenDaymoneyTotal);
+        dataTotalDTO.setOneDayMoneyTotal(oneDayMoneyTotal);
+        return ApiResult.ok(dataTotalDTO);
     }
 }

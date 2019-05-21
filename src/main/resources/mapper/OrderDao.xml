@@ -146,6 +146,11 @@
         WHERE
         status = 1
         AND create_time BETWEEN #{startTime} AND #{endTime}
+        AND
+        supply_id IN
+        <foreach collection="supplyIds" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
     </select>
 
     <select id="findNumTotal" resultType="java.util.Map">
@@ -168,6 +173,26 @@
             #{item}
         </foreach>
         GROUP BY s.id
+    </select>
+
+    <select id="moneyTotal" resultType="java.lang.Long">
+        SELECT
+        SUM(od.amount)
+        FROM
+        `order` AS o
+        INNER JOIN supply AS s
+        ON o.supply_id = s.id
+        INNER JOIN order_detail AS od
+        ON od.order_id = o.id
+        WHERE
+        o.`status` = 1
+        AND
+        o.create_time BETWEEN #{startTime} AND #{endTime}
+        AND
+        o.supply_id IN
+        <foreach collection="supplyIds" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
     </select>
 
     <resultMap id="OrderDTOMap" type="com.sms.admin.data.dto.OrderDTO">

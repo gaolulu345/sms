@@ -22,7 +22,10 @@ public interface OrderDao {
 
     int addOrderDetail(OrderSearch orderSearch);
 
-    Long orderTatal(@Param("startTime") String startTime, @Param("endTime") String
-            endTime);
+    Long orderTatal(@Param("startTime") String startTime, @Param("endTime") String endTime,  @Param("supplyIds") List<Integer> supplyIds);
+
     List<Map<String, Long>> findNumTotal(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("supplyIds") List<Integer> supplyIds);
+
+    Long moneyTotal(@Param("startTime") String startTime, @Param("endTime") String
+            endTime, @Param("supplyIds") List<Integer> supplyIds);
 }

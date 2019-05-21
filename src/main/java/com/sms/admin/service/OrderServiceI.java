@@ -28,4 +28,6 @@ public interface OrderServiceI {
     ApiResult orderRangeSumTotal(HttpServletRequest request, RangeSearch rangeSearch);
 
     ApiResult orderNumTotal(HttpServletRequest request, RangeSearch rangeSearch);
+
+    ApiResult dataTotal(HttpServletRequest request, RangeSearch rangeSearch);
 }

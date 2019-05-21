@@ -99,8 +99,10 @@ public class OrderController {
         return orderService.orderNumTotal(request, rangeSearch);
     }
 
-    /*@PostMapping(value = "/")
-    public ApiResult*/
+    @PostMapping(value = "/data/total")
+    public ApiResult dataTotal(HttpServletRequest request, @RequestBody RangeSearch rangeSearch) {
+        return orderService.dataTotal(request, rangeSearch);
+    }
 
 
 }
