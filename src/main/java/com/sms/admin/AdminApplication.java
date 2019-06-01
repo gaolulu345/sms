@@ -65,7 +65,7 @@ public class AdminApplication {
 	 * http重定向到https
 	 * @return
 	 */
-	/*@Bean
+	@Bean
 	public TomcatServletWebServerFactory servletWebServerFactory() {
 		TomcatServletWebServerFactory tomcatServletWebServerFactory = new TomcatServletWebServerFactory() {
 			@Override
@@ -92,5 +92,5 @@ public class AdminApplication {
 		//监听到http的端口号后转向到的https的端口号
 		connector.setRedirectPort(7070);
 		return connector;
-	}*/
+	}
 }
