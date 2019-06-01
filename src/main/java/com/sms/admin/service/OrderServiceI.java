@@ -5,6 +5,7 @@ import com.sms.admin.data.search.OrderSearch;
 import com.sms.admin.data.search.RangeSearch;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,4 +31,6 @@ public interface OrderServiceI {
     ApiResult orderNumTotal(HttpServletRequest request, RangeSearch rangeSearch);
 
     ApiResult dataTotal(HttpServletRequest request, RangeSearch rangeSearch);
+
+    ApiResult uploadPicture(HttpServletRequest request, MultipartFile multipartFile);
 }

@@ -18,11 +18,25 @@ public class OrderSearch extends Search {
 
     private String orderCode;
 
+    //这里是进货商品父类型
+    private Integer proType;
+
+    //这里是新添加的，进货商品Id
+    private Integer productId;
+
+    //下面两个是新添加的规格和原产地
+    private String standards;
+
+    private String place;
+
     private String goodName;
 
     private String goodCompany;
 
     private Integer goodNumber;
+
+    //这里是新添加的进货商品的图片
+    private String proPicture;
 
     private Integer amount;
 

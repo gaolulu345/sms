@@ -4,15 +4,18 @@ import com.github.crab2died.ExcelUtils;
 import com.github.crab2died.exceptions.Excel4JException;
 import com.sms.admin.ajax.ApiResult;
 import com.sms.admin.common.Constant;
+import com.sms.admin.config.AliyunOssProperties;
 import com.sms.admin.dao.OrderDao;
 import com.sms.admin.dao.SupplyDao;
 import com.sms.admin.data.dto.DataTotalDTO;
 import com.sms.admin.data.dto.OrderDTO;
 import com.sms.admin.data.dto.SupplyDTO;
+import com.sms.admin.data.dto.UploadFileDTO;
 import com.sms.admin.data.search.OrderSearch;
 import com.sms.admin.data.search.RangeSearch;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
+import com.sms.admin.manage.AliyunOssManagerI;
 import com.sms.admin.manage.TransactionalServiceI;
 import com.sms.admin.service.OrderServiceI;
 import com.sms.admin.utils.ExcelUtil;
@@ -21,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,18 +43,27 @@ public class OrderServiceImpl implements OrderServiceI {
     SupplyDao supplyDao;
 
     @Autowired
+    AliyunOssManagerI aliyunOssManager;
+
+    @Autowired
+    AliyunOssProperties aliyunOssProperties;
+
+    @Autowired
     TransactionalServiceI transactionalService;
 
     @Override
     public ApiResult addOrder(HttpServletRequest request, OrderSearch orderSearch) {
         if (null == orderSearch ||
                 null == orderSearch.getOrderCode() ||
-                null == orderSearch.getGoodName() ||
+                null == orderSearch.getProType() ||
                 null == orderSearch.getGoodCompany() ||
                 null == orderSearch.getGoodNumber() ||
                 null == orderSearch.getAmount() ||
                 null == orderSearch.getSupplyId() ||
                 null == orderSearch.getStatus()) {
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING);
+        }
+        if (null == orderSearch.getProductId() && null == orderSearch.getGoodName()) {
             throw new BaseException(ExceptionCode.PARAMETER_MISSING);
         }
         transactionalService.insertOrder(orderSearch);
@@ -223,5 +236,17 @@ public class OrderServiceImpl implements OrderServiceI {
         dataTotalDTO.setSevenDayMoneyTotal(sevenDaymoneyTotal);
         dataTotalDTO.setOneDayMoneyTotal(oneDayMoneyTotal);
         return ApiResult.ok(dataTotalDTO);
+    }
+
+    @Override
+    public ApiResult uploadPicture(HttpServletRequest request, MultipartFile multipartFile) {
+        if (null == multipartFile) {
+            throw new BaseException(ExceptionCode.PARAMETER_WRONG);
+        }
+        UploadFileDTO dto = aliyunOssManager.uploadFileToAliyunOss(multipartFile , aliyunOssProperties.getPath() + "/input");
+        if (null == dto) {
+            return ApiResult.error(ExceptionCode.UNKNOWN_EXCEPTION, "upload file failure");
+        }
+        return ApiResult.ok(dto);
     }
 }

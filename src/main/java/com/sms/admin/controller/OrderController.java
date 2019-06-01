@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -102,6 +103,11 @@ public class OrderController {
     @PostMapping(value = "/data/total")
     public ApiResult dataTotal(HttpServletRequest request, @RequestBody RangeSearch rangeSearch) {
         return orderService.dataTotal(request, rangeSearch);
+    }
+
+    @PostMapping(value = "/picture/upload")
+    public ApiResult uploadPicture(HttpServletRequest request, @RequestPart("file") MultipartFile multipartFile) {
+        return orderService.uploadPicture(request, multipartFile);
     }
 
 

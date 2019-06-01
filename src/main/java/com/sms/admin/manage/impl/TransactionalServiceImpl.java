@@ -1,8 +1,10 @@
 package com.sms.admin.manage.impl;
 
 import com.sms.admin.dao.*;
+import com.sms.admin.data.dto.ProductDTO;
 import com.sms.admin.data.entity.*;
 import com.sms.admin.data.search.OrderSearch;
+import com.sms.admin.data.search.ProductSearch;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
 import com.sms.admin.manage.TransactionalServiceI;
@@ -33,6 +35,9 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
 
     @Autowired
     OrderDao orderDao;
+
+    @Autowired
+    ProductDao productDao;
 
 
 
@@ -151,7 +156,7 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
     public void insertOrder(OrderSearch orderSearch) {
         if (null == orderSearch ||
                 null == orderSearch.getOrderCode() ||
-                null == orderSearch.getGoodName() ||
+                null == orderSearch.getProType() ||
                 null == orderSearch.getGoodCompany() ||
                 null == orderSearch.getGoodNumber() ||
                 null == orderSearch.getAmount() ||
@@ -169,6 +174,27 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
             res = orderDao.addOrderDetail(orderSearch);
             if (0 == res) {
                 throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+            }
+            //下面是更改商品
+            if (null != orderSearch.getProductId()) {
+                ProductSearch productSearch = new ProductSearch(orderSearch);
+                ProductDTO productDTO = productDao.findProductById(productSearch);
+                if (null != productDTO) {
+                    //更改相关
+                    Product product = new Product(orderSearch, productDTO);
+                    res = productDao.updateProductById(product);
+                    if (res == 0) {
+                        throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+                    }
+                }
+            }
+            //下面是新增商品
+            if (null == orderSearch.getProductId() && null != orderSearch.getGoodName()) {
+                Product product = new Product(orderSearch);
+                res = productDao.addProduct(product);
+                if (res == 0) {
+                    throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+                }
             }
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

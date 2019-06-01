@@ -23,18 +23,13 @@ public enum ExceptionCode {
     ALI_OSS_OPEN_STORAGE_SERVICE_ERROR("9000","当访问对象存储服务 Open Storage Service 失败时抛出该异常类实例，请重新尝试"),
 
 
-    TER_OFFLINE("3004","设备未上线"),
-    INVALID_TER_STATE("3005","网点状态异常"),
+    NOT_THIS_PRODUCT("3000","无该商品"),
     SIGN_FAILURE_FOR_REMOTE_TER("3006","加签失败"),
     SIGN_ERROR_FOR_REMOTE_TER("3007","加签错误"),
     SIGN_ERROR_FOR_REMOTE_OP("3008","操作失败,操作请求失败"),
-    TER_STATUS_RESERT_ERROR("4007","网点状态复位操作失败"),
-    TER_DEVICE_RESERT_ERROR("4008","网点设备复位操作失败"),
 
     NOT_PARTNER("5000","查无此合作伙伴"),
 
-    NOT_ALLOW_PUSH_AD("6000","该设备不允许推送广告"),
-    NOT_RELATION_TER("6001","该设备未关联网点，无法推送广告"),
     PICTURE_NOT_ENABLE_OR_TYPE_NOT_ACCESS("6002","图片未启用或者上传类型不匹配"),
 
     NO_THIS_CARD("7000","没有该洗车卡"),
@@ -47,7 +42,6 @@ public enum ExceptionCode {
     API_NOT_PERMISSION_ERROR("10000","数据未授权。"),
     PAGES_NOT_PERMISSION_ERROR("10001","页面未授权。"),
 
-    MACHINE_HAVE_START("20001","洗车机当前正在处于运行状态"),
     PHONE_INVALID("20002","手机号码不合法");
 
 
