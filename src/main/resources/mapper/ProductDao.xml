@@ -92,7 +92,10 @@
                 old_price = #{oldPrice},
             </if>
             <if test="newPrice != null">
-                new_price = #{newPrice}
+                new_price = #{newPrice},
+            </if>
+            <if test="place != null">
+                place = #{place}
             </if>
         </trim>
         WHERE

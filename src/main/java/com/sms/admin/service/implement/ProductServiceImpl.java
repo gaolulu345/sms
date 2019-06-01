@@ -67,7 +67,14 @@ public class ProductServiceImpl implements ProductServiceI {
         if (null == productSearch.getNewPrice() || null == productSearch.getProductId()) {
             throw new BaseException(ExceptionCode.PARAMETER_MISSING);
         }
-
-        return null;
+        ProductDTO productDTO = productDao.findProductById(productSearch);
+        if (null == productDTO) {
+            throw new BaseException(ExceptionCode.NOT_THIS_PRODUCT);
+        }
+        int res = productDao.updateProduct(productSearch);
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+        }
+        return ApiResult.ok();
     }
 }

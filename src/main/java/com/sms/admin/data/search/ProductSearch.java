@@ -24,6 +24,8 @@ public class ProductSearch extends Search {
 
     Boolean online;
 
+    String place;
+
     public ProductSearch(OrderSearch orderSearch) {
         this.proType = orderSearch.getProType();
         this.productId = orderSearch.getProductId();
