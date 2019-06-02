@@ -166,20 +166,15 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
         }
 
         try {
-            int res = orderDao.addOrder(orderSearch);
-            if (0 == res){
-                throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
-            }
-            //orderSearch.setId(res);
-            res = orderDao.addOrderDetail(orderSearch);
-            if (0 == res) {
-                throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
-            }
+            int res = 0;
             //下面是更改商品
             if (null != orderSearch.getProductId()) {
                 ProductSearch productSearch = new ProductSearch(orderSearch);
                 ProductDTO productDTO = productDao.findProductById(productSearch);
                 if (null != productDTO) {
+                    if (null == orderSearch.getGoodName()) {
+                        orderSearch.setGoodName(productDTO.getProName());
+                    }
                     //更改相关
                     Product product = new Product(orderSearch, productDTO);
                     res = productDao.updateProductById(product);
@@ -196,6 +191,16 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
                     throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
                 }
             }
+            res = orderDao.addOrder(orderSearch);
+            if (0 == res){
+                throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+            }
+            //orderSearch.setId(res);
+            res = orderDao.addOrderDetail(orderSearch);
+            if (0 == res) {
+                throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+            }
+
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
