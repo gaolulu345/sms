@@ -17,6 +17,8 @@ public class ProductDTO {
 
     Integer proType;
 
+    String typeName;
+
     Integer oldPrice;
 
     Integer newPrice;

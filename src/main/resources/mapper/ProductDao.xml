@@ -3,20 +3,22 @@
 <mapper namespace="com.sms.admin.dao.ProductDao">
 
     <select id="listBySearch" parameterType="com.sms.admin.data.search.ProductSearch" resultMap="ProductDTOMap">
-        SELECT *
-        FROM `product`
+        SELECT p.*,pp.type_name
+        FROM `product` AS p
+        INNER JOIN `product_parent` AS pp
+        ON p.pro_type = pp.id
         WHERE
-        deleted = 0
+        p.deleted = 0
         <if test="proName != null">
-            AND pro_name LIKE CONCAT('%',#{proName},'%')
+            AND p.pro_name LIKE CONCAT('%',#{proName},'%')
         </if>
         <if test="proType != null">
-            AND pro_type = #{proType}
+            AND p.pro_type = #{proType}
         </if>
         <if test="online != null">
-            AND online = #{online}
+            AND p.online = #{online}
         </if>
-        ORDER BY online DESC,id DESC
+        ORDER BY p.online DESC,p.id DESC
         <if test="pageSize != null and pageSize !=0 and offset != null">
             LIMIT #{offset},#{pageSize}
         </if>
@@ -261,7 +263,8 @@
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="pro_name" property="proName" jdbcType="VARCHAR" />
         <result column="pro_picture" property="proPicture" jdbcType="VARCHAR" />
-        <result column="pro_type" property="proType" jdbcType="VARCHAR"/>
+        <result column="pro_type" property="proType" jdbcType="INTEGER"/>
+        <result column="type_name" property="typeName" jdbcType="VARCHAR"/>
         <result column="old_price" property="oldPrice" jdbcType="VARCHAR" />
         <result column="new_price" property="newPrice" jdbcType="VARCHAR" />
         <result column="standards" property="standards" jdbcType="INTEGER" />
