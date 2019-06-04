@@ -9,6 +9,8 @@
         ON p.pro_type = pp.id
         WHERE
         p.deleted = 0
+        AND
+        pp.deleted = 0
         <if test="proName != null">
             AND p.pro_name LIKE CONCAT('%',#{proName},'%')
         </if>
@@ -26,17 +28,21 @@
 
     <select id="cntBySearch" parameterType="com.sms.admin.data.search.ProductSearch" resultType="java.lang.Integer">
         SELECT COUNT(*)
-        FROM `product`
+        FROM `product` AS p
+        INNER JOIN `product_parent` AS pp
+        ON p.pro_type = pp.id
         WHERE
-        deleted = 0
+        p.deleted = 0
+        AND
+        pp.deleted = 0
         <if test="proName != null">
-            AND pro_name LIKE CONCAT('%',#{proName},'%')
+            AND p.pro_name LIKE CONCAT('%',#{proName},'%')
         </if>
         <if test="proType != null">
-            AND pro_type = #{proType}
+            AND p.pro_type = #{proType}
         </if>
         <if test="online != null">
-            AND online = #{online}
+            AND p.online = #{online}
         </if>
     </select>
 

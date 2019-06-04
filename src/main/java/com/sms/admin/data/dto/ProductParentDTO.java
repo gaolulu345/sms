@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class ProductParentDTO {
     Integer id;
 
-    Integer type;
+    //Integer type;
 
     String typeName;
 

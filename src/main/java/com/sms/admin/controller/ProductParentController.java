@@ -19,11 +19,26 @@ public class ProductParentController {
     public static final String ROUTE_INDEX = "/api/private/product/parent";
 
     @Autowired
-    ProductParentServiceI productParentServiceI;
+    ProductParentServiceI productParentService;
 
     @PostMapping(value = "/list")
     public ApiResult listProductParent(HttpServletRequest request, @RequestBody ProductParentSearch productParentSearch) {
-        return productParentServiceI.list(request, productParentSearch);
+        return productParentService.list(request, productParentSearch);
+    }
+
+    @PostMapping(value = "/add")
+    public ApiResult addProductParent(HttpServletRequest request, @RequestBody ProductParentSearch productParentSearch) {
+        return productParentService.addProductParent(request, productParentSearch);
+    }
+
+    @PostMapping(value = "/update/info")
+    public ApiResult updateProductParentInfo(HttpServletRequest request, @RequestBody ProductParentSearch productParentSearch) {
+        return productParentService.updateProductParentInfo(request, productParentSearch);
+    }
+
+    @PostMapping(value = "/update/deleted")
+    public ApiResult updateProductParentDeleted(HttpServletRequest request, @RequestBody ProductParentSearch productParentSearch) {
+        return productParentService.updateProductParentDeleted(request, productParentSearch);
     }
 
     

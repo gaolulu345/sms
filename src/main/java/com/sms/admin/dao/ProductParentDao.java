@@ -10,6 +10,10 @@ public interface ProductParentDao {
     List<ProductParentDTO> listBySearch(ProductParentSearch productParentSearch);
 
     int cntBySearch(ProductParentSearch productParentSearch);
+
+    int updateProductParent(ProductParentSearch productParentSearch);
+
+    int addProductParent(ProductParentSearch productParentSearch);
     /*
 
     List<OrderDTO> listBySearch(OrderSearch orderSearch);

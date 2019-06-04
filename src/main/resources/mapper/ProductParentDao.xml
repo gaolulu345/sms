@@ -23,6 +23,31 @@
         deleted = 0
     </select>
 
+    <update id="updateProductParent" parameterType="com.sms.admin.data.search.ProductParentSearch">
+        UPDATE
+        `product_parent`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="typeName != null">
+                type_name = #{typeName},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted}
+            </if>
+        </trim>
+        WHERE
+          id = #{id}
+    </update>
+
+    <insert id="addProductParent" parameterType="com.sms.admin.data.search.ProductParentSearch" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+            INSERT INTO
+          `product_parent`(
+            type_name
+          ) VALUES (
+            #{typeName}
+          )
+    </insert>
+
     <!--
 
 
@@ -66,20 +91,7 @@
         order_id = #{id}
     </update>
 
-    <insert id="addOrder" parameterType="com.sms.admin.data.search.OrderSearch" useGeneratedKeys="true" keyProperty="id"
-            keyColumn="id">
-            INSERT INTO
-          `order`(
-            order_code,
-            supply_id,
-            status
-          ) VALUES (
-            #{orderCode},
-            #{supplyId},
-            #{status}
-          )
 
-    </insert>
 
     <insert id="addOrderDetail" parameterType="com.sms.admin.data.search.OrderSearch" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO
@@ -157,7 +169,7 @@
 -->
     <resultMap id="ProductParentDTOMap" type="com.sms.admin.data.dto.ProductParentDTO">
         <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="type" property="type" jdbcType="INTEGER" />
+        <!--<result column="type" property="type" jdbcType="INTEGER" />-->
         <result column="type_name" property="typeName" jdbcType="VARCHAR" />
         <result column="enable" property="enable" jdbcType="BIT" />
         <result column="deleted" property="deleted" jdbcType="BIT" />

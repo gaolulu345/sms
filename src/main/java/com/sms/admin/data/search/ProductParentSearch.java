@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 public class ProductParentSearch extends Search {
     Integer id;
 
+    String typeName;
+
+    Boolean deleted;
+
     @Override
     public void builData() {
         super.build();
