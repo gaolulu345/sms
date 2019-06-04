@@ -39,4 +39,13 @@ public class ProductDTO {
     Timestamp createTime;
 
     Timestamp modifyTime;
+
+    public void build() {
+        if (null != oldPrice) {
+            oldPrice = oldPrice / 100;
+        }
+        if (null != newPrice) {
+            newPrice = newPrice / 100;
+        }
+    }
 }

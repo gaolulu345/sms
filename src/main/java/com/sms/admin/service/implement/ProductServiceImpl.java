@@ -24,6 +24,9 @@ public class ProductServiceImpl implements ProductServiceI {
         productSearch.build();
         List<ProductDTO> list = productDao.listBySearch(productSearch);
         if (null != list && !list.isEmpty()) {
+            for (ProductDTO temp:list) {
+                temp.build();
+            }
             productSearch.setResult(list);
             int cnt = productDao.cntBySearch(productSearch);
             productSearch.setTotalCnt(cnt);
