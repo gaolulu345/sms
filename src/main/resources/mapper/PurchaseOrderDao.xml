@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sms.admin.dao.PurchaseOrderDao">
+
+    <select id="listBySearch" parameterType="com.sms.admin.data.search.PurchaseOrderSearch" resultMap="PurchaseOrderDTOMap">
+        SELECT po.*,p.pro_name,pp.type_name
+        FROM `purchase_order` AS po
+        INNER JOIN `product_parent` AS pp
+        ON po.pro_type = pp.id
+        INNER JOIN product AS p
+        ON po.pro_id = p.id
+        WHERE
+        po.deleted = 0
+        <if test="startTime != null and endTime != null ">
+            AND po.create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        ORDER BY po.id DESC
+        <if test="pageSize != null and pageSize !=0 and offset != null">
+            LIMIT #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <select id="cntBySearch" parameterType="com.sms.admin.data.search.PurchaseOrderSearch" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `purchase_order`
+        WHERE
+        deleted = 0
+        <if test="startTime != null and endTime != null ">
+            AND create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+    </select>
+
+    <!--
+
+
+
+    <select id="findProductById" parameterType="com.sms.admin.data.search.ProductSearch" resultMap="ProductDTOMap">
+        SELECT *
+        FROM `product`
+        WHERE
+        deleted = 0
+        <if test="proType != null">
+            AND pro_type = #{proType}
+        </if>
+        <if test="productId != null">
+            AND id = #{productId}
+        </if>
+    </select>
+
+    <update id="updateProductById" parameterType="com.sms.admin.data.entity.Product">
+        UPDATE
+        `product`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="proName != null">
+                pro_name = #{proName},
+            </if>
+            <if test="standards != null">
+                standards = #{standards},
+            </if>
+            <if test="repertory != null">
+                repertory = #{repertory},
+            </if>
+            <if test="place != null">
+                place = #{place},
+            </if>
+            <if test="proPicture != null">
+                pro_picture = #{proPicture},
+            </if>
+            <if test="oldPrice != null">
+                old_price = #{oldPrice}
+            </if>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateProduct" parameterType="com.sms.admin.data.search.ProductSearch">
+        UPDATE
+          `product`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="online != null">
+                online = #{online},
+            </if>
+            <if test="standards != null">
+                standards = #{standards},
+            </if>
+            <if test="oldPrice != null">
+                old_price = #{oldPrice},
+            </if>
+            <if test="newPrice != null">
+                new_price = #{newPrice},
+            </if>
+            <if test="place != null">
+                place = #{place}
+            </if>
+        </trim>
+        WHERE
+          deleted = 0
+          AND
+          id = #{productId}
+    </update>
+
+    <insert id="addProduct" parameterType="com.sms.admin.data.entity.Product" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+         INSERT INTO
+           `product`(
+             pro_name,
+             pro_picture,
+             pro_type,
+             old_price,
+             standards,
+             repertory,
+             place
+           ) VALUES (
+             #{proName},
+             #{proPicture},
+             #{proType},
+             #{oldPrice},
+             #{standards},
+             #{repertory},
+             #{place}
+           )
+
+     </insert>-->
+
+    <resultMap id="PurchaseOrderDTOMap" type="com.sms.admin.data.dto.PurchaseOrderDTO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="pro_id" property="proId" jdbcType="INTEGER" />
+        <result column="pro_type" property="proType" jdbcType="INTEGER"/>
+        <result column="sale_num" property="saleNum" jdbcType="INTEGER"/>
+        <result column="sale_value" property="saleValue" jdbcType="INTEGER"/>
+        <result column="net_profits" property="netProfits" jdbcType="INTEGER"/>
+        <result column="pro_name" property="proName" jdbcType="VARCHAR" />
+        <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+        <result column="intros" property="intros" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+</mapper>

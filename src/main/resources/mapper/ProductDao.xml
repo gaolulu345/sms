@@ -275,7 +275,6 @@
         <result column="new_price" property="newPrice" jdbcType="VARCHAR" />
         <result column="standards" property="standards" jdbcType="INTEGER" />
         <result column="repertory" property="repertory" jdbcType="INTEGER" />
-        <result column="sale_num" property="saleNum" jdbcType="INTEGER" />
         <result column="place" property="place" jdbcType="VARCHAR" />
         <result column="online" property="online" jdbcType="BIT" />
         <result column="deleted" property="deleted" jdbcType="BIT" />

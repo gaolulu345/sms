@@ -28,8 +28,6 @@ public class Product {
 
     Integer repertory;
 
-    Integer saleNum;
-
     String place;
 
     Boolean online;

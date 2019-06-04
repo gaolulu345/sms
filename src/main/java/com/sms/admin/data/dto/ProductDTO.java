@@ -27,9 +27,6 @@ public class ProductDTO {
 
     Integer repertory;
 
-    //销量
-    Integer saleNum;
-
     String place;
 
     Boolean online;

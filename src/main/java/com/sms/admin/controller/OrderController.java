@@ -70,9 +70,11 @@ public class OrderController {
             orderSearch.setStatus(status);
         }
         if (null != startTime){
+            startTime = startTime + " 00:00:00";
             orderSearch.setStartTime(startTime);
         }
         if (null != endTime) {
+            endTime = endTime + " 23:59:59";
             orderSearch.setEndTime(endTime);
         }
         return orderService.orderExport(request, response, orderSearch);
