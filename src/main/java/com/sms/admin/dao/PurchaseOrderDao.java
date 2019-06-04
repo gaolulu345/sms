@@ -10,6 +10,8 @@ public interface PurchaseOrderDao {
     int cntBySearch(PurchaseOrderSearch purchaseOrderSearch);
 
     List<PurchaseOrderDTO> listBySearch(PurchaseOrderSearch purchaseOrderSearch);
+
+    int addPurchaseOrder(PurchaseOrderSearch purchaseOrderSearch);
     /*
 
     ProductDTO findProductById(ProductSearch productSearch);

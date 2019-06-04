@@ -12,6 +12,18 @@ import lombok.NoArgsConstructor;
 public class PurchaseOrderSearch extends Search {
 
     Integer id;
+
+    Integer proType;
+
+    Integer proId;
+
+    Integer saleNum;
+
+    Integer saleValue;
+
+    Integer netProfits;
+
+    String intros;
     @Override
     protected void builData() {
         super.build();

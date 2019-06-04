@@ -8,6 +8,8 @@ public interface Constant {
 
     String ORDER_LIST = "ORDER_LIST_";
 
+    String PURCHASE_ORDER_LIST = "PURCHASE_ORDER_LIST_";
+
     String USER = "WASH_USER_LIST_";
 
     String ADMIN_LIST = "ADMIN_LIST_";

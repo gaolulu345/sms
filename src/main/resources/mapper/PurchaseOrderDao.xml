@@ -11,6 +11,12 @@
         ON po.pro_id = p.id
         WHERE
         po.deleted = 0
+        <if test="proType != null ">
+            AND po.pro_type = #{proType}
+        </if>
+        <if test="proId != null ">
+            AND po.pro_id = #{proId}
+        </if>
         <if test="startTime != null and endTime != null ">
             AND po.create_time BETWEEN #{startTime} AND #{endTime}
         </if>
@@ -29,6 +35,26 @@
             AND create_time BETWEEN #{startTime} AND #{endTime}
         </if>
     </select>
+
+    <insert id="addPurchaseOrder" parameterType="com.sms.admin.data.search.PurchaseOrderSearch" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+         INSERT INTO
+           `purchase_order`(
+             pro_type,
+             pro_id,
+             sale_value,
+             sale_num,
+             net_profits,
+             intros
+           ) VALUES (
+             #{proType},
+             #{proId},
+             #{saleValue},
+             #{saleNum},
+             #{netProfits},
+             #{intros}
+           )
+
+     </insert>
 
     <!--
 
@@ -100,27 +126,7 @@
           id = #{productId}
     </update>
 
-    <insert id="addProduct" parameterType="com.sms.admin.data.entity.Product" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-         INSERT INTO
-           `product`(
-             pro_name,
-             pro_picture,
-             pro_type,
-             old_price,
-             standards,
-             repertory,
-             place
-           ) VALUES (
-             #{proName},
-             #{proPicture},
-             #{proType},
-             #{oldPrice},
-             #{standards},
-             #{repertory},
-             #{place}
-           )
-
-     </insert>-->
+    -->
 
     <resultMap id="PurchaseOrderDTOMap" type="com.sms.admin.data.dto.PurchaseOrderDTO">
         <id column="id" property="id" jdbcType="INTEGER" />

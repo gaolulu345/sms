@@ -24,6 +24,7 @@ public enum ExceptionCode {
 
 
     NOT_THIS_PRODUCT("3000","无该商品"),
+    NOT_ONLINE("3001","商品未上架或者现价为空"),
     SIGN_FAILURE_FOR_REMOTE_TER("3006","加签失败"),
     SIGN_ERROR_FOR_REMOTE_TER("3007","加签错误"),
     SIGN_ERROR_FOR_REMOTE_OP("3008","操作失败,操作请求失败"),
