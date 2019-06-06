@@ -1,10 +1,8 @@
 package com.sms.admin.manage;
 
-import com.sms.admin.data.entity.AdminAccount;
-import com.sms.admin.data.entity.AdminPkRolesMenu;
-import com.sms.admin.data.entity.AdminPkRolesOperations;
-import com.sms.admin.data.entity.AdminRoles;
+import com.sms.admin.data.entity.*;
 import com.sms.admin.data.search.OrderSearch;
+import com.sms.admin.data.search.PurchaseOrderSearch;
 
 import java.util.List;
 
@@ -35,4 +33,6 @@ public interface TransactionalServiceI {
     void updateOrder(OrderSearch orderSearch);
 
     void insertOrder(OrderSearch orderSearch);
+
+    void addPurchaseOrder(Product product, PurchaseOrderSearch purchaseOrderSearch);
 }

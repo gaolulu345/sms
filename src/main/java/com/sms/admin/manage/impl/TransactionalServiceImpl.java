@@ -5,6 +5,7 @@ import com.sms.admin.data.dto.ProductDTO;
 import com.sms.admin.data.entity.*;
 import com.sms.admin.data.search.OrderSearch;
 import com.sms.admin.data.search.ProductSearch;
+import com.sms.admin.data.search.PurchaseOrderSearch;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
 import com.sms.admin.manage.TransactionalServiceI;
@@ -38,6 +39,9 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
 
     @Autowired
     ProductDao productDao;
+
+    @Autowired
+    PurchaseOrderDao purchaseOrderDao;
 
 
 
@@ -204,6 +208,21 @@ public class TransactionalServiceImpl implements TransactionalServiceI {
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new BaseException(ExceptionCode.DB_ERR_EXCEPTION);
+        }
+    }
+
+    @Override
+    public void addPurchaseOrder(Product product, PurchaseOrderSearch purchaseOrderSearch) {
+        if (null == product.getRepertory() || null == product.getId() || null == purchaseOrderSearch) {
+            throw new BaseException(ExceptionCode.PARAMETER_MISSING);
+        }
+        int res = productDao.updateProductById(product);
+        if (res == 0){
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
+        }
+        res = purchaseOrderDao.addPurchaseOrder(purchaseOrderSearch);
+        if (res == 0) {
+            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
         }
     }
 

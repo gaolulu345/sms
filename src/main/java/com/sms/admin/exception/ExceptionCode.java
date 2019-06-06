@@ -43,7 +43,8 @@ public enum ExceptionCode {
     API_NOT_PERMISSION_ERROR("10000","数据未授权。"),
     PAGES_NOT_PERMISSION_ERROR("10001","页面未授权。"),
 
-    PHONE_INVALID("20002","手机号码不合法");
+    PHONE_INVALID("20002","手机号码不合法"),
+    ILLEGAL_DATA("20003","数据与实际情况不符合");
 
 
 

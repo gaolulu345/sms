@@ -27,6 +27,8 @@ public class ProductDTO {
 
     Integer repertory;
 
+    Integer saleAll;
+
     String place;
 
     Boolean online;

@@ -28,6 +28,9 @@ public class Product {
 
     Integer repertory;
 
+    //该商品的销售总数
+    Integer saleAll;
+
     String place;
 
     Boolean online;

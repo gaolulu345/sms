@@ -10,10 +10,12 @@ import com.sms.admin.dao.PurchaseOrderDao;
 import com.sms.admin.data.dto.OrderDTO;
 import com.sms.admin.data.dto.ProductDTO;
 import com.sms.admin.data.dto.PurchaseOrderDTO;
+import com.sms.admin.data.entity.Product;
 import com.sms.admin.data.search.ProductSearch;
 import com.sms.admin.data.search.PurchaseOrderSearch;
 import com.sms.admin.exception.BaseException;
 import com.sms.admin.exception.ExceptionCode;
+import com.sms.admin.manage.TransactionalServiceI;
 import com.sms.admin.service.PurchaseOrderServiceI;
 import com.sms.admin.utils.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderServiceI {
 
     @Autowired
     ProductDao productDao;
+
+    @Autowired
+    TransactionalServiceI transactionalService;
 
     @Override
     public ApiResult listPurchaseOrder(HttpServletRequest request, PurchaseOrderSearch purchaseOrderSearch) {
@@ -65,15 +70,19 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderServiceI {
         if (null == productDTO) {
             throw new BaseException(ExceptionCode.NOT_THIS_PRODUCT);
         }
+        if (purchaseOrderSearch.getSaleNum() > productDTO.getRepertory()) {
+            throw new BaseException(ExceptionCode.ILLEGAL_DATA);
+        }
         if (!productDTO.getOnline() || null == productDTO.getNewPrice()) {
             throw new BaseException(ExceptionCode.NOT_ONLINE);
         }
+        Product product = new Product();
+        product.setId(purchaseOrderSearch.getProId());
+        product.setRepertory(productDTO.getRepertory() - purchaseOrderSearch.getSaleNum());
+        product.setSaleAll(productDTO.getSaleAll() + purchaseOrderSearch.getSaleNum());
         purchaseOrderSearch.setSaleValue(purchaseOrderSearch.getSaleNum() * productDTO.getNewPrice());
         purchaseOrderSearch.setNetProfits(purchaseOrderSearch.getSaleNum() * productDTO.getOldPrice() - purchaseOrderSearch.getSaleNum() * productDTO.getNewPrice());
-        int res = purchaseOrderDao.addPurchaseOrder(purchaseOrderSearch);
-        if (res == 0) {
-            throw new BaseException(ExceptionCode.DB_BUSY_EXCEPTION);
-        }
+        transactionalService.addPurchaseOrder(product, purchaseOrderSearch);
         return ApiResult.ok();
     }
 
