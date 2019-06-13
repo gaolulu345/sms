@@ -47,7 +47,9 @@ public class Product {
         this.standards = orderSearch.getStandards();
         this.repertory = productDTO.getRepertory() + orderSearch.getGoodNumber();
         this.place = orderSearch.getPlace();
-        this.proPicture = orderSearch.getProPicture();
+        if (null != orderSearch.getProPicture() && !orderSearch.getProPicture().isEmpty()) {
+            this.proPicture = orderSearch.getProPicture();
+        }
         this.oldPrice = orderSearch.getAmount()/orderSearch.getGoodNumber();
     }
 
@@ -58,7 +60,9 @@ public class Product {
         this.standards = orderSearch.getStandards();
         this.repertory = orderSearch.getGoodNumber();
         this.place = orderSearch.getPlace();
-        this.proPicture = orderSearch.getProPicture();
+        if (null != orderSearch.getProPicture() && !orderSearch.getProPicture().isEmpty()) {
+            this.proPicture = orderSearch.getProPicture();
+        }
         this.oldPrice = orderSearch.getAmount()/orderSearch.getGoodNumber();
     }
 }
