@@ -81,7 +81,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderServiceI {
         product.setRepertory(productDTO.getRepertory() - purchaseOrderSearch.getSaleNum());
         product.setSaleAll(productDTO.getSaleAll() + purchaseOrderSearch.getSaleNum());
         purchaseOrderSearch.setSaleValue(purchaseOrderSearch.getSaleNum() * productDTO.getNewPrice());
-        purchaseOrderSearch.setNetProfits(purchaseOrderSearch.getSaleNum() * productDTO.getNewPrice() - purchaseOrderSearch.getSaleNum() * productDTO.getOldPrice());
+        purchaseOrderSearch.setNetProfits(purchaseOrderSearch.getSaleNum() * productDTO.getOldPrice() - purchaseOrderSearch.getSaleNum() * productDTO.getNewPrice());
         transactionalService.addPurchaseOrder(product, purchaseOrderSearch);
         return ApiResult.ok();
     }
