@@ -102,6 +102,12 @@ public class OrderController {
         return orderService.orderNumTotal(request, rangeSearch);
     }
 
+    /**
+     * 首页的支出与收入价钱
+     * @param request
+     * @param rangeSearch
+     * @return
+     */
     @PostMapping(value = "/data/total")
     public ApiResult dataTotal(HttpServletRequest request, @RequestBody RangeSearch rangeSearch) {
         return orderService.dataTotal(request, rangeSearch);
