@@ -56,6 +56,18 @@
 
      </insert>
 
+    <select id="receiveMoneyTotal" resultType="java.lang.Long">
+        SELECT
+        SUM(sale_value)
+        FROM purchase_order
+        WHERE
+        enable = 1
+        AND
+        deleted = 0
+        AND
+        create_time BETWEEN #{startTime} AND #{endTime}
+    </select>
+
     <!--
 
 

@@ -6,11 +6,13 @@ import com.sms.admin.ajax.ApiResult;
 import com.sms.admin.common.Constant;
 import com.sms.admin.config.AliyunOssProperties;
 import com.sms.admin.dao.OrderDao;
+import com.sms.admin.dao.PurchaseOrderDao;
 import com.sms.admin.dao.SupplyDao;
 import com.sms.admin.data.dto.DataTotalDTO;
 import com.sms.admin.data.dto.OrderDTO;
 import com.sms.admin.data.dto.SupplyDTO;
 import com.sms.admin.data.dto.UploadFileDTO;
+import com.sms.admin.data.entity.PurchaseOrder;
 import com.sms.admin.data.search.OrderSearch;
 import com.sms.admin.data.search.RangeSearch;
 import com.sms.admin.exception.BaseException;
@@ -50,6 +52,9 @@ public class OrderServiceImpl implements OrderServiceI {
 
     @Autowired
     TransactionalServiceI transactionalService;
+
+    @Autowired
+    PurchaseOrderDao purchaseOrderDao;
 
     @Override
     public ApiResult addOrder(HttpServletRequest request, OrderSearch orderSearch) {
@@ -215,6 +220,8 @@ public class OrderServiceImpl implements OrderServiceI {
         Long orderTotal = 0L;
         Long sevenDaymoneyTotal = 0L;
         Long oneDayMoneyTotal = 0L;
+        Long oneDayReceiveMoneyTotal = 0L;
+        Long sevenDayReceiveMoneyTotal = 0L;
         // 当天开始时间
         Date beginDay = TimeUtil.getDayBegin();
         // 当天结束时间
@@ -228,13 +235,17 @@ public class OrderServiceImpl implements OrderServiceI {
                 , endDay.toString(), supplyIds);
         //七天完成的订单金额总和
         sevenDaymoneyTotal = orderDao.moneyTotal(TimeUtil.getDayStartTime(sevenDays).toString(), endDay.toString(), supplyIds);
-
+        oneDayReceiveMoneyTotal = purchaseOrderDao.receiveMoneyTotal(beginDay.toString(), endDay.toString());
+        sevenDayReceiveMoneyTotal = purchaseOrderDao.receiveMoneyTotal(TimeUtil.getDayStartTime(sevenDays).toString(), endDay.toString());
         //今天完成订单金额总和
         oneDayMoneyTotal = orderDao.moneyTotal(beginDay.toString(), endDay.toString()
                 , supplyIds);
+
         dataTotalDTO.setOrderTotal(orderTotal);
         dataTotalDTO.setSevenDayMoneyTotal(sevenDaymoneyTotal);
         dataTotalDTO.setOneDayMoneyTotal(oneDayMoneyTotal);
+        dataTotalDTO.setOneDayReceiveMoneyTotal(oneDayReceiveMoneyTotal);
+        dataTotalDTO.setSevenDayReceiveMoneyTotal(sevenDayReceiveMoneyTotal);
         return ApiResult.ok(dataTotalDTO);
     }
 
